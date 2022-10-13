@@ -1,0 +1,3 @@
+[submodule "taylor"]
+	path = taylor
+	url = https://github.com/wjakethompson/taylor
