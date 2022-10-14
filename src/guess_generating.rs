@@ -26,7 +26,11 @@ pub fn optimal_truncated_dist(l1: &str, l2: &str) -> (i32, usize) {
 			optimal_k = k;
 			minimal_dist = d;
 		}
-		k += 1
+		k += 1;
+		// This part is needed so that k always ends on a character boundary, since slices operate on bytes, not characters.
+		while l1.len() as i32 - k >= 0 && !l1.is_char_boundary(l1.len()-k as usize) {
+			k += 1;
+		}
 	}
 	return (optimal_k, minimal_dist)
 
@@ -34,7 +38,7 @@ pub fn optimal_truncated_dist(l1: &str, l2: &str) -> (i32, usize) {
 
 
 fn are_close_enough(s1: &str, s2: &str) -> bool {
-	(edit_distance(s1, s2) as f32 / std::cmp::min(s1.len(), s2.len()) as f32) < {0.1 as f32}
+	(edit_distance(s1, s2) as f32 / std::cmp::min(s1.chars().count(), s2.chars().count()) as f32) < {0.1 as f32}
 }
 
 fn is_acceptable_guess(guess: &str, lines: &Vec<String>) -> bool {

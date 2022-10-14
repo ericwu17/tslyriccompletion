@@ -139,8 +139,8 @@ fn generate_edit_graph_loop(
   if diff == -1{
     return Ok(vec![])
   }
-  let first_length = first.len() as isize;
-  let second_length = second.len() as isize;
+  let first_length = first.chars().count() as isize;
+  let second_length = second.chars().count() as isize;
 
   let second_chars = split_string(second);
   let first_chars = split_string(first);

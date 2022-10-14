@@ -13,7 +13,7 @@ fn clear_screen() {
 
 }
 
-fn input(prompt: &str) -> String {
+pub fn input(prompt: &str) -> String {
 	print!("{}", prompt);
 	io::stdout().flush().unwrap();
 	io::stdin()
@@ -46,7 +46,7 @@ Good luck! And have fun!",
 }
 
 fn print_with_flags(text: &str, flags: Vec<i32>) {
-	if text.len() != flags.len() {
+	if text.chars().count() != flags.len() {
 		panic!("called print_with_flags with mismatched text and flag");
 	}
 	for i in 0..flags.len() {
@@ -72,8 +72,8 @@ fn print_guess_with_answer(guess: &str, answer: &str, optimal_truncate_amt: i32)
 			&answer.to_lowercase(),
 		).unwrap();
 	
-	let mut guess_flags = vec![0; guess.len()];
-	let mut ans_flags = vec![0; answer.len()];
+	let mut guess_flags = vec![0; guess.chars().count()];
+	let mut ans_flags = vec![0; answer.chars().count()];
 	for insertion in diffs.get("insert").unwrap() {
 		for i in insertion.at..=insertion.to {
 			ans_flags[i] = 1;
@@ -96,6 +96,9 @@ fn print_guess_with_answer(guess: &str, answer: &str, optimal_truncate_amt: i32)
 
 
 pub fn run_game_loop() {
+	
+	const MAX_ACCEPTABLE_DIST: usize = 13;
+	
 	let score = 0;
 	let songs: Vec<Song> = load_songs_from_files();
 	print_intro();
@@ -104,10 +107,38 @@ pub fn run_game_loop() {
 		let question = pick_random_guess(&songs);
 		clear_screen();
 		println!("Your current score is {}. What line follows: \n\t{}", score.to_string().green(),question.shown_line.blue().bold());
-		let guess = input("");
+		
+		let mut guess = input(">>> ");
+		loop {
+			if guess == "?" {
+				// Reduce to a multiple choice question (TODO:)
+				break;
+			}
+
+			if guess.chars().count() < question.answer.chars().count() - 5 {
+				println!("Try guessing again: your guess was significantly shorter than the programmed answer");
+				guess = input(">>> ");
+			} else {
+				break;
+			}
+			break;
+		}
 
 		let (truncate_amt, dist) = optimal_truncated_dist(&guess, &question.answer);
+		
 		print_guess_with_answer(&guess, &question.answer, truncate_amt);
+
+		if dist > MAX_ACCEPTABLE_DIST {
+			println!("That wasn't it! The game is over now, thanks for playing!");
+			let response = input("Press enter to quit ('?' to show song):");
+			if response == "?" {
+				println!("song here (TODO:)");
+				input("Press enter to quit:");
+			}
+			std::process::exit(0);
+		}
+
+
 		println!("The correct answer was {} and the distance was {}, {}", question.answer, dist, truncate_amt);
 		input("");
 
