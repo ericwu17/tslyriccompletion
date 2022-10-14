@@ -29,7 +29,7 @@ fn capitalize_first_letter(s: &str) -> String {
 	if s.len() == 0 {
 		return "".to_owned()
 	}
-    s[0..1].to_uppercase() + &s[1..]
+	s[0..1].to_uppercase() + &s[1..]
 }
 fn process_album_name(name: &str) -> String {
 	let mut name = name;
