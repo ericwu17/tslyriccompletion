@@ -2,8 +2,9 @@ use colored::Colorize;
 use std::io::{self, BufRead, Write};
 use crate::loader::load_songs_from_files;
 use crate::song::Song;
-use crate::guess_generating::{pick_random_guess, optimal_truncated_dist};
+use crate::guess_generating::{pick_random_guess, optimal_truncated_dist, pick_distractors};
 use crate::diff::diff_greedy;
+use rand::prelude::SliceRandom;
 
 fn clear_screen() {
 	// print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
@@ -107,6 +108,31 @@ fn print_song(song: &Song, highlighted_line: &str) {
 	}
 }
 
+fn take_user_multiple_choice_guess(answer: &str, choices: &Vec<String>) -> bool{
+	// returns true if the user gets the correct answer
+	for i in 0..choices.len(){
+			println!("{}{} {}",
+				(i+1).to_string().blue().bold(),
+				")".blue().bold(),
+				choices[i]
+			);
+	}
+	let acceptable_inputs: Vec<String> = (1..=choices.len()).map(|x| x.to_string()).collect();
+	let chosen_index: usize;
+	loop {
+		let guess = input(">>> ");
+		if !acceptable_inputs.contains(&guess) {
+			println!("That's not a valid choice!")
+		} else {
+			chosen_index = guess.parse::<usize>().unwrap() - 1;
+			break
+		}
+
+	}
+
+	return choices[chosen_index] == answer;
+}
+
 
 pub fn run_game_loop() {
 	
@@ -122,29 +148,40 @@ pub fn run_game_loop() {
 		clear_screen();
 		println!("Your current score is {}. What line follows: \n\t{}", score.to_string().green(),question.shown_line.blue().bold());
 		
+		let dist: usize;
+
 		let mut guess = input(">>> ");
 		loop {
 			if guess == "?" {
-				// Reduce to a multiple choice question (TODO:)
+				println!("Reducing to a multiple choice challenge: ");
+				let mut choices = pick_distractors(&question.answer, &songs);
+				choices.push(question.answer.to_owned());
+				choices.shuffle(&mut rand::thread_rng());
+
+				let result = take_user_multiple_choice_guess(&question.answer, &choices);
+				dist = if result { MAX_ACCEPTABLE_DIST } else { MAX_ACCEPTABLE_DIST + 1 };
+				
 				break;
 			}
 
-			if guess.chars().count() < question.answer.chars().count() - 5 {
+			else if guess.chars().count() < question.answer.chars().count() - 5 {
 				println!("Try guessing again: your guess was significantly shorter than the programmed answer");
 				guess = input(">>> ");
 			} else {
+				let (truncate_amt, dist_after_truncation) = optimal_truncated_dist(&guess, &question.answer);
+		
+				print_guess_with_answer(&guess, &question.answer, truncate_amt);
+
+				dist = dist_after_truncation;
 				break;
 			}
-			break;
 		}
 
-		let (truncate_amt, dist) = optimal_truncated_dist(&guess, &question.answer);
-		
-		print_guess_with_answer(&guess, &question.answer, truncate_amt);
+
 
 		if dist > MAX_ACCEPTABLE_DIST {
 			println!("That wasn't it! The game is over now, thanks for playing!");
-			let response = input("Press enter to quit ('?' to show song):");
+			let response = input("Press enter to quit ('?' to show song): ");
 			if response == "?" {
 				print_song(&question.song, &question.shown_line);
 				input("Press enter to quit:");
@@ -161,7 +198,7 @@ pub fn run_game_loop() {
 
 
 		// println!("The correct answer was {} and the distance was {}, {}", question.answer, dist, truncate_amt);
-		let response = input("Press enter to continue ('?' to show song):");
+		let response = input("Press enter to continue ('?' to show song): ");
 		if response == "?" {
 			print_song(&question.song, &question.shown_line);
 			input("Press enter to continue: ");
