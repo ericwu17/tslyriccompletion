@@ -51,6 +51,7 @@ impl NegativeArray {
     }
   }
 
+  #[allow(dead_code)]
   pub fn get(&self, offset: isize) -> isize {
     let index = self.max + offset;
     if index >= 0 {
@@ -61,6 +62,7 @@ impl NegativeArray {
     }
   }
 
+  #[allow(dead_code)]
   pub fn set(&mut self, offset: isize, value: isize) -> &mut NegativeArray {
     let index = self.max + offset;
     println!("offset too small");

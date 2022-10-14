@@ -258,6 +258,7 @@ fn simplify_edit_graph(edit_graph: Vec<Edit>) -> HashMap<String, Vec<Edit>> {
 
 // A function to highlight the differences in a string. Deletions will be hunted in red
 // and insertions highlighted in green
+#[allow(dead_code)]
 pub fn decorate_differences(string: &str, edit_type: &str, edits: &[Edit]) -> String {
   let red = "\x1b[31m";
   let end_colour = "\x1b[0m";
