@@ -2,7 +2,8 @@ use colored::Colorize;
 use std::io::{self, BufRead, Write};
 use crate::loader::load_songs_from_files;
 use crate::song::Song;
-use crate::guess_generating::pick_random_guess;
+use crate::guess_generating::{pick_random_guess, optimal_truncated_dist};
+use crate::diff::diff_greedy;
 
 fn clear_screen() {
 	// print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
@@ -44,12 +45,71 @@ Good luck! And have fun!",
 	clear_screen();
 }
 
+fn print_with_flags(text: &str, flags: Vec<i32>) {
+	if text.len() != flags.len() {
+		panic!("called print_with_flags with mismatched text and flag");
+	}
+	for i in 0..flags.len() {
+		match flags[i] {
+			1 => {
+				print!("{}", text.chars().nth(i).unwrap().to_string().red().bold())
+			},
+			2 => {
+				print!("{}", text.chars().nth(i).unwrap().to_string().yellow().bold())
+			}
+			_ => {
+				print!("{}", text.chars().nth(i).unwrap())
+			},
+		}
+	}
+	println!("");
+}
+
+fn print_guess_with_answer(guess: &str, answer: &str, optimal_truncate_amt: i32) {
+	let (_, diffs) = 
+		diff_greedy(
+			&guess.to_lowercase()[0..(guess.len()-optimal_truncate_amt as usize)], 
+			&answer.to_lowercase(),
+		).unwrap();
+	
+	let mut guess_flags = vec![0; guess.len()];
+	let mut ans_flags = vec![0; answer.len()];
+	for insertion in diffs.get("insert").unwrap() {
+		for i in insertion.at..=insertion.to {
+			ans_flags[i] = 1;
+		}
+	}
+	for deletion in diffs.get("delete").unwrap() {
+		for i in deletion.at..=deletion.to {
+			guess_flags[i] = 1;
+		}
+	}
+	for i in (guess_flags.len()-optimal_truncate_amt as usize)..guess_flags.len() {
+		guess_flags[i] = 2;
+	}
+
+	print!("{}", "   Your Answer: ".blue().bold());
+	print_with_flags(guess, guess_flags);
+	print!("{}", "Correct Answer: ".blue().bold());
+	print_with_flags(answer, ans_flags);
+}
+
 
 pub fn run_game_loop() {
+	let score = 0;
 	let songs: Vec<Song> = load_songs_from_files();
 	print_intro();
 
 	loop {
-		println!("{:?}", pick_random_guess(&songs));
+		let question = pick_random_guess(&songs);
+		clear_screen();
+		println!("Your current score is {}. What line follows: \n\t{}", score.to_string().green(),question.shown_line.blue().bold());
+		let guess = input("");
+
+		let (truncate_amt, dist) = optimal_truncated_dist(&guess, &question.answer);
+		print_guess_with_answer(&guess, &question.answer, truncate_amt);
+		println!("The correct answer was {} and the distance was {}, {}", question.answer, dist, truncate_amt);
+		input("");
+
 	}
 }
