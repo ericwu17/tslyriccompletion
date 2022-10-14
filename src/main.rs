@@ -1,15 +1,10 @@
 mod loader;
+mod song;
 
 use std::error::Error;
 use loader::load_songs_from_files;
+use song::Song;
 
-
-#[derive(Debug)]
-pub struct Song {
-	pub album: String,
-	pub name: String,
-	pub lyrics_raw: String,
-}
 
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -17,7 +12,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 	for song in &songs {
 		println!("{}, {}", song.name, song.album);
 	}
-	println!("{}", songs[0].lyrics_raw);
+	println!("{}", songs[5].lyrics_raw);
+	println!("{:?}", songs[5].lines);
 
 	Ok(())
 }

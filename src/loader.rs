@@ -1,5 +1,5 @@
 use include_dir::{include_dir, Dir};
-use crate::Song;
+use crate::song::Song;
 
 static PROJECT_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/taylor/data-raw/lyrics");
 
@@ -86,7 +86,7 @@ pub fn load_songs_from_files() -> Vec<Song> {
 			let song_name = split[1];
 
 			let song_lyrics = song_file.contents_utf8().unwrap();
-			songs.push(Song { album: process_album_name(&curr_album_name), name: process_song_name(song_name), lyrics_raw: song_lyrics.to_owned() });
+			songs.push(Song::new(process_album_name(&curr_album_name), process_song_name(song_name), song_lyrics.to_owned() ));
 		}
 	}
 	songs
