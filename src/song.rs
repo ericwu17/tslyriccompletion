@@ -9,7 +9,7 @@ pub struct Song {
 
 impl Song {
 	pub fn new(album: String, name: String, lyrics_raw: String) -> Self {
-		let v: Vec<String> = lyrics_raw.split("\n").filter(|x| !(x.starts_with("[") || x == &"")).map(|x| x.to_owned()).collect();
+		let v: Vec<String> = lyrics_raw.split("\n").filter(|x| !(x.starts_with("[") || x == &"")).map(|x| x.trim().to_owned()).collect();
 		
 		Song {
 			album, name, lyrics_raw, lines: v,
