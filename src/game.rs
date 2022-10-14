@@ -95,6 +95,19 @@ fn print_guess_with_answer(guess: &str, answer: &str, optimal_truncate_amt: i32)
 }
 
 
+fn print_song(song: &Song, highlighted_line: &str) {
+	println!("{}", format!("{} : {}", song.album, song.name).green().bold());
+	for line in song.lyrics_raw.split("\n") {
+		if line.trim() == highlighted_line {
+			println!("{}", line.green().bold());
+		} else {
+			println!("{}", line);
+		}
+
+	}
+}
+
+
 pub fn run_game_loop() {
 	
 	const MAX_ACCEPTABLE_DIST: usize = 13;
@@ -133,7 +146,7 @@ pub fn run_game_loop() {
 			println!("That wasn't it! The game is over now, thanks for playing!");
 			let response = input("Press enter to quit ('?' to show song):");
 			if response == "?" {
-				println!("song here (TODO:)");
+				print_song(&question.song, &question.shown_line);
 				input("Press enter to quit:");
 			}
 			std::process::exit(0);
@@ -150,7 +163,7 @@ pub fn run_game_loop() {
 		// println!("The correct answer was {} and the distance was {}, {}", question.answer, dist, truncate_amt);
 		let response = input("Press enter to continue ('?' to show song):");
 		if response == "?" {
-			println!("song here (TODO:)");
+			print_song(&question.song, &question.shown_line);
 			input("Press enter to continue: ");
 		}
 	}

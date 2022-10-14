@@ -4,9 +4,8 @@ use crate::Song;
 
 #[derive(Debug)]
 pub struct Question {
-	pub song_title: String,
-	pub song_album: String,
 	pub shown_line: String,
+	pub song: Song,
 	pub answer: String,
 }
 
@@ -93,10 +92,9 @@ pub fn pick_random_guess(songs: &Vec<Song>) -> Question {
 	let answer = &random_song.lines[line_num + 1];
 
 	Question {
-		song_title: random_song.name.clone(),
-		song_album: random_song.album.clone(),
 		shown_line: random_line.clone(),
 		answer: answer.clone(),
+		song: random_song.clone(),
 	}
 
 }
