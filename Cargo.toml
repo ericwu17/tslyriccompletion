@@ -7,3 +7,5 @@ edition = "2021"
 
 [dependencies]
 include_dir = "0.7.2"
+edit-distance = "2.1.0"
+rand = "0.8.5"
