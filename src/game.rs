@@ -98,8 +98,9 @@ fn print_guess_with_answer(guess: &str, answer: &str, optimal_truncate_amt: i32)
 pub fn run_game_loop() {
 	
 	const MAX_ACCEPTABLE_DIST: usize = 13;
+	const POINTS_FOR_PERFECT_MATCH: i32 = 26;
 	
-	let score = 0;
+	let mut score = 0;
 	let songs: Vec<Song> = load_songs_from_files();
 	print_intro();
 
@@ -136,11 +137,21 @@ pub fn run_game_loop() {
 				input("Press enter to quit:");
 			}
 			std::process::exit(0);
+		} else if dist != 0 {
+			let points_earned = (MAX_ACCEPTABLE_DIST - dist + 1) as i32;
+			println!("Correct! You scored {points_earned} points for your answer.");
+			score += points_earned;
+		} else {
+			println!("Yes! You scored {POINTS_FOR_PERFECT_MATCH} points for your {}!", "perfect match".green().bold());
+			score += POINTS_FOR_PERFECT_MATCH;
 		}
 
 
-		println!("The correct answer was {} and the distance was {}, {}", question.answer, dist, truncate_amt);
-		input("");
-
+		// println!("The correct answer was {} and the distance was {}, {}", question.answer, dist, truncate_amt);
+		let response = input("Press enter to continue ('?' to show song):");
+		if response == "?" {
+			println!("song here (TODO:)");
+			input("Press enter to continue: ");
+		}
 	}
 }
