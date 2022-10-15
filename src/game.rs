@@ -121,6 +121,9 @@ fn take_user_multiple_choice_guess(answer: &str, choices: &Vec<String>) -> bool{
 	let chosen_index: usize;
 	loop {
 		let guess = input(">>> ");
+		if guess == "/" {
+			return false;
+		}
 		if !acceptable_inputs.contains(&guess) {
 			println!("That's not a valid choice!")
 		} else {
@@ -164,7 +167,7 @@ pub fn run_game_loop() {
 				break;
 			}
 
-			else if guess.chars().count() < question.answer.chars().count() - 5 {
+			else if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" {
 				println!("Try guessing again: your guess was significantly shorter than the programmed answer");
 				guess = input(">>> ");
 			} else {
@@ -181,10 +184,16 @@ pub fn run_game_loop() {
 
 		if dist > MAX_ACCEPTABLE_DIST {
 			println!("That wasn't it! The game is over now, thanks for playing!");
-			let response = input("Press enter to quit ('?' to show song): ");
+			let response = input("Press enter to quit ('?' to show song, 'r' to restart): ");
 			if response == "?" {
 				print_song(&question.song, &question.shown_line);
-				input("Press enter to quit:");
+				if input("Press enter to quit, r to restart:") == "r" {
+					score = 0;
+					continue;
+				}
+			} else if response == "r" {
+				score = 0;
+				continue;
 			}
 			std::process::exit(0);
 		} else if dist != 0 {
