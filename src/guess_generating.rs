@@ -1,6 +1,7 @@
 use edit_distance::edit_distance;
 use rand::seq::SliceRandom;
 use crate::Song;
+use rand::Rng;
 
 #[derive(Debug)]
 pub struct Question {
@@ -72,6 +73,11 @@ pub fn pick_distractors (correct_answer: &str, songs: &Vec<Song>) -> Vec<String>
 			random_line = random_song.lines.choose(&mut rand::thread_rng()).unwrap();
 		}
 		distractors.push(random_line.to_owned());
+	}
+
+	// This is an easter egg, where there's a small probability for one of the distractors to be a funny quote by Ms. Swift:
+	if rand::thread_rng().gen::<i32>() % 100 == 0 {
+		distractors[0] = "umm I think for me...".to_owned();
 	}
 
 	distractors
