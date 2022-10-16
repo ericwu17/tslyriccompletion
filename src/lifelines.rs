@@ -1,11 +1,23 @@
 use std::fmt;
-
 use colored::Colorize;
+use rand::prelude::*;
 
 pub enum Lifeline {
 	ShowTitleAlbum,
 	ShowPrevLines,
 	Skip,
+}
+
+impl  Lifeline {
+	pub fn random_lifeline() -> Self {
+		let mut rng = rand::thread_rng();
+
+		match rng.gen_range(0..3) {
+			0 => Lifeline::ShowTitleAlbum,
+			1 => Lifeline::ShowPrevLines,
+			_ => Lifeline::Skip,
+		}
+	}
 }
 
 pub struct LifelineInventory {
@@ -43,6 +55,19 @@ impl LifelineInventory {
 			}
 		}
 	}
+	pub fn add_lifeline(&mut self, lifeline: &Lifeline) {
+		match lifeline {
+			Lifeline::ShowTitleAlbum => {
+				self.show_title_album += 1;
+			}
+			Lifeline::ShowPrevLines => {
+				self.show_prev_lines += 1;
+			}
+			Lifeline::Skip => {
+				self.skip += 1;
+			}
+		}
+	}
 }
 
 impl fmt::Display for LifelineInventory {
@@ -56,5 +81,25 @@ impl fmt::Display for LifelineInventory {
 			self.show_prev_lines.to_string().red().bold(),
 			self.skip.to_string().red().bold(),
 		)
+	}
+}
+
+impl fmt::Display for Lifeline {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		// Write strictly the first element into the supplied output
+		// stream: `f`. Returns `fmt::Result` which indicates whether the
+		// operation succeeded or failed. Note that `write!` uses syntax which
+		// is very similar to `println!`.
+		match self {
+			Lifeline::ShowPrevLines => {
+				write!(f, "{} Lifeline", "Show Previous Lines".bold())
+			}
+			Lifeline::ShowTitleAlbum => {
+				write!(f, "{} Lifeline", "Show Title".bold())
+			}
+			Lifeline::Skip => {
+				write!(f, "{} Lifeline", "Skip Question".bold())
+			}
+		}
 	}
 }

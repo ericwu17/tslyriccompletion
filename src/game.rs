@@ -1,4 +1,5 @@
 use colored::Colorize;
+use rand::Rng;
 use std::io::{self, BufRead, Write};
 use crate::loader::load_songs_from_files;
 use crate::song::Song;
@@ -41,6 +42,12 @@ If you do not know what the next line is, simply enter a question mark ('?') and
 After each round, press the enter key to continue, or enter '?' to view the full lyrics of the song.
 
 The game ends as soon as you submit an incorrect answer.
+
+In this game, there are 3 types of consumable lifelines that can be invoked by typing \"?s\", \"?t\", or \"?p\". ?s will skip the current question and move on to an entirely different one. ?t will show the album and song of the current question, and ?p will show you 3 consecutive lines and ask you to guess the next (giving you 2 additional lines of information). You may use ?l to view how many lifelines of each type you currently have and also see the keybindings for each lifeline.
+
+You may only use lifelines before you choose to enter multiple-choice mode by pressing \"?\".
+
+You will earn a lifeline for each perfect match, and you'll also have change of getting a lifeline for each correct guess (the closer the match, the higher the chance of getting a lifeline).
 
 Good luck! And have fun!", 
 
@@ -213,6 +220,8 @@ pub fn run_game_loop() {
 
 			else if guess == "?s" {
 				if lifeline_inv.consume_lifeline(Lifeline::Skip) {
+					print_song(&question.song, &question.shown_line);
+					input("Press enter to continue: ");
 					question = pick_random_guess(&songs);
 					clear_screen();
 					println!("Your current score is {}. What line follows: \n\t{}", score.to_string().green(),question.shown_line.blue().bold());
@@ -283,10 +292,25 @@ pub fn run_game_loop() {
 			std::process::exit(0);
 		} else if dist != 0 {
 			let points_earned = (MAX_ACCEPTABLE_DIST - dist + 1) as i32;
-			println!("Correct! You scored {points_earned} points for your answer.");
+			println!("Correct! You scored {} points for your answer.", points_earned.to_string().green());
+
+			let mut maybe_new_lifeline: Option<Lifeline> = None;
+
+			if rand::thread_rng().gen_range(0..MAX_ACCEPTABLE_DIST) > dist {
+				maybe_new_lifeline = Some(Lifeline::random_lifeline());
+			}
+
+			if let Some(new_lifeline) = maybe_new_lifeline {
+				lifeline_inv.add_lifeline(&new_lifeline);
+				println!("You also got a {}", new_lifeline);
+			}
+			println!("{}", lifeline_inv);
 			score += points_earned;
 		} else {
-			println!("Yes! You scored {POINTS_FOR_PERFECT_MATCH} points for your {}!", "perfect match".green().bold());
+			let new_lifeline = Lifeline::random_lifeline();
+			lifeline_inv.add_lifeline(&new_lifeline);
+			println!("Yes! You scored {POINTS_FOR_PERFECT_MATCH} points for your {}, and got a {}", "perfect match".green().bold(), new_lifeline);
+			println!("{}", lifeline_inv);
 			score += POINTS_FOR_PERFECT_MATCH;
 		}
 
