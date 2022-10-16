@@ -1,10 +1,14 @@
 use colored::Colorize;
+use std::char::MAX;
 use std::io::{self, BufRead, Write};
 use crate::loader::load_songs_from_files;
 use crate::song::Song;
 use crate::guess_generating::{pick_random_guess, optimal_truncated_dist, pick_distractors};
 use crate::diff::diff_greedy;
 use rand::prelude::SliceRandom;
+
+const MAX_ACCEPTABLE_DIST: usize = 13;
+const POINTS_FOR_PERFECT_MATCH: i32 = 26;
 
 fn clear_screen() {
 	// print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
@@ -136,12 +140,12 @@ fn take_user_multiple_choice_guess(answer: &str, choices: &Vec<String>) -> bool{
 	return choices[chosen_index] == answer;
 }
 
+pub fn is_on_right_track(guess: &str, answer: &str) -> bool {
+	let (_, dist) = optimal_truncated_dist(answer, guess);
+	dist <= MAX_ACCEPTABLE_DIST
+}
 
 pub fn run_game_loop() {
-	
-	const MAX_ACCEPTABLE_DIST: usize = 13;
-	const POINTS_FOR_PERFECT_MATCH: i32 = 26;
-	
 	let mut score = 0;
 	let songs: Vec<Song> = load_songs_from_files();
 	print_intro();
@@ -167,8 +171,8 @@ pub fn run_game_loop() {
 				break;
 			}
 
-			else if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" {
-				println!("Try guessing again: your guess was significantly shorter than the programmed answer");
+			else if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" && is_on_right_track(&guess, &question.answer) {
+				println!("You're on the right track, but your guess was too short!");
 				guess = input(">>> ");
 			} else {
 				let (truncate_amt, dist_after_truncation) = optimal_truncated_dist(&guess, &question.answer);
