@@ -1,7 +1,7 @@
 use edit_distance::edit_distance;
 use rand::seq::SliceRandom;
-use crate::Song;
 use rand::Rng;
+use crate::song::{Line, Song};
 
 #[derive(Debug)]
 pub struct Question {
@@ -41,17 +41,27 @@ fn are_close_enough(s1: &str, s2: &str) -> bool {
 	(edit_distance(s1, s2) as f32 / std::cmp::min(s1.chars().count(), s2.chars().count()) as f32) < {0.1 as f32}
 }
 
-fn is_acceptable_guess(guess: &str, lines: &Vec<String>) -> bool {
-	if !lines.contains(&guess.to_owned()) {
+fn is_acceptable_guess(guess: &Line, lines: &Vec<Line>) -> bool {
+	if !lines.contains(&guess) {
+		return false;
+	}
+
+	if guess.is_exclamatory {
 		return false;
 	}
 
 	let mut possible_continuations = vec![];
 	for (index, line) in (&lines[..lines.len()-1]).into_iter().enumerate() {
-		if are_close_enough(line, guess) {
+		if are_close_enough(line.text.as_str(), guess.text.as_str()) {
 			possible_continuations.push(lines[index+1].clone());
 		}
 	}
+	for continuation in &possible_continuations {
+		if continuation.is_exclamatory {
+			return false;
+		}
+	}
+
 	for c1 in &possible_continuations {
 		for c2 in &possible_continuations {
 			if c1 != c2 {
@@ -68,9 +78,9 @@ pub fn pick_distractors (correct_answer: &str, songs: &Vec<Song>) -> Vec<String>
 	let mut distractors: Vec<String> = vec![];
 	for _ in 0..NUM_DISTRACTORS {
 		let random_song = songs.choose(&mut rand::thread_rng()).unwrap();
-		let mut random_line = random_song.lines.choose(&mut rand::thread_rng()).unwrap();
+		let mut random_line = random_song.lines.choose(&mut rand::thread_rng()).unwrap().text.as_str();
 		while are_close_enough(random_line, correct_answer) {
-			random_line = random_song.lines.choose(&mut rand::thread_rng()).unwrap();
+			random_line = random_song.lines.choose(&mut rand::thread_rng()).unwrap().text.as_str();
 		}
 		distractors.push(random_line.to_owned());
 	}
@@ -98,8 +108,8 @@ pub fn pick_random_guess(songs: &Vec<Song>) -> Question {
 	let answer = &random_song.lines[line_num + 1];
 
 	Question {
-		shown_line: random_line.clone(),
-		answer: answer.clone(),
+		shown_line: random_line.text.clone(),
+		answer: answer.text.clone(),
 		song: random_song.clone(),
 	}
 
