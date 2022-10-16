@@ -1,10 +1,10 @@
 use colored::Colorize;
-use std::char::MAX;
 use std::io::{self, BufRead, Write};
 use crate::loader::load_songs_from_files;
 use crate::song::Song;
-use crate::guess_generating::{pick_random_guess, optimal_truncated_dist, pick_distractors};
+use crate::guess_generating::{pick_random_guess, optimal_truncated_dist, pick_distractors, Question};
 use crate::diff::diff_greedy;
+use crate::lifelines::{LifelineInventory, Lifeline};
 use rand::prelude::SliceRandom;
 
 const MAX_ACCEPTABLE_DIST: usize = 13;
@@ -48,6 +48,10 @@ Good luck! And have fun!",
 
 	input("Press enter to begin.");
 	clear_screen();
+}
+
+pub fn print_help() {
+	println!("This is the help menu: Coming soon!");
 }
 
 fn print_with_flags(text: &str, flags: Vec<i32>) {
@@ -129,7 +133,7 @@ fn take_user_multiple_choice_guess(answer: &str, choices: &Vec<String>) -> bool{
 			return false;
 		}
 		if !acceptable_inputs.contains(&guess) {
-			println!("That's not a valid choice!")
+			println!("That's not a valid choice! (You can no longer use lifelines after opting for multiple choice)")
 		} else {
 			chosen_index = guess.parse::<usize>().unwrap() - 1;
 			break
@@ -145,15 +149,41 @@ pub fn is_on_right_track(guess: &str, answer: &str) -> bool {
 	dist <= MAX_ACCEPTABLE_DIST
 }
 
+fn print_previous_lines(question: &Question) {
+	const PREV_LINES_TO_SHOW: usize = 2;
+
+	let lines = question.song.lines.clone();
+	let mut answer_position: usize = 0;
+	for index in 0..lines.len() {
+		if lines[index].text == question.shown_line {
+			answer_position = index;
+		}
+	}
+	if answer_position <= PREV_LINES_TO_SHOW {
+		println!("{}", "This is the beginning of the song:".red().bold());
+	}
+	let beginning_index = std::cmp::max(answer_position as i32 - PREV_LINES_TO_SHOW as i32, 0);
+
+	for index in (beginning_index as usize)..=answer_position {
+		println!("{}", lines[index].text.blue().bold());
+	}
+
+
+}
+
+
+
 pub fn run_game_loop() {
 	let mut score = 0;
+	let mut lifeline_inv = LifelineInventory::new();
 	let songs: Vec<Song> = load_songs_from_files();
 	print_intro();
 
-	loop {
-		let question = pick_random_guess(&songs);
-		clear_screen();
-		println!("Your current score is {}. What line follows: \n\t{}", score.to_string().green(),question.shown_line.blue().bold());
+	let mut question = pick_random_guess(&songs);
+	clear_screen();
+	println!("Your current score is {}. What line follows: \n\t{}", score.to_string().green(),question.shown_line.blue().bold());
+	'main_game: loop  {
+		
 		
 		let dist: usize;
 
@@ -169,6 +199,49 @@ pub fn run_game_loop() {
 				dist = if result { MAX_ACCEPTABLE_DIST } else { MAX_ACCEPTABLE_DIST + 1 };
 				
 				break;
+			}
+
+			else if guess == "?l" {
+				println!("{}", lifeline_inv);
+				continue 'main_game;
+			}
+
+			else if guess == "?h" {
+				print_help();
+				continue 'main_game;
+			}
+
+			else if guess == "?s" {
+				if lifeline_inv.consume_lifeline(Lifeline::Skip) {
+					question = pick_random_guess(&songs);
+					clear_screen();
+					println!("Your current score is {}. What line follows: \n\t{}", score.to_string().green(),question.shown_line.blue().bold());
+					continue 'main_game;
+				} else {
+					println!("You do not have any of these lifelines left!");
+					guess = input(">>> ");
+				}
+				
+			}
+
+			else if guess == "?t" {
+				if lifeline_inv.consume_lifeline(Lifeline::ShowTitleAlbum) {
+					println!("{}", format!("{} : {}", question.song.album, question.song.name).green().bold());
+					guess = input(">>> ");
+				} else {
+					println!("You do not have any of these lifelines left!");
+					guess = input(">>> ");
+				}
+			}
+
+			else if guess == "?p" {
+				if lifeline_inv.consume_lifeline(Lifeline::ShowPrevLines) {
+					print_previous_lines(&question);
+					guess = input(">>> ");
+				} else {
+					println!("You do not have any of these lifelines left!");
+					guess = input(">>> ");
+				}
 			}
 
 			else if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" && is_on_right_track(&guess, &question.answer) {
@@ -193,10 +266,18 @@ pub fn run_game_loop() {
 				print_song(&question.song, &question.shown_line);
 				if input("Press enter to quit, r to restart:") == "r" {
 					score = 0;
+					lifeline_inv = LifelineInventory::new();
+					question = pick_random_guess(&songs);
+					clear_screen();
+					println!("Your current score is {}. What line follows: \n\t{}", score.to_string().green(),question.shown_line.blue().bold());
 					continue;
 				}
 			} else if response == "r" {
 				score = 0;
+				lifeline_inv = LifelineInventory::new();
+				question = pick_random_guess(&songs);
+				clear_screen();
+				println!("Your current score is {}. What line follows: \n\t{}", score.to_string().green(),question.shown_line.blue().bold());
 				continue;
 			}
 			std::process::exit(0);
@@ -216,5 +297,9 @@ pub fn run_game_loop() {
 			print_song(&question.song, &question.shown_line);
 			input("Press enter to continue: ");
 		}
+
+		question = pick_random_guess(&songs);
+		clear_screen();
+		println!("Your current score is {}. What line follows: \n\t{}", score.to_string().green(),question.shown_line.blue().bold());
 	}
 }

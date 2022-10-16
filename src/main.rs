@@ -3,6 +3,7 @@ mod song;
 mod guess_generating;
 mod game;
 mod diff;
+mod lifelines;
 
 use std::error::Error;
 use game::{run_game_loop};
