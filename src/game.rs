@@ -7,6 +7,7 @@ use crate::guess_generating::{pick_random_guess, optimal_truncated_dist, pick_di
 use crate::diff::diff_greedy;
 use crate::lifelines::{LifelineInventory, Lifeline};
 use rand::prelude::SliceRandom;
+use std::collections::HashSet;
 
 const MAX_ACCEPTABLE_DIST: usize = 13;
 const POINTS_FOR_PERFECT_MATCH: i32 = 26;
@@ -52,9 +53,6 @@ You will earn a lifeline for each perfect match, and you'll also have chance of 
 Good luck! And have fun!", 
 
 "Welcome to a Taylor Swift lyric guessing game!".blue().bold());
-
-	input("Press enter to begin.");
-	clear_screen();
 }
 
 pub fn print_help() {
@@ -177,14 +175,67 @@ fn print_previous_lines(question: &Question) {
 
 
 }
+pub fn take_selection_from_songs(songs: Vec<Song>) -> Vec<Song> {
+	let mut albums: HashSet<&str> = HashSet::new();
+	for song in &songs {
+		albums.insert(song.album.as_str());
+	}
+	let mut albums: Vec<&str> = albums.into_iter().collect();
+	albums.sort();
+	clear_screen();
+	let ordinals = vec!["1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
 
+
+	for (index, album_name) in albums.iter().enumerate() {
+		println!("{} {}", (ordinals[index].to_string() + ")").blue().bold(), album_name);
+	}
+
+	println!("Please make a selection as follows:\n\tEnter \"{}{}{}\" if you would like to play with only {}, {}, and {}.\n\tEnter \"!{}{}\" if you would like to play with all albums except {} and {}.", 
+		ordinals[0], ordinals[2], ordinals[3], 
+		albums[0], albums[2], albums[3], 
+		ordinals[2], ordinals[1],
+		albums[2], albums[1],
+	);
+
+	let res = input("Please make a selection: ");
+	let mut selected_indices: Vec<usize> = Vec::new();
+	for character in (&res).chars() {
+		if let Some(index) = ordinals.iter().position(|&x| *x == character.to_string()) {
+			if index < albums.len() {
+				selected_indices.push(index);
+			}
+		}
+	}
+	let selected_albums:Vec<&str> = selected_indices.iter().map(|x| albums[*x]).collect();
+
+	let mut included_albums: Vec<&str> = if res.starts_with("!") {
+		albums.clone().into_iter().filter(|x| !selected_albums.contains(x)).collect()
+	} else {
+		selected_albums
+	};
+	if included_albums.len() == 0 {
+		included_albums = albums.clone();
+	}
+
+	println!("You are about to play the game with the following albums:");
+	for a in &included_albums {
+		println!("\t{}", a.blue().bold());
+	}
+	input("Please press enter to confirm: ");
+
+	songs.clone().into_iter().filter(|x| included_albums.contains(&x.album.as_str())).collect()
+}
 
 
 pub fn run_game_loop() {
 	let mut score = 0;
 	let mut lifeline_inv = LifelineInventory::new();
-	let songs: Vec<Song> = load_songs_from_files();
+	let mut songs: Vec<Song> = load_songs_from_files();
 	print_intro();
+
+	if input("Press enter to begin (or type \"s\" to make an album selection). ") == "s" {
+		songs = take_selection_from_songs(songs);
+	}
 
 	let mut question = pick_random_guess(&songs);
 	clear_screen();

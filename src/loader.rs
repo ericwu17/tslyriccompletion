@@ -42,6 +42,8 @@ fn process_album_name(name: &str) -> String {
 		.map(|x| capitalize_first_letter(x))
 		.collect::<Vec<String>>()
 		.join(" ")
+		.trim_end()
+		.to_string()
 }
 
 fn process_song_name(name: &str) -> String {
