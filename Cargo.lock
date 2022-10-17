@@ -142,7 +142,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "taylorlyricguessigrs"
+name = "taylorlyricguessingrs"
 version = "0.1.0"
 dependencies = [
  "colored",
