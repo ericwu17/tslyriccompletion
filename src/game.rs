@@ -47,7 +47,7 @@ In this game, there are 3 types of consumable lifelines that can be invoked by t
 
 You may only use lifelines before you choose to enter multiple-choice mode by pressing \"?\".
 
-You will earn a lifeline for each perfect match, and you'll also have change of getting a lifeline for each correct guess (the closer the match, the higher the chance of getting a lifeline).
+You will earn a lifeline for each perfect match, and you'll also have chance of getting a lifeline for each correct guess (the closer the match, the higher the chance of getting a lifeline).
 
 Good luck! And have fun!", 
 
