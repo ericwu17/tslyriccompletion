@@ -27,7 +27,7 @@ impl Line {
 		let mut is_exclamatory = false;
 
 		let exclamatory_words = ["mmmm", "mmm", "mm", "oh", "ohh", "la", "na", "no", "my", "da", "uh", "huh", "ah", "ha", "yeah", "whoa",
-			"ayy", "i"];
+			"ayy", "i", "eh", "hey"];
 
 		let text_lower = text.to_lowercase();
 		let words: Vec<&str> = text_lower.split(|x: char| !x.is_alphabetic()).filter(|x| *x != "").collect();
