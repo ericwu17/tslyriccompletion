@@ -117,8 +117,8 @@ fn print_song(song: &Song, highlighted_line: &str) {
 		} else {
 			println!("{}", line);
 		}
-
 	}
+	println!("{}", format!("{} : {}", song.album, song.name).green().bold());
 }
 
 fn take_user_multiple_choice_guess(answer: &str, choices: &Vec<String>) -> bool{
