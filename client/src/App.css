@@ -1,0 +1,10 @@
+html, body {
+  background: #9BCFFF;
+  height: 100%;
+}
+
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
