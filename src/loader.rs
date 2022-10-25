@@ -15,10 +15,12 @@ static EXCLUDED_ALBUMS: [&str;8] = [
 	"04a_red-deluxe-edition",
 ];
 
-static EXCLUDED_SONGS: [&str; 3] = [
+static EXCLUDED_SONGS: [&str; 5] = [
 	"15_teardrops-on-my-guitar-popv",
 	"20_state-of-grace-acousticv-tv",
 	"16_forever-n-always-pianov-tv",
+	"15_youre-on-your-own-kid-stringrmx",
+	"16_sweet-nothing-pianormx",
 ];
 
 
