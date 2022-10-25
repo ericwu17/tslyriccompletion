@@ -2,9 +2,6 @@ use std::collections::HashMap;
 
 use serde::Serialize;
 
-use crate::guess_generating::are_close_enough;
-
-
 #[derive(Debug, Clone, Serialize)]
 pub struct Song {
 	pub album: String,
@@ -12,8 +9,6 @@ pub struct Song {
 	pub lyrics_raw: String,
 	pub lines: Vec<Line>,
 }
-unsafe impl Send for Song {}
-unsafe impl Sync for Song {}
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Line {
@@ -22,8 +17,7 @@ pub struct Line {
 	pub has_multiple_successors: bool,
 	pub has_bad_successor: bool,
 }
-unsafe impl Send for Line {}
-unsafe impl Sync for Line {}
+
 
 impl PartialEq for Line {
 	fn eq(&self, other: &Line) -> bool {
@@ -131,27 +125,27 @@ impl Song {
 	}
 }
 
-fn line_has_multiple_successors(guess: &Line, lines: &Vec<Line>) -> bool {
+// fn line_has_multiple_successors(guess: &Line, lines: &Vec<Line>) -> bool {
 
-	let mut possible_continuations = vec![];
-	for (index, line) in (&lines[..lines.len()-1]).into_iter().enumerate() {
-		if are_close_enough(line.text.as_str(), guess.text.as_str()) {
-			possible_continuations.push(lines[index+1].clone());
-		}
-	}
-	for continuation in &possible_continuations {
-		if continuation.is_exclamatory {
-			return true;
-		}
-	}
+// 	let mut possible_continuations = vec![];
+// 	for (index, line) in (&lines[..lines.len()-1]).into_iter().enumerate() {
+// 		if are_close_enough(line.text.as_str(), guess.text.as_str()) {
+// 			possible_continuations.push(lines[index+1].clone());
+// 		}
+// 	}
+// 	for continuation in &possible_continuations {
+// 		if continuation.is_exclamatory {
+// 			return true;
+// 		}
+// 	}
 
-	for c1 in &possible_continuations {
-		for c2 in &possible_continuations {
-			if c1 != c2 {
-				return true;
-			}
-		}
-	}
+// 	for c1 in &possible_continuations {
+// 		for c2 in &possible_continuations {
+// 			if c1 != c2 {
+// 				return true;
+// 			}
+// 		}
+// 	}
 
-	false
-}
+// 	false
+// }

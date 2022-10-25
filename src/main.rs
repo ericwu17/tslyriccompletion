@@ -1,21 +1,15 @@
-mod loader;
-mod song;
-mod guess_generating;
-mod game;
-mod diff;
-mod lifelines;
+pub mod loader;
+pub mod song;
+pub mod guess_generating;
+pub mod game;
+pub mod diff;
+pub mod lifelines;
 
 use std::collections::HashMap;
-use std::error::Error;
-use game::{run_game_loop};
 use crate::song::Song;
 use crate::loader::load_songs_from_files;
 
-use std::sync::atomic::AtomicUsize;
 use rocket::State;
-use std::sync::atomic::Ordering;
-use serde::{Deserialize, Serialize};
-use serde_json::Result;
 
 
 struct SongList {
