@@ -32,7 +32,7 @@ impl Line {
 
 		let mut is_exclamatory = false;
 
-		let exclamatory_words = ["mmmm", "mmm", "mm", "oh", "ohh", "la", "na", "no", "my", "uh", "huh", "ahh", "ah", "ha", "yeah", "whoa",
+		let exclamatory_words = ["mmmm", "mmm", "mm", "oh", "ohh", "ooh", "la", "na", "no", "my", "uh", "huh", "ahh", "ah", "ha", "yeah", "whoa",
 			"ayy", "i", "eh", "hey", "ra", "di", "da"];
 
 		let text_lower = text.to_lowercase();

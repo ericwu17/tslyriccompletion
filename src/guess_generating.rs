@@ -1,9 +1,10 @@
 use edit_distance::edit_distance;
 use rand::seq::SliceRandom;
 use rand::Rng;
+use serde::Serialize;
 use crate::song::{Line, Song};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Question {
 	pub shown_line: String,
 	pub song: Song,

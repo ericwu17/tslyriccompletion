@@ -16,10 +16,11 @@ use std::collections::{HashSet, HashMap};
 const MAX_ACCEPTABLE_DIST: usize = 13;
 const POINTS_FOR_PERFECT_MATCH: i32 = 26;
 
-#[derive(Serialize, Clone)]
+#[derive(Serialize, Clone, PartialEq)]
 pub enum Hint {
 	ShowTitle(String),
 	ShowPrevLines{lines: String, is_at_song_beginning: bool},
+	Skip,
 }
 
 #[derive(Clone)]
@@ -34,11 +35,12 @@ pub struct GameState {
 #[derive(Serialize)]
 pub struct GameStatePublic {
 	score: i32,
-	current_question: String,
+	current_question: Question,
 	lifeline_inv: LifelineInventory,
 	hints_shown: Vec<Hint>,
 	choices: Vec<String>,
-	id: i32,
+	id: usize,
+	terminated: bool
 }
 
 impl GameState {
@@ -53,14 +55,61 @@ impl GameState {
 	}
 
 
-	pub fn into_public(&self, id: i32) -> GameStatePublic {
+	pub fn into_public(&self, id: usize) -> GameStatePublic {
 		GameStatePublic {
 			score: self.score,
-			current_question: self.current_question.shown_line.clone(),
+			current_question: Question {
+				song: Song{
+					album: String::new(), name: String::new(), lyrics_raw: String::new(), lines: vec![]
+				},
+				shown_line: self.current_question.shown_line.clone(),
+				answer: String::new(),
+			},
 			lifeline_inv: self.lifeline_inv.clone(),
 			hints_shown: self.hints_shown.clone(),
 			choices: self.choices.clone(),
 			id,
+			terminated: false,
+		}
+	}
+	pub fn into_public_with_answers(&self, id: usize) -> GameStatePublic {
+		GameStatePublic {
+			score: self.score,
+			current_question: self.current_question.clone(),
+			lifeline_inv: self.lifeline_inv.clone(),
+			hints_shown: self.hints_shown.clone(),
+			choices: self.choices.clone(),
+			id,
+			terminated: false,
+		}
+	}
+
+	pub fn has_used_lifeline(&self, lifeline: Lifeline) -> bool {
+		match lifeline {
+			Lifeline::ShowPrevLines => {
+				for hint in &self.hints_shown {
+					if let Hint::ShowPrevLines{..} = hint {
+						return true;
+					}
+				}
+				return false;
+			},
+			Lifeline::ShowTitleAlbum => {
+				for hint in &self.hints_shown {
+					if let Hint::ShowTitle(_) = hint {
+						return true;
+					}
+				}
+				return false;
+			},
+			Lifeline::Skip => {
+				for hint in &self.hints_shown {
+					if *hint == Hint::Skip {
+						return true;
+					}
+				}
+				return false;
+			}
 		}
 	}
 
@@ -71,13 +120,63 @@ impl GameState {
 
 
 #[get("/game/start")]
-pub fn init_game(game_state: &State<Arc<Mutex<HashMap<i32, GameState>>>>, songs: &State<Vec<Song>>) -> String {
+pub fn init_game(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, songs: &State<Vec<Song>>) -> String {
 	let mut guard = game_state.lock().unwrap();
 	let id = NEXT_GAME_ID.fetch_add(1, Ordering::Relaxed);
 	let new_game_state = GameState::new(songs);
-	(*guard).insert(id as i32, new_game_state.clone());
+	(*guard).insert(id, new_game_state.clone());
 
-	serde_json::to_string(&new_game_state.into_public(id as i32)).unwrap()
+	serde_json::to_string(&new_game_state.into_public(id)).unwrap()
+}
+
+#[get("/game/use-lifeline?<id>&<lifeline>")]
+pub fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, id: usize, lifeline: &str) -> String {
+	let mut guard = game_state.lock().unwrap();
+	if let Some(game_state) = (*guard).get(&id) {
+		let mut new_game_state = game_state.clone();
+		match lifeline {
+			"show_title_album" => {
+				if !new_game_state.has_used_lifeline(Lifeline::ShowTitleAlbum)
+						&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::ShowTitleAlbum) {
+					let title = format!("{} : {}", game_state.current_question.song.album, game_state.current_question.song.name);
+					new_game_state.hints_shown.push(Hint::ShowTitle(title));
+					(*guard).insert(id, new_game_state.clone());
+					return serde_json::to_string(&new_game_state.into_public(id)).unwrap()
+				} else {
+					// no lifelines remaining, so do nothing
+					return serde_json::to_string(&game_state.into_public(id)).unwrap()
+				}
+			},
+			"show_prev_lines" => {
+				if !new_game_state.has_used_lifeline(Lifeline::ShowPrevLines)
+						&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::ShowPrevLines) {
+					let (lines, is_at_song_beginning) = get_previous_lines(&new_game_state.current_question);
+					new_game_state.hints_shown.push(Hint::ShowPrevLines{lines, is_at_song_beginning});
+					(*guard).insert(id, new_game_state.clone());
+					return serde_json::to_string(&new_game_state.into_public(id)).unwrap()
+				} else {
+					// no lifelines remaining, so do nothing
+					return serde_json::to_string(&game_state.into_public(id)).unwrap()
+				}
+			},
+			"skip" => {
+				if !new_game_state.has_used_lifeline(Lifeline::Skip)
+						&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::Skip) {
+					new_game_state.hints_shown.push(Hint::Skip);
+					(*guard).insert(id, new_game_state.clone());
+					// not calling into_public() because we want to show everything, including all answers.
+					return serde_json::to_string(&new_game_state.into_public_with_answers(id)).unwrap()
+				} else {
+					// no lifelines remaining, so do nothing
+					return serde_json::to_string(&game_state.into_public(id)).unwrap()
+				}
+			},
+			_ => {},
+		}
+	}
+
+	
+	"{}".to_owned()
 }
 
 
@@ -232,27 +331,27 @@ pub fn init_game(game_state: &State<Arc<Mutex<HashMap<i32, GameState>>>>, songs:
 // 	dist <= MAX_ACCEPTABLE_DIST
 // }
 
-// fn print_previous_lines(question: &Question) {
-// 	const PREV_LINES_TO_SHOW: usize = 2;
+fn get_previous_lines(question: &Question) -> (String, bool) {
+	const PREV_LINES_TO_SHOW: usize = 2;
 
-// 	let lines = question.song.lines.clone();
-// 	let mut answer_position: usize = 0;
-// 	for index in 0..lines.len() {
-// 		if lines[index].text == question.shown_line {
-// 			answer_position = index;
-// 		}
-// 	}
-// 	if answer_position <= PREV_LINES_TO_SHOW {
-// 		println!("{}", "This is the beginning of the song:".red().bold());
-// 	}
-// 	let beginning_index = std::cmp::max(answer_position as i32 - PREV_LINES_TO_SHOW as i32, 0);
+	let lines = question.song.lines.clone();
+	let mut answer_position: usize = 0;
+	for index in 0..lines.len() {
+		if lines[index].text == question.shown_line {
+			answer_position = index;
+		}
+	}
+	let mut output = String::new();
 
-// 	for index in (beginning_index as usize)..=answer_position {
-// 		println!("{}", lines[index].text.blue().bold());
-// 	}
+	let is_at_song_beginning =  answer_position <= PREV_LINES_TO_SHOW;
+	let beginning_index = std::cmp::max(answer_position as i32 - PREV_LINES_TO_SHOW as i32, 0);
 
+	for index in (beginning_index as usize)..=answer_position {
+		output.push_str(&format!("{}\n", lines[index].text));
+	}
+	(output, is_at_song_beginning)
 
-// }
+}
 // pub fn take_selection_from_songs(songs: Vec<Song>) -> Vec<Song> {
 // 	let mut albums: HashSet<&str> = HashSet::new();
 // 	for song in &songs {

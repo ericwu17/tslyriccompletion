@@ -9,7 +9,7 @@ use std::{collections::HashMap, sync::atomic::AtomicUsize};
 use crate::song::Song;
 use crate::loader::load_songs_from_files;
 
-use game::{init_game, GameState};
+use game::{init_game, game_lifelines, GameState};
 use rocket::State;
 use std::sync::{Arc, Mutex};
 
@@ -57,7 +57,7 @@ fn get_song(songs: &State<Vec<Song>>, album: &str, name: &str) -> String {
 #[launch]
 fn rocket() -> _{
 	let songs: Vec<Song> = load_songs_from_files();
-	let my_hashmap: HashMap<i32, GameState> = HashMap::new();
+	let my_hashmap: HashMap<usize, GameState> = HashMap::new();
 	let game_state = Arc::new(Mutex::new(my_hashmap));
 
 	rocket::build()
@@ -67,4 +67,5 @@ fn rocket() -> _{
 		.mount("/", routes![get_song_list])
 		.mount("/", routes![get_song])
 		.mount("/", routes![init_game])
+		.mount("/", routes![game_lifelines])
 }
