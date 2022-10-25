@@ -175,12 +175,32 @@ pub fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>,
 		}
 	}
 
-	
 	"{}".to_owned()
 }
 
 
+#[get("/game/reduce-multiple-choice?<id>")]
+pub fn reduce_multiple_choice(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, songs: &State<Vec<Song>>, id: usize, ) -> String {
+	let mut guard = game_state.lock().unwrap();
+	if let Some(game_state) = (*guard).get(&id) {
+		if game_state.choices.len() > 0 {
+			// we do nothing if the current game state has already been reduced to multiple choice
+			return serde_json::to_string(&game_state.into_public(id)).unwrap()
+		}
 
+		let mut new_game_state = game_state.clone();
+		let answer = new_game_state.current_question.answer.clone();
+		new_game_state.choices = pick_distractors(&answer, songs);
+		new_game_state.choices.push(answer);
+		new_game_state.choices.shuffle(&mut rand::thread_rng());
+
+		(*guard).insert(id, new_game_state.clone());
+		return serde_json::to_string(&new_game_state.into_public(id)).unwrap()
+
+	}
+
+	"{}".to_owned()
+}
 
 
 
