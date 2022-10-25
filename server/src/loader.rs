@@ -1,7 +1,7 @@
 use include_dir::{include_dir, Dir};
 use crate::song::Song;
 
-static PROJECT_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/taylor/data-raw/lyrics");
+static PROJECT_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/../taylor/data-raw/lyrics");
 
 static EXCLUDED_ALBUMS: [&str;8] = [
 	"91_beautiful-eyes",
