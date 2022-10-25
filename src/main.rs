@@ -51,12 +51,12 @@ fn get_song_list(songs: &State<SongList>) -> String {
 	serde_json::to_string(&s).unwrap()
 }
 
-#[get("/songs/<album>/<title>")]
-fn get_song(songs: &State<SongList>, album: &str, title: &str) -> String {
+#[get("/songs/<album>/<name>")]
+fn get_song(songs: &State<SongList>, album: &str, name: &str) -> String {
 	let songs = &songs.songs;
 
 	for song in songs {
-		if song.album == album && song.name == title {
+		if song.album == album && song.name == name {
 			return serde_json::to_string(&song).unwrap()
 		}
 	}

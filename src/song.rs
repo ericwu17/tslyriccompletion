@@ -1,4 +1,8 @@
+use std::collections::HashMap;
+
 use serde::Serialize;
+
+use crate::guess_generating::are_close_enough;
 
 
 #[derive(Debug, Clone, Serialize)]
@@ -15,6 +19,8 @@ unsafe impl Sync for Song {}
 pub struct Line {
 	pub text: String,
 	pub is_exclamatory: bool,
+	pub has_multiple_successors: bool,
+	pub has_bad_successor: bool,
 }
 unsafe impl Send for Line {}
 unsafe impl Sync for Line {}
@@ -75,19 +81,77 @@ impl Line {
 		Line {
 			text: text.to_owned(),
 			is_exclamatory,
+			has_multiple_successors: false,
+			has_bad_successor: false,
 		}
 	}
 }
 
 impl Song {
 	pub fn new(album: String, name: String, lyrics_raw: String) -> Self {
-		let v: Vec<Line> = lyrics_raw.split("\n").filter(|x| !(x.starts_with("[") || x == &""))
+		let mut lines: Vec<Line> = lyrics_raw.split("\n").filter(|x| !(x.starts_with("[") || x == &""))
 			.map(|x| x.trim())
 			.map(|x| Line::new(x))
 			.collect();
-		
+
+		for index in 0..lines.len()-1 {
+			if lines[index+1].is_exclamatory {
+				lines[index].has_bad_successor = true;
+			}
+		}
+		let n = lines.len();
+		lines[n-1].has_bad_successor = true;
+
+
+		let mut continuation_map: HashMap<String, Vec<String>> = HashMap::new();
+		for index in 0..lines.len()-1 {
+			let line = &lines[index];
+			if let Some(continuations) = continuation_map.get(&line.text) {
+				if !continuations.contains(&lines[index+1].text) {
+					let mut v = continuations.clone();
+					v.push(lines[index+1].text.clone());
+					continuation_map.insert(line.text.clone(), v);
+				}
+			} else {
+				continuation_map.insert(line.text.clone(), vec![lines[index+1].text.clone()]);
+			}
+		}
+		for index in 0..lines.len()-1 {
+			if let Some(continuations) = continuation_map.get(&lines[index].text) {
+				if continuations.len() > 1 {
+					lines[index].has_multiple_successors = true;
+				}
+			}
+		}
+
+
 		Song {
-			album, name, lyrics_raw, lines: v,
+			album, name, lyrics_raw, lines,
 		}
 	}
+}
+
+fn line_has_multiple_successors(guess: &Line, lines: &Vec<Line>) -> bool {
+
+	let mut possible_continuations = vec![];
+	for (index, line) in (&lines[..lines.len()-1]).into_iter().enumerate() {
+		if are_close_enough(line.text.as_str(), guess.text.as_str()) {
+			possible_continuations.push(lines[index+1].clone());
+		}
+	}
+	for continuation in &possible_continuations {
+		if continuation.is_exclamatory {
+			return true;
+		}
+	}
+
+	for c1 in &possible_continuations {
+		for c2 in &possible_continuations {
+			if c1 != c2 {
+				return true;
+			}
+		}
+	}
+
+	false
 }

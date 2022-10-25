@@ -37,40 +37,12 @@ pub fn optimal_truncated_dist(l1: &str, l2: &str) -> (i32, usize) {
 }
 
 
-fn are_close_enough(s1: &str, s2: &str) -> bool {
+pub fn are_close_enough(s1: &str, s2: &str) -> bool {
 	(edit_distance(s1, s2) as f32 / std::cmp::min(s1.chars().count(), s2.chars().count()) as f32) < {0.1 as f32}
 }
 
-fn is_acceptable_guess(guess: &Line, lines: &Vec<Line>) -> bool {
-	if !lines.contains(&guess) {
-		return false;
-	}
-
-	if guess.is_exclamatory {
-		return false;
-	}
-
-	let mut possible_continuations = vec![];
-	for (index, line) in (&lines[..lines.len()-1]).into_iter().enumerate() {
-		if are_close_enough(line.text.as_str(), guess.text.as_str()) {
-			possible_continuations.push(lines[index+1].clone());
-		}
-	}
-	for continuation in &possible_continuations {
-		if continuation.is_exclamatory {
-			return false;
-		}
-	}
-
-	for c1 in &possible_continuations {
-		for c2 in &possible_continuations {
-			if c1 != c2 {
-				return false;
-			}
-		}
-	}
-
-	true
+fn is_acceptable_guess(guess: &Line) -> bool {
+	!guess.has_bad_successor && !guess.has_multiple_successors && !guess.is_exclamatory
 }
 
 pub fn pick_distractors (correct_answer: &str, songs: &Vec<Song>) -> Vec<String> {
@@ -101,7 +73,7 @@ pub fn pick_random_guess(songs: &Vec<Song>) -> Question {
 	let candidate_lines = &random_song.lines[0..(random_song.lines.len()-1)];
 
 	let mut random_line = candidate_lines.choose(&mut rand::thread_rng()).unwrap();
-	while !is_acceptable_guess(random_line, &random_song.lines) {
+	while !is_acceptable_guess(random_line) {
 		random_line = candidate_lines.choose(&mut rand::thread_rng()).unwrap();
 	}
 	let line_num = (&random_song.lines).into_iter().position(|r| r == random_line).unwrap();
