@@ -1,7 +1,9 @@
 use std::fmt;
 use colored::Colorize;
 use rand::prelude::*;
+use serde::Serialize;
 
+#[derive(Serialize, Clone)]
 pub enum Lifeline {
 	ShowTitleAlbum,
 	ShowPrevLines,
@@ -20,6 +22,7 @@ impl  Lifeline {
 	}
 }
 
+#[derive(Serialize, Clone)]
 pub struct LifelineInventory {
 	show_title_album: i32,
 	show_prev_lines: i32,

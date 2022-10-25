@@ -1,5 +1,7 @@
 use colored::Colorize;
 use rand::Rng;
+use rocket::State;
+use serde::Serialize;
 use std::io::{self, BufRead, Write};
 use crate::loader::load_songs_from_files;
 use crate::song::Song;
@@ -12,6 +14,68 @@ use std::collections::HashSet;
 const MAX_ACCEPTABLE_DIST: usize = 13;
 const POINTS_FOR_PERFECT_MATCH: i32 = 26;
 
+#[derive(Serialize, Clone)]
+pub enum Hint {
+	ShowTitle(String),
+	ShowPrevLines{lines: String, is_at_song_beginning: bool},
+}
+
+pub struct GameState {
+	score: i32,
+	current_question: Question,
+	lifeline_inv: LifelineInventory,
+	hints_shown: Vec<Hint>,
+	choices: Vec<String>,
+}
+
+#[derive(Serialize)]
+pub struct GameStatePublic {
+	score: i32,
+	current_question: String,
+	lifeline_inv: LifelineInventory,
+	hints_shown: Vec<Hint>,
+	choices: Vec<String>
+}
+
+impl GameState {
+	pub fn new(songs: &Vec<Song>) -> Self {
+		GameState { 
+			score: 0, 
+			current_question: pick_random_guess(songs), 
+			lifeline_inv: LifelineInventory::new(), 
+			hints_shown: vec![], 
+			choices: vec![] 
+		}
+	}
+
+
+	pub fn into_public(&self) -> GameStatePublic {
+		GameStatePublic {
+			score: self.score,
+			current_question: self.current_question.shown_line.clone(),
+			lifeline_inv: self.lifeline_inv.clone(),
+			hints_shown: self.hints_shown.clone(),
+			choices: self.choices.clone(),
+		}
+	}
+}
+
+
+#[get("/game/start")]
+pub fn init_game(game_state: &State<GameState>) -> String {
+	serde_json::to_string(&game_state.into_public()).unwrap()
+}
+
+
+
+
+
+
+
+
+
+
+// Dead code below lol
 fn clear_screen() {
 	// print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
 	// print!("\x1B[2J\x1B[1;1H");

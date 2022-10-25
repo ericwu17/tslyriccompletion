@@ -9,14 +9,13 @@ use std::collections::HashMap;
 use crate::song::Song;
 use crate::loader::load_songs_from_files;
 
+use game::{init_game, GameState};
 use rocket::State;
 
 
 struct SongList {
     songs: Vec<Song>
 }
-unsafe impl Send for SongList {}
-unsafe impl Sync for SongList {}
 
 #[macro_use] extern crate rocket;
 
@@ -62,26 +61,12 @@ fn get_song(songs: &State<SongList>, album: &str, name: &str) -> String {
 #[launch]
 fn rocket() -> _{
 	let songs: Vec<Song> = load_songs_from_files();
-	
-
 
 	rocket::build()
+		.manage(GameState::new(&songs))
 		.manage(SongList { songs })
 		.mount("/", routes![index])
 		.mount("/", routes![get_song_list])
 		.mount("/", routes![get_song])
-	// run_game_loop();
-
-
-	// let songs: Vec<Song> = load_songs_from_files();
-	// for song in songs {
-	// 	for line in song.lines {
-	// 		if line.is_exclamatory {
-	// 			println!("[E]{}", line.text);
-	// 		} else {
-	// 			println!("{}", line.text);
-	// 		}
-	// 	}
-	// 	println!("\n\n");
-	// }
+		.mount("/", routes![init_game])
 }
