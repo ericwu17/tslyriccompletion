@@ -3,7 +3,7 @@ use rand::seq::SliceRandom;
 use rand::Rng;
 use crate::song::{Line, Song};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Question {
 	pub shown_line: String,
 	pub song: Song,
