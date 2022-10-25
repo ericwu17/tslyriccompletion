@@ -9,7 +9,13 @@ use std::{collections::HashMap, sync::atomic::AtomicUsize};
 use crate::song::Song;
 use crate::loader::load_songs_from_files;
 
-use game::{init_game, game_lifelines, reduce_multiple_choice, GameState};
+use game::{GameState,
+	init_game,
+	game_lifelines,
+	reduce_multiple_choice,
+	next_question,
+	take_guess,
+};
 use rocket::State;
 use std::sync::{Arc, Mutex};
 
@@ -69,4 +75,6 @@ fn rocket() -> _{
 		.mount("/", routes![init_game])
 		.mount("/", routes![game_lifelines])
 		.mount("/", routes![reduce_multiple_choice])
+		.mount("/", routes![next_question])
+		.mount("/", routes![take_guess])
 }

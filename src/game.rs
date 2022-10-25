@@ -1,17 +1,14 @@
-use colored::Colorize;
 use rand::Rng;
 use rocket::State;
 use std::sync::{Arc, Mutex, atomic::Ordering};
 use serde::Serialize;
-use std::io::{self, BufRead, Write};
 use crate::NEXT_GAME_ID;
-use crate::loader::load_songs_from_files;
 use crate::song::Song;
 use crate::guess_generating::{pick_random_guess, optimal_truncated_dist, pick_distractors, Question};
 use crate::diff::diff_greedy;
 use crate::lifelines::{LifelineInventory, Lifeline};
 use rand::prelude::SliceRandom;
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashMap};
 
 const MAX_ACCEPTABLE_DIST: usize = 13;
 const POINTS_FOR_PERFECT_MATCH: i32 = 26;
@@ -30,17 +27,47 @@ pub struct GameState {
 	lifeline_inv: LifelineInventory,
 	hints_shown: Vec<Hint>,
 	choices: Vec<String>,
+	terminated: bool,
+	completed_question: bool,
 }
 
 #[derive(Serialize)]
 pub struct GameStatePublic {
+	id: usize,
 	score: i32,
 	current_question: Question,
 	lifeline_inv: LifelineInventory,
 	hints_shown: Vec<Hint>,
 	choices: Vec<String>,
-	id: usize,
-	terminated: bool
+	terminated: bool,
+	completed_question: bool,
+}
+
+#[derive(Serialize)]
+pub struct FlaggedString {
+	flags: Vec<i32>,
+	text: String,
+}
+
+#[derive(Serialize)]
+pub enum GuessResult {
+	AFM, // asking for more. Used when the user's guess is on the right track but too short.
+	Correct {
+		points_earned: i32,
+		user_guess: FlaggedString,
+		answer: FlaggedString,
+		new_lifeline: Option<Lifeline>,
+	},
+	Incorrect {
+		user_guess: FlaggedString,
+		answer: FlaggedString,
+	},
+}
+
+#[derive(Serialize)]
+pub struct GuessResultPublic {
+	guess_res: GuessResult,
+	game_state: GameStatePublic,
 }
 
 impl GameState {
@@ -50,7 +77,9 @@ impl GameState {
 			current_question: pick_random_guess(songs), 
 			lifeline_inv: LifelineInventory::new(), 
 			hints_shown: vec![], 
-			choices: vec![] 
+			choices: vec![],
+			terminated: false,
+			completed_question: false,
 		}
 	}
 
@@ -69,7 +98,8 @@ impl GameState {
 			hints_shown: self.hints_shown.clone(),
 			choices: self.choices.clone(),
 			id,
-			terminated: false,
+			terminated: self.terminated,
+			completed_question: self.completed_question,
 		}
 	}
 	pub fn into_public_with_answers(&self, id: usize) -> GameStatePublic {
@@ -80,7 +110,8 @@ impl GameState {
 			hints_shown: self.hints_shown.clone(),
 			choices: self.choices.clone(),
 			id,
-			terminated: false,
+			terminated: self.terminated,
+			completed_question: self.completed_question,
 		}
 	}
 
@@ -163,6 +194,7 @@ pub fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>,
 				if !new_game_state.has_used_lifeline(Lifeline::Skip)
 						&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::Skip) {
 					new_game_state.hints_shown.push(Hint::Skip);
+					new_game_state.completed_question = true;
 					(*guard).insert(id, new_game_state.clone());
 					// not calling into_public() because we want to show everything, including all answers.
 					return serde_json::to_string(&new_game_state.into_public_with_answers(id)).unwrap()
@@ -197,6 +229,107 @@ pub fn reduce_multiple_choice(game_state: &State<Arc<Mutex<HashMap<usize, GameSt
 		(*guard).insert(id, new_game_state.clone());
 		return serde_json::to_string(&new_game_state.into_public(id)).unwrap()
 
+	}
+
+	"{}".to_owned()
+}
+
+#[get("/game/next?<id>")]
+pub fn next_question(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, songs: &State<Vec<Song>>, id: usize, ) -> String {
+	let mut guard = game_state.lock().unwrap();
+	if let Some(game_state) = (*guard).get(&id) {
+		if game_state.completed_question && !game_state.terminated {
+			let mut new_game_state = game_state.clone();
+			new_game_state.current_question = pick_random_guess(songs);
+			new_game_state.completed_question = false;
+			new_game_state.choices = vec![];
+			new_game_state.hints_shown = vec![];
+
+			(*guard).insert(id, new_game_state.clone());
+			return serde_json::to_string(&new_game_state.into_public(id)).unwrap()
+
+		} else {
+			return serde_json::to_string(&game_state.into_public(id)).unwrap()
+		}
+	}
+
+	"{}".to_owned()
+}
+
+#[get("/game/submit-guess?<id>&<guess>")]
+pub fn take_guess(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, id: usize, guess: &str) -> String {
+	let mut guard = game_state.lock().unwrap();
+	if let Some(game_state) = (*guard).get(&id) {
+		if game_state.completed_question {
+			// already guessed, so we do nothing
+			return serde_json::to_string(&game_state.into_public_with_answers(id)).unwrap();
+		}
+
+
+		let question = game_state.current_question.clone();
+
+		if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" && is_on_right_track(&guess, &question.answer) {
+			// The guess was on the right track, but was too short.
+			let res = GuessResultPublic {
+				game_state: game_state.into_public(id),
+				guess_res: GuessResult::AFM,
+			};
+			return serde_json::to_string(&res).unwrap();
+		}
+
+		let (truncate_amt, dist) = optimal_truncated_dist(&guess, &question.answer);
+		let mut new_game_state = game_state.clone();
+		let (guess_flag_str, ans_flag_str) = get_flags(guess, &question.answer, truncate_amt);
+		let points_earned: i32;
+		let mut maybe_new_lifeline = None;
+
+		if (game_state.choices.len() == 0 && dist > MAX_ACCEPTABLE_DIST) || (game_state.choices.len() > 0 && guess != question.answer) {
+			// The user has guessed wrong and the game is now over
+			new_game_state.terminated = true;
+			new_game_state.completed_question = true;
+			(*guard).insert(id, new_game_state.clone());
+			
+			let res = GuessResultPublic {
+				game_state: new_game_state.into_public_with_answers(id),
+				guess_res: GuessResult::Incorrect {
+					user_guess: guess_flag_str,
+					answer: ans_flag_str,
+				},
+			};
+			return serde_json::to_string(&res).unwrap();
+		} else if game_state.choices.len() > 0 {
+			// The user got a multiple choice question correct
+			points_earned = 1;
+		} else if dist != 0 {
+			// The guess was correct but not perfect.
+			if rand::thread_rng().gen_range(0..MAX_ACCEPTABLE_DIST) > dist {
+				maybe_new_lifeline = Some(Lifeline::random_lifeline());
+			}
+			points_earned = (MAX_ACCEPTABLE_DIST - dist + 1) as i32;
+		} else {
+			// perfect match
+			maybe_new_lifeline = Some(Lifeline::random_lifeline());
+			points_earned = POINTS_FOR_PERFECT_MATCH;
+		}
+
+		
+		new_game_state.score += points_earned;
+		new_game_state.completed_question = true;
+		if let Some(new_lifeline) = &maybe_new_lifeline {
+			new_game_state.lifeline_inv.add_lifeline(&new_lifeline);
+		}
+		(*guard).insert(id, new_game_state.clone());
+
+		let res = GuessResultPublic {
+			game_state: new_game_state.into_public_with_answers(id),
+			guess_res: GuessResult::Correct {
+				points_earned,
+				user_guess: guess_flag_str,
+				answer: ans_flag_str,
+				new_lifeline: maybe_new_lifeline
+			}
+		};
+		return serde_json::to_string(&res).unwrap();
 	}
 
 	"{}".to_owned()
@@ -276,34 +409,40 @@ pub fn reduce_multiple_choice(game_state: &State<Arc<Mutex<HashMap<usize, GameSt
 // 	println!("");
 // }
 
-// fn print_guess_with_answer(guess: &str, answer: &str, optimal_truncate_amt: i32) {
-// 	let (_, diffs) = 
-// 		diff_greedy(
-// 			&guess.to_lowercase()[0..(guess.len()-optimal_truncate_amt as usize)], 
-// 			&answer.to_lowercase(),
-// 		).unwrap();
+fn get_flags(guess: &str, answer: &str, optimal_truncate_amt: i32) -> (FlaggedString, FlaggedString){
+	let (_, diffs) = 
+		diff_greedy(
+			&guess.to_lowercase()[0..(guess.len()-optimal_truncate_amt as usize)], 
+			&answer.to_lowercase(),
+		).unwrap();
 	
-// 	let mut guess_flags = vec![0; guess.chars().count()];
-// 	let mut ans_flags = vec![0; answer.chars().count()];
-// 	for insertion in diffs.get("insert").unwrap() {
-// 		for i in insertion.at..=insertion.to {
-// 			ans_flags[i] = 1;
-// 		}
-// 	}
-// 	for deletion in diffs.get("delete").unwrap() {
-// 		for i in deletion.at..=deletion.to {
-// 			guess_flags[i] = 1;
-// 		}
-// 	}
-// 	for i in (guess_flags.len()-optimal_truncate_amt as usize)..guess_flags.len() {
-// 		guess_flags[i] = 2;
-// 	}
+	let mut guess_flags = vec![0; guess.chars().count()];
+	let mut ans_flags = vec![0; answer.chars().count()];
+	for insertion in diffs.get("insert").unwrap() {
+		for i in insertion.at..=insertion.to {
+			ans_flags[i] = 1;
+		}
+	}
+	for deletion in diffs.get("delete").unwrap() {
+		for i in deletion.at..=deletion.to {
+			guess_flags[i] = 1;
+		}
+	}
+	for i in (guess_flags.len()-optimal_truncate_amt as usize)..guess_flags.len() {
+		guess_flags[i] = 2;
+	}
 
-// 	print!("{}", "   Your Answer: ".blue().bold());
-// 	print_with_flags(guess, guess_flags);
-// 	print!("{}", "Correct Answer: ".blue().bold());
-// 	print_with_flags(answer, ans_flags);
-// }
+	(
+		FlaggedString {
+			flags: guess_flags,
+			text: guess.to_string(),
+		},
+		FlaggedString {
+			flags: ans_flags,
+			text: answer.to_string(),
+		}
+	)
+}
 
 
 // fn print_song(song: &Song, highlighted_line: &str) {
@@ -346,10 +485,10 @@ pub fn reduce_multiple_choice(game_state: &State<Arc<Mutex<HashMap<usize, GameSt
 // 	return choices[chosen_index] == answer;
 // }
 
-// pub fn is_on_right_track(guess: &str, answer: &str) -> bool {
-// 	let (_, dist) = optimal_truncated_dist(answer, guess);
-// 	dist <= MAX_ACCEPTABLE_DIST
-// }
+pub fn is_on_right_track(guess: &str, answer: &str) -> bool {
+	let (_, dist) = optimal_truncated_dist(answer, guess);
+	dist <= MAX_ACCEPTABLE_DIST
+}
 
 fn get_previous_lines(question: &Question) -> (String, bool) {
 	const PREV_LINES_TO_SHOW: usize = 2;
