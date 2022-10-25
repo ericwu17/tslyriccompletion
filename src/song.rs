@@ -1,17 +1,23 @@
+use serde::Serialize;
 
-#[derive(Debug, Clone)]
+
+#[derive(Debug, Clone, Serialize)]
 pub struct Song {
 	pub album: String,
 	pub name: String,
 	pub lyrics_raw: String,
 	pub lines: Vec<Line>,
 }
+unsafe impl Send for Song {}
+unsafe impl Sync for Song {}
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Line {
 	pub text: String,
 	pub is_exclamatory: bool,
 }
+unsafe impl Send for Line {}
+unsafe impl Sync for Line {}
 
 impl PartialEq for Line {
 	fn eq(&self, other: &Line) -> bool {
