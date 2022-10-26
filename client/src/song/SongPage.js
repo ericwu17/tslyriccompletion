@@ -48,7 +48,7 @@ export default function SongPage() {
                         height: 50,
                         width: 50,
                       }}
-                      alt="The house from the offer."
+                      alt="Album Img"
                       src={ALBUM_LOGOS[album]}
                       mr={1}
                     />

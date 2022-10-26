@@ -1,4 +1,3 @@
-import Homepage from './home/Homepage';
 import AboutPage from './home/AboutPage';
 import SongPage from './song/SongPage';
 import NotFound from './not-found/NotFound';
@@ -13,8 +12,7 @@ function App() {
       <Navbar />
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<Homepage />} />
-          <Route exact path="/about" element={<AboutPage />} />
+          <Route exact path="/" element={<AboutPage />} />
           <Route exact path="/song" element={<SongPage />} />
           <Route path="/song/:album/:name" element={<SongPage />} />
           <Route path="/song/:album" element={<SongPage />} />

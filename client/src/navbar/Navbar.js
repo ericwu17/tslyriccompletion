@@ -26,13 +26,13 @@ export default function Navbar() {
           </Typography>
           <Button 
             color="inherit"
-            onClick={() => {window.location.href="/about"}}
+            onClick={() => {window.location.href="/play"}}
           >
-            About This Site
+            Start Game
           </Button>
           <Button 
             color="inherit"
-            onClick={() => {window.location.href="/songs"}}
+            onClick={() => {window.location.href="/song"}}
           >
             View Lyrics
           </Button>

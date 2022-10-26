@@ -7,8 +7,7 @@ export default function AboutPage() {
       Taylor Swift Lyric Guessing Game
     </Typography>
     <Typography>
-      This is a game where your goal is to guess the next line from a random Taylor Swift song! To start playing, go to the home page
-      by clicking the home icon in the navbar, and then press "begin"! You can also use this site to browse Taylor Swift lyrics, although you might
+      This is a game where your goal is to guess the next line from a random Taylor Swift song! To start playing, press <Link href="/play">start game</Link> in the navbar! You can also use this site to browse Taylor Swift lyrics, although you might
       find the line highlighting to be a little distracting.
     </Typography>
     <Typography variant="h4" sx={{textDecoration: 'underline', mt:2, mb: 2}}>
