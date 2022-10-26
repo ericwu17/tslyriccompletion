@@ -1,7 +1,17 @@
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import React from "react";
-import {Tooltip, Typography} from '@mui/material';
+import {Tooltip, Typography, Box, Grid, Paper, Link} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { ALBUM_ORDER } from "../utils/Utils";
+
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#E0FFFF',
+  ...theme.typography.body2,
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 
 export default function SongPage() {
@@ -9,7 +19,6 @@ export default function SongPage() {
 
   const [songList, setSongList] = React.useState({});
   const [song, setSong] = React.useState({});
-  console.log(song);
 
   React.useEffect(() => {
     axios.get(`/songs`).then((response) => {
@@ -24,10 +33,28 @@ export default function SongPage() {
 
 
   if (album === undefined) {
-    return Object.keys(songList).map(key => {
-
-      return <AlbumSection key={key} albumTitle={key} songs={songList[key]}></AlbumSection>
-    })
+    return (
+      <Box sx={{ width: '100%' }}>
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          {ALBUM_ORDER.map(album => {
+            let songs = songList[album];
+            return (
+              <Grid item xs={4} key={album}>
+                <Item sx={{height: '100%', m: 2, p: 2}}>
+                  <Typography variant="h4">{album}</Typography>
+                  {songs && songs.map((song, index) => 
+                    <Typography>
+                      {index+1}) <Link href={`/song/${album}/${song}`} key={`/song/${album}/${song}`}>{song}
+                      </Link>
+                    </Typography>
+                  )}
+                </Item>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Box>
+    );
   }
   if (album !== undefined && name !== undefined && song.lyrics_raw) {
     return displaySong(song);
@@ -40,9 +67,8 @@ export default function SongPage() {
 
     let renderedLines = [];
     for (let lineInfo of lineInfos) {
-      debugger;
       while (lineInfo.text !== lines[0]) {
-        renderedLines.push(<Typography>{lines.shift()}</Typography>)
+        renderedLines.push(<Typography sx={{ fontWeight: 'bold' }}>{lines.shift()}</Typography>)
       }
       if (lineInfo.has_bad_successor || lineInfo.has_multiple_successors || lineInfo.is_exclamatory) {
         let tooltipText = "";
@@ -60,7 +86,7 @@ export default function SongPage() {
           <Tooltip title={
             <div style={{ whiteSpace: 'pre-line' }}>{tooltipText}</div>
           } placement="right">
-            <Typography color="gray" sx={{
+            <Typography color="pink" sx={{
               width: 'max-content',
             }}>
               {lines.shift()}
@@ -73,27 +99,13 @@ export default function SongPage() {
     }
 
     return (
-      <>
+      <Box mt={2} ml={5} mb={30}>
         <Typography variant="h4">{song.album} : {song.name}</Typography>
         {renderedLines}
-      </>
+      </Box>
     )
   }
 
-  function AlbumSection({albumTitle, songs}) {
-    return (
-      <>
-        <div>{albumTitle}</div>
-        {songs.map(songName => 
-          <a href={`/song/${albumTitle}/${songName}`} key={songName}>
-            {songName}
-          </a>
-        )}
-      </>
-    );
-  }
-
-  
   return (
     <>
       <div>
