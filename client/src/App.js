@@ -1,12 +1,15 @@
-import './App.css';
 import Homepage from './home/Homepage';
 import SongPage from './song/SongPage';
 import NotFound from './not-found/NotFound';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { CssBaseline } from '@mui/material';
+import Navbar from './navbar/Navbar';
 
 function App() {
   return (
     <div className="App">
+      <CssBaseline />
+      <Navbar />
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Homepage />} />
