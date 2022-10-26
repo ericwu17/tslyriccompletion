@@ -15,12 +15,15 @@ static EXCLUDED_ALBUMS: [&str;8] = [
 	"04a_red-deluxe-edition",
 ];
 
-static EXCLUDED_SONGS: [&str; 5] = [
+
+// These songs are excluded because they are duplicates of other songs.
+static EXCLUDED_SONGS: [&str; 6] = [
 	"15_teardrops-on-my-guitar-popv",
 	"20_state-of-grace-acousticv-tv",
 	"16_forever-n-always-pianov-tv",
 	"15_youre-on-your-own-kid-stringrmx",
 	"16_sweet-nothing-pianormx",
+	"05_all-too-well-tv",
 ];
 
 
