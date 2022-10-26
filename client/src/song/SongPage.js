@@ -3,7 +3,7 @@ import axios from 'axios';
 import React from "react";
 import {Tooltip, Typography, Box, Grid, Paper, Link} from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { ALBUM_ORDER } from "../utils/Utils";
+import { ALBUM_LOGOS, ALBUM_ORDER } from "../utils/Utils";
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -41,7 +41,19 @@ export default function SongPage() {
             return (
               <Grid item xs={4} key={album}>
                 <Item sx={{height: '100%', m: 2, p: 2}}>
-                  <Typography variant="h4">{album}</Typography>
+                  <Box display="flex" justifyContent="center" alignItems="center" width="100%">
+                    <Box
+                      component="img"
+                      sx={{
+                        height: 50,
+                        width: 50,
+                      }}
+                      alt="The house from the offer."
+                      src={ALBUM_LOGOS[album]}
+                      mr={1}
+                    />
+                    <Typography variant="h4" sx={{textDecoration: 'underline'}}>{album}</Typography>
+                  </Box>
                   {songs && songs.map((song, index) => 
                     <Typography>
                       {index+1}) <Link href={`/song/${album}/${song}`} key={`/song/${album}/${song}`}>{song}
@@ -107,14 +119,17 @@ export default function SongPage() {
   }
 
   return (
-    <>
+    <Box mx={5} my={5}>
       <div>
-        This is the song page!
+        Error: song not found! If you're typing in the URL by hand, note that the characters must be an exact match (and it's case sensitive!)
       </div>
       <div>
-        <h2>{album} -- {name}</h2>
+        Album: {album}
       </div>
-    </>
+      <div>
+        Name: {name}
+      </div>
+    </Box>
   );
 }
 
