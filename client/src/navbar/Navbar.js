@@ -8,8 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import HomeIcon from '@mui/icons-material/Home';
 export default function Navbar() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box sx={{ flexGrow: 1 }} mb={10}>
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             size="large"
@@ -26,9 +26,15 @@ export default function Navbar() {
           </Typography>
           <Button 
             color="inherit"
+            onClick={() => {window.location.href="/about"}}
+          >
+            About This Site
+          </Button>
+          <Button 
+            color="inherit"
             onClick={() => {window.location.href="/songs"}}
           >
-            View Songs
+            View Lyrics
           </Button>
         </Toolbar>
       </AppBar>
