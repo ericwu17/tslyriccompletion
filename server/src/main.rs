@@ -43,7 +43,6 @@ fn get_song_list(songs: &State<Vec<Song>>) -> String {
 			s.insert(song.album.clone(), vec![song.name.clone()]);
 		}
 	}
-	println!("{:?}", songs);
 
 	serde_json::to_string(&s).unwrap()
 }
