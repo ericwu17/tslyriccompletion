@@ -1,9 +1,10 @@
 import React from "react";
 import axios from "axios";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import ResultDisplay from "./ResultDisplay";
 
 
-export default function GameStateDisplay({gameState, setGameState, setHasStarted}) {
+export default function GameStateDisplay({gameState, setGameState, setHasStarted, restartGame}) {
   const [guessResult, setGuessResult] = React.useState({});
   const [currentGuess, setCurrentGuess] = React.useState("");
   // console.log(currentGuess);
@@ -11,7 +12,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
 
   // console.log(gameState)
 
-  const { score, current_question, id, completed_question } = gameState;
+  const { score, current_question, id, completed_question, terminated } = gameState;
   console.log(`The current game has id: ${id}`)
 
   if (!current_question) {
@@ -31,15 +32,25 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
         console.log(response.data);
         setGameState(game_state);
         setGuessResult(guess_res);
-        setCurrentGuess("");
+        if (guess_res !== "AFM") {
+          setCurrentGuess("");
+        }
       })
+    } else if (e.key === "Enter" && completed_question && !terminated) {
+      goToNextQuestion();
     }
   }
 
   const goToNextQuestion = () => {
     axios.get(`/game/next?id=${id}`).then((response) => {
       setGameState(response.data);
+      setGuessResult({});
     })
+  }
+
+  const beginAgain = () => {
+    restartGame()
+    setGuessResult({});
   }
 
   return (
@@ -58,9 +69,10 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
           sx={{width: '100%'}}
         />
       </Box>
+      {Object.keys(guessResult).length > 0 && <ResultDisplay guessRes={guessResult}/>}
 
-      {completed_question && <Button onClick={goToNextQuestion}>Next Question</Button>}
+      {completed_question && !terminated && <Button onClick={goToNextQuestion}>Next Question</Button>}
+      {completed_question && terminated && <Button onClick={beginAgain}>Play Again</Button>}
     </>
   )
-  
 }

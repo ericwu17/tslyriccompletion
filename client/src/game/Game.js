@@ -28,6 +28,7 @@ export default function Game() {
       gameState={gameState}
       setGameState={setGameState}
       setHasStarted={setHasStarted}
+      restartGame={beginGame}
     />
   }
 }
