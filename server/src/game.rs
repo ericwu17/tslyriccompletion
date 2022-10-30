@@ -1,5 +1,6 @@
 use rand::Rng;
 use rocket::State;
+use rocket::serde::json::Json;
 use std::sync::{Arc, Mutex, atomic::Ordering};
 use serde::Serialize;
 use crate::NEXT_GAME_ID;
@@ -29,6 +30,7 @@ pub struct GameState {
 	choices: Vec<String>,
 	terminated: bool,
 	completed_question: bool,
+	included_songs: Vec<(String, String)>,
 }
 
 #[derive(Serialize)]
@@ -40,6 +42,7 @@ pub struct GameStatePublic {
 	hints_shown: Vec<Hint>,
 	choices: Vec<String>,
 	terminated: bool,
+	included_songs: Vec<(String, String)>,
 	completed_question: bool,
 }
 
@@ -71,15 +74,24 @@ pub struct GuessResultPublic {
 }
 
 impl GameState {
-	pub fn new(songs: &Vec<Song>) -> Self {
+	pub fn new(songs: &Vec<Song>, songs_to_include: Vec<(String, String)>) -> Self {
+		let mut songs_to_include: Vec<(String, String)> = songs_to_include.into_iter()
+			.filter(|(a, b)| {
+				songs.iter().filter(|song| song.album == *a && song.name == *b).count() > 0
+			}
+			).collect();
+		if songs_to_include.len() == 0 {
+			songs_to_include = songs.iter().map(|song| (song.album.clone(), song.name.clone())).collect();
+		}
 		GameState { 
 			score: 0, 
-			current_question: pick_random_guess(songs), 
+			current_question: pick_random_guess(songs, &songs_to_include), 
 			lifeline_inv: LifelineInventory::new(), 
 			hints_shown: vec![], 
 			choices: vec![],
 			terminated: false,
 			completed_question: false,
+			included_songs: songs_to_include,
 		}
 	}
 
@@ -99,6 +111,7 @@ impl GameState {
 			choices: self.choices.clone(),
 			id,
 			terminated: self.terminated,
+			included_songs: self.included_songs.clone(),
 			completed_question: self.completed_question,
 		}
 	}
@@ -111,6 +124,7 @@ impl GameState {
 			choices: self.choices.clone(),
 			id,
 			terminated: self.terminated,
+			included_songs: self.included_songs.clone(),
 			completed_question: self.completed_question,
 		}
 	}
@@ -150,11 +164,11 @@ impl GameState {
 }
 
 
-#[get("/game/start")]
-pub fn init_game(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, songs: &State<Vec<Song>>) -> String {
+#[post("/game/start", format = "application/json", data = "<songs_to_include>")]
+pub fn init_game(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, songs: &State<Vec<Song>>, songs_to_include: Json<Vec<(String, String)>>) -> String {
 	let mut guard = game_state.lock().unwrap();
 	let id = NEXT_GAME_ID.fetch_add(1, Ordering::Relaxed);
-	let new_game_state = GameState::new(songs);
+	let new_game_state = GameState::new(songs, songs_to_include.to_vec());
 	(*guard).insert(id, new_game_state.clone());
 
 	serde_json::to_string(&new_game_state.into_public(id)).unwrap()
@@ -240,7 +254,7 @@ pub fn next_question(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, 
 	if let Some(game_state) = (*guard).get(&id) {
 		if game_state.completed_question && !game_state.terminated {
 			let mut new_game_state = game_state.clone();
-			new_game_state.current_question = pick_random_guess(songs);
+			new_game_state.current_question = pick_random_guess(songs, &game_state.included_songs);
 			new_game_state.completed_question = false;
 			new_game_state.choices = vec![];
 			new_game_state.hints_shown = vec![];

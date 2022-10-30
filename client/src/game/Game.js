@@ -10,7 +10,7 @@ export default function Game() {
 
 
   const beginGame = () => {
-    axios.get(`/game/start`).then((response) => {
+    axios.post(`/game/start`, [["Speak Now", "Speak Now"]]).then((response) => {
       setGameState(response.data);
       setHasStarted(true);
     })
