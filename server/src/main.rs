@@ -60,7 +60,8 @@ fn get_song(songs: &State<Vec<Song>>, album: &str, name: &str) -> String {
 
 
 #[launch]
-fn rocket() -> _{
+fn rocket() -> _ {
+	std::env::set_var("RUST_BACKTRACE", "1");
 	let songs: Vec<Song> = load_songs_from_files();
 	let my_hashmap: HashMap<usize, GameState> = HashMap::new();
 	let game_state = Arc::new(Mutex::new(my_hashmap));
