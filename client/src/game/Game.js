@@ -43,7 +43,7 @@ export default function Game() {
         const names = [...songs[album]];
         songs[album] = {};
         for (let name of names) {
-          songs[album][name] = false;
+          songs[album][name] = true;
         }
       }
       setSongList(songs);
@@ -53,10 +53,10 @@ export default function Game() {
   if (!hasStarted) {
     return (
       <>
-        <SongSelection songList={songList} setSongList={setSongList}/>
         <Button onClick={beginGame}>
           Begin
         </Button>
+        <SongSelection songList={songList} setSongList={setSongList}/>
       </>
     );
   } else {
@@ -89,17 +89,61 @@ function SongSelection({songList, setSongList}) {
     return true;
   }
 
+  const toggleAlbum = album => {
+    let res
+    if (hasAllSelected(album)) {
+      res = false;
+    } else {
+      res = true;
+    }
+    let newAlbum = {};
+    for (let song of Object.keys(songList[album])) {
+      newAlbum[song] = res;
+    }
+    setSongList({...songList, [album]: newAlbum});
+  }
+  const isAllSongsSelected = ALBUM_ORDER.map(album => hasAllSelected(album)).every(x => x);
+
+
+  const toggleAll = () => {
+    const res = isAllSongsSelected ? false : true;
+
+    const newSongList = {}
+    for (let album of ALBUM_ORDER) {
+      const newAlbum = {};
+      for (let song of Object.keys(songList[album])) {
+        newAlbum[song] = res;
+      }
+      newSongList[album] = newAlbum;
+    }
+    setSongList(newSongList);
+  }
+
+  const invertSelection = () => {
+    const newSongList = {}
+    for (let album of ALBUM_ORDER) {
+      const newAlbum = {};
+      for (let song of Object.keys(songList[album])) {
+        newAlbum[song] = !songList[album][song];
+      }
+      newSongList[album] = newAlbum;
+    }
+    setSongList(newSongList);
+  }
+
   return (
     <Box sx={{ width: '100%' }}>
+      <Button onClick={toggleAll}>{isAllSongsSelected ? 'Deselect' : 'Select'} all</Button>
+      <Button onClick={invertSelection}>Invert Selection</Button>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         {ALBUM_ORDER.map(album => {
           let songs = songList[album];
           return (
-            <Grid item xs={4} key={album}>
-              <Item sx={{height: '100%', m: 2, p: 2}}>
+            <Grid item xs={3} key={album}>
+              <Item sx={{height: '100%', mb: 1, p: 1}}>
                 <Box display="flex" justifyContent="center" alignItems="center" width="100%">
-                  <Checkbox checked={hasAllSelected(album)}/>
-                  <Typography variant="h4" sx={{textDecoration: 'underline'}}>{album}</Typography>
+                  <Checkbox checked={hasAllSelected(album)} onClick={() => toggleAlbum(album)} />
+                  <Typography variant="h4" sx={{textDecoration: 'underline'}} noWrap>{album}</Typography>
                   <Box
                     component="img"
                     sx={{
@@ -114,7 +158,7 @@ function SongSelection({songList, setSongList}) {
                 {songs && Object.keys(songs).map((song, index) => 
                   <Box display="flex" flexDirection="row" alignItems="center" key={`/song/${album}/${song}`} mb={-2}>
                     <Checkbox checked={songList[album][song]} onClick={() => toggleSong(album, song)}/>
-                    <Typography>
+                    <Typography noWrap>
                       {index+1}) <Link href={`/song/${album}/${song}`} >{song}
                       </Link>
                     </Typography>
