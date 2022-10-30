@@ -52,13 +52,15 @@ export default function SongPage() {
                       src={ALBUM_LOGOS[album]}
                       mr={1}
                     />
-                    <Typography variant="h4" sx={{textDecoration: 'underline'}}>{album}</Typography>
+                    <Typography variant="h4" sx={{textDecoration: 'underline'}} noWrap>{album}</Typography>
                   </Box>
                   {songs && songs.map((song, index) => 
-                    <Typography>
-                      {index+1}) <Link href={`/song/${album}/${song}`} key={`/song/${album}/${song}`}>{song}
-                      </Link>
-                    </Typography>
+                    <Box>
+                      <Typography textAlign="left" noWrap>
+                        {index+1}) <Link href={`/song/${album}/${song}`} key={`/song/${album}/${song}`}>{song}
+                        </Link>
+                      </Typography>
+                    </Box>
                   )}
                 </Item>
               </Grid>
