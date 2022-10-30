@@ -12,7 +12,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
 
   // console.log(gameState)
 
-  const { score, current_question, id, completed_question, terminated } = gameState;
+  const { score, current_question, id, completed_question, terminated, choices } = gameState;
   console.log(`The current game has id: ${id}`)
 
   if (!current_question) {
@@ -21,24 +21,29 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
     </Typography>
   }
 
+  const isMultipleChoice = choices.length > 0
+
   const prompt = current_question.shown_line;
 
 
   const onKeyDown = e => {
     if (e.key === "Enter" && !completed_question && currentGuess !== "") {
-      // submit the guess
-      axios.get(`/game/submit-guess?id=${id}&guess=${currentGuess}`).then((response) => {
-        const {game_state, guess_res} = response.data;
-        console.log(response.data);
-        setGameState(game_state);
-        setGuessResult(guess_res);
-        if (guess_res !== "AFM") {
-          setCurrentGuess("");
-        }
-      })
+      submitGuess(currentGuess)
     } else if (e.key === "Enter" && completed_question && !terminated) {
       goToNextQuestion();
     }
+  }
+
+  const submitGuess = guess => {
+    axios.get(`/game/submit-guess?id=${id}&guess=${guess}`).then((response) => {
+      const {game_state, guess_res} = response.data;
+      console.log(response.data);
+      setGameState(game_state);
+      setGuessResult(guess_res);
+      if (guess_res !== "AFM") {
+        setCurrentGuess("");
+      }
+    })
   }
 
   const goToNextQuestion = () => {
@@ -46,6 +51,14 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       setGameState(response.data);
       setGuessResult({});
     })
+  }
+
+  const handleMultipleChoiceClick = () => {
+    if (!completed_question) {
+      axios.get(`/game/reduce-multiple-choice?id=${id}`).then((response) => {
+        setGameState(response.data);
+      })
+    }
   }
 
   const beginAgain = () => {
@@ -61,14 +74,30 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       <Typography>
         What line follows: {prompt}
       </Typography>
-      <Box display="flex" flexDirection="row">
-        <TextField 
-          onChange={event => setCurrentGuess(event.target.value)}
-          onKeyDown={onKeyDown}
-          value={currentGuess}
-          sx={{width: '100%'}}
-        />
-      </Box>
+      {!isMultipleChoice && 
+        <Box display="flex" flexDirection="row">
+          <TextField 
+            onChange={event => setCurrentGuess(event.target.value)}
+            onKeyDown={onKeyDown}
+            value={currentGuess}
+            sx={{width: '100%'}}
+          />
+          <Button onClick={handleMultipleChoiceClick}>
+            Multiple Choice
+          </Button>
+        </Box>
+      }
+      {isMultipleChoice && 
+        <Box display="flex" flexDirection="column">
+          <Typography>Your {choices.length} choices are: </Typography>
+          {choices.map((choice, index) => {
+            return <Typography key={index}>{index+1}) <Link onClick={() => submitGuess(choice)}>{choice}</Link></Typography>
+          })
+          }
+        </Box>
+      }
+
+
       {Object.keys(guessResult).length > 0 && <ResultDisplay guessRes={guessResult}/>}
       {!completed_question && 
         <LifelineSection 
@@ -132,6 +161,7 @@ function DisplayAnswer({question}) {
 
   const {song, shown_line} = question;
   const albumTitle = `${song.album}--${song.name}`;
+  const href = `/song/${song.album}/${song.name}`;
   const lines = song.lines;
 
   const toggleShowLyrics = () => {
@@ -141,7 +171,7 @@ function DisplayAnswer({question}) {
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       <Typography>
-        This question was from: {albumTitle} <Link onClick={toggleShowLyrics}>({showLyrics ? "hide" :"show"})</Link>
+        This question was from: <Link href={href} target="_blank">{albumTitle}</Link> <Link onClick={toggleShowLyrics}>({showLyrics ? "hide" :"show"})</Link>
       </Typography>
       {showLyrics && lines.map((line, index) => {
         const text = line.text
