@@ -13,7 +13,8 @@ export default function ResultDisplay({guessRes}) {
     const {user_guess, answer, points_earned, new_lifeline} = guessRes.Correct;
     return (
       <Box>
-        <Typography>Correct! You earned {points_earned} points.</Typography>
+        <Typography>Correct! You earned {points_earned} points</Typography>
+        {new_lifeline && <Typography>You also got a {new_lifeline} lifeline!</Typography>}
         <Typography>Your Guess:</Typography>
         <FlaggedText text={user_guess.text} flags={user_guess.flags}/>
         <Typography>Correct Answer:</Typography>
