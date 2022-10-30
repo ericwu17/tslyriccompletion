@@ -23,11 +23,11 @@ export default function AboutPage() {
       location within the song. Therefore, the game will not show the line "Long live the walls we crashed through" and ask you to guess what comes next.
     </Typography>
     <Typography>
-      There are also some lyrics which I call "exclamatory", such as {' '}
+      There are also some lines which I call "exclamatory", such as {' '}
         <Link href="/song/Reputation/Dress">Ah, ha, ha, ha-ah</Link>, {' '}
         <Link href="/song/Speak Now/Haunted">Oh, oh, oh, oh, oh, oh, oh, oh, oh</Link>, {' '}
         <Link href="/song/Fearless/Fifteen">La-la-la, la-la-la, la-la-la-la</Link>.
-      Can you figure out which songs these lyrics come from? I certainly can't, and I don't think it's fun to include such lines in the guessing game. In this game, neither the prompt nor the answer will
+      Can you figure out which songs these lines come from? I certainly can't, and I don't think it's fun to include such lines in the guessing game. In this game, neither the prompt nor the answer will
       ever be an exclamatory line. An exclamatory line is any line with more than a 50% concentration of exclamatory words, or any line with less than 3 words 
       (short lines are excluded because they are generally hard to identify). A list of exclamatory words is:
       <Typography sx={{ml:5}}>
@@ -36,7 +36,7 @@ export default function AboutPage() {
       </Typography>
     </Typography>
     <Typography>
-      When browsing lyrics, all lines which may show up as a prompt in-game are shown in black, while all lines which are not candidates for in-game prompts are shown in pink. 
+      When browsing lyrics on this site, all lines which may show up as a prompt in-game are shown in black, while all lines which are not candidates for in-game prompts are shown in pink. 
       Hovering over a pink line shows reasons why it is not a valid candidate.
     </Typography>
 
@@ -52,6 +52,20 @@ export default function AboutPage() {
     </Typography>
     <Typography>
       TODO: This section of the about page is coming soon.
+    </Typography>
+
+    <Typography variant="h4" sx={{textDecoration: 'underline', mt:2, mb: 2}}>
+      Known issues
+    </Typography>
+    <Typography>
+      When viewing the track list of Red, I removed the song "All Too Well" (non-ten minute version), since it contains duplicate lyrics with the ten minute version. This results in a mismatch between track numbers and songs. (For example, Come Back Be Here is track 18 on the album, but it appears as track 17).
+    </Typography>
+
+    <Typography variant="h4" sx={{textDecoration: 'underline', mt:2, mb: 2}}>
+      Future Ideas for the Taylor Swift Guessing Game?
+    </Typography>
+    <Typography>
+      I'll write any future ideas here! Please let me know if you have any suggestions.
     </Typography>
 
     <Typography variant="h4" sx={{textDecoration: 'underline', mt:2, mb: 2}}>
