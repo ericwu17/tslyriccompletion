@@ -268,7 +268,7 @@ pub fn take_guess(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, id:
 
 		let question = game_state.current_question.clone();
 
-		if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" && is_on_right_track(&guess, &question.answer) {
+		if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" && is_on_right_track(&guess, &question.answer) && game_state.choices.len() == 0 {
 			// The guess was on the right track, but was too short.
 			let res = GuessResultPublic {
 				game_state: game_state.into_public(id),
