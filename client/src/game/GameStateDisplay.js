@@ -40,7 +40,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       console.log(response.data);
       setGameState(game_state);
       setGuessResult(guess_res);
-      if (guess_res !== "AFM") {
+      if (!guess_res.AFM) {
         setCurrentGuess("");
       }
     })
@@ -67,7 +67,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
   }
 
   return (
-    <>
+    <Box m={2}>
       <Typography>
         Current Score: {score}
       </Typography>
@@ -110,7 +110,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
 
       {completed_question && !terminated && <Button onClick={goToNextQuestion}>Next Question</Button>}
       {completed_question && terminated && <Button onClick={beginAgain}>Play Again</Button>}
-    </>
+    </Box>
   )
 }
 

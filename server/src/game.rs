@@ -52,9 +52,20 @@ pub struct FlaggedString {
 	text: String,
 }
 
+impl FlaggedString {
+	pub fn set_all_flags(&mut self, val: i32) {
+		for i in 0..self.flags.len() {
+			self.flags[i] = val;
+		}
+	}
+}
+
 #[derive(Serialize)]
 pub enum GuessResult {
-	AFM, // asking for more. Used when the user's guess is on the right track but too short.
+	AFM { // asking for more. Used when the user's guess is on the right track but too short.
+		target_length: usize,
+		guess_length: usize,
+	},
 	Correct {
 		points_earned: i32,
 		user_guess: FlaggedString,
@@ -286,19 +297,27 @@ pub fn take_guess(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, id:
 			// The guess was on the right track, but was too short.
 			let res = GuessResultPublic {
 				game_state: game_state.into_public(id),
-				guess_res: GuessResult::AFM,
+				guess_res: GuessResult::AFM{ 
+					target_length:question.answer.chars().count(),
+					guess_length: guess.chars().count(),
+				},
 			};
 			return serde_json::to_string(&res).unwrap();
 		}
 
 		let (truncate_amt, dist) = optimal_truncated_dist(&guess, &question.answer);
 		let mut new_game_state = game_state.clone();
-		let (guess_flag_str, ans_flag_str) = get_flags(guess, &question.answer, truncate_amt);
+		let (mut guess_flag_str, mut ans_flag_str) = get_flags(guess, &question.answer, truncate_amt);
 		let points_earned: i32;
 		let mut maybe_new_lifeline = None;
 
 		if (game_state.choices.len() == 0 && dist > MAX_ACCEPTABLE_DIST) || (game_state.choices.len() > 0 && guess != question.answer) {
 			// The user has guessed wrong and the game is now over
+			if game_state.choices.len() > 0 {
+				// In a multiple choice situation, we set the flags for both strings' characters all to red.
+				guess_flag_str.set_all_flags(1);
+				ans_flag_str.set_all_flags(1);
+			}
 			new_game_state.terminated = true;
 			new_game_state.completed_question = true;
 			(*guard).insert(id, new_game_state.clone());
