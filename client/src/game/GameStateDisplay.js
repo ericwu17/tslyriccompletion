@@ -35,6 +35,10 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
   }
 
   const submitGuess = guess => {
+    if (gameState.completed_question) {
+      return;
+    }
+    
     axios.get(`/game/submit-guess?id=${id}&guess=${guess}`).then((response) => {
       const {game_state, guess_res} = response.data;
       console.log(response.data);
