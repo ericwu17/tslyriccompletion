@@ -49,6 +49,16 @@ export default function ResultDisplay({guessRes}) {
     )
   }
 
+  if (guessRes.Skipped) {
+    const {user_guess, answer} = guessRes.Skipped;
+    return (
+      <Box>
+        <Typography>Skipped question:</Typography>
+        {answerComparison(user_guess.text, user_guess.flags, answer.text, answer.flags)}
+      </Box>
+    )
+  }
+
 
   return (
     <Typography>Error: Received a guess result in an unexpected format: {JSON.stringify(guessRes)}</Typography>
@@ -57,6 +67,9 @@ export default function ResultDisplay({guessRes}) {
 
 function FlaggedText({text, flags}) {
   const chars = text.split('')
+  if (!flags) {
+    flags = [];
+  }
   return (
     <Typography sx={{ fontFamily: 'Monospace' }}>
       {chars.map((char, index) => {
@@ -71,7 +84,7 @@ function FlaggedText({text, flags}) {
         }
 
 
-        return <span style={{color, fontWeight}}>{char}</span>
+        return <span style={{color, fontWeight}} key={index}>{char}</span>
       })}
     </Typography>
   );

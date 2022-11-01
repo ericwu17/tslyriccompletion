@@ -107,6 +107,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
         <LifelineSection 
           gameState={gameState}
           setGameState={setGameState}
+          setGuessResult={setGuessResult}
         />
       }
 
@@ -118,13 +119,29 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
   )
 }
 
-function LifelineSection({gameState, setGameState}) {
+function LifelineSection({gameState, setGameState, setGuessResult}) {
   const {id, hints_shown} = gameState
   const {show_title_album, show_prev_lines, skip} = gameState.lifeline_inv;
 
   const consumeLifeline = lifelineToUse => {
     axios.get(`/game/use-lifeline?id=${id}&lifeline=${lifelineToUse}`).then((response) => {
-      setGameState(response.data);
+      const newGameState = response.data;
+      setGameState(newGameState);
+      console.log(newGameState);
+      if (lifelineToUse === "skip") {
+        setGuessResult({
+          Skipped: {
+            user_guess: {
+              text: "-",
+              flags: [],
+            },
+            answer: {
+              text: newGameState.current_question.answer,
+              flags: [],
+            },
+          }
+        });
+      }
     })
   }
 
