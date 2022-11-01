@@ -4,10 +4,8 @@ import { Box, Typography } from "@mui/material";
 
 export default function ResultDisplay({guessRes}) {
   if (guessRes.AFM) {
-    const numCharsActual = guessRes.AFM.target_length;
-    const numCharsGuess = guessRes.AFM.guess_length;
     return (
-      <Typography>You're on the right track, but your guess was too short! ({numCharsGuess}/{numCharsActual} characters)</Typography>
+      <Typography>You're on the right track, but your guess was too short!</Typography>
     );
   }
 
