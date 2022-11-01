@@ -1,15 +1,16 @@
 use rand::Rng;
 use rocket::State;
 use rocket::serde::json::Json;
-use std::sync::{Arc, Mutex, atomic::Ordering};
+use std::sync::{Arc, Mutex};
 use serde::Serialize;
-use crate::NEXT_GAME_ID;
 use crate::song::Song;
 use crate::guess_generating::{pick_random_guess, optimal_truncated_dist, pick_distractors, Question};
 use crate::diff::diff_greedy;
 use crate::lifelines::{LifelineInventory, Lifeline};
 use rand::prelude::SliceRandom;
 use std::collections::{HashMap};
+use uuid::Uuid;
+
 
 const MAX_ACCEPTABLE_DIST: usize = 13;
 const POINTS_FOR_PERFECT_MATCH: i32 = 26;
@@ -35,7 +36,7 @@ pub struct GameState {
 
 #[derive(Serialize)]
 pub struct GameStatePublic {
-	id: usize,
+	id: String,
 	score: i32,
 	current_question: Question,
 	lifeline_inv: LifelineInventory,
@@ -107,7 +108,7 @@ impl GameState {
 	}
 
 
-	pub fn into_public(&self, id: usize) -> GameStatePublic {
+	pub fn into_public(&self, id: String) -> GameStatePublic {
 		GameStatePublic {
 			score: self.score,
 			current_question: Question {
@@ -126,7 +127,7 @@ impl GameState {
 			completed_question: self.completed_question,
 		}
 	}
-	pub fn into_public_with_answers(&self, id: usize) -> GameStatePublic {
+	pub fn into_public_with_answers(&self, id: String) -> GameStatePublic {
 		GameStatePublic {
 			score: self.score,
 			current_question: self.current_question.clone(),
@@ -176,17 +177,18 @@ impl GameState {
 
 
 #[post("/game/start", format = "application/json", data = "<songs_to_include>")]
-pub fn init_game(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, songs: &State<Vec<Song>>, songs_to_include: Json<Vec<(String, String)>>) -> String {
+pub fn init_game(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, songs: &State<Vec<Song>>, songs_to_include: Json<Vec<(String, String)>>) -> String {
 	let mut guard = game_state.lock().unwrap();
-	let id = NEXT_GAME_ID.fetch_add(1, Ordering::Relaxed);
-	let new_game_state = GameState::new(songs, songs_to_include.to_vec());
-	(*guard).insert(id, new_game_state.clone());
+	let id = Uuid::new_v4().to_string();
 
-	serde_json::to_string(&new_game_state.into_public(id)).unwrap()
+	let new_game_state = GameState::new(songs, songs_to_include.to_vec());
+	(*guard).insert(id.clone(), new_game_state.clone());
+
+	serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap()
 }
 
 #[get("/game/use-lifeline?<id>&<lifeline>")]
-pub fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, id: usize, lifeline: &str) -> String {
+pub fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, id: String, lifeline: &str) -> String {
 	let mut guard = game_state.lock().unwrap();
 	if let Some(game_state) = (*guard).get(&id) {
 		let mut new_game_state = game_state.clone();
@@ -196,11 +198,11 @@ pub fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>,
 						&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::ShowTitleAlbum) {
 					let title = format!("{} : {}", game_state.current_question.song.album, game_state.current_question.song.name);
 					new_game_state.hints_shown.push(Hint::ShowTitle(title));
-					(*guard).insert(id, new_game_state.clone());
-					return serde_json::to_string(&new_game_state.into_public(id)).unwrap()
+					(*guard).insert(id.clone(), new_game_state.clone());
+					return serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap()
 				} else {
 					// no lifelines remaining, so do nothing
-					return serde_json::to_string(&game_state.into_public(id)).unwrap()
+					return serde_json::to_string(&game_state.into_public(id.clone())).unwrap()
 				}
 			},
 			"show_prev_lines" => {
@@ -208,8 +210,8 @@ pub fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>,
 						&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::ShowPrevLines) {
 					let (lines, is_at_song_beginning) = get_previous_lines(&new_game_state.current_question);
 					new_game_state.hints_shown.push(Hint::ShowPrevLines{lines, is_at_song_beginning});
-					(*guard).insert(id, new_game_state.clone());
-					return serde_json::to_string(&new_game_state.into_public(id)).unwrap()
+					(*guard).insert(id.clone(), new_game_state.clone());
+					return serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap()
 				} else {
 					// no lifelines remaining, so do nothing
 					return serde_json::to_string(&game_state.into_public(id)).unwrap()
@@ -220,12 +222,12 @@ pub fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>,
 						&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::Skip) {
 					new_game_state.hints_shown.push(Hint::Skip);
 					new_game_state.completed_question = true;
-					(*guard).insert(id, new_game_state.clone());
+					(*guard).insert(id.clone(), new_game_state.clone());
 					// not calling into_public() because we want to show everything, including all answers.
-					return serde_json::to_string(&new_game_state.into_public_with_answers(id)).unwrap()
+					return serde_json::to_string(&new_game_state.into_public_with_answers(id.clone())).unwrap()
 				} else {
 					// no lifelines remaining, so do nothing
-					return serde_json::to_string(&game_state.into_public(id)).unwrap()
+					return serde_json::to_string(&game_state.into_public(id.clone())).unwrap()
 				}
 			},
 			_ => {},
@@ -237,12 +239,12 @@ pub fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>,
 
 
 #[get("/game/reduce-multiple-choice?<id>")]
-pub fn reduce_multiple_choice(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, songs: &State<Vec<Song>>, id: usize, ) -> String {
+pub fn reduce_multiple_choice(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, songs: &State<Vec<Song>>, id: String) -> String {
 	let mut guard = game_state.lock().unwrap();
 	if let Some(game_state) = (*guard).get(&id) {
 		if game_state.choices.len() > 0 {
 			// we do nothing if the current game state has already been reduced to multiple choice
-			return serde_json::to_string(&game_state.into_public(id)).unwrap()
+			return serde_json::to_string(&game_state.into_public(id.clone())).unwrap()
 		}
 
 		let mut new_game_state = game_state.clone();
@@ -251,8 +253,8 @@ pub fn reduce_multiple_choice(game_state: &State<Arc<Mutex<HashMap<usize, GameSt
 		new_game_state.choices.push(answer);
 		new_game_state.choices.shuffle(&mut rand::thread_rng());
 
-		(*guard).insert(id, new_game_state.clone());
-		return serde_json::to_string(&new_game_state.into_public(id)).unwrap()
+		(*guard).insert(id.clone(), new_game_state.clone());
+		return serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap()
 
 	}
 
@@ -260,7 +262,7 @@ pub fn reduce_multiple_choice(game_state: &State<Arc<Mutex<HashMap<usize, GameSt
 }
 
 #[get("/game/next?<id>")]
-pub fn next_question(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, songs: &State<Vec<Song>>, id: usize, ) -> String {
+pub fn next_question(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, songs: &State<Vec<Song>>, id: String) -> String {
 	let mut guard = game_state.lock().unwrap();
 	if let Some(game_state) = (*guard).get(&id) {
 		if game_state.completed_question && !game_state.terminated {
@@ -270,11 +272,11 @@ pub fn next_question(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, 
 			new_game_state.choices = vec![];
 			new_game_state.hints_shown = vec![];
 
-			(*guard).insert(id, new_game_state.clone());
-			return serde_json::to_string(&new_game_state.into_public(id)).unwrap()
+			(*guard).insert(id.clone(), new_game_state.clone());
+			return serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap()
 
 		} else {
-			return serde_json::to_string(&game_state.into_public(id)).unwrap()
+			return serde_json::to_string(&game_state.into_public(id.clone())).unwrap()
 		}
 	}
 
@@ -282,7 +284,7 @@ pub fn next_question(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, 
 }
 
 #[get("/game/submit-guess?<id>&<guess>")]
-pub fn take_guess(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, id: usize, guess: &str) -> String {
+pub fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, id: String, guess: &str) -> String {
 	let mut guard = game_state.lock().unwrap();
 	if let Some(game_state) = (*guard).get(&id) {
 		if game_state.completed_question {
@@ -320,10 +322,10 @@ pub fn take_guess(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, id:
 			}
 			new_game_state.terminated = true;
 			new_game_state.completed_question = true;
-			(*guard).insert(id, new_game_state.clone());
+			(*guard).insert(id.clone(), new_game_state.clone());
 			
 			let res = GuessResultPublic {
-				game_state: new_game_state.into_public_with_answers(id),
+				game_state: new_game_state.into_public_with_answers(id.clone()),
 				guess_res: GuessResult::Incorrect {
 					user_guess: guess_flag_str,
 					answer: ans_flag_str,
@@ -351,10 +353,10 @@ pub fn take_guess(game_state: &State<Arc<Mutex<HashMap<usize, GameState>>>>, id:
 		if let Some(new_lifeline) = &maybe_new_lifeline {
 			new_game_state.lifeline_inv.add_lifeline(&new_lifeline);
 		}
-		(*guard).insert(id, new_game_state.clone());
+		(*guard).insert(id.clone(), new_game_state.clone());
 
 		let res = GuessResultPublic {
-			game_state: new_game_state.into_public_with_answers(id),
+			game_state: new_game_state.into_public_with_answers(id.clone()),
 			guess_res: GuessResult::Correct {
 				points_earned,
 				user_guess: guess_flag_str,

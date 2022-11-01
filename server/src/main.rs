@@ -5,7 +5,7 @@ pub mod game;
 pub mod diff;
 pub mod lifelines;
 
-use std::{collections::HashMap, sync::atomic::AtomicUsize};
+use std::{collections::HashMap};
 use crate::song::Song;
 use crate::loader::load_songs_from_files;
 
@@ -18,9 +18,6 @@ use game::{GameState,
 };
 use rocket::State;
 use std::sync::{Arc, Mutex};
-
-
-pub static NEXT_GAME_ID: AtomicUsize = AtomicUsize::new(1);
 
 
 #[macro_use] extern crate rocket;
@@ -63,7 +60,7 @@ fn get_song(songs: &State<Vec<Song>>, album: &str, name: &str) -> String {
 fn rocket() -> _ {
 	std::env::set_var("RUST_BACKTRACE", "1");
 	let songs: Vec<Song> = load_songs_from_files();
-	let my_hashmap: HashMap<usize, GameState> = HashMap::new();
+	let my_hashmap: HashMap<String, GameState> = HashMap::new();
 	let game_state = Arc::new(Mutex::new(my_hashmap));
 
 	rocket::build()
