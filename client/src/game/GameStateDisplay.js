@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Box, Button, Link, TextField, Typography } from "@mui/material";
 import ResultDisplay from "./ResultDisplay";
+import { ALBUM_LOGOS } from "../utils/Utils";
 
 
 export default function GameStateDisplay({gameState, setGameState, setHasStarted, restartGame}) {
@@ -111,10 +112,10 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
         />
       }
 
-      {current_question.answer && <DisplayAnswer question={current_question}/>}
-
       {completed_question && !terminated && <Button onClick={goToNextQuestion}>Next Question</Button>}
       {completed_question && terminated && <Button onClick={beginAgain}>Play Again</Button>}
+
+      {current_question.answer && <DisplayAnswer question={current_question}/>}
     </Box>
   )
 }
@@ -178,12 +179,12 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
 }
 
 function DisplayAnswer({question}) {
-  const [showLyrics, setShowLyrics] = React.useState(false);
+  const [showLyrics, setShowLyrics] = React.useState(true);
 
   const {song, shown_line} = question;
   const albumTitle = `${song.album}--${song.name}`;
   const href = `/song/${song.album}/${song.name}`;
-  const { lines, lyrics_raw } = song;
+  const { lyrics_raw } = song;
   console.log(song)
 
   const toggleShowLyrics = () => {
@@ -192,9 +193,28 @@ function DisplayAnswer({question}) {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      <Typography>
-        This question was from: <Link href={href} target="_blank">{albumTitle}</Link> <Link onClick={toggleShowLyrics}>({showLyrics ? "hide" :"show"})</Link>
-      </Typography>
+      <Box display="flex" flexDirection="row" alignItems="center">
+        <Box alignSelf="flex-end" mr={1}>
+          <Typography>
+            This question was from: 
+          </Typography>
+        </Box>
+        <Typography variant="h4" noWrap>
+          <Link href={href} target="_blank">{albumTitle}</Link> 
+        </Typography>
+
+        <Box
+          component="img"
+          sx={{
+            height: 35,
+            width: 35,
+          }}
+          alt="Album Img"
+          src={ALBUM_LOGOS[song.album]}
+          mx={1}
+        />
+        <Button onClick={toggleShowLyrics}>({showLyrics ? "hide" :"show"} lyrics)</Button>
+      </Box>
       {showLyrics && <SongLyricsDisplay lyrics_raw={lyrics_raw} shown_line={shown_line}/>}
 
     </Box>
