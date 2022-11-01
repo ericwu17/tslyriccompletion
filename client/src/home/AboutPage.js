@@ -60,10 +60,6 @@ export default function AboutPage() {
     <Typography>
       When viewing the track list of Red, I removed the song "All Too Well" (non-ten minute version), since it contains duplicate lyrics with the ten minute version. This results in a mismatch between track numbers and songs. (For example, Come Back Be Here is track 18 on the album, but it appears as track 17).
     </Typography>
-    <Typography>
-    Server is panicking when the answer contains a non-ascii character (oops). It's causing the entire server to essentially crash (this issue must be addressed soon). This was observed when the answer was "And losing on card game bets with Dalí"
-    </Typography>
-
 
     <Typography variant="h4" sx={{textDecoration: 'underline', mt:2, mb: 2}}>
       Future Ideas for the Taylor Swift Guessing Game?

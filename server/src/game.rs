@@ -461,7 +461,9 @@ fn get_flags(guess: &str, answer: &str, optimal_truncate_amt: i32) -> (FlaggedSt
 			guess_flags[i] = 1;
 		}
 	}
-	for i in (guess_flags.len()-optimal_truncate_amt as usize)..guess_flags.len() {
+	let num_chars_truncated = guess[(guess.len()-optimal_truncate_amt as usize)..].chars().count();
+
+	for i in (guess_flags.len()-num_chars_truncated)..guess_flags.len() {
 		guess_flags[i] = 2;
 	}
 

@@ -22,16 +22,16 @@ pub fn optimal_truncated_dist(l1: &str, l2: &str) -> (i32, usize) {
 	let mut minimal_dist = lowercase_edit_dist(l1, l2);
 	let mut k: i32 = 1;
 	while l1.len() as i32 - k >= 0 {
+		// This part is needed so that k always ends on a character boundary, since slices operate on bytes, not characters.
+		while l1.len() as i32 - k >= 0 && !l1.is_char_boundary(l1.len()-k as usize) {
+			k += 1;
+		}
 		let d = lowercase_edit_dist(&l1[..(l1.len()-k as usize)], l2);
 		if d < minimal_dist {
 			optimal_k = k;
 			minimal_dist = d;
 		}
 		k += 1;
-		// This part is needed so that k always ends on a character boundary, since slices operate on bytes, not characters.
-		while l1.len() as i32 - k >= 0 && !l1.is_char_boundary(l1.len()-k as usize) {
-			k += 1;
-		}
 	}
 	return (optimal_k, minimal_dist)
 
