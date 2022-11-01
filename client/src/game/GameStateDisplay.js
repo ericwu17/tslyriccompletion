@@ -183,7 +183,8 @@ function DisplayAnswer({question}) {
   const {song, shown_line} = question;
   const albumTitle = `${song.album}--${song.name}`;
   const href = `/song/${song.album}/${song.name}`;
-  const lines = song.lines;
+  const { lines, lyrics_raw } = song;
+  console.log(song)
 
   const toggleShowLyrics = () => {
     setShowLyrics(!showLyrics);
@@ -194,12 +195,27 @@ function DisplayAnswer({question}) {
       <Typography>
         This question was from: <Link href={href} target="_blank">{albumTitle}</Link> <Link onClick={toggleShowLyrics}>({showLyrics ? "hide" :"show"})</Link>
       </Typography>
-      {showLyrics && lines.map((line, index) => {
-        const text = line.text
-        return <Typography key={index} sx={{color: text === shown_line ? 'red' : 'black'}}>{text}</Typography>
-      })}
+      {showLyrics && <SongLyricsDisplay lyrics_raw={lyrics_raw} shown_line={shown_line}/>}
 
     </Box>
   )
 
+}
+
+function SongLyricsDisplay({lyrics_raw, shown_line}) {
+  const lines = lyrics_raw.split('\n')
+  return (
+    <Box>
+      {lines.map((line, index) => {
+        const styles = {}
+        if (line === shown_line) {
+          styles['color'] = 'red'
+        }
+        if (line.startsWith('[') && line.endsWith(']')) {
+          styles['fontWeight'] = 'bold'
+        }
+        return <Typography key={index} sx={styles}>{line}</Typography>
+      })}
+    </Box>
+  )
 }
