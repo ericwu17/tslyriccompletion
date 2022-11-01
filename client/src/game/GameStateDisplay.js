@@ -161,7 +161,21 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
       {!nameHint && <Button onClick={() => {consumeLifeline("show_title_album")}} disabled={show_title_album === 0}>
         Show song album and name ({show_title_album})
       </Button>}
-      {nameHint && <Typography>{nameHint}</Typography>}
+      {nameHint && 
+        <Box display="flex" flexDirection="row" alignItems="center">
+          <Box
+            component="img"
+            sx={{
+              height: 20,
+              width: 20,
+            }}
+            alt="Album Img"
+            src={ALBUM_LOGOS[nameHint.split(' : ')[0]]}
+            mx={0.5}
+          />
+          <Typography>{nameHint}</Typography>
+        </Box>
+      }
       
       {!prevLineHint && <Button onClick={() => {consumeLifeline("show_prev_lines")}} disabled={show_prev_lines === 0}>
         Show previous lines ({show_prev_lines})
