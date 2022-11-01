@@ -96,7 +96,11 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
         <Box display="flex" flexDirection="column">
           <Typography>Your {choices.length} choices are: </Typography>
           {choices.map((choice, index) => {
-            return <Typography key={index}>{index+1}) <Link onClick={() => submitGuess(choice)}>{choice}</Link></Typography>
+            if (!completed_question) {
+              return <Typography key={index}>{index+1}) <Link onClick={() => submitGuess(choice)}>{choice}</Link></Typography>
+            } else {
+              return <Typography key={index} >{index+1}) <span style={{color:'darkgray', fontWeight: 'bold'}}>{choice}</span></Typography>
+            }
           })
           }
         </Box>
