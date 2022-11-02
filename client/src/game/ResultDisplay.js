@@ -65,24 +65,27 @@ export default function ResultDisplay({guessRes}) {
 
 function FlaggedText({text, flags}) {
   const chars = text.split('')
-  if (!flags) {
-    flags = [];
+  console.log(flags);
+  if (!flags || flags.length === 0) {
+    flags = chars.map(c => -1);
   }
   return (
     <Typography sx={{ fontFamily: 'Monospace' }}>
       {chars.map((char, index) => {
-        let color = '';
-        let fontWeight = '';
+        let style = {}
         if (flags[index] === 1) {
-          color = '#BA0021'
-          fontWeight = 'bold';
+          style.color = '#BA0021'
+          style.fontWeight = 'bold';
         } else if (flags[index] === 2) {
-          color = '#BDB76B'
-          fontWeight = 'bold';
+          style.color = '#BDB76B'
+          style.fontWeight = 'bold';
+        } else if (flags[index] === -1) {
+          style.color = 'darkgray';
+          style.fontWeight = 'bold';
         }
 
 
-        return <span style={{color, fontWeight}} key={index}>{char}</span>
+        return <span style={style} key={index}>{char}</span>
       })}
     </Typography>
   );
