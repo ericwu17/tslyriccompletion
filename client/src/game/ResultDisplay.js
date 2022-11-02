@@ -41,7 +41,7 @@ export default function ResultDisplay({guessRes}) {
     const {user_guess, answer} = guessRes.Incorrect;
     return (
       <Box>
-        <Typography><span style={{color:'#BA0021', fontWeight: 'bold'}}>Incorrect!</span> The Game is now over. Better luck next time!</Typography>
+        <Typography><span style={{color:'#BA0021', fontWeight: 'bold'}}>Incorrect!</span> The Game is now over.</Typography>
         {answerComparison(user_guess.text, user_guess.flags, answer.text, answer.flags)}
       </Box>
     )

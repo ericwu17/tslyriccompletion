@@ -117,7 +117,17 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       }
 
       {completed_question && !terminated && <Button onClick={goToNextQuestion}>Next Question</Button>}
-      {completed_question && terminated && <Button onClick={beginAgain}>Play Again</Button>}
+      {completed_question && terminated && 
+        <Box>
+          <Typography sx={{color:'#BA0021'}}>Good game! Better luck next time! Leave your name if you want to be remembered:</Typography>
+          <Box>
+            <TextField 
+              placeholder="Enter your name..."
+            />
+            <Button onClick={beginAgain} sx={{width:'min-content'}}>Play Again</Button>
+          </Box>
+        </Box>
+      }
 
       {current_question.answer && <DisplayAnswer question={current_question}/>}
     </Box>
