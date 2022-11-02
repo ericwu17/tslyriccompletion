@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import React from "react";
-import {Tooltip, Typography, Box, Grid, Paper, Link} from '@mui/material';
+import {Tooltip, Typography, Box, Grid, Paper, Link, TextField} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { ALBUM_LOGOS, ALBUM_ORDER } from "../utils/Utils";
 
@@ -17,8 +17,9 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function SongPage() {
   let { album, name } = useParams();
 
-  const [songList, setSongList] = React.useState({});
+  const [unfilteredSongList, setSongList] = React.useState({});
   const [song, setSong] = React.useState({});
+  const [searchString, setSearchString] = React.useState("");
 
   React.useEffect(() => {
     axios.get(`/songs`).then((response) => {
@@ -31,16 +32,53 @@ export default function SongPage() {
     })
   }, [album, name])
 
+  
+
+  if (JSON.stringify(unfilteredSongList) === "{}") {
+    return "still fetching songs..."
+  }
+
+  let songList = {};
+  let shownSongsArr = [];
+  for (let albumName of ALBUM_ORDER) {
+    let songArr = unfilteredSongList[albumName].filter(song => song.toLowerCase().includes(searchString.toLowerCase()));
+    songList[albumName] = songArr;
+    shownSongsArr.push(...songArr.map(song => `${albumName}/${song}`));
+  }
+  console.log(shownSongsArr);
+
+  const onKeyDown = e => {
+    if (e.key === "Enter" && shownSongsArr.length === 1) {
+      window.location.href=`/song/${shownSongsArr[0]}`
+    }
+  }
+
 
   if (album === undefined) {
     return (
       <Box sx={{ width: '100%' }}>
+        <TextField
+          sx={{
+            width:'100%',
+            background:shownSongsArr.length === 1 ? "lightgreen" : null,
+          }}
+          placeholder="Search songs..."
+          value={searchString}
+          onChange={event => setSearchString(event.target.value)}
+          autoFocus
+          color={shownSongsArr.length === 1 ? "success" : "primary"}
+          onKeyDown={onKeyDown}
+          helperText={shownSongsArr.length === 1 && "Press enter to continue"}
+        />
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           {ALBUM_ORDER.map(album => {
             let songs = songList[album];
+            if (songs.length === 0) {
+              return null;
+            }
             return (
-              <Grid item xs={4} key={album}>
-                <Item sx={{height: '100%', m: 2, p: 2}}>
+              <Grid item xs={3} key={album}>
+                <Item sx={{height: '100%', m: 0.5, p: 2}}>
                   <Box display="flex" justifyContent="center" alignItems="center" width="100%">
                     <Box
                       component="img"
@@ -67,6 +105,11 @@ export default function SongPage() {
             );
           })}
         </Grid>
+        {shownSongsArr.length === 0 && 
+          <Box m={2}>
+            <Typography variant="h5">No songs matched your search</Typography>
+          </Box>
+        }
       </Box>
     );
   }
