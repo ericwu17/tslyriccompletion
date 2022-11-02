@@ -1,20 +1,26 @@
 import React from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { Box, Button, Link, TextField, Typography } from "@mui/material";
 import ResultDisplay from "./ResultDisplay";
 import { ALBUM_LOGOS } from "../utils/Utils";
 
 
-export default function GameStateDisplay({gameState, setGameState, setHasStarted, restartGame}) {
+export default function GameStateDisplay({gameState, setGameState, setHasStarted}) {
   const [guessResult, setGuessResult] = React.useState({});
   const [currentGuess, setCurrentGuess] = React.useState("");
-  // console.log(currentGuess);
 
-
-  // console.log(gameState)
 
   const { score, current_question, id, completed_question, terminated, choices } = gameState;
-  console.log(`The current game has id: ${id}`)
+
+  React.useEffect(() => {
+    if (terminated === true) {
+      // once the game ends, we want to remove the cookie so that
+      // if users close the tab, they won't be loaded into the game
+      // next time
+      Cookies.remove('tsgg-game-id')
+    } 
+  }, [terminated]);
 
   if (!current_question) {
     return <Typography>
@@ -25,6 +31,8 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
   const isMultipleChoice = choices.length > 0
 
   const prompt = current_question.shown_line;
+
+  
 
 
   const onKeyDown = e => {
@@ -67,8 +75,8 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
   }
 
   const beginAgain = () => {
-    restartGame()
     setGuessResult({});
+    setHasStarted(false)
   }
 
   return (

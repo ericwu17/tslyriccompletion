@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Cookies from 'js-cookie'
 import { Checkbox, Box, Grid, Button, Typography, Paper, Link } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import GameStateDisplay from "./GameStateDisplay";
@@ -21,6 +22,9 @@ export default function Game() {
   const [flag, setFlag] = React.useState(0);
 
   const beginGame = () => {
+    // if (!hasStarted) {
+    //   return;
+    // }
     const includedSongList = [];
     for (let album of Object.keys(songList)) {
       for (let name of Object.keys(songList[album])) {
@@ -32,10 +36,65 @@ export default function Game() {
 
     axios.post(`/game/start`, includedSongList).then((response) => {
       setGameState(response.data);
+      Cookies.set('tsgg-game-id', response.data.id);
+      console.log('starting game with id: ', response.data.id)
       setHasStarted(true);
     })
-    setHasStarted(true);
   }
+
+  React.useEffect(() => {
+    axios.get(`/songs`).then((response) => {
+      let songs = response.data
+      for (let album of Object.keys(songs)) {
+        const names = [...songs[album]];
+        songs[album] = {};
+        for (let name of names) {
+          songs[album][name] = true;
+        }
+      }
+      setSongList(songs);
+    });
+
+    let maybeGameId = Cookies.get('tsgg-game-id')
+    if (maybeGameId) {
+      console.log(`Loading game from cookies... (the id is: ${maybeGameId})`)
+      axios.get(`/songs`).then((response) => {
+        const songs = response.data
+        axios.get(`/game/next?id=${maybeGameId}`).then((response) => {
+          if (!response.data.id) {
+            // return early because the game id in cookies is invalid.
+            console.log("invalid id from cookies. Aborting.")
+            return;
+          }
+          setGameState(response.data);
+          console.log(response.data);
+          // set the songList according to the songList in the current game
+          const newSongList = {}
+
+          for (let album of Object.keys(songs)) {
+            const names = [...songs[album]];
+            newSongList[album] = {};
+            for (let name of names) {
+              newSongList[album][name] = false;
+            }
+          }
+          for (let [album, name] of response.data.included_songs) {
+            newSongList[album][name] = true;
+          }
+  
+          setSongList(newSongList);
+          
+          console.log("new song list:")
+          console.log(newSongList);
+  
+  
+          setHasStarted(true);
+        })
+      });
+      
+      return;
+    }
+  }, []);
 
   React.useEffect(() => {
     const keyDownHandler = event => {
@@ -50,32 +109,26 @@ export default function Game() {
         document.removeEventListener('keydown', keyDownHandler);
       }
     };
+    if (!hasStarted) {
+      document.addEventListener('keydown', keyDownHandler);
+      setFlag(0);
+    } else {
+      document.removeEventListener('keydown', keyDownHandler);
+    }
 
-    document.addEventListener('keydown', keyDownHandler);
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, []);
+  }, [hasStarted]);
+
   React.useEffect(() => {
     if (flag === 17) {
+      console.log('calling beginGame due to Enter being pressed!')
       beginGame();
     }
     // eslint-disable-next-line
   }, [flag]);
 
-  React.useEffect(() => {
-    axios.get(`/songs`).then((response) => {
-      let songs = response.data
-      for (let album of Object.keys(songs)) {
-        const names = [...songs[album]];
-        songs[album] = {};
-        for (let name of names) {
-          songs[album][name] = true;
-        }
-      }
-      setSongList(songs);
-    });
-  }, [])
 
   if (!hasStarted) {
     return (
@@ -99,7 +152,6 @@ export default function Game() {
       gameState={gameState}
       setGameState={setGameState}
       setHasStarted={setHasStarted}
-      restartGame={beginGame}
     />
   }
 }
