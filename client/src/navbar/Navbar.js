@@ -32,6 +32,12 @@ export default function Navbar() {
           </Button>
           <Button 
             color="inherit"
+            onClick={() => {window.location.href="/history"}}
+          >
+            View Scores
+          </Button>
+          <Button 
+            color="inherit"
             onClick={() => {window.location.href="/song"}}
           >
             View Lyrics

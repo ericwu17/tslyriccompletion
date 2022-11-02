@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CssBaseline } from '@mui/material';
 import Navbar from './navbar/Navbar';
 import Game from './game/Game';
+import HistoryPage from './history/History'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/song/:album/:name" element={<SongPage />} />
           <Route path="/song/:album" element={<SongPage />} />
           <Route path="/songs" element={<Navigate to="/song" />} />
+          <Route path="/history" element={<HistoryPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
