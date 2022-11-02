@@ -65,7 +65,7 @@ export default function ResultDisplay({guessRes}) {
 
 function FlaggedText({text, flags}) {
   const chars = text.split('')
-  console.log(flags);
+
   if (!flags || flags.length === 0) {
     flags = chars.map(c => -1);
   }

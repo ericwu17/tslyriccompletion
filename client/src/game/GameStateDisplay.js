@@ -132,7 +132,7 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
     axios.get(`/game/use-lifeline?id=${id}&lifeline=${lifelineToUse}`).then((response) => {
       const newGameState = response.data;
       setGameState(newGameState);
-      console.log(newGameState);
+
       if (lifelineToUse === "skip") {
         setGuessResult({
           Skipped: {
@@ -203,7 +203,7 @@ function DisplayAnswer({question}) {
   const albumTitle = `${song.album}--${song.name}`;
   const href = `/song/${song.album}/${song.name}`;
   const { lyrics_raw } = song;
-  console.log(song)
+
 
   const toggleShowLyrics = () => {
     setShowLyrics(!showLyrics);

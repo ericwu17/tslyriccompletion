@@ -18,6 +18,7 @@ export default function Game() {
   const [hasStarted, setHasStarted] = React.useState(false);
   const [gameState, setGameState] = React.useState({});
   const [songList, setSongList] = React.useState({});
+  const [flag, setFlag] = React.useState(0);
 
   const beginGame = () => {
     const includedSongList = [];
@@ -35,6 +36,32 @@ export default function Game() {
     })
     setHasStarted(true);
   }
+
+  React.useEffect(() => {
+    const keyDownHandler = event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        // For some reason, if I call the function beginGame()
+        // right here, it does not properly capture the current songList
+        // (songList will be {} inside the function)
+        // Hence I change an integer flag, and observe
+        // changes to the flag in another useEffect.
+        setFlag(17);
+        document.removeEventListener('keydown', keyDownHandler);
+      }
+    };
+
+    document.addEventListener('keydown', keyDownHandler);
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, []);
+  React.useEffect(() => {
+    if (flag === 17) {
+      beginGame();
+    }
+    // eslint-disable-next-line
+  }, [flag]);
 
   React.useEffect(() => {
     axios.get(`/songs`).then((response) => {
@@ -57,7 +84,7 @@ export default function Game() {
           Are you ... Ready For It?
         </Typography>
         <Typography variant="body1">
-          Select which songs you want to be quizzed on using the checkbox menu below. When you're ready, press "Begin"!
+          Select which songs you want to be quizzed on using the checkbox menu below. When you're ready, click "Begin"! (or press the enter key)
         </Typography>
         <Box sx={{width: 'max-content', border: '2px solid green'}}>
           <Button onClick={beginGame} size="large">
