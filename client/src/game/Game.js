@@ -52,12 +52,20 @@ export default function Game() {
 
   if (!hasStarted) {
     return (
-      <>
-        <Button onClick={beginGame}>
-          Begin
-        </Button>
+      <Box m={2}>
+        <Typography variant="h3" sx={{textDecoration: 'underline'}}>
+          Are you ... Ready For It?
+        </Typography>
+        <Typography variant="body1">
+          Select which songs you want to be quizzed on using the checkbox menu below. When you're ready, press "Begin"!
+        </Typography>
+        <Box sx={{width: 'max-content', border: '2px solid green'}}>
+          <Button onClick={beginGame} size="large">
+            Begin
+          </Button>
+        </Box>
         <SongSelection songList={songList} setSongList={setSongList}/>
-      </>
+      </Box>
     );
   } else {
     return <GameStateDisplay 

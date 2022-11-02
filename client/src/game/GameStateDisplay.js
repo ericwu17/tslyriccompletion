@@ -189,7 +189,7 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
       }
 
       <Button onClick={() => {consumeLifeline("skip")}} disabled={skip === 0}>
-        Skip Question({skip})
+        Skip Question ({skip})
       </Button>
     </Box>
   )
