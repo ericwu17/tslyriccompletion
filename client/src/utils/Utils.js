@@ -1,5 +1,5 @@
 export const ALBUM_ORDER = [
-  "Taylor Swift", "Fearless", "Speak Now", "Red", "1989", "Reputation", "Lover", "Folklore", "Evermore", "Midnights"
+  "Taylor Swift", "Fearless", "Speak Now", "Red", "1989", "Reputation", "Lover", "folklore", "evermore", "Midnights"
 ]
 
 export const ALBUM_LOGOS = { 
@@ -10,7 +10,7 @@ export const ALBUM_LOGOS = {
   "1989": "https://i.scdn.co/image/ab67616d00001e02332d85510aba3eb28312cfb2",
   "Reputation": "https://i.scdn.co/image/ab67616d00001e02da5d5aeeabacacc1263c0f4b",
   "Lover": "https://i.scdn.co/image/ab67616d00001e02e787cffec20aa2a396a61647",
-  "Folklore": "https://i.scdn.co/image/ab67616d00001e02c288028c2592f400dd0b9233",
-  "Evermore": "https://i.scdn.co/image/ab67616d00001e0290fd9741e1838115cd90b3b6",
+  "folklore": "https://i.scdn.co/image/ab67616d00001e02c288028c2592f400dd0b9233",
+  "evermore": "https://i.scdn.co/image/ab67616d00001e0290fd9741e1838115cd90b3b6",
   "Midnights": "https://i.scdn.co/image/ab67616d0000b273ada1a886fc3150dc695168a7",
 }

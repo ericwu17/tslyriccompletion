@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use include_dir::{include_dir, Dir};
 use crate::song::Song;
 
@@ -44,22 +46,56 @@ fn process_album_name(name: &str) -> String {
 		name = name.trim_end_matches(suffix);
 	}
 	name.split("-")
-		.map(|x| capitalize_first_letter(x))
+		.map(|x| 
+			if x != "folklore" && x != "evermore" {
+				capitalize_first_letter(x)
+			} else {
+				x.to_string()
+			}
+		)
 		.collect::<Vec<String>>()
 		.join(" ")
 		.trim_end()
 		.to_string()
 }
 
-fn process_song_name(name: &str) -> String {
+fn process_song_name(name: &str, album: &str) -> String {
 	let mut name = name;
 	let suffixes_to_remove = ["-tv", "-10mv-tv-ftv", "-tv-ftv"];
 
 	for suffix in suffixes_to_remove {
 		name = name.trim_end_matches(suffix);
 	}
+
+	let name_substitutions = HashMap::from([
+		("shouldve-said-no", "should've-said-no"),
+		("im-only-me-when-im-with-you", "i'm-only-me-when-i'm-with-you"),
+		("forever-n-always", "forever-&-always"),
+		("dont-you", "don't-you"),
+		("youre-not-sorry", "you're-not-sorry"),
+		("dont-blame-me", "don't-blame-me"),
+		("miss-americana-n-the-heartbreak-prince", "miss-americana-&-the-heartbreak-prince"),
+		("its-nice-to-have-a-friend", "it's-nice-to-have-a-friend"),
+		("me", "ME!"),
+		("come-back-be-here", "come-back...Be-here"),
+		("youre-on-your-own-kid", "you're-on-your-own-kid"),
+		("wouldve-couldve-shouldve", "would've-could've-should've"),
+		("its-time-to-go", "it's-time-to-go"),
+		("tis-the-damn-season", "'tis-the-damn-season"),
+	]);
+
+	if let Some(corrected_name) = name_substitutions.get(&name) {
+		name = corrected_name;
+	}
+
 	name.split("-")
-		.map(|x| capitalize_first_letter(x))
+		.map(|x| 
+			if album != "folklore" && album != "evermore" {
+				capitalize_first_letter(x)
+			} else {
+				x.to_string()
+			}
+		)
 		.collect::<Vec<String>>()
 		.join(" ")
 }
@@ -93,7 +129,7 @@ pub fn load_songs_from_files() -> Vec<Song> {
 			let song_name = split[1];
 
 			let song_lyrics = song_file.contents_utf8().unwrap();
-			songs.push(Song::new(process_album_name(&curr_album_name), process_song_name(song_name), song_lyrics.to_owned() ));
+			songs.push(Song::new(process_album_name(&curr_album_name), process_song_name(song_name, &curr_album_name), song_lyrics.to_owned() ));
 		}
 	}
 	songs
