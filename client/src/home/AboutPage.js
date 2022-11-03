@@ -58,7 +58,7 @@ export default function AboutPage() {
       Known issues
     </Typography>
     <Typography>
-      When viewing the track list of Red, I removed the song "All Too Well" (non-ten minute version), since it contains duplicate lyrics with the ten minute version. This results in a mismatch between track numbers and songs. (For example, Come Back Be Here is track 18 on the album, but it appears as track 17).
+      When viewing the track list of Red, I removed the song "All Too Well" (non-ten minute version), since it contains duplicate lyrics with the ten minute version. This results in a mismatch between track numbers and songs. (For example, Come Back Be Here is track 18 on Red (TV), but it appears as track 17 on this site).
     </Typography>
 
     <Typography variant="h4" sx={{textDecoration: 'underline', mt:2, mb: 2}}>
