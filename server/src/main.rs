@@ -5,7 +5,7 @@ pub mod game;
 pub mod diff;
 pub mod lifelines;
 
-use std::{collections::HashMap};
+use std::collections::HashMap;
 use crate::song::Song;
 use crate::loader::load_songs_from_files;
 
@@ -59,6 +59,7 @@ fn get_song(songs: &State<Vec<Song>>, album: &str, name: &str) -> String {
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
 	std::env::set_var("RUST_BACKTRACE", "1");
+	std::env::set_var("DATABASE_URL", "mysql://localhost:3306/mydb");
 	let songs: Vec<Song> = load_songs_from_files();
 	let my_hashmap: HashMap<String, GameState> = HashMap::new();
 	let game_state = Arc::new(Mutex::new(my_hashmap));
@@ -73,6 +74,7 @@ async fn main() -> Result<(), rocket::Error> {
 	let rocket = rocket::build()
 		.manage(game_state)
 		.manage(songs)
+		.manage(pool)
 		.mount("/", routes![index])
 		.mount("/", routes![get_song_list])
 		.mount("/", routes![get_song])

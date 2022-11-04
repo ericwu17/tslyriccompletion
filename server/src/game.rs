@@ -10,6 +10,9 @@ use crate::lifelines::{LifelineInventory, Lifeline};
 use rand::prelude::SliceRandom;
 use std::collections::{HashMap};
 use uuid::Uuid;
+use sqlx::{Pool, MySql};
+use sha1::{Sha1, Digest};
+
 
 
 const MAX_ACCEPTABLE_DIST: usize = 13;
@@ -86,24 +89,28 @@ pub struct GuessResultPublic {
 }
 
 impl GameState {
-	pub fn new(songs: &Vec<Song>, songs_to_include: Vec<(String, String)>) -> Self {
-		let mut songs_to_include: Vec<(String, String)> = songs_to_include.into_iter()
+	pub fn new(songs: &Vec<Song>,songs_to_include: &mut Vec<(String, String)>) -> Self {
+		// This function will modify songs_to_include, so that if it's the empty vector,
+		// it will end up containing all songs in songs. It will also filter out any
+		// invalid songs.
+		let mut actual_songs_to_include: Vec<(String, String)> = songs_to_include.clone().into_iter()
 			.filter(|(a, b)| {
 				songs.iter().filter(|song| song.album == *a && song.name == *b).count() > 0
 			}
 			).collect();
-		if songs_to_include.len() == 0 {
-			songs_to_include = songs.iter().map(|song| (song.album.clone(), song.name.clone())).collect();
+		if actual_songs_to_include.len() == 0 {
+			actual_songs_to_include = songs.iter().map(|song| (song.album.clone(), song.name.clone())).collect();
 		}
-		GameState { 
+		*songs_to_include = actual_songs_to_include.clone();
+		GameState {
 			score: 0, 
-			current_question: pick_random_guess(songs, &songs_to_include), 
+			current_question: pick_random_guess(songs, &actual_songs_to_include), 
 			lifeline_inv: LifelineInventory::new(), 
 			hints_shown: vec![], 
 			choices: vec![],
 			terminated: false,
 			completed_question: false,
-			included_songs: songs_to_include,
+			included_songs: actual_songs_to_include,
 		}
 	}
 
@@ -177,14 +184,53 @@ impl GameState {
 
 
 #[post("/game/start", format = "application/json", data = "<songs_to_include>")]
-pub fn init_game(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, songs: &State<Vec<Song>>, songs_to_include: Json<Vec<(String, String)>>) -> String {
-	let mut guard = game_state.lock().unwrap();
-	let id = Uuid::new_v4().to_string();
+pub async fn init_game(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, songs: &State<Vec<Song>>, songs_to_include: Json<Vec<(String, String)>>, pool: &rocket::State<Pool<MySql>>) -> String {
+	let mut songs_to_include = songs_to_include.to_vec();
+	let new_game_state;
+	let uuid = Uuid::new_v4().to_string();
+	new_game_state = GameState::new(songs, &mut songs_to_include);
 
-	let new_game_state = GameState::new(songs, songs_to_include.to_vec());
-	(*guard).insert(id.clone(), new_game_state.clone());
+	{
+		let mut guard = game_state.lock().unwrap();
+		(*guard).insert(uuid.clone(), new_game_state.clone());
+	}
 
-	serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap()
+	let full_songlist: Vec<(String, String)> = songs.iter().map(|song| (song.album.clone(), song.name.clone())).collect();
+	let mut songlist_desc: HashMap<String, Vec<bool>> = HashMap::new();
+	// The for loop below builds out the songlist_desc object, which is a Hashmap mapping album names to a list of boolean values.
+	// The list of boolean values represents which songs are included/excluded in the game.
+	for song in &full_songlist {
+		let is_included = songs_to_include.contains(&song);
+		if let Some(v) = songlist_desc.get(&song.0) {
+			let mut v = v.clone();
+			v.push(is_included);
+			songlist_desc.insert(song.0.clone(), v);
+		} else {
+			songlist_desc.insert(song.0.clone(), vec![is_included]);
+		}
+	}
+
+	let mut hasher = Sha1::new();
+	hasher.update(serde_json::to_string(&full_songlist).unwrap().as_bytes());
+	let full_songlist_hash = format!("{:X}", hasher.finalize());
+
+
+	let full_songlist_json: sqlx::types::Json<Vec<(String, String)>> = sqlx::types::Json(songs_to_include);
+	let songlist_desc_json = sqlx::types::Json(songlist_desc);
+	
+	let _ = sqlx::query("INSERT INTO songlists VALUES (?, ?)")
+		.bind(full_songlist_hash.clone())
+		.bind(full_songlist_json)
+		.fetch_all(pool.inner())
+		.await;
+	let _ = sqlx::query("INSERT INTO games VALUES (?, NOW(), ?, ?, 0, NULL, NULL)")
+		.bind(uuid.clone())
+		.bind(full_songlist_hash.clone())
+		.bind(songlist_desc_json)
+		.fetch_all(pool.inner())
+		.await;
+
+	serde_json::to_string(&new_game_state.into_public(uuid.clone())).unwrap()
 }
 
 #[get("/game/use-lifeline?<id>&<lifeline>")]
