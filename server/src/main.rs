@@ -56,14 +56,21 @@ fn get_song(songs: &State<Vec<Song>>, album: &str, name: &str) -> String {
 }
 
 
-#[launch]
-fn rocket() -> _ {
+#[rocket::main]
+async fn main() -> Result<(), rocket::Error> {
 	std::env::set_var("RUST_BACKTRACE", "1");
 	let songs: Vec<Song> = load_songs_from_files();
 	let my_hashmap: HashMap<String, GameState> = HashMap::new();
 	let game_state = Arc::new(Mutex::new(my_hashmap));
 
-	rocket::build()
+	let database_url = "mysql://localhost:3306/mydb";
+	println!("Connecting to MySql Database...");
+	let pool = sqlx::MySqlPool::connect(database_url)
+			.await
+			.expect("Failed to connect to database");
+	println!("Connection established!");
+
+	let rocket = rocket::build()
 		.manage(game_state)
 		.manage(songs)
 		.mount("/", routes![index])
@@ -73,5 +80,9 @@ fn rocket() -> _ {
 		.mount("/", routes![game_lifelines])
 		.mount("/", routes![reduce_multiple_choice])
 		.mount("/", routes![next_question])
-		.mount("/", routes![take_guess])
+		.mount("/", routes![take_guess]).ignite().await?;
+	
+	let _ = rocket.launch().await?;
+
+	Ok(())
 }
