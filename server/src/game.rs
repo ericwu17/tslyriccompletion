@@ -28,6 +28,7 @@ pub enum Hint {
 #[derive(Clone)]
 pub struct GameState {
 	score: i32,
+	guesses_made: i32,
 	current_question: Question,
 	lifeline_inv: LifelineInventory,
 	hints_shown: Vec<Hint>,
@@ -41,6 +42,7 @@ pub struct GameState {
 pub struct GameStatePublic {
 	id: String,
 	score: i32,
+	guesses_made: i32,
 	current_question: Question,
 	lifeline_inv: LifelineInventory,
 	hints_shown: Vec<Hint>,
@@ -104,6 +106,7 @@ impl GameState {
 		*songs_to_include = actual_songs_to_include.clone();
 		GameState {
 			score: 0, 
+			guesses_made: 0, 
 			current_question: pick_random_guess(songs, &actual_songs_to_include), 
 			lifeline_inv: LifelineInventory::new(), 
 			hints_shown: vec![], 
@@ -118,6 +121,7 @@ impl GameState {
 	pub fn into_public(&self, id: String) -> GameStatePublic {
 		GameStatePublic {
 			score: self.score,
+			guesses_made: self.guesses_made,
 			current_question: Question {
 				song: Song{
 					album: String::new(), name: String::new(), lyrics_raw: String::new(), lines: vec![]
@@ -137,6 +141,7 @@ impl GameState {
 	pub fn into_public_with_answers(&self, id: String) -> GameStatePublic {
 		GameStatePublic {
 			score: self.score,
+			guesses_made: self.guesses_made,
 			current_question: self.current_question.clone(),
 			lifeline_inv: self.lifeline_inv.clone(),
 			hints_shown: self.hints_shown.clone(),
@@ -317,6 +322,7 @@ pub fn next_question(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>,
 			new_game_state.completed_question = false;
 			new_game_state.choices = vec![];
 			new_game_state.hints_shown = vec![];
+			new_game_state.guesses_made += 1;
 
 			(*guard).insert(id.clone(), new_game_state.clone());
 			return serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap()
