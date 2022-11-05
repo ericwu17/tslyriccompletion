@@ -9,6 +9,7 @@ import { ALBUM_LOGOS } from "../utils/Utils";
 export default function GameStateDisplay({gameState, setGameState, setHasStarted}) {
   const [guessResult, setGuessResult] = React.useState({});
   const [currentGuess, setCurrentGuess] = React.useState("");
+  const [currentName, setCurrentName] = React.useState("");
 
 
   const { score, current_question, id, completed_question, terminated, choices } = gameState;
@@ -75,8 +76,25 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
   }
 
   const beginAgain = () => {
+    if (currentName !== "") {
+      claimGame(currentName);
+    }
     setGuessResult({});
-    setHasStarted(false)
+    setHasStarted(false);
+  }
+
+  const claimboxOnKeyDown = e => {
+    if (e.key === "Enter" && currentName !== "") {
+      claimGame(currentName);
+    }
+  }
+
+  const claimGame = name => {
+    setCurrentName("")
+    axios.get(`/game/claim?id=${id}&name=${name}`).then((response) => {
+      setGuessResult({});
+      setHasStarted(false);
+    })
   }
 
   return (
@@ -131,6 +149,9 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
           <Box>
             <TextField 
               placeholder="Enter your name..."
+              onChange={event => setCurrentName(event.target.value)}
+              onKeyDown={claimboxOnKeyDown}
+              value={currentName}
             />
             <Button onClick={beginAgain} sx={{width:'min-content'}}>Play Again</Button>
           </Box>

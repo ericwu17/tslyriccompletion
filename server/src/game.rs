@@ -368,6 +368,24 @@ pub fn next_question(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>,
 	"{}".to_owned()
 }
 
+#[get("/game/claim?<id>&<name>")]
+pub async fn claim_game(id: String, name: String, pool: &rocket::State<Pool<MySql>>) -> String {
+	let _ = sqlx::query(
+		"UPDATE games
+			SET
+				player_name = ?
+			WHERE
+				UUID = ?
+		")
+		.bind(name)
+		.bind(id)
+		.fetch_all(pool.inner())
+		.await;
+	
+	return "{}".to_owned()
+}
+
+
 #[get("/game/submit-guess?<id>&<guess>")]
 pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, id: String, guess: &str, pool: &rocket::State<Pool<MySql>>) -> String {
 	let outer_game_state:GameState;

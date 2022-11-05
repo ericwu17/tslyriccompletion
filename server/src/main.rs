@@ -15,6 +15,7 @@ use game::{GameState,
 	reduce_multiple_choice,
 	next_question,
 	take_guess,
+	claim_game,
 };
 use rocket::State;
 use std::sync::{Arc, Mutex};
@@ -82,6 +83,7 @@ async fn main() -> Result<(), rocket::Error> {
 		.mount("/", routes![game_lifelines])
 		.mount("/", routes![reduce_multiple_choice])
 		.mount("/", routes![next_question])
+		.mount("/", routes![claim_game])
 		.mount("/", routes![take_guess]).ignite().await?;
 	
 	let _ = rocket.launch().await?;
