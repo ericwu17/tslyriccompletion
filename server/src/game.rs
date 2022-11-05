@@ -500,6 +500,21 @@ pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>
 		.bind(sqlx::types::Json(gs.choices))
 		.fetch_all(pool.inner())
 		.await;
+	
+	if !is_correct {
+		let _ = sqlx::query(
+		"UPDATE games 
+			SET 
+				has_terminated = true,
+				terminal_score = ?
+			WHERE
+				UUID = ?
+		")
+		.bind(gs.score)
+		.bind(id.clone())
+		.fetch_all(pool.inner())
+		.await;
+	}
 
 	return serde_json::to_string(&guess_res).unwrap();
 }
