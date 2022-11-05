@@ -8,6 +8,8 @@ pub mod lifelines;
 use std::collections::HashMap;
 use crate::song::Song;
 use crate::loader::load_songs_from_files;
+use sqlx::mysql::MySqlPoolOptions;
+
 
 use game::{GameState,
 	init_game,
@@ -60,16 +62,18 @@ fn get_song(songs: &State<Vec<Song>>, album: &str, name: &str) -> String {
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
 	std::env::set_var("RUST_BACKTRACE", "1");
-	std::env::set_var("DATABASE_URL", "mysql://localhost:3306/mydb");
+	// std::env::set_var("DATABASE_URL", "mysql://localhost:3306/mydb");
 	let songs: Vec<Song> = load_songs_from_files();
 	let my_hashmap: HashMap<String, GameState> = HashMap::new();
 	let game_state = Arc::new(Mutex::new(my_hashmap));
 
 	let database_url = "mysql://localhost:3306/mydb";
 	println!("Connecting to MySql Database...");
-	let pool = sqlx::MySqlPool::connect(database_url)
-			.await
-			.expect("Failed to connect to database");
+	let pool = MySqlPoolOptions::new()
+		.max_connections(5)
+		.connect(database_url)
+		.await
+		.expect("Failed to connect to database");
 	println!("Connection established!");
 
 	let rocket = rocket::build()
