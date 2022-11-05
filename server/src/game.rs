@@ -382,8 +382,10 @@ pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>
 
 			let question = game_state.current_question.clone();
 
-			if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" && is_on_right_track(&guess, &question.answer) && game_state.choices.len() == 0 {
+			if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" && is_on_right_track(&guess, &question.answer) && game_state.choices.len() == 0 
+				|| guess.chars().count() > 150 {
 				// The guess was on the right track, but was too short.
+				// We also return AFM (refuse to process the guess) if the user submits a ridiculously long guess.
 				let res = GuessResultPublic {
 					game_state: game_state.into_public(id),
 					guess_res: GuessResult::AFM{ 
