@@ -18,14 +18,24 @@ use sha1::{Sha1, Digest};
 const MAX_ACCEPTABLE_DIST: usize = 13;
 const POINTS_FOR_PERFECT_MATCH: i32 = 26;
 
-#[derive(Serialize, Clone, PartialEq)]
+#[derive(Serialize, Clone, PartialEq, Debug)]
 pub enum Hint {
 	ShowTitle(String),
 	ShowPrevLines{lines: String, is_at_song_beginning: bool},
 	Skip,
 }
 
-#[derive(Clone)]
+impl Hint {
+	pub fn underlying_lifeline(&self) -> Lifeline{
+		match self {
+			Hint::ShowTitle(_) => Lifeline::ShowTitleAlbum,
+			Hint::ShowPrevLines{..} => Lifeline::ShowPrevLines,
+			Hint::Skip => Lifeline::Skip,
+		}
+	}
+}
+
+#[derive(Clone, Debug)]
 pub struct GameState {
 	score: i32,
 	guesses_made: i32,
@@ -239,53 +249,76 @@ pub async fn init_game(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>
 }
 
 #[get("/game/use-lifeline?<id>&<lifeline>")]
-pub fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, id: String, lifeline: &str) -> String {
-	let mut guard = game_state.lock().unwrap();
-	if let Some(game_state) = (*guard).get(&id) {
-		let mut new_game_state = game_state.clone();
-		match lifeline {
-			"show_title_album" => {
-				if !new_game_state.has_used_lifeline(Lifeline::ShowTitleAlbum)
-						&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::ShowTitleAlbum) {
-					let title = format!("{} : {}", game_state.current_question.song.album, game_state.current_question.song.name);
-					new_game_state.hints_shown.push(Hint::ShowTitle(title));
-					(*guard).insert(id.clone(), new_game_state.clone());
-					return serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap()
-				} else {
-					// no lifelines remaining, so do nothing
-					return serde_json::to_string(&game_state.into_public(id.clone())).unwrap()
-				}
-			},
-			"show_prev_lines" => {
-				if !new_game_state.has_used_lifeline(Lifeline::ShowPrevLines)
-						&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::ShowPrevLines) {
-					let (lines, is_at_song_beginning) = get_previous_lines(&new_game_state.current_question);
-					new_game_state.hints_shown.push(Hint::ShowPrevLines{lines, is_at_song_beginning});
-					(*guard).insert(id.clone(), new_game_state.clone());
-					return serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap()
-				} else {
-					// no lifelines remaining, so do nothing
-					return serde_json::to_string(&game_state.into_public(id)).unwrap()
-				}
-			},
-			"skip" => {
-				if !new_game_state.has_used_lifeline(Lifeline::Skip)
-						&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::Skip) {
-					new_game_state.hints_shown.push(Hint::Skip);
-					new_game_state.completed_question = true;
-					(*guard).insert(id.clone(), new_game_state.clone());
-					// not calling into_public() because we want to show everything, including all answers.
-					return serde_json::to_string(&new_game_state.into_public_with_answers(id.clone())).unwrap()
-				} else {
-					// no lifelines remaining, so do nothing
-					return serde_json::to_string(&game_state.into_public(id.clone())).unwrap()
-				}
-			},
-			_ => {},
+pub async fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, id: String, lifeline: &str, pool: &rocket::State<Pool<MySql>>) -> String {
+	let res = 'outer_block: {
+		let mut guard = game_state.lock().unwrap();
+		if let Some(game_state) = (*guard).get(&id) {
+			let mut new_game_state = game_state.clone();
+			match lifeline {
+				"show_title_album" => {
+					if !new_game_state.has_used_lifeline(Lifeline::ShowTitleAlbum)
+							&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::ShowTitleAlbum) {
+						let title = format!("{} : {}", game_state.current_question.song.album, game_state.current_question.song.name);
+						new_game_state.hints_shown.push(Hint::ShowTitle(title));
+						(*guard).insert(id.clone(), new_game_state.clone());
+						return serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap()
+					} else {
+						// no lifelines remaining, so do nothing
+						return serde_json::to_string(&game_state.into_public(id.clone())).unwrap()
+					}
+				},
+				"show_prev_lines" => {
+					if !new_game_state.has_used_lifeline(Lifeline::ShowPrevLines)
+							&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::ShowPrevLines) {
+						let (lines, is_at_song_beginning) = get_previous_lines(&new_game_state.current_question);
+						new_game_state.hints_shown.push(Hint::ShowPrevLines{lines, is_at_song_beginning});
+						(*guard).insert(id.clone(), new_game_state.clone());
+						return serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap()
+					} else {
+						// no lifelines remaining, so do nothing
+						return serde_json::to_string(&game_state.into_public(id)).unwrap()
+					}
+				},
+				"skip" => {
+					if !new_game_state.has_used_lifeline(Lifeline::Skip)
+							&& new_game_state.lifeline_inv.consume_lifeline(Lifeline::Skip) {
+						new_game_state.hints_shown.push(Hint::Skip);
+						new_game_state.completed_question = true;
+						(*guard).insert(id.clone(), new_game_state.clone());
+						// not calling into_public() because we want to show everything, including all answers.
+						break 'outer_block new_game_state;
+					} else {
+						// no lifelines remaining, so do nothing
+						return serde_json::to_string(&game_state.into_public(id.clone())).unwrap()
+					}
+				},
+				_ => {},
+			}
 		}
-	}
 
-	"{}".to_owned()
+		return "{}".to_owned()
+	};
+	let gs = res.clone();
+
+	let _ = sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
+		.bind(id.clone())
+		.bind(gs.guesses_made)
+		.bind(gs.current_question.song.album)
+		.bind(gs.current_question.song.name)
+		.bind(gs.current_question.shown_line)
+		.bind(gs.current_question.answer)
+		.bind("skipped")
+		.bind("")
+		.bind(0)
+		.bind(Option::<String>::None)
+		.bind(
+			sqlx::types::Json(gs.hints_shown.iter().map(|hint| hint.underlying_lifeline().as_string()).collect::<Vec<String>>())
+		)
+		.bind(sqlx::types::Json(gs.choices))
+		.fetch_all(pool.inner())
+		.await;
+
+	return serde_json::to_string(&res.into_public_with_answers(id.clone())).unwrap() 
 }
 
 
@@ -336,90 +369,137 @@ pub fn next_question(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>,
 }
 
 #[get("/game/submit-guess?<id>&<guess>")]
-pub fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, id: String, guess: &str) -> String {
-	let mut guard = game_state.lock().unwrap();
-	if let Some(game_state) = (*guard).get(&id) {
-		if game_state.completed_question {
-			// already guessed, so we do nothing
-			return serde_json::to_string(&game_state.into_public_with_answers(id)).unwrap();
-		}
-
-
-		let question = game_state.current_question.clone();
-
-		if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" && is_on_right_track(&guess, &question.answer) && game_state.choices.len() == 0 {
-			// The guess was on the right track, but was too short.
-			let res = GuessResultPublic {
-				game_state: game_state.into_public(id),
-				guess_res: GuessResult::AFM{ 
-					target_length:question.answer.chars().count(),
-					guess_length: guess.chars().count(),
-				},
-			};
-			return serde_json::to_string(&res).unwrap();
-		}
-
-		let (truncate_amt, dist) = optimal_truncated_dist(&guess, &question.answer);
-		let mut new_game_state = game_state.clone();
-		let (mut guess_flag_str, mut ans_flag_str) = get_flags(guess, &question.answer, truncate_amt);
-		let points_earned: i32;
-		let mut maybe_new_lifeline = None;
-
-		if (game_state.choices.len() == 0 && dist > MAX_ACCEPTABLE_DIST) || (game_state.choices.len() > 0 && guess != question.answer) {
-			// The user has guessed wrong and the game is now over
-			if game_state.choices.len() > 0 {
-				// In a multiple choice situation, we set the flags for both strings' characters all to red.
-				guess_flag_str.set_all_flags(1);
-				ans_flag_str.set_all_flags(1);
+pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, id: String, guess: &str, pool: &rocket::State<Pool<MySql>>) -> String {
+	let outer_game_state:GameState;
+	let guess_res = 'outer_block: {
+		let mut guard = game_state.lock().unwrap();
+		if let Some(game_state) = (*guard).get(&id) {
+			if game_state.completed_question {
+				// already guessed, so we do nothing
+				return serde_json::to_string(&game_state.into_public_with_answers(id)).unwrap();
 			}
-			new_game_state.terminated = true;
-			new_game_state.completed_question = true;
-			(*guard).insert(id.clone(), new_game_state.clone());
+
+
+			let question = game_state.current_question.clone();
+
+			if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" && is_on_right_track(&guess, &question.answer) && game_state.choices.len() == 0 {
+				// The guess was on the right track, but was too short.
+				let res = GuessResultPublic {
+					game_state: game_state.into_public(id),
+					guess_res: GuessResult::AFM{ 
+						target_length:question.answer.chars().count(),
+						guess_length: guess.chars().count(),
+					},
+				};
+				return serde_json::to_string(&res).unwrap();
+			}
+
+			let (truncate_amt, dist) = optimal_truncated_dist(&guess, &question.answer);
+			let mut new_game_state = game_state.clone();
+			let (mut guess_flag_str, mut ans_flag_str) = get_flags(guess, &question.answer, truncate_amt);
+			let points_earned: i32;
+			let mut maybe_new_lifeline = None;
+
+			if (game_state.choices.len() == 0 && dist > MAX_ACCEPTABLE_DIST) || (game_state.choices.len() > 0 && guess != question.answer) {
+				// The user has guessed wrong and the game is now over
+				if game_state.choices.len() > 0 {
+					// In a multiple choice situation, we set the flags for both strings' characters all to red.
+					guess_flag_str.set_all_flags(1);
+					ans_flag_str.set_all_flags(1);
+				}
+				new_game_state.terminated = true;
+				new_game_state.completed_question = true;
+				(*guard).insert(id.clone(), new_game_state.clone());
+				
+				let res = GuessResultPublic {
+					game_state: new_game_state.into_public_with_answers(id.clone()),
+					guess_res: GuessResult::Incorrect {
+						user_guess: guess_flag_str,
+						answer: ans_flag_str,
+					},
+				};
+				outer_game_state = new_game_state.clone();
+				break 'outer_block res;
+			} else if game_state.choices.len() > 0 {
+				// The user got a multiple choice question correct
+				points_earned = 1;
+			} else if dist != 0 {
+				// The guess was correct but not perfect.
+				if rand::thread_rng().gen_range(0..MAX_ACCEPTABLE_DIST) > dist {
+					maybe_new_lifeline = Some(Lifeline::random_lifeline());
+				}
+				points_earned = (MAX_ACCEPTABLE_DIST - dist + 1) as i32;
+			} else {
+				// perfect match
+				maybe_new_lifeline = Some(Lifeline::random_lifeline());
+				points_earned = POINTS_FOR_PERFECT_MATCH;
+			}
+
 			
+			new_game_state.score += points_earned;
+			new_game_state.completed_question = true;
+			if let Some(new_lifeline) = &maybe_new_lifeline {
+				new_game_state.lifeline_inv.add_lifeline(&new_lifeline);
+			}
+			(*guard).insert(id.clone(), new_game_state.clone());
+
 			let res = GuessResultPublic {
 				game_state: new_game_state.into_public_with_answers(id.clone()),
-				guess_res: GuessResult::Incorrect {
+				guess_res: GuessResult::Correct {
+					points_earned,
 					user_guess: guess_flag_str,
 					answer: ans_flag_str,
-				},
+					new_lifeline: maybe_new_lifeline
+				}
 			};
-			return serde_json::to_string(&res).unwrap();
-		} else if game_state.choices.len() > 0 {
-			// The user got a multiple choice question correct
-			points_earned = 1;
-		} else if dist != 0 {
-			// The guess was correct but not perfect.
-			if rand::thread_rng().gen_range(0..MAX_ACCEPTABLE_DIST) > dist {
-				maybe_new_lifeline = Some(Lifeline::random_lifeline());
-			}
-			points_earned = (MAX_ACCEPTABLE_DIST - dist + 1) as i32;
-		} else {
-			// perfect match
-			maybe_new_lifeline = Some(Lifeline::random_lifeline());
-			points_earned = POINTS_FOR_PERFECT_MATCH;
+			outer_game_state = new_game_state.clone();
+			break 'outer_block res;
 		}
+		return "{}".to_owned()
+	};
 
-		
-		new_game_state.score += points_earned;
-		new_game_state.completed_question = true;
-		if let Some(new_lifeline) = &maybe_new_lifeline {
-			new_game_state.lifeline_inv.add_lifeline(&new_lifeline);
-		}
-		(*guard).insert(id.clone(), new_game_state.clone());
+	let gs = outer_game_state;
 
-		let res = GuessResultPublic {
-			game_state: new_game_state.into_public_with_answers(id.clone()),
-			guess_res: GuessResult::Correct {
-				points_earned,
-				user_guess: guess_flag_str,
-				answer: ans_flag_str,
-				new_lifeline: maybe_new_lifeline
-			}
-		};
-		return serde_json::to_string(&res).unwrap();
+	let num_points_earned;
+	let is_correct;
+	let mut lifeline_earned: Option<String> = None;
+	match &guess_res.guess_res {
+		GuessResult::Correct { points_earned, new_lifeline, .. } => {
+			num_points_earned = *points_earned;
+			is_correct = true;
+			lifeline_earned = match new_lifeline {
+				None => None,
+				Some(lifeline) => Some(lifeline.as_string()),
+			};
+		},
+		GuessResult::Incorrect { .. } => {
+			num_points_earned = 0;
+			is_correct = false;
+		},
+		_ => {unreachable!()}
 	}
+	// If the code runs to this point, then the guess is either correct or incorrect (not AFM state).
+	// We can now record the guess into the database before returning.
 
-	"{}".to_owned()
+	let _ = sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
+		.bind(id.clone())
+		.bind(gs.guesses_made)
+		.bind(gs.current_question.song.album)
+		.bind(gs.current_question.song.name)
+		.bind(gs.current_question.shown_line)
+		.bind(gs.current_question.answer)
+		.bind(if is_correct {"correct"} else {"incorrect"})
+		.bind(guess)
+		.bind(num_points_earned)
+		.bind(lifeline_earned)
+		.bind(
+			sqlx::types::Json(gs.hints_shown.iter().map(|hint| hint.underlying_lifeline().as_string()).collect::<Vec<String>>())
+		)
+		.bind(sqlx::types::Json(gs.choices))
+		.fetch_all(pool.inner())
+		.await;
+
+	return serde_json::to_string(&guess_res).unwrap();
 }
 
 

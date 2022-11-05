@@ -20,9 +20,17 @@ impl  Lifeline {
 			_ => Lifeline::Skip,
 		}
 	}
+
+	pub fn as_string(&self) -> String {
+		match self {
+			Lifeline::ShowPrevLines => "ShowPrevLines".to_owned(),
+			Lifeline::ShowTitleAlbum => "ShowTitleAlbum".to_owned(),
+			Lifeline::Skip => "Skip".to_owned(),
+		}
+	}
 }
 
-#[derive(Serialize, Clone)]
+#[derive(Serialize, Clone, Debug)]
 pub struct LifelineInventory {
 	show_title_album: i32,
 	show_prev_lines: i32,
