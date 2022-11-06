@@ -49,7 +49,7 @@ export default function SongPage() {
 
   const onKeyDown = e => {
     if (e.key === "Enter" && shownSongsArr.length === 1) {
-      window.location.href=`/song/${shownSongsArr[0]}`
+      window.location.href=`/tswift/song/${shownSongsArr[0]}`
     }
   }
 
@@ -98,7 +98,7 @@ export default function SongPage() {
                   {songs && songs.map((song, index) => 
                     <Box>
                       <Typography textAlign="left" noWrap>
-                        {index+1}) <Link href={`/song/${album}/${song}`} key={`/song/${album}/${song}`}>{song}
+                        {index+1}) <Link href={`/tswift/song/${album}/${song}`} key={`/song/${album}/${song}`}>{song}
                         </Link>
                       </Typography>
                     </Box>

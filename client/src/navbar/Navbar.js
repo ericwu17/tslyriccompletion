@@ -17,7 +17,7 @@ export default function Navbar() {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={() => {window.location.href="/"}}
+            onClick={() => {window.location.href="/tswift"}}
           >
             <HomeIcon />
           </IconButton>
@@ -26,19 +26,19 @@ export default function Navbar() {
           </Typography>
           <Button 
             color="inherit"
-            onClick={() => {window.location.href="/play"}}
+            onClick={() => {window.location.href="/tswift/play"}}
           >
             Start Game
           </Button>
           <Button 
             color="inherit"
-            onClick={() => {window.location.href="/history"}}
+            onClick={() => {window.location.href="/tswift/history"}}
           >
             View Scores
           </Button>
           <Button 
             color="inherit"
-            onClick={() => {window.location.href="/song"}}
+            onClick={() => {window.location.href="/tswift/song"}}
           >
             View Lyrics
           </Button>

@@ -243,10 +243,10 @@ function SongSelection({songList, setSongList}) {
                   />
                 </Box>
                 {songs && Object.keys(songs).map((song, index) => 
-                  <Box display="flex" flexDirection="row" alignItems="center" key={`/song/${album}/${song}`} mb={-2}>
+                  <Box display="flex" flexDirection="row" alignItems="center" key={`/tswift/song/${album}/${song}`} mb={-2}>
                     <Checkbox checked={songList[album][song]} onClick={() => toggleSong(album, song)}/>
                     <Typography noWrap>
-                      {index+1}) <Link href={`/song/${album}/${song}`} >{song}
+                      {index+1}) <Link href={`/tswift/song/${album}/${song}`} >{song}
                       </Link>
                     </Typography>
                   </Box>

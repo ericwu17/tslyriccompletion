@@ -7,7 +7,7 @@ export default function AboutPage() {
       Taylor Swift Lyric Guessing Game
     </Typography>
     <Typography>
-      This is a game where your goal is to guess the next line from a random Taylor Swift song! To start playing, press <Link href="/play">start game</Link> in the navbar! You can also use this site to browse Taylor Swift lyrics, although you might
+      This is a game where your goal is to guess the next line from a random Taylor Swift song! To start playing, press <Link href="/tswift/play">start game</Link> in the navbar! You can also use this site to browse Taylor Swift lyrics, although you might
       find the line highlighting to be a little distracting.
     </Typography>
     <Typography variant="h4" sx={{textDecoration: 'underline', mt:2, mb: 2}}>
@@ -18,15 +18,15 @@ export default function AboutPage() {
       to appear, even though some songs might have many more lines. 
     </Typography>
     <Typography>
-      As an example of a "bad case", in the song <Link href="/song/Speak Now/Long Live">Long Live</Link>,
+      As an example of a "bad case", in the song <Link href="/tswift/song/Speak Now/Long Live">Long Live</Link>,
       the line "Long live the walls we crashed through" can be followed by either "I had the time of my life, with you" or "All the kingdom lights shined just for me and you", depending on the
       location within the song. Therefore, the game will not show the line "Long live the walls we crashed through" and ask you to guess what comes next.
     </Typography>
     <Typography>
       There are also some lines which I call "exclamatory", such as {' '}
-        <Link href="/song/Reputation/Dress">Ah, ha, ha, ha-ah</Link>, {' '}
-        <Link href="/song/Speak Now/Haunted">Oh, oh, oh, oh, oh, oh, oh, oh, oh</Link>, {' '}
-        <Link href="/song/Fearless/Fifteen">La-la-la, la-la-la, la-la-la-la</Link>.
+        <Link href="/tswift/song/Reputation/Dress">Ah, ha, ha, ha-ah</Link>, {' '}
+        <Link href="/tswift/song/Speak Now/Haunted">Oh, oh, oh, oh, oh, oh, oh, oh, oh</Link>, {' '}
+        <Link href="/tswift/song/Fearless/Fifteen">La-la-la, la-la-la, la-la-la-la</Link>.
       Can you figure out which songs these lines come from? I certainly can't, and I don't think it's fun to include such lines in the guessing game. In this game, neither the prompt nor the answer will
       ever be an exclamatory line. An exclamatory line is any line with more than a 50% concentration of exclamatory words, or any line with less than 3 words 
       (short lines are excluded because they are generally hard to identify). A list of exclamatory words is:

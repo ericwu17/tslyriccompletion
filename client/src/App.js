@@ -12,7 +12,7 @@ function App() {
     <div className="App">
       <CssBaseline />
       <Navbar />
-      <BrowserRouter>
+      <BrowserRouter basename="tswift">
         <Routes>
           <Route exact path="/" element={<AboutPage />} />
           <Route exact path="/play" element={<Game />} />

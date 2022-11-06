@@ -240,7 +240,7 @@ function DisplayAnswer({question}) {
 
   const {song, shown_line} = question;
   const albumTitle = `${song.album}--${song.name}`;
-  const href = `/song/${song.album}/${song.name}`;
+  const href = `/tswift/song/${song.album}/${song.name}`;
   const { lyrics_raw } = song;
 
 
