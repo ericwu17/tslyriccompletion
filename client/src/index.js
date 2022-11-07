@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://linux.ucla.edu/tswift/api/';
+axios.defaults.baseURL = process.env.REACT_APP_AXIOS_BASE_URL;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
