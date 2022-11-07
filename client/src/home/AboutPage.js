@@ -60,6 +60,10 @@ export default function AboutPage() {
     <Typography>
       When viewing the track list of Red, I removed the song "All Too Well" (non-ten minute version), since it contains duplicate lyrics with the ten minute version. This results in a mismatch between track numbers and songs. (For example, Come Back Be Here is track 18 on Red (TV), but it appears as track 17 on this site).
     </Typography>
+    <Typography>
+      In the song <Link href="/tswift/song/Fearless/You All Over Me">You All Over Me</Link>, the line "I lived, I learned" should technically have multiple different successors (it can be followed
+      by "And found out what it was to turn around" or "had you, got burned"). However, due to how line breaks are positioned, the game thinks that there is only one possible successor.
+    </Typography>
 
     <Typography variant="h4" sx={{textDecoration: 'underline', mt:2, mb: 2}}>
       Future Ideas for the Taylor Swift Guessing Game?
