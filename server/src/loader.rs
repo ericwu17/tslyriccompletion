@@ -70,6 +70,7 @@ fn process_song_name(name: &str, album: &str) -> String {
 	let name_substitutions = HashMap::from([
 		("shouldve-said-no", "should've-said-no"),
 		("im-only-me-when-im-with-you", "i'm-only-me-when-i'm-with-you"),
+		("marys-song", "mary's-song"),
 		("forever-n-always", "forever-&-always"),
 		("dont-you", "don't-you"),
 		("youre-not-sorry", "you're-not-sorry"),
