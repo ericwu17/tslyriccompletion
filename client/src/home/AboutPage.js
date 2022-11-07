@@ -75,6 +75,9 @@ export default function AboutPage() {
       Big thanks to Jake Thompson for <Link href="https://github.com/wjakethompson/taylor">compiling Taylor Swift lyrics</Link>! This game would not have been possible without these.
     </Typography>
     <Typography>
+      Special thanks to David from the Linux Users Group at UCLA for helping me get this thing on the internet!
+    </Typography>
+    <Typography>
       Thanks to my friends Kim and Hannah for being my most frequent testers of early versions of this lyric guessing game.
     </Typography>
     <Typography variant="h4" sx={{textDecoration: 'underline', mt:2, mb: 2}}>
@@ -84,7 +87,7 @@ export default function AboutPage() {
       The source code for this project is available at <Link href="https://github.com/EricWu2003/taylorlyricguessingrs">https://github.com/EricWu2003/taylorlyricguessingrs</Link>.
     </Typography>
     <Typography>
-      My name is Eric, and I'm an undergraduate student at UCLA (expected graduation in spring of 2025). I love listening to Taylor Swift (surprise, right?) and if you have issues with trying to run the code
+      My name is Eric, and I'm an undergraduate student at UCLA (expected graduation in spring of 2025). I love listening to Taylor Swift (surprise, right?) and if you have issues with trying to run this app
       locally, please reach out! I'd love to hear from you. My email is eric.dianhao.wu@gmail.com. Also feel free to reach out if you have any feedback about the game, and definitely let me know
       if you encounter anything you think may be a bug!
     </Typography>
