@@ -6,6 +6,7 @@ import { CssBaseline } from '@mui/material';
 import Navbar from './navbar/Navbar';
 import Game from './game/Game';
 import HistoryPage from './history/History'
+import MechanicsPage from './home/Mechanics';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <BrowserRouter basename="tswift">
         <Routes>
           <Route exact path="/" element={<AboutPage />} />
+          <Route exact path="/mechanics" element={<MechanicsPage />} />
           <Route exact path="/play" element={<Game />} />
           <Route exact path="/song" element={<SongPage />} />
           <Route path="/song/:album/:name" element={<SongPage />} />
