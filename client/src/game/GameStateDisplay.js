@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { Box, Button, Link, TextField, Typography } from "@mui/material";
 import ResultDisplay from "./ResultDisplay";
-import { ALBUM_LOGOS } from "../utils/Utils";
+import { ALBUM_LOGOS, normalizeQuotes } from "../utils/Utils";
 
 
 export default function GameStateDisplay({gameState, setGameState, setHasStarted}) {
@@ -108,7 +108,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       {!isMultipleChoice && 
         <Box display="flex" flexDirection="row">
           <TextField 
-            onChange={event => setCurrentGuess(event.target.value)}
+            onChange={event => setCurrentGuess(normalizeQuotes(event.target.value))}
             onKeyDown={onKeyDown}
             value={currentGuess}
             sx={{width: '100%'}}

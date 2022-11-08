@@ -3,7 +3,7 @@ import axios from 'axios';
 import React from "react";
 import {Tooltip, Typography, Box, Grid, Paper, Link, TextField} from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { ALBUM_LOGOS, ALBUM_ORDER } from "../utils/Utils";
+import { ALBUM_LOGOS, ALBUM_ORDER, normalizeQuotes } from "../utils/Utils";
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -45,14 +45,13 @@ export default function SongPage() {
     songList[albumName] = songArr;
     shownSongsArr.push(...songArr.map(song => `${albumName}/${song}`));
   }
-  console.log(shownSongsArr);
+
 
   const onKeyDown = e => {
     if (e.key === "Enter" && shownSongsArr.length === 1) {
       window.location.href=`/tswift/song/${shownSongsArr[0]}`
     }
   }
-
 
   if (album === undefined) {
     return (
@@ -67,7 +66,7 @@ export default function SongPage() {
           }}
           placeholder="Search songs..."
           value={searchString}
-          onChange={event => setSearchString(event.target.value)}
+          onChange={event => setSearchString(normalizeQuotes(event.target.value))}
           autoFocus
           color={shownSongsArr.length === 1 ? "success" : "primary"}
           onKeyDown={onKeyDown}

@@ -14,3 +14,16 @@ export const ALBUM_LOGOS = {
   "evermore": "https://i.scdn.co/image/ab67616d00001e0290fd9741e1838115cd90b3b6",
   "Midnights": "https://i.scdn.co/image/ab67616d0000b273ada1a886fc3150dc695168a7",
 }
+
+export const normalizeQuotes = string => {
+  const result = string
+    .replaceAll("“", '"')
+    .replaceAll("”", '"')
+    .replaceAll("‘", "'")
+    .replaceAll("’", "'")
+    .replaceAll("`", "'")
+    .replaceAll("′", "'")
+    .replaceAll("″", '"')
+
+  return result
+}
