@@ -19,61 +19,62 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       // once the game ends, we want to remove the cookie so that
       // if users close the tab, they won't be loaded into the game
       // next time
-      Cookies.remove('tsgg-game-id')
-    } 
+      Cookies.remove("tsgg-game-id");
+    }
   }, [terminated]);
 
   if (!current_question) {
-    return <Typography>
-      There was an issue fetching the game :(
-    </Typography>
+    return (
+      <Typography>
+        There was an issue fetching the game :(
+      </Typography>
+    );
   }
 
-  const isMultipleChoice = choices.length > 0
+  const isMultipleChoice = choices.length > 0;
 
   const prompt = current_question.shown_line;
 
-  
+
 
 
   const onKeyDown = e => {
     if (e.key === "Enter" && !completed_question && currentGuess !== "") {
-      submitGuess(currentGuess)
+      submitGuess(currentGuess);
     } else if (e.key === "Enter" && completed_question && !terminated) {
       goToNextQuestion();
     }
-  }
+  };
 
   const submitGuess = guess => {
     if (gameState.completed_question) {
       return;
     }
-    
+
     axios.get(`/game/submit-guess?id=${id}&guess=${guess}`).then((response) => {
       const {game_state, guess_res} = response.data;
-      console.log(response.data);
       setGameState(game_state);
       setGuessResult(guess_res);
       if (!guess_res.AFM) {
         setCurrentGuess("");
       }
-    })
-  }
+    });
+  };
 
   const goToNextQuestion = () => {
     axios.get(`/game/next?id=${id}`).then((response) => {
       setGameState(response.data);
       setGuessResult({});
-    })
-  }
+    });
+  };
 
   const handleMultipleChoiceClick = () => {
     if (!completed_question) {
       axios.get(`/game/reduce-multiple-choice?id=${id}`).then((response) => {
         setGameState(response.data);
-      })
+      });
     }
-  }
+  };
 
   const beginAgain = () => {
     if (currentName !== "") {
@@ -81,21 +82,23 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
     }
     setGuessResult({});
     setHasStarted(false);
-  }
+  };
 
   const claimboxOnKeyDown = e => {
     if (e.key === "Enter" && currentName !== "") {
       claimGame(currentName);
     }
-  }
+  };
 
   const claimGame = name => {
-    setCurrentName("")
+    setCurrentName("");
     axios.get(`/game/claim?id=${id}&name=${name}`).then((response) => {
-      setGuessResult({});
-      setHasStarted(false);
-    })
-  }
+      if (response.status === 200) {
+        setGuessResult({});
+        setHasStarted(false);
+      }
+    });
+  };
 
   return (
     <Box m={2}>
@@ -105,27 +108,37 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       <Typography>
         What line follows: {prompt}
       </Typography>
-      {!isMultipleChoice && 
+      {!isMultipleChoice &&
         <Box display="flex" flexDirection="row">
-          <TextField 
+          <TextField
             onChange={event => setCurrentGuess(normalizeQuotes(event.target.value))}
             onKeyDown={onKeyDown}
             value={currentGuess}
-            sx={{width: '100%'}}
+            sx={{width: "100%"}}
           />
           <Button onClick={handleMultipleChoiceClick}>
             Multiple Choice
           </Button>
         </Box>
       }
-      {isMultipleChoice && 
+      {isMultipleChoice &&
         <Box display="flex" flexDirection="column">
           <Typography>Your {choices.length} choices are: </Typography>
           {choices.map((choice, index) => {
             if (!completed_question) {
-              return <Typography key={index}>{index+1}) <Link onClick={() => submitGuess(choice)}>{choice}</Link></Typography>
+              return (
+                <Typography key={index}>
+                  {index+1}) {}
+                  <Link onClick={() => submitGuess(choice)}>{choice}</Link>
+                </Typography>
+              );
             } else {
-              return <Typography key={index} >{index+1}) <span style={{color:'darkgray', fontWeight: 'bold'}}>{choice}</span></Typography>
+              return (
+                <Typography key={index} >
+                  {index+1}) {}
+                  <span style={{color:"darkgray", fontWeight: "bold"}}>{choice}</span>
+                </Typography>
+              );
             }
           })
           }
@@ -134,37 +147,41 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
 
 
       {Object.keys(guessResult).length > 0 && <ResultDisplay guessRes={guessResult}/>}
-      {!completed_question && 
-        <LifelineSection 
+      {!completed_question &&
+        <LifelineSection
           gameState={gameState}
           setGameState={setGameState}
           setGuessResult={setGuessResult}
         />
       }
 
-      {completed_question && !terminated && <Button onClick={goToNextQuestion}>Next Question</Button>}
-      {completed_question && terminated && 
+      {completed_question && !terminated &&
+        <Button onClick={goToNextQuestion}>Next Question</Button>
+      }
+      {completed_question && terminated &&
         <Box>
-          <Typography sx={{color:'#BA0021'}}>Good game! Better luck next time! Leave your name if you want to be remembered:</Typography>
+          <Typography sx={{color:"#BA0021"}}>
+            Good game! Better luck next time! Leave your name if you want to be remembered:
+          </Typography>
           <Box>
-            <TextField 
+            <TextField
               placeholder="Enter your name..."
               onChange={event => setCurrentName(event.target.value)}
               onKeyDown={claimboxOnKeyDown}
               value={currentName}
             />
-            <Button onClick={beginAgain} sx={{width:'min-content'}}>Play Again</Button>
+            <Button onClick={beginAgain} sx={{width:"min-content"}}>Play Again</Button>
           </Box>
         </Box>
       }
 
       {current_question.answer && <DisplayAnswer question={current_question}/>}
     </Box>
-  )
+  );
 }
 
 function LifelineSection({gameState, setGameState, setGuessResult}) {
-  const {id, hints_shown} = gameState
+  const {id, hints_shown} = gameState;
   const {show_title_album, show_prev_lines, skip} = gameState.lifeline_inv;
 
   const consumeLifeline = lifelineToUse => {
@@ -186,8 +203,8 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
           }
         });
       }
-    })
-  }
+    });
+  };
 
   let nameHint = hints_shown.find(hint => hint.ShowTitle);
   nameHint = nameHint && nameHint.ShowTitle;
@@ -197,10 +214,15 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      {!nameHint && <Button onClick={() => {consumeLifeline("show_title_album")}} disabled={show_title_album === 0}>
-        Show song album and name ({show_title_album})
-      </Button>}
-      {nameHint && 
+      {!nameHint &&
+        <Button
+          onClick={() => {consumeLifeline("show_title_album");}}
+          disabled={show_title_album === 0}
+        >
+          Show song album and name ({show_title_album})
+        </Button>
+      }
+      {nameHint &&
         <Box display="flex" flexDirection="row" alignItems="center">
           <Box
             component="img"
@@ -209,29 +231,36 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
               width: 20,
             }}
             alt="Album Img"
-            src={ALBUM_LOGOS[nameHint.split(' : ')[0]]}
+            src={ALBUM_LOGOS[nameHint.split(" : ")[0]]}
             mx={0.5}
           />
           <Typography>{nameHint}</Typography>
         </Box>
       }
-      
-      {!prevLineHint && <Button onClick={() => {consumeLifeline("show_prev_lines")}} disabled={show_prev_lines === 0}>
-        Show previous lines ({show_prev_lines})
-      </Button>}
-      {prevLineHint && 
+
+      {!prevLineHint &&
+        <Button
+          onClick={() => {consumeLifeline("show_prev_lines");}}
+          disabled={show_prev_lines === 0}
+        >
+          Show previous lines ({show_prev_lines})
+        </Button>
+      }
+      {prevLineHint &&
         <>
-          {prevLineHint.is_at_song_beginning && <Typography sx={{color:'red'}}>This is the beginning of the song:</Typography>}
+          {prevLineHint.is_at_song_beginning &&
+            <Typography sx={{color:"red"}}>This is the beginning of the song:</Typography>
+          }
           {!prevLineHint.is_at_song_beginning && <Typography>...</Typography>}
-          <Typography style={{whiteSpace: 'pre-line'}}>{prevLineHint.lines}</Typography>
+          <Typography style={{whiteSpace: "pre-line"}}>{prevLineHint.lines}</Typography>
         </>
       }
 
-      <Button onClick={() => {consumeLifeline("skip")}} disabled={skip === 0}>
+      <Button onClick={() => {consumeLifeline("skip");}} disabled={skip === 0}>
         Skip Question ({skip})
       </Button>
     </Box>
-  )
+  );
 
 }
 
@@ -246,18 +275,18 @@ function DisplayAnswer({question}) {
 
   const toggleShowLyrics = () => {
     setShowLyrics(!showLyrics);
-  }
+  };
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       <Box display="flex" flexDirection="row" alignItems="center">
         <Box alignSelf="flex-end" mr={1}>
           <Typography>
-            This question was from: 
+            This question was from:
           </Typography>
         </Box>
         <Typography variant="h4" noWrap>
-          <Link href={href} target="_blank">{albumTitle}</Link> 
+          <Link href={href} target="_blank">{albumTitle}</Link>
         </Typography>
 
         <Box
@@ -275,24 +304,24 @@ function DisplayAnswer({question}) {
       {showLyrics && <SongLyricsDisplay lyrics_raw={lyrics_raw} shown_line={shown_line}/>}
 
     </Box>
-  )
+  );
 
 }
 
 function SongLyricsDisplay({lyrics_raw, shown_line}) {
-  const lines = lyrics_raw.split('\n')
+  const lines = lyrics_raw.split("\n");
   return (
     <Box>
       {lines.map((line, index) => {
-        const styles = {}
+        const styles = {};
         if (line === shown_line) {
-          styles['color'] = 'red'
+          styles["color"] = "red";
         }
-        if (line.startsWith('[') && line.endsWith(']')) {
-          styles['fontWeight'] = 'bold'
+        if (line.startsWith("[") && line.endsWith("]")) {
+          styles["fontWeight"] = "bold";
         }
-        return <Typography key={index} sx={styles}>{line}</Typography>
+        return <Typography key={index} sx={styles}>{line}</Typography>;
       })}
     </Box>
-  )
+  );
 }

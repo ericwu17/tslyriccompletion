@@ -1,12 +1,13 @@
-import AboutPage from './home/AboutPage';
-import SongPage from './song/SongPage';
-import NotFound from './not-found/NotFound';
+import React  from "react";
+import AboutPage from "./home/AboutPage";
+import SongPage from "./song/SongPage";
+import NotFound from "./not-found/NotFound";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { CssBaseline } from '@mui/material';
-import Navbar from './navbar/Navbar';
-import Game from './game/Game';
-import HistoryPage from './history/History'
-import MechanicsPage from './home/Mechanics';
+import { CssBaseline } from "@mui/material";
+import Navbar from "./navbar/Navbar";
+import Game from "./game/Game";
+import HistoryPage from "./history/History";
+import MechanicsPage from "./home/Mechanics";
 
 function App() {
   return (

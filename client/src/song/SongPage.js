@@ -1,15 +1,15 @@
 import { useParams } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import React from "react";
-import {Tooltip, Typography, Box, Grid, Paper, Link, TextField} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import {Tooltip, Typography, Box, Grid, Paper, Link, TextField} from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { ALBUM_LOGOS, ALBUM_ORDER, normalizeQuotes } from "../utils/Utils";
 
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#E0FFFF',
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#E0FFFF",
   ...theme.typography.body2,
-  textAlign: 'center',
+  textAlign: "center",
   color: theme.palette.text.secondary,
 }));
 
@@ -22,26 +22,28 @@ export default function SongPage() {
   const [searchString, setSearchString] = React.useState("");
 
   React.useEffect(() => {
-    axios.get(`/songs`).then((response) => {
+    axios.get("/songs").then((response) => {
       setSongList(response.data);
     });
-  }, [])
+  }, []);
   React.useEffect(() => {
     axios.get(`/songs/${album}/${name}`).then((response) => {
       setSong(response.data);
-    })
-  }, [album, name])
+    });
+  }, [album, name]);
 
-  
+
 
   if (JSON.stringify(unfilteredSongList) === "{}") {
-    return "still fetching songs..."
+    return "still fetching songs...";
   }
 
   let songList = {};
   let shownSongsArr = [];
   for (let albumName of ALBUM_ORDER) {
-    let songArr = unfilteredSongList[albumName].filter(song => song.toLowerCase().includes(searchString.toLowerCase()));
+    let songArr = unfilteredSongList[albumName].filter(
+      song => song.toLowerCase().includes(searchString.toLowerCase())
+    );
     songList[albumName] = songArr;
     shownSongsArr.push(...songArr.map(song => `${albumName}/${song}`));
   }
@@ -49,19 +51,19 @@ export default function SongPage() {
 
   const onKeyDown = e => {
     if (e.key === "Enter" && shownSongsArr.length === 1) {
-      window.location.href=`/tswift/song/${shownSongsArr[0]}`
+      window.location.href=`/tswift/song/${shownSongsArr[0]}`;
     }
-  }
+  };
 
   if (album === undefined) {
     return (
       <Box m={2}>
-        <Typography variant="h3" sx={{textDecoration:'underline'}}>
+        <Typography variant="h3" sx={{textDecoration:"underline"}}>
           Browse Taylor Swift Lyrics
         </Typography>
         <TextField
           sx={{
-            width:'100%',
+            width:"100%",
             background:shownSongsArr.length === 1 ? "lightgreen" : null,
           }}
           placeholder="Search songs..."
@@ -80,7 +82,7 @@ export default function SongPage() {
             }
             return (
               <Grid item xs={3} key={album}>
-                <Item sx={{height: '100%', m: 0.5, p: 2}}>
+                <Item sx={{height: "100%", m: 0.5, p: 2}}>
                   <Box display="flex" justifyContent="center" alignItems="center" width="100%">
                     <Box
                       component="img"
@@ -92,12 +94,16 @@ export default function SongPage() {
                       src={ALBUM_LOGOS[album]}
                       mr={1}
                     />
-                    <Typography variant="h4" sx={{textDecoration: 'underline'}} noWrap>{album}</Typography>
+                    <Typography variant="h4" sx={{textDecoration: "underline"}} noWrap>
+                      {album}
+                    </Typography>
                   </Box>
-                  {songs && songs.map((song, index) => 
-                    <Box>
+                  {songs && songs.map((song, index) =>
+                    <Box key={index}>
                       <Typography textAlign="left" noWrap>
-                        {index+1}) <Link href={`/tswift/song/${album}/${song}`} key={`/song/${album}/${song}`}>{song}
+                        {index+1}) {}
+                        <Link href={`/tswift/song/${album}/${song}`} key={`/song/${album}/${song}`}>
+                          {song}
                         </Link>
                       </Typography>
                     </Box>
@@ -107,7 +113,7 @@ export default function SongPage() {
             );
           })}
         </Grid>
-        {shownSongsArr.length === 0 && 
+        {shownSongsArr.length === 0 &&
           <Box m={2}>
             <Typography variant="h5">No songs matched your search</Typography>
           </Box>
@@ -121,39 +127,42 @@ export default function SongPage() {
 
 
   function displaySong(song) {
-    let lines = song.lyrics_raw.split('\n');
+    let lines = song.lyrics_raw.split("\n");
     let lineInfos = song.lines;
 
     let renderedLines = [];
     for (let lineInfo of lineInfos) {
       while (lineInfo.text !== lines[0]) {
-        renderedLines.push(<Typography sx={{ fontWeight: 'bold' }}>{lines.shift()}</Typography>)
+        renderedLines.push(<Typography sx={{ fontWeight: "bold" }}>{lines.shift()}</Typography>);
       }
-      if (lineInfo.has_bad_successor || lineInfo.has_multiple_successors || lineInfo.is_exclamatory) {
+      if (lineInfo.has_bad_successor
+        || lineInfo.has_multiple_successors
+        || lineInfo.is_exclamatory
+      ) {
         let tooltipText = "";
         if (lineInfo.has_bad_successor) {
-          tooltipText += "Has a bad successor\n"
+          tooltipText += "Has a bad successor\n";
         }
         if (lineInfo.has_multiple_successors) {
-          tooltipText += "Has multiple different successors\n"
+          tooltipText += "Has multiple different successors\n";
         }
         if (lineInfo.is_exclamatory) {
-          tooltipText += "Is an exclamatory line"
+          tooltipText += "Is an exclamatory line";
         }
 
         renderedLines.push(
           <Tooltip title={
-            <div style={{ whiteSpace: 'pre-line' }}>{tooltipText}</div>
+            <div style={{ whiteSpace: "pre-line" }}>{tooltipText}</div>
           } placement="right">
             <Typography color="pink" sx={{
-              width: 'max-content',
+              width: "max-content",
             }}>
               {lines.shift()}
             </Typography>
           </Tooltip>
         );
       } else {
-        renderedLines.push(<Typography>{lines.shift()}</Typography>)
+        renderedLines.push(<Typography>{lines.shift()}</Typography>);
       }
     }
 
@@ -162,13 +171,14 @@ export default function SongPage() {
         <Typography variant="h4">{song.album} : {song.name}</Typography>
         {renderedLines}
       </Box>
-    )
+    );
   }
 
   return (
     <Box mx={5} my={5}>
       <div>
-        Error: song not found! If you're typing in the URL by hand, note that the characters must be an exact match (and it's case sensitive!)
+        Error: song not found! If you're typing in the URL by hand,
+        note that the characters must be an exact match (and it's case sensitive!)
       </div>
       <div>
         Album: {album}

@@ -1,11 +1,11 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import HomeIcon from '@mui/icons-material/Home';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import HomeIcon from "@mui/icons-material/Home";
 export default function Navbar() {
   const toolbar = (
     <Toolbar>
@@ -15,28 +15,28 @@ export default function Navbar() {
         color="inherit"
         aria-label="menu"
         sx={{ mr: 2 }}
-        onClick={() => {window.location.href="/tswift"}}
+        onClick={() => {window.location.href="/tswift";}}
       >
         <HomeIcon />
       </IconButton>
       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
         Taylor Swift Lyric Guessing Game
       </Typography>
-      <Button 
+      <Button
         color="inherit"
-        onClick={() => {window.location.href="/tswift/play"}}
+        onClick={() => {window.location.href="/tswift/play";}}
       >
         Start Game
       </Button>
-      <Button 
+      <Button
         color="inherit"
-        onClick={() => {window.location.href="/tswift/history"}}
+        onClick={() => {window.location.href="/tswift/history";}}
       >
         View Scores
       </Button>
-      <Button 
+      <Button
         color="inherit"
-        onClick={() => {window.location.href="/tswift/song"}}
+        onClick={() => {window.location.href="/tswift/song";}}
       >
         View Lyrics
       </Button>
@@ -52,9 +52,9 @@ export default function Navbar() {
       {/* We render the toolbar twice: once in the AppBar and once in the page,
        so that the content of the page is not hidden beneath the AppBar.
        */}
-       <Box visibility="hidden">
+      <Box visibility="hidden">
         {toolbar}
-       </Box>
+      </Box>
     </Box>
   );
 }

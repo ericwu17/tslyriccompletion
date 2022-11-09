@@ -1,16 +1,16 @@
 import React from "react";
 import axios from "axios";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 import { Checkbox, Box, Grid, Button, Typography, Paper, Link } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import GameStateDisplay from "./GameStateDisplay";
 import { ALBUM_LOGOS, ALBUM_ORDER } from "../utils/Utils";
 
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#E0FFFF',
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#E0FFFF",
   ...theme.typography.body2,
-  textAlign: 'center',
+  textAlign: "center",
   color: theme.palette.text.secondary,
 }));
 
@@ -34,17 +34,18 @@ export default function Game() {
       }
     }
 
-    axios.post(`/game/start`, includedSongList).then((response) => {
+    axios.post("/game/start", includedSongList).then((response) => {
       setGameState(response.data);
-      Cookies.set('tsgg-game-id', response.data.id);
-      console.log('starting game with id: ', response.data.id)
+      Cookies.set("tsgg-game-id", response.data.id);
+      // eslint-disable-next-line no-console
+      console.log("starting game with id: ", response.data.id);
       setHasStarted(true);
-    })
-  }
+    });
+  };
 
   React.useEffect(() => {
-    axios.get(`/songs`).then((response) => {
-      let songs = response.data
+    axios.get("/songs").then((response) => {
+      let songs = response.data;
       for (let album of Object.keys(songs)) {
         const names = [...songs[album]];
         songs[album] = {};
@@ -55,21 +56,22 @@ export default function Game() {
       setSongList(songs);
     });
 
-    let maybeGameId = Cookies.get('tsgg-game-id')
+    let maybeGameId = Cookies.get("tsgg-game-id");
     if (maybeGameId) {
-      console.log(`Loading game from cookies... (the id is: ${maybeGameId})`)
-      axios.get(`/songs`).then((response) => {
-        const songs = response.data
+      // eslint-disable-next-line no-console
+      console.log(`Loading game from cookies... (the id is: ${maybeGameId})`);
+      axios.get("/songs").then((response) => {
+        const songs = response.data;
         axios.get(`/game/next?id=${maybeGameId}`).then((response) => {
           if (!response.data.id) {
             // return early because the game id in cookies is invalid.
-            console.log("invalid id from cookies. Aborting.")
+            // eslint-disable-next-line no-console
+            console.log("invalid id from cookies. Aborting.");
             return;
           }
           setGameState(response.data);
-          console.log(response.data);
           // set the songList according to the songList in the current game
-          const newSongList = {}
+          const newSongList = {};
 
           for (let album of Object.keys(songs)) {
             const names = [...songs[album]];
@@ -81,24 +83,20 @@ export default function Game() {
           for (let [album, name] of response.data.included_songs) {
             newSongList[album][name] = true;
           }
-  
+
           setSongList(newSongList);
-          
-          console.log("new song list:")
-          console.log(newSongList);
-  
-  
+
           setHasStarted(true);
-        })
+        });
       });
-      
+
       return;
     }
   }, []);
 
   React.useEffect(() => {
     const keyDownHandler = event => {
-      if (event.key === 'Enter') {
+      if (event.key === "Enter") {
         event.preventDefault();
         // For some reason, if I call the function beginGame()
         // right here, it does not properly capture the current songList
@@ -106,40 +104,41 @@ export default function Game() {
         // Hence I change an integer flag, and observe
         // changes to the flag in another useEffect.
         setFlag(17);
-        document.removeEventListener('keydown', keyDownHandler);
+        document.removeEventListener("keydown", keyDownHandler);
       }
     };
     if (!hasStarted) {
-      document.addEventListener('keydown', keyDownHandler);
+      document.addEventListener("keydown", keyDownHandler);
       setFlag(0);
     } else {
-      document.removeEventListener('keydown', keyDownHandler);
+      document.removeEventListener("keydown", keyDownHandler);
     }
 
     return () => {
-      document.removeEventListener('keydown', keyDownHandler);
+      document.removeEventListener("keydown", keyDownHandler);
     };
   }, [hasStarted]);
 
   React.useEffect(() => {
     if (flag === 17) {
-      console.log('calling beginGame due to Enter being pressed!')
+      // eslint-disable-next-line no-console
+      console.log("calling beginGame due to Enter being pressed!");
       beginGame();
     }
-    // eslint-disable-next-line
   }, [flag]);
 
 
   if (!hasStarted) {
     return (
       <Box m={2}>
-        <Typography variant="h3" sx={{textDecoration: 'underline'}}>
+        <Typography variant="h3" sx={{textDecoration: "underline"}}>
           Are you ... Ready For It?
         </Typography>
         <Typography variant="body1">
-          Select which songs you want to be quizzed on using the checkbox menu below. When you're ready, click "Begin"! (or press the enter key)
+          Select which songs you want to be quizzed on using the checkbox menu below.
+          When you're ready, click "Begin"! (or press the enter key)
         </Typography>
-        <Box sx={{width: 'max-content', border: '2px solid green'}}>
+        <Box sx={{width: "max-content", border: "2px solid green"}}>
           <Button onClick={beginGame} size="large">
             Begin
           </Button>
@@ -148,11 +147,11 @@ export default function Game() {
       </Box>
     );
   } else {
-    return <GameStateDisplay 
+    return <GameStateDisplay
       gameState={gameState}
       setGameState={setGameState}
       setHasStarted={setHasStarted}
-    />
+    />;
   }
 }
 
@@ -161,7 +160,7 @@ function SongSelection({songList, setSongList}) {
   const toggleSong = (album, song) => {
     const currentStatus = songList[album][song];
     setSongList({...songList, [album]: {...songList[album], [song]: !currentStatus}});
-  }
+  };
 
 
   const hasAllSelected = album => {
@@ -174,10 +173,10 @@ function SongSelection({songList, setSongList}) {
       }
     }
     return true;
-  }
+  };
 
   const toggleAlbum = album => {
-    let res
+    let res;
     if (hasAllSelected(album)) {
       res = false;
     } else {
@@ -188,14 +187,14 @@ function SongSelection({songList, setSongList}) {
       newAlbum[song] = res;
     }
     setSongList({...songList, [album]: newAlbum});
-  }
+  };
   const isAllSongsSelected = ALBUM_ORDER.map(album => hasAllSelected(album)).every(x => x);
 
 
   const toggleAll = () => {
     const res = isAllSongsSelected ? false : true;
 
-    const newSongList = {}
+    const newSongList = {};
     for (let album of ALBUM_ORDER) {
       const newAlbum = {};
       for (let song of Object.keys(songList[album])) {
@@ -204,10 +203,10 @@ function SongSelection({songList, setSongList}) {
       newSongList[album] = newAlbum;
     }
     setSongList(newSongList);
-  }
+  };
 
   const invertSelection = () => {
-    const newSongList = {}
+    const newSongList = {};
     for (let album of ALBUM_ORDER) {
       const newAlbum = {};
       for (let song of Object.keys(songList[album])) {
@@ -216,21 +215,23 @@ function SongSelection({songList, setSongList}) {
       newSongList[album] = newAlbum;
     }
     setSongList(newSongList);
-  }
+  };
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Button onClick={toggleAll}>{isAllSongsSelected ? 'Deselect' : 'Select'} all</Button>
+    <Box sx={{ width: "100%" }}>
+      <Button onClick={toggleAll}>{isAllSongsSelected ? "Deselect" : "Select"} all</Button>
       <Button onClick={invertSelection}>Invert Selection</Button>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         {ALBUM_ORDER.map(album => {
           let songs = songList[album];
           return (
             <Grid item xs={3} key={album}>
-              <Item sx={{height: '100%', mb: 1, p: 1}}>
+              <Item sx={{height: "100%", mb: 1, p: 1}}>
                 <Box display="flex" justifyContent="center" alignItems="center" width="100%">
                   <Checkbox checked={hasAllSelected(album)} onClick={() => toggleAlbum(album)} />
-                  <Typography variant="h4" sx={{textDecoration: 'underline'}} noWrap>{album}</Typography>
+                  <Typography variant="h4" sx={{textDecoration: "underline"}} noWrap>
+                    {album}
+                  </Typography>
                   <Box
                     component="img"
                     sx={{
@@ -242,11 +243,22 @@ function SongSelection({songList, setSongList}) {
                     ml={1}
                   />
                 </Box>
-                {songs && Object.keys(songs).map((song, index) => 
-                  <Box display="flex" flexDirection="row" alignItems="center" key={`/tswift/song/${album}/${song}`} mb={-2}>
-                    <Checkbox checked={songList[album][song]} onClick={() => toggleSong(album, song)}/>
+                {songs && Object.keys(songs).map((song, index) =>
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    alignItems="center"
+                    key={`/tswift/song/${album}/${song}`}
+                    mb={-2}
+                  >
+                    <Checkbox
+                      checked={songList[album][song]}
+                      onClick={() => toggleSong(album, song)}
+                    />
                     <Typography noWrap>
-                      {index+1}) <Link href={`/tswift/song/${album}/${song}`} >{song}
+                      {index+1}) {}
+                      <Link href={`/tswift/song/${album}/${song}`} >
+                        {song}
                       </Link>
                     </Typography>
                   </Box>
