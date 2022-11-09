@@ -24,7 +24,7 @@ function App() {
           <Route path="/song/:album" element={<SongPage />} />
           <Route path="/songs" element={<Navigate to="/song" />} />
           <Route path="/history" element={<HistoryPage />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path=":any/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
