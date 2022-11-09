@@ -48,21 +48,21 @@ impl LifelineInventory {
 					self.show_title_album -= 1;
 					return true;
 				}
-				return false;
+				false
 			}
 			Lifeline::ShowPrevLines => {
 				if self.show_prev_lines > 0 {
 					self.show_prev_lines -= 1;
 					return true;
 				}
-				return false;
+				false
 			}
 			Lifeline::Skip => {
 				if self.skip > 0 {
 					self.skip -= 1;
 					return true;
 				}
-				return false;
+				false
 			}
 		}
 	}
@@ -78,6 +78,12 @@ impl LifelineInventory {
 				self.skip += 1;
 			}
 		}
+	}
+}
+
+impl Default for LifelineInventory {
+	fn default() -> Self {
+		Self::new()
 	}
 }
 

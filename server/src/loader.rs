@@ -33,7 +33,7 @@ static EXCLUDED_SONGS: [&str; 6] = [
 
 
 fn capitalize_first_letter(s: &str) -> String {
-	if s.len() == 0 {
+	if s.is_empty() {
 		return "".to_owned()
 	}
 	s[0..1].to_uppercase() + &s[1..]
@@ -45,7 +45,7 @@ fn process_album_name(name: &str) -> String {
 	for suffix in suffixes_to_remove {
 		name = name.trim_end_matches(suffix);
 	}
-	name.split("-")
+	name.split('-')
 		.map(|x| 
 			if x != "folklore" && x != "evermore" {
 				capitalize_first_letter(x)
@@ -89,7 +89,7 @@ fn process_song_name(name: &str, album: &str) -> String {
 		name = corrected_name;
 	}
 
-	name.split("-")
+	name.split('-')
 		.map(|x| 
 			if album != "folklore" && album != "evermore" {
 				capitalize_first_letter(x)
@@ -113,9 +113,9 @@ pub fn load_songs_from_files() -> Vec<Song> {
 		if EXCLUDED_ALBUMS.contains(&album_name_full) {
 			continue;
 		}
-		let split = album_name_full.split("_").collect::<Vec<&str>>();
+		let split = album_name_full.split('_').collect::<Vec<&str>>();
 		let (index_str, name) = (split[0], split[1]);
-		let index: String = index_str.chars().filter(|c| c.is_digit(10)).collect();
+		let index: String = index_str.chars().filter(|c| c.is_ascii_digit()).collect();
 		if index != curr_index {
 			curr_index = index;
 			curr_album_name = name.to_owned();
@@ -126,7 +126,7 @@ pub fn load_songs_from_files() -> Vec<Song> {
 			if EXCLUDED_SONGS.contains(&song_name_full) {
 				continue;
 			}
-			let split = song_name_full.split("_").collect::<Vec<&str>>();
+			let split = song_name_full.split('_').collect::<Vec<&str>>();
 			let song_name = split[1];
 
 			let song_lyrics = song_file.contents_utf8().unwrap();

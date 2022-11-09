@@ -2,7 +2,7 @@
 
 use std::ops::{Index, IndexMut};
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 // A specialized Vector for easily working with the Meyers Diff Algorithm.
 pub struct NegativeArray {
     // The positive maximum index for the vector
@@ -22,7 +22,7 @@ impl Index<isize> for NegativeArray {
 
 // Allow mutating NegativeArray through `[]`
 impl IndexMut<isize> for NegativeArray {
-  fn index_mut<'a>(&'a mut self, offset: isize) -> &'a mut isize {
+  fn index_mut(&mut self, offset: isize) -> &mut isize {
     let index = self.max + offset;
     if index >= 0 {
       &mut self.arr[index as usize]

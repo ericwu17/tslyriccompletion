@@ -29,7 +29,7 @@ use std::fmt;
 /// http://www.xmailserver.org/diff2.pdf
 
 
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Operation {
   Insert,
   Delete,
@@ -44,7 +44,7 @@ impl std::fmt::Display for Operation {
 }
 
 // A Structure for describing change
-#[derive(Debug, Clone, PartialEq, Copy)]
+#[derive(Debug, Clone, PartialEq, Eq, Copy)]
 pub struct Edit {
   pub edit: Operation,
   pub at: usize,

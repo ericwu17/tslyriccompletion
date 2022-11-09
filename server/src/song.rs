@@ -36,10 +36,10 @@ impl Line {
 			"ayy", "i", "eh", "hey", "ra", "di", "da"];
 
 		let text_lower = text.to_lowercase();
-		let words: Vec<&str> = text_lower.split(|x: char| !x.is_alphabetic()).filter(|x| *x != "").collect();
+		let words: Vec<&str> = text_lower.split(|x: char| !x.is_alphabetic()).filter(|x| !x.is_empty()).collect();
 		let num_words = words.len();
-		let exclamatory_words = words.clone().into_iter().filter(|x| exclamatory_words.contains(x)).collect::<Vec<&str>>();
-		let num_exclamatory_words = exclamatory_words.len();
+		let exclamatory_words = words.clone().into_iter().filter(|x| exclamatory_words.contains(x));
+		let num_exclamatory_words = exclamatory_words.count();
 		
 		if num_exclamatory_words as f32 / num_words as f32 >= 0.5 {
 			is_exclamatory = true;
@@ -83,9 +83,9 @@ impl Line {
 
 impl Song {
 	pub fn new(album: String, name: String, lyrics_raw: String) -> Self {
-		let mut lines: Vec<Line> = lyrics_raw.split("\n").filter(|x| !(x.starts_with("[") || x == &""))
+		let mut lines: Vec<Line> = lyrics_raw.split('\n').filter(|x| !(x.starts_with('[') || x.is_empty()))
 			.map(|x| x.trim())
-			.map(|x| Line::new(x))
+			.map(Line::new)
 			.collect();
 
 		for index in 0..lines.len()-1 {

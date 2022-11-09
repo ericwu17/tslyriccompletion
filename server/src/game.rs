@@ -18,7 +18,7 @@ use sha1::{Sha1, Digest};
 const MAX_ACCEPTABLE_DIST: usize = 13;
 const POINTS_FOR_PERFECT_MATCH: i32 = 26;
 
-#[derive(Serialize, Clone, PartialEq, Debug)]
+#[derive(Serialize, Clone, PartialEq, Eq, Debug)]
 pub enum Hint {
 	ShowTitle(String),
 	ShowPrevLines{lines: String, is_at_song_beginning: bool},
@@ -101,7 +101,7 @@ pub struct GuessResultPublic {
 }
 
 impl GameState {
-	pub fn new(songs: &Vec<Song>,songs_to_include: &mut Vec<(String, String)>) -> Self {
+	pub fn new(songs: &[Song],songs_to_include: &mut Vec<(String, String)>) -> Self {
 		// This function will modify songs_to_include, so that if it's the empty vector,
 		// it will end up containing all songs in songs. It will also filter out any
 		// invalid songs.
@@ -110,7 +110,7 @@ impl GameState {
 				songs.iter().filter(|song| song.album == *a && song.name == *b).count() > 0
 			}
 			).collect();
-		if actual_songs_to_include.len() == 0 {
+		if actual_songs_to_include.is_empty() {
 			actual_songs_to_include = songs.iter().map(|song| (song.album.clone(), song.name.clone())).collect();
 		}
 		*songs_to_include = actual_songs_to_include.clone();
@@ -171,7 +171,7 @@ impl GameState {
 						return true;
 					}
 				}
-				return false;
+				false
 			},
 			Lifeline::ShowTitleAlbum => {
 				for hint in &self.hints_shown {
@@ -179,7 +179,7 @@ impl GameState {
 						return true;
 					}
 				}
-				return false;
+				false
 			},
 			Lifeline::Skip => {
 				for hint in &self.hints_shown {
@@ -187,7 +187,7 @@ impl GameState {
 						return true;
 					}
 				}
-				return false;
+				false
 			}
 		}
 	}
@@ -201,9 +201,8 @@ impl GameState {
 #[post("/game/start", format = "application/json", data = "<songs_to_include>")]
 pub async fn init_game(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, songs: &State<Vec<Song>>, songs_to_include: Json<Vec<(String, String)>>, pool: &rocket::State<Pool<MySql>>) -> String {
 	let mut songs_to_include = songs_to_include.to_vec();
-	let new_game_state;
+	let new_game_state = GameState::new(songs, &mut songs_to_include);
 	let uuid = Uuid::new_v4().to_string();
-	new_game_state = GameState::new(songs, &mut songs_to_include);
 
 	{
 		let mut guard = game_state.lock().unwrap();
@@ -215,7 +214,7 @@ pub async fn init_game(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>
 	// The for loop below builds out the songlist_desc object, which is a Hashmap mapping album names to a list of boolean values.
 	// The list of boolean values represents which songs are included/excluded in the game.
 	for song in &full_songlist {
-		let is_included = songs_to_include.contains(&song);
+		let is_included = songs_to_include.contains(song);
 		if let Some(v) = songlist_desc.get(&song.0) {
 			let mut v = v.clone();
 			v.push(is_included);
@@ -318,7 +317,7 @@ pub async fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<String, GameSta
 		.fetch_all(pool.inner())
 		.await;
 
-	return serde_json::to_string(&res.into_public_with_answers(id.clone())).unwrap() 
+	serde_json::to_string(&res.into_public_with_answers(id.clone())).unwrap() 
 }
 
 
@@ -326,7 +325,7 @@ pub async fn game_lifelines(game_state: &State<Arc<Mutex<HashMap<String, GameSta
 pub fn reduce_multiple_choice(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>, songs: &State<Vec<Song>>, id: String) -> String {
 	let mut guard = game_state.lock().unwrap();
 	if let Some(game_state) = (*guard).get(&id) {
-		if game_state.choices.len() > 0 {
+		if !game_state.choices.is_empty() {
 			// we do nothing if the current game state has already been reduced to multiple choice
 			return serde_json::to_string(&game_state.into_public(id.clone())).unwrap()
 		}
@@ -382,7 +381,7 @@ pub async fn claim_game(id: String, name: String, pool: &rocket::State<Pool<MySq
 		.fetch_all(pool.inner())
 		.await;
 	
-	return "{}".to_owned()
+	"{}".to_owned()
 }
 
 
@@ -400,7 +399,7 @@ pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>
 
 			let question = game_state.current_question.clone();
 
-			if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" && is_on_right_track(&guess, &question.answer) && game_state.choices.len() == 0 
+			if guess.chars().count() < question.answer.chars().count() - 5 && guess != "/" && is_on_right_track(guess, &question.answer) && game_state.choices.is_empty()
 				|| guess.chars().count() > 150 {
 				// The guess was on the right track, but was too short.
 				// We also return AFM (refuse to process the guess) if the user submits a ridiculously long guess.
@@ -414,15 +413,15 @@ pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>
 				return serde_json::to_string(&res).unwrap();
 			}
 
-			let (truncate_amt, dist) = optimal_truncated_dist(&guess, &question.answer);
+			let (truncate_amt, dist) = optimal_truncated_dist(guess, &question.answer);
 			let mut new_game_state = game_state.clone();
 			let (mut guess_flag_str, mut ans_flag_str) = get_flags(guess, &question.answer, truncate_amt);
 			let points_earned: i32;
 			let mut maybe_new_lifeline = None;
 
-			if (game_state.choices.len() == 0 && dist > MAX_ACCEPTABLE_DIST) || (game_state.choices.len() > 0 && guess != question.answer) {
+			if (game_state.choices.is_empty() && dist > MAX_ACCEPTABLE_DIST) || (!game_state.choices.is_empty() && guess != question.answer) {
 				// The user has guessed wrong and the game is now over
-				if game_state.choices.len() > 0 {
+				if !game_state.choices.is_empty() {
 					// In a multiple choice situation, we set the flags for both strings' characters all to red.
 					guess_flag_str.set_all_flags(1);
 					ans_flag_str.set_all_flags(1);
@@ -440,7 +439,7 @@ pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>
 				};
 				outer_game_state = new_game_state.clone();
 				break 'outer_block res;
-			} else if game_state.choices.len() > 0 {
+			} else if !game_state.choices.is_empty() {
 				// The user got a multiple choice question correct
 				points_earned = 1;
 			} else if dist != 0 {
@@ -459,7 +458,7 @@ pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>
 			new_game_state.score += points_earned;
 			new_game_state.completed_question = true;
 			if let Some(new_lifeline) = &maybe_new_lifeline {
-				new_game_state.lifeline_inv.add_lifeline(&new_lifeline);
+				new_game_state.lifeline_inv.add_lifeline(new_lifeline);
 			}
 			(*guard).insert(id.clone(), new_game_state.clone());
 
@@ -487,10 +486,7 @@ pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>
 		GuessResult::Correct { points_earned, new_lifeline, .. } => {
 			num_points_earned = *points_earned;
 			is_correct = true;
-			lifeline_earned = match new_lifeline {
-				None => None,
-				Some(lifeline) => Some(lifeline.as_string()),
-			};
+			lifeline_earned = new_lifeline.as_ref().map(|lifeline| lifeline.as_string());
 		},
 		GuessResult::Incorrect { .. } => {
 			num_points_earned = 0;
@@ -534,7 +530,7 @@ pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>
 		.await;
 	}
 
-	return serde_json::to_string(&guess_res).unwrap();
+	serde_json::to_string(&guess_res).unwrap()
 }
 
 
@@ -548,13 +544,13 @@ fn get_flags(guess: &str, answer: &str, optimal_truncate_amt: i32) -> (FlaggedSt
 	let mut guess_flags = vec![0; guess.chars().count()];
 	let mut ans_flags = vec![0; answer.chars().count()];
 	for insertion in diffs.get("insert").unwrap() {
-		for i in insertion.at..=insertion.to {
-			ans_flags[i] = 1;
+		for flag in ans_flags.iter_mut().take(insertion.to + 1).skip(insertion.at) {
+			*flag = 1;
 		}
 	}
 	for deletion in diffs.get("delete").unwrap() {
-		for i in deletion.at..=deletion.to {
-			guess_flags[i] = 1;
+		for flag in guess_flags.iter_mut().take(deletion.to + 1).skip(deletion.at) {
+			*flag = 1;
 		}
 	}
 	let num_chars_truncated = guess[(guess.len()-optimal_truncate_amt as usize)..].chars().count();
@@ -586,8 +582,8 @@ fn get_previous_lines(question: &Question) -> (String, bool) {
 
 	let lines = question.song.lines.clone();
 	let mut answer_position: usize = 0;
-	for index in 0..lines.len() {
-		if lines[index].text == question.shown_line {
+	for (index, line) in lines.iter().enumerate() {
+		if line.text == question.shown_line {
 			answer_position = index;
 		}
 	}
@@ -596,8 +592,8 @@ fn get_previous_lines(question: &Question) -> (String, bool) {
 	let is_at_song_beginning =  answer_position <= PREV_LINES_TO_SHOW;
 	let beginning_index = std::cmp::max(answer_position as i32 - PREV_LINES_TO_SHOW as i32, 0);
 
-	for index in (beginning_index as usize)..=answer_position {
-		output.push_str(&format!("{}\n", lines[index].text));
+	for line in lines.iter().take(answer_position + 1).skip(beginning_index as usize) {
+		output.push_str(&format!("{}\n", line.text));
 	}
 	(output, is_at_song_beginning)
 

@@ -33,13 +33,13 @@ pub fn optimal_truncated_dist(l1: &str, l2: &str) -> (i32, usize) {
 		}
 		k += 1;
 	}
-	return (optimal_k, minimal_dist)
+	(optimal_k, minimal_dist)
 
 }
 
 
 pub fn are_close_enough(s1: &str, s2: &str) -> bool {
-	(edit_distance(s1, s2) as f32 / std::cmp::min(s1.chars().count(), s2.chars().count()) as f32) < {0.1 as f32}
+	(edit_distance(s1, s2) as f32 / std::cmp::min(s1.chars().count(), s2.chars().count()) as f32) < 0.1_f32
 }
 
 fn is_acceptable_guess(guess: &Line) -> bool {
@@ -68,8 +68,8 @@ pub fn pick_distractors (correct_answer: &str, songs: &Vec<Song>) -> Vec<String>
 
 
 
-pub fn pick_random_guess(songs: &Vec<Song>, songs_to_include: &Vec<(String, String)>) -> Question {
-	let songs: Vec<Song> = songs.clone().into_iter().filter(|song| songs_to_include.contains(&(song.album.clone(), song.name.clone()))).collect();
+pub fn pick_random_guess(songs: &[Song], songs_to_include: &[(String, String)]) -> Question {
+	let songs: Vec<Song> = songs.iter().cloned().filter(|song| songs_to_include.contains(&(song.album.clone(), song.name.clone()))).collect();
 	let random_song = songs.choose(&mut rand::thread_rng()).unwrap();
 
 	let candidate_lines = &random_song.lines[0..(random_song.lines.len()-1)];
@@ -78,7 +78,7 @@ pub fn pick_random_guess(songs: &Vec<Song>, songs_to_include: &Vec<(String, Stri
 	while !is_acceptable_guess(random_line) {
 		random_line = candidate_lines.choose(&mut rand::thread_rng()).unwrap();
 	}
-	let line_num = (&random_song.lines).into_iter().position(|r| r == random_line).unwrap();
+	let line_num = random_song.lines.iter().position(|r| r == random_line).unwrap();
 	let answer = &random_song.lines[line_num + 1];
 
 	Question {
