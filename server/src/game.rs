@@ -428,7 +428,7 @@ pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>
 				}
 				new_game_state.terminated = true;
 				new_game_state.completed_question = true;
-				(*guard).insert(id.clone(), new_game_state.clone());
+				(*guard).remove(&id);
 				
 				let res = GuessResultPublic {
 					game_state: new_game_state.into_public_with_answers(id.clone()),
@@ -524,10 +524,10 @@ pub async fn take_guess(game_state: &State<Arc<Mutex<HashMap<String, GameState>>
 			WHERE
 				UUID = ?
 		")
-		.bind(gs.score)
-		.bind(id.clone())
-		.fetch_all(pool.inner())
-		.await;
+			.bind(gs.score)
+			.bind(id.clone())
+			.fetch_all(pool.inner())
+			.await;
 	}
 
 	serde_json::to_string(&guess_res).unwrap()
