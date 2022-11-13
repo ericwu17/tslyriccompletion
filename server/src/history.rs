@@ -56,6 +56,8 @@ impl SonglistChoiceDescription {
 		let mut num_inc = 0;
 		let mut num_exc = 0;
 
+		let mut album_order = full_songlist.iter().map(|x| x.0.clone()).collect::<Vec<String>>();
+		album_order.dedup();  // remove duplicates since full_songlist contains one entry for each song but we only want a list of albums.
 
 		for (_, inc_exc_list) in &selected_songs {
 			for v in inc_exc_list {
@@ -72,8 +74,8 @@ impl SonglistChoiceDescription {
 		if num_inc > num_exc {
 			let mut exc_arr: Vec<SongSet> = vec![];
 
-			for (album, inc_exc_list) in &selected_songs {
-
+			for album in album_order {
+				let inc_exc_list = selected_songs.get(&album).unwrap();
 				if inc_exc_list.iter().all(|v| *v == false) {
 					exc_arr.push(SongSet::Album(album.clone()));
 					continue;
@@ -91,7 +93,8 @@ impl SonglistChoiceDescription {
 		} else {
 			let mut inc_arr: Vec<SongSet> = vec![];
 
-			for (album, inc_exc_list) in &selected_songs {
+			for album in album_order {
+				let inc_exc_list = selected_songs.get(&album).unwrap();
 
 				if inc_exc_list.iter().all(|v| *v == true) {
 					inc_arr.push(SongSet::Album(album.clone()));
