@@ -72,10 +72,14 @@ fn process_song_name(name: &str, album: &str) -> String {
 		("im-only-me-when-im-with-you", "i'm-only-me-when-i'm-with-you"),
 		("marys-song", "mary's-song"),
 		("forever-n-always", "forever-&-always"),
+		("mr-perfectly-fine", "Mr.-perfectly-fine"),
 		("dont-you", "don't-you"),
+		("thats-when", "that's-when"),
 		("youre-not-sorry", "you're-not-sorry"),
 		("dont-blame-me", "don't-blame-me"),
+		("this-is-why-we-cant-have-nice-things", "this-is-why-we-can't-have-nice-things"),
 		("miss-americana-n-the-heartbreak-prince", "miss-americana-&-the-heartbreak-prince"),
+		("soon-youll-get-better", "soon-you'll-get-better"),
 		("its-nice-to-have-a-friend", "it's-nice-to-have-a-friend"),
 		("me", "ME!"),
 		("come-back-be-here", "come-back...Be-here"),
@@ -83,6 +87,7 @@ fn process_song_name(name: &str, album: &str) -> String {
 		("wouldve-couldve-shouldve", "would've-could've-should've"),
 		("its-time-to-go", "it's-time-to-go"),
 		("tis-the-damn-season", "'tis-the-damn-season"),
+		("question", "Question...?"),
 	]);
 
 	if let Some(corrected_name) = name_substitutions.get(&name) {
