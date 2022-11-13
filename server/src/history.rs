@@ -128,8 +128,20 @@ pub struct Songlist {
 }
 
 
-#[get("/history/all")]
-pub async fn get_games(pool: &rocket::State<Pool<MySql>>) -> String {
+#[get("/history/all?<sort>&<search>&<limit>&<include_nameless>")]
+pub async fn get_games(
+	pool: &rocket::State<Pool<MySql>>,
+	sort: Option<String>,
+	search: Option<String>,
+	limit: Option<usize>,
+	include_nameless: Option<bool>,
+) -> String {
+	let sort = sort.unwrap_or("start_time".to_string());
+	let search = format!("%{}%", search.unwrap_or("".to_string()));
+	let limit = limit.unwrap_or(34);
+	let include_nameless = include_nameless.unwrap_or(true);
+
+
 	let songlists: Vec<SonglistSchema> = sqlx::query_as(
 		"SELECT * from songlists")
 		.fetch_all(pool.inner())
@@ -144,11 +156,42 @@ pub async fn get_games(pool: &rocket::State<Pool<MySql>>) -> String {
 			content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap()).unwrap(),
 		}).collect();
 
-	let games: Vec<GameSchema> = sqlx::query_as(
-		"SELECT * from games")
+	
+		let query = match sort.as_str() {
+		"score" => {
+			if include_nameless {
+				"SELECT * from games
+				WHERE player_name LIKE ? OR player_name IS NULL
+				ORDER BY terminal_score DESC
+				LIMIT ?"
+			} else {
+				"SELECT * from games
+				WHERE player_name LIKE ?
+				ORDER BY terminal_score DESC
+				LIMIT ?"
+			}
+		}
+		_ => {
+			if include_nameless {
+				"SELECT * from games
+				WHERE player_name LIKE ? OR player_name IS NULL
+				ORDER BY start_time DESC
+				LIMIT ?"
+			} else {
+				"SELECT * from games
+				WHERE player_name LIKE ?
+				ORDER BY start_time DESC
+				LIMIT ?"
+			}
+		}
+	};
+
+	let games: Vec<GameSchema> = sqlx::query_as(query)
+		.bind(search)
+		.bind(limit as i32)
 		.fetch_all(pool.inner())
 		.await.unwrap();
-	
+
 	let games: Vec<Game> = games.into_iter()
 		.map(|game| {
 			let selected_songs =  serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap()).unwrap();
