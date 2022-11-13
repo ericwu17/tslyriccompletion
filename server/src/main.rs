@@ -4,6 +4,7 @@ pub mod guess_generating;
 pub mod game;
 pub mod diff;
 pub mod lifelines;
+pub mod history;
 
 use std::collections::HashMap;
 use crate::song::Song;
@@ -20,6 +21,7 @@ use game::{GameState,
 	take_guess,
 	claim_game,
 };
+use history::get_games;
 use rocket::State;
 use std::sync::{Arc, Mutex};
 
@@ -92,7 +94,9 @@ async fn main() -> Result<(), rocket::Error> {
 		.mount("/", routes![reduce_multiple_choice])
 		.mount("/", routes![next_question])
 		.mount("/", routes![claim_game])
-		.mount("/", routes![take_guess]).ignite().await?;
+		.mount("/", routes![take_guess])
+		.mount("/", routes![get_games])
+		.ignite().await?;
 	
 	let _ = rocket.launch().await?;
 
