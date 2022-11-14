@@ -1,5 +1,5 @@
 import React from "react";
-import { TableRow, TableCell } from "@mui/material";
+import { TableRow, TableCell, Link } from "@mui/material";
 
 import { parseISO } from "date-fns";
 
@@ -22,7 +22,9 @@ export default function GameTableRow({game, index}) {
       </TableCell>
       <TableCell>{name}</TableCell>
       <TableCell align="right">{score}</TableCell>
-      <TableCell align="right">See Details</TableCell>
+      <TableCell align="right">
+        <Link href={`/tswift/history/game?id=${game.uuid}`}>See Details</Link>
+      </TableCell>
     </TableRow>
   );
 }

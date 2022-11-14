@@ -7,6 +7,7 @@ import { CssBaseline } from "@mui/material";
 import Navbar from "./navbar/Navbar";
 import Game from "./game/Game";
 import HistoryPage from "./history/History";
+import GameDetails from "./history/GameDetails";
 import MechanicsPage from "./home/Mechanics";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/song/:album" element={<SongPage />} />
           <Route path="/songs" element={<Navigate to="/song" />} />
           <Route path="/history" element={<HistoryPage />} />
+          <Route path="/history/game" element={<GameDetails />} />
           <Route path=":any/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
