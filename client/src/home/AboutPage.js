@@ -5,7 +5,7 @@ export default function AboutPage() {
   return (
     <Box mt={2} mx={5} mb={30}>
       <Typography variant="h3" sx={{textDecoration: "underline", mb: 2}}>
-        Taylor Swift Lyric Guessing Game
+        Taylor Swift Lyric Completion Game
       </Typography>
       <Typography>
         This is a game where your goal is to guess the next line from a random Taylor Swift song!

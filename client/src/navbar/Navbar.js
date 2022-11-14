@@ -20,7 +20,7 @@ export default function Navbar() {
         <HomeIcon />
       </IconButton>
       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-        Taylor Swift Lyric Guessing Game
+        Taylor Swift Lyric Completion Game
       </Typography>
       <Button
         color="inherit"

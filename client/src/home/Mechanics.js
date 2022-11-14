@@ -5,7 +5,7 @@ export default function MechanicsPage() {
   return (
     <Box mt={2} mx={5} mb={30}>
       <Typography variant="h3" sx={{textDecoration: "underline", mb: 2}}>
-        Taylor Swift Guessing Game: Game Mechanics
+        Taylor Swift Completion Game: Game Mechanics
       </Typography>
       <Typography variant="h4" sx={{textDecoration: "underline", mt:2, mb: 2}}>
         Overview
