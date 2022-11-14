@@ -48,10 +48,14 @@ export default function AboutPage() {
         Future Ideas for the Taylor Swift Guessing Game?
       </Typography>
       <Typography>
-        There's gonna be a high scores page where you can look through game history! Besides from
+        Besides
         viewing high scores, I also plan to allow you to look at statistics about each line of
         particular songs. It would be cool to see how many times a certain line was played, and to
         see which lines are commonly answered correctly/incorrectly.
+      </Typography>
+      <Typography>
+        Also, I need to improve how this website looks on small screens and mobile devices!
+        Right now, the site is best viewed on a computer and is difficult to use on a phone.
       </Typography>
 
       <Typography variant="h4" sx={{textDecoration: "underline", mt:2, mb: 2}}>
