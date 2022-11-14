@@ -217,3 +217,121 @@ pub async fn get_games(
 
 	serde_json::to_string(&games).unwrap()
 }
+
+#[derive(sqlx::FromRow, Debug)]
+pub struct GuessSchema {
+	game_uuid: String,
+	order_num: i32,
+	album: String,
+	song_name: String,
+	prompt: String,
+	correct_answer: String,
+	result: String,
+	user_guess: String,
+	points_earned: i32,
+	lifeline_earned: Option<String>,
+	lifelines_used: Json<Vec<String>>,
+	options: Json<Vec<String>>,
+	submit_time: PrimitiveDateTime
+}
+
+#[derive(Serialize)]
+pub struct Guess {
+	game_uuid: String,
+	order_num: i32,
+	album: String,
+	song_name: String,
+	prompt: String,
+	correct_answer: String,
+	result: String,
+	user_guess: String,
+	points_earned: i32,
+	lifeline_earned: Option<String>,
+	lifelines_used: Vec<String>,
+	options: Vec<String>,
+	submit_time: String,
+}
+
+
+impl Guess {
+	pub fn from_schema(guess_schema: GuessSchema) -> Self {
+		let format = format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
+
+		Guess {
+			game_uuid: guess_schema.game_uuid,
+			order_num: guess_schema.order_num,
+			album: guess_schema.album,
+			song_name: guess_schema.song_name,
+			prompt: guess_schema.prompt,
+			correct_answer: guess_schema.correct_answer,
+			result: guess_schema.result,
+			user_guess: guess_schema.user_guess,
+			points_earned: guess_schema.points_earned,
+			lifeline_earned: guess_schema.lifeline_earned,
+			lifelines_used: serde_json::from_str(&serde_json::to_string(&guess_schema.lifelines_used).unwrap()).unwrap(),
+			options: serde_json::from_str(&serde_json::to_string(&guess_schema.options).unwrap()).unwrap(),
+			submit_time: guess_schema.submit_time.format(&format).unwrap(),
+		}
+	}
+}
+
+#[derive(Serialize)]
+pub struct GameWithGuesses {
+	game: Game,
+	guesses: Vec<Guess>,
+}
+
+
+
+#[get("/history/game?<id>")]
+pub async fn get_game(
+	pool: &rocket::State<Pool<MySql>>,
+	id: String,
+) -> String {
+
+	let songlists: Vec<SonglistSchema> = sqlx::query_as(
+		"SELECT * from songlists")
+		.fetch_all(pool.inner())
+		.await.unwrap();
+
+	let songlists: Vec<Songlist> = songlists.into_iter()
+		.map(|songlist| Songlist{
+			sha1sum: songlist.sha1sum,
+			
+			// We are serializing and then immediately deserializing because I can't figure out
+			// how to convert the type from Json<Vec<(String, String)>> to Vec<(String, String)>
+			content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap()).unwrap(),
+		}).collect();
+
+	let game: GameSchema = sqlx::query_as("SELECT * from games
+		WHERE uuid LIKE ?")
+		.bind(id.clone())
+		.fetch_one(pool.inner())
+		.await.unwrap();
+	let format = format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
+	
+	let selected_songs =  serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap()).unwrap();
+	let full_songlist = songlists.iter().filter(|s| s.sha1sum == game.songlist_sha).next().unwrap().content.clone();
+	let selected_songs_desc = SonglistChoiceDescription::from_db(full_songlist, selected_songs);
+
+	let game = Game{
+		uuid: game.uuid,
+		start_time: game.start_time.format(&format).unwrap(),
+		songlist_sha: game.songlist_sha,
+		selected_songs: selected_songs_desc,
+		has_terminated: game.has_terminated,
+		terminal_score: game.terminal_score,
+		player_name: game.player_name,
+	};
+
+	let guesses: Vec<GuessSchema> = sqlx::query_as(
+		"SELECT * from guesses
+		WHERE game_uuid LIKE ?"
+	).bind(id.clone())
+		.fetch_all(pool.inner())
+		.await.unwrap();
+	
+	let guesses: Vec<Guess> = guesses.into_iter().map(Guess::from_schema).collect();
+
+	serde_json::to_string(&GameWithGuesses{game, guesses}).unwrap()
+}
