@@ -1,3 +1,5 @@
+import { useSearchParams } from "react-router-dom";
+
 export const ALBUM_ORDER = [
   "Taylor Swift", "Fearless", "Speak Now", "Red", "1989", "Reputation", "Lover",
   "folklore", "evermore", "Midnights"
@@ -28,3 +30,31 @@ export const normalizeQuotes = string => {
 
   return result;
 };
+
+
+
+// A function that can use used like React.useState
+// but will also store the state in the URL.
+// copied from https://blog.logrocket.com/use-state-url-persist-state-usesearchparams/
+export function useSearchParamsState(
+  searchParamName,
+  defaultValue
+) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const acquiredSearchParam = searchParams.get(searchParamName);
+  const searchParamsState = acquiredSearchParam ?? defaultValue;
+
+  const setSearchParamsState = (newState) => {
+    const next = Object.assign(
+      {},
+      [...searchParams.entries()].reduce(
+        (o, [key, value]) => ({ ...o, [key]: value }),
+        {}
+      ),
+      { [searchParamName]: newState }
+    );
+    setSearchParams(next);
+  };
+  return [searchParamsState, setSearchParamsState];
+}

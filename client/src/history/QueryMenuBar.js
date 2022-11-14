@@ -1,16 +1,24 @@
 import React from "react";
 import {
   Box, Select , MenuItem, Typography, FormControl,
-  Divider, Checkbox, TextField, Button
+  Divider, Checkbox, TextField
 } from "@mui/material";
 import axios from "axios";
+import { useSearchParamsState } from "../utils/Utils";
 
 
 export default function QueryMenuBar({setGames}) {
-  const [sortBy, setSortBy] = React.useState("score");
-  const [includeNameless, setIncludeNameless] = React.useState(true);
-  const [searchString, setSearchString] = React.useState("");
+  const [sortBy, setSortBy] = useSearchParamsState("sortBy", "score");
+  const [includeNameless, setIncludeNameless] = useSearchParamsState("includeNameless", "true");
+  const [searchString, setSearchString] = useSearchParamsState("search", "");
 
+  const toggleIncludeNameless = () => {
+    if (includeNameless === "true") {
+      setIncludeNameless("false");
+    } else {
+      setIncludeNameless("true");
+    }
+  };
 
   const refetchGames = () => {
     axios.get(
@@ -23,7 +31,7 @@ export default function QueryMenuBar({setGames}) {
 
   React.useEffect(() => {
     refetchGames();
-  }, []);
+  }, [sortBy, includeNameless, searchString]);
 
   return (
     <Box
@@ -52,8 +60,8 @@ export default function QueryMenuBar({setGames}) {
       <Divider orientation="vertical" flexItem />
 
       <Checkbox
-        checked={includeNameless}
-        onClick={() => setIncludeNameless(!includeNameless)}
+        checked={includeNameless === "true"}
+        onClick={toggleIncludeNameless}
       />
       <Box mr={1}>
         <Typography>
@@ -75,16 +83,6 @@ export default function QueryMenuBar({setGames}) {
           size="small"
         />
       </Box>
-
-      <Divider orientation="vertical" flexItem />
-
-      <Box mx={1}>
-        <Button onClick={refetchGames}>
-          Go
-        </Button>
-      </Box>
-
-
     </Box>
   );
 }
