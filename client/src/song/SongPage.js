@@ -3,7 +3,7 @@ import axios from "axios";
 import React from "react";
 import {Tooltip, Typography, Box, Grid, Paper, Link, TextField} from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ALBUM_LOGOS, ALBUM_ORDER, normalizeQuotes } from "../utils/Utils";
+import { ALBUM_LOGOS, ALBUM_ORDER, normalizeQuotes, escapeQuestionMarks } from "../utils/Utils";
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -51,7 +51,7 @@ export default function SongPage() {
 
   const onKeyDown = e => {
     if (e.key === "Enter" && shownSongsArr.length === 1) {
-      window.location.href=`/tswift/song/${shownSongsArr[0]}`;
+      window.location.href=`/tswift/song/${escapeQuestionMarks(shownSongsArr[0])}`;
     }
   };
 

@@ -58,3 +58,12 @@ export function useSearchParamsState(
   };
   return [searchParamsState, setSearchParamsState];
 }
+
+export const escapeQuestionMarks = s => {
+  // This function replaces question marks in 's' with the string '%253F'.
+  // The purpose is so that when entered into a URL on the front end, it translates to
+  // '%3F', and then this gets interpreted as '?' when the front end communicates with the back end.
+
+  // This function is needed because of the song "Question...?"
+  return s.replaceAll("?", "%253F");
+};
