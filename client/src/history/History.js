@@ -1,17 +1,18 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import QueryMenuBar from "./QueryMenuBar";
+import GameSection from "./GameSection";
 
 export default function HistoryPage() {
   const [games, setGames] = React.useState([]);
-  console.log(games);
 
   return (
     <Box m={2}>
       <QueryMenuBar setGames={setGames} />
-      <Typography>
-        This is the history page (coming soon)
-      </Typography>
+      {games.map(game => {
+        return (<GameSection key={game.uuid} game={game}/>);
+      })}
+
     </Box>
   );
 }

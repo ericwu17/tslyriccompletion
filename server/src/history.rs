@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use rocket::time::format_description;
 use serde::Deserialize;
 use serde::Serialize;
 use std::default::Default;
@@ -164,12 +165,12 @@ pub async fn get_games(
 		"score" => {
 			if include_nameless {
 				"SELECT * from games
-				WHERE player_name LIKE ? OR player_name IS NULL
+				WHERE (player_name LIKE ? OR player_name IS NULL) AND has_terminated LIKE TRUE
 				ORDER BY terminal_score DESC
 				LIMIT ?"
 			} else {
 				"SELECT * from games
-				WHERE player_name LIKE ?
+				WHERE (player_name LIKE ?) AND has_terminated LIKE TRUE
 				ORDER BY terminal_score DESC
 				LIMIT ?"
 			}
@@ -177,12 +178,12 @@ pub async fn get_games(
 		_ => {
 			if include_nameless {
 				"SELECT * from games
-				WHERE player_name LIKE ? OR player_name IS NULL
+				WHERE (player_name LIKE ? OR player_name IS NULL) AND has_terminated LIKE TRUE
 				ORDER BY start_time DESC
 				LIMIT ?"
 			} else {
 				"SELECT * from games
-				WHERE player_name LIKE ?
+				WHERE (player_name LIKE ?) AND has_terminated LIKE TRUE
 				ORDER BY start_time DESC
 				LIMIT ?"
 			}
@@ -202,9 +203,11 @@ pub async fn get_games(
 
 			let selected_songs_desc = SonglistChoiceDescription::from_db(full_songlist, selected_songs);
 
+			let format = format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
+
 			Game{
 				uuid: game.uuid,
-				start_time: game.start_time.to_string(),
+				start_time: game.start_time.format(&format).unwrap(),
 				songlist_sha: game.songlist_sha,
 				selected_songs: selected_songs_desc,
 				has_terminated: game.has_terminated,
