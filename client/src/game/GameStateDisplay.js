@@ -5,6 +5,7 @@ import { Box, Button, Link, TextField, Typography } from "@mui/material";
 import ResultDisplay from "./ResultDisplay";
 import { ALBUM_LOGOS, normalizeQuotes } from "../utils/Utils";
 
+const MAX_NAME_LEN = 35;
 
 export default function GameStateDisplay({gameState, setGameState, setHasStarted}) {
   const [guessResult, setGuessResult] = React.useState({});
@@ -22,6 +23,13 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       Cookies.remove("tsgg-game-id");
     }
   }, [terminated]);
+
+  React.useEffect(() => {
+
+    if (currentName.length > MAX_NAME_LEN) {
+      setCurrentName(currentName.slice(0, MAX_NAME_LEN));
+    }
+  }, [currentName]);
 
   if (!current_question) {
     return (
@@ -161,7 +169,8 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       {completed_question && terminated &&
         <Box>
           <Typography sx={{color:"#BA0021"}}>
-            Good game! Better luck next time! Leave your name if you want to be remembered:
+            Good game! Better luck next time!
+            Leave your name if you want to be remembered ({MAX_NAME_LEN} characters max):
           </Typography>
           <Box>
             <TextField
