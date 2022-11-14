@@ -3,6 +3,7 @@ import React from "react";
 import { useSearchParamsState } from "../utils/Utils";
 import { parseISO } from "date-fns";
 import { Box, Table, TableRow, TableCell, TableBody, CircularProgress } from "@mui/material";
+import InclusionExclusionSection from "./InclusionExclusionSection";
 
 export default function GameDetails() {
   const [data, setData] = React.useState({});
@@ -32,7 +33,7 @@ export default function GameDetails() {
       <CircularProgress />
     );
   }
-  console.log(data);
+
   let {game, guesses} = data;
 
   const name = game.player_name || "<Anonymous>";
@@ -63,6 +64,11 @@ export default function GameDetails() {
             <TableRow>
               <TableCell><strong>Number of Guesses: {}</strong></TableCell>
               <TableCell>{numGuesses}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell colSpan={2}>
+                <InclusionExclusionSection selectedSongs={game.selected_songs}/>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
