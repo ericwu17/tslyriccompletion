@@ -15,6 +15,7 @@ pub struct GameSchema {
 	pub has_terminated: bool,
 	pub terminal_score: Option<i32>,
 	pub player_name: Option<String>,
+	pub num_guesses: i32,
 }
 
 #[derive(Debug, Serialize)]
@@ -27,6 +28,7 @@ pub struct Game {
 	pub has_terminated: bool,
 	pub terminal_score: Option<i32>,
 	pub player_name: Option<String>,
+	pub num_guesses: i32,
 }
 
 #[derive(Serialize, Debug)]
@@ -160,37 +162,38 @@ pub async fn get_games(
 			content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap()).unwrap(),
 		}).collect();
 
+		let sub_query = "select count(*) from guesses where game_uuid like uuid";
 	
 		let query = match sort.as_str() {
 		"score" => {
 			if include_nameless {
-				"SELECT * from games
+				format!("SELECT *, ({}) as num_guesses from games
 				WHERE (player_name LIKE ? OR player_name IS NULL) AND has_terminated LIKE TRUE
 				ORDER BY terminal_score DESC
-				LIMIT ?"
+				LIMIT ?", sub_query)
 			} else {
-				"SELECT * from games
+				format!("SELECT *, ({}) as num_guesses from games
 				WHERE (player_name LIKE ?) AND has_terminated LIKE TRUE
 				ORDER BY terminal_score DESC
-				LIMIT ?"
+				LIMIT ?", sub_query)
 			}
 		}
 		_ => {
 			if include_nameless {
-				"SELECT * from games
+				format!("SELECT *, ({}) as num_guesses from games
 				WHERE (player_name LIKE ? OR player_name IS NULL) AND has_terminated LIKE TRUE
 				ORDER BY start_time DESC
-				LIMIT ?"
+				LIMIT ?", sub_query)
 			} else {
-				"SELECT * from games
+				format!("SELECT *, ({}) as num_guesses from games
 				WHERE (player_name LIKE ?) AND has_terminated LIKE TRUE
 				ORDER BY start_time DESC
-				LIMIT ?"
+				LIMIT ?", sub_query)
 			}
 		}
 	};
 
-	let games: Vec<GameSchema> = sqlx::query_as(query)
+	let games: Vec<GameSchema> = sqlx::query_as(&query)
 		.bind(search)
 		.bind(limit as i32)
 		.fetch_all(pool.inner())
@@ -213,6 +216,7 @@ pub async fn get_games(
 				has_terminated: game.has_terminated,
 				terminal_score: game.terminal_score,
 				player_name: game.player_name,
+				num_guesses: game.num_guesses,
 		}}).collect();
 
 	serde_json::to_string(&games).unwrap()
@@ -303,7 +307,8 @@ pub async fn get_game(
 			content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap()).unwrap(),
 		}).collect();
 
-	let game: GameSchema = sqlx::query_as("SELECT * from games
+	let game: GameSchema = sqlx::query_as(
+		"SELECT *, (select count(*) from guesses where game_uuid like uuid) as num_guesses from games
 		WHERE uuid LIKE ?")
 		.bind(id.clone())
 		.fetch_one(pool.inner())
@@ -314,15 +319,6 @@ pub async fn get_game(
 	let full_songlist = songlists.iter().filter(|s| s.sha1sum == game.songlist_sha).next().unwrap().content.clone();
 	let selected_songs_desc = SonglistChoiceDescription::from_db(full_songlist, selected_songs);
 
-	let game = Game{
-		uuid: game.uuid,
-		start_time: game.start_time.format(&format).unwrap(),
-		songlist_sha: game.songlist_sha,
-		selected_songs: selected_songs_desc,
-		has_terminated: game.has_terminated,
-		terminal_score: game.terminal_score,
-		player_name: game.player_name,
-	};
 
 	let guesses: Vec<GuessSchema> = sqlx::query_as(
 		"SELECT * from guesses
@@ -332,6 +328,17 @@ pub async fn get_game(
 		.await.unwrap();
 	
 	let guesses: Vec<Guess> = guesses.into_iter().map(Guess::from_schema).collect();
+
+	let game = Game{
+		uuid: game.uuid,
+		start_time: game.start_time.format(&format).unwrap(),
+		songlist_sha: game.songlist_sha,
+		selected_songs: selected_songs_desc,
+		has_terminated: game.has_terminated,
+		terminal_score: game.terminal_score,
+		player_name: game.player_name,
+		num_guesses: guesses.len() as i32,
+	};
 
 	serde_json::to_string(&GameWithGuesses{game, guesses}).unwrap()
 }
