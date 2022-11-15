@@ -25,14 +25,14 @@ export default function InclusionExclusionSection({selectedSongs}) {
       return (
         <Box>
           This game was played with no songs at all (this shouldn't be possible and if you're seeing
-          this it indicates an error).
+          this it means there's been an error).
         </Box>
       );
     }
     return (
       <>
         <Box>
-          This game was played only the following songs:
+          This game was played with only the following songs:
         </Box>
         <SongSetList songSet={included}/>
       </>
