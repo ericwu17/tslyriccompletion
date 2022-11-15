@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { Box, Button, Link, TextField, Typography } from "@mui/material";
 import ResultDisplay from "./ResultDisplay";
-import { ALBUM_LOGOS, normalizeQuotes } from "../utils/Utils";
+import { ALBUM_LOGOS, generateSongHref, normalizeQuotes } from "../utils/Utils";
 
 const MAX_NAME_LEN = 35;
 
@@ -278,7 +278,7 @@ function DisplayAnswer({question}) {
 
   const {song, shown_line} = question;
   const albumTitle = `${song.album}--${song.name}`;
-  const href = `/tswift/song/${song.album}/${song.name}`;
+  const href = generateSongHref(song.album, song.name);
   const { lyrics_raw } = song;
 
 

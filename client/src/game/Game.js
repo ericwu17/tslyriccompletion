@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { Checkbox, Box, Grid, Button, Typography, Paper, Link } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import GameStateDisplay from "./GameStateDisplay";
-import { ALBUM_LOGOS, ALBUM_ORDER, escapeQuestionMarks } from "../utils/Utils";
+import { ALBUM_LOGOS, ALBUM_ORDER, generateSongHref } from "../utils/Utils";
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -257,7 +257,7 @@ function SongSelection({songList, setSongList}) {
                     />
                     <Typography noWrap>
                       {index+1}) {}
-                      <Link href={`/tswift/song/${album}/${escapeQuestionMarks(song)}`} >
+                      <Link href={generateSongHref(album, song)} >
                         {song}
                       </Link>
                     </Typography>

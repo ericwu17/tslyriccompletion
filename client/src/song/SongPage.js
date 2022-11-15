@@ -3,7 +3,7 @@ import axios from "axios";
 import React from "react";
 import {Tooltip, Typography, Box, Grid, Paper, Link, TextField} from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ALBUM_LOGOS, ALBUM_ORDER, normalizeQuotes, escapeQuestionMarks } from "../utils/Utils";
+import { ALBUM_LOGOS, ALBUM_ORDER, generateSongHref, normalizeQuotes } from "../utils/Utils";
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -45,13 +45,14 @@ export default function SongPage() {
       song => song.toLowerCase().includes(searchString.toLowerCase())
     );
     songList[albumName] = songArr;
-    shownSongsArr.push(...songArr.map(song => `${albumName}/${song}`));
+    shownSongsArr.push(...songArr.map(song => ({"album": albumName, "name": song})));
   }
 
 
   const onKeyDown = e => {
     if (e.key === "Enter" && shownSongsArr.length === 1) {
-      window.location.href=`/tswift/song/${escapeQuestionMarks(shownSongsArr[0])}`;
+      const song = shownSongsArr[0];
+      window.location.href = generateSongHref(song.album, song.name);
     }
   };
 
@@ -102,7 +103,10 @@ export default function SongPage() {
                     <Box key={index}>
                       <Typography textAlign="left" noWrap>
                         {index+1}) {}
-                        <Link href={`/tswift/song/${album}/${song}`} key={`/song/${album}/${song}`}>
+                        <Link
+                          href={generateSongHref(album, song)}
+                          key={generateSongHref(album, song)}
+                        >
                           {song}
                         </Link>
                       </Typography>
