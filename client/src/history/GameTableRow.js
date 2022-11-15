@@ -7,6 +7,7 @@ export default function GameTableRow({game, index}) {
   const name = game.player_name || "<Anonymous>";
 
   const score = game.terminal_score;
+  const { num_guesses } = game;
 
   const startTime = parseISO(game.start_time);
 
@@ -21,6 +22,7 @@ export default function GameTableRow({game, index}) {
         {startTime.toLocaleString()}
       </TableCell>
       <TableCell>{name}</TableCell>
+      <TableCell align="right">{num_guesses}</TableCell>
       <TableCell align="right">{score}</TableCell>
       <TableCell align="right">
         <Link href={`/tswift/history/game?id=${game.uuid}`}>See Details</Link>

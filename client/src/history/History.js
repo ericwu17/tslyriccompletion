@@ -12,13 +12,14 @@ export default function HistoryPage() {
     <Box m={2} display="flex" flexDirection="column" alignItems="center">
       <QueryMenuBar setGames={setGames} />
 
-      <Box width="50%">
+      <Box maxWidth="100%">
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table aria-label="simple table">
             <TableHead sx={{background:"#B9D9EB"}}>
               <TableRow>
                 <TableCell><strong>Time</strong></TableCell>
                 <TableCell><strong>Player</strong></TableCell>
+                <TableCell align="right"><strong>Number of Guesses</strong></TableCell>
                 <TableCell align="right"><strong>Score</strong></TableCell>
                 <TableCell align="right"><strong>Details</strong></TableCell>
               </TableRow>
