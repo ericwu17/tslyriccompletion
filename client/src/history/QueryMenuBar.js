@@ -29,9 +29,20 @@ export default function QueryMenuBar({setGames}) {
     });
   };
 
+  // These two useEffects handle calling refetchGames().
+  // We want to call it immediately if a user changes a selected parameter,
+  // but we want a small cooldown if the user is typing (since typing generates many updates)
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      refetchGames();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchString]);
+
   React.useEffect(() => {
     refetchGames();
-  }, [sortBy, includeNameless, searchString]);
+  }, [sortBy, includeNameless]);
 
   return (
     <Box
