@@ -12,18 +12,29 @@ export default function ResultDisplay({guessRes}) {
 
   const answerComparison = (guess, guessFlags, answer, answerFlags) => {
     return (
-      <Box display="flex" flexDirection="row">
-        <Box display="flex" flexDirection="column" mr={1} alignItems="flex-end">
-          <Typography sx={{ fontFamily: "Monospace", color: "gray", fontWeight: "bold" }}>
-            Yours:
-          </Typography>
-          <Typography sx={{ fontFamily: "Monospace", color: "gray", fontWeight: "bold" }}>
-            Actual:
-          </Typography>
+      <Box display="flex" flexDirection="column">
+        <Box display="flex">
+          <Box mr={1} alignItems="flex-end">
+            {/* In the typography below, we use the '|' character to ensure that this typography
+            has the same number of characters as the "Actual:" typography further below. This gives
+            better alignment. */}
+            <Typography sx={{ fontFamily: "Monospace", color: "gray", fontWeight: "bold" }}>
+              |Yours:
+            </Typography>
+          </Box>
+          <Box>
+            <FlaggedText text={guess} flags={guessFlags}/>
+          </Box>
         </Box>
-        <Box display="flex" flexDirection="column">
-          <FlaggedText text={guess} flags={guessFlags}/>
-          <FlaggedText text={answer} flags={answerFlags}/>
+        <Box display="flex">
+          <Box mr={1} alignItems="flex-end">
+            <Typography sx={{ fontFamily: "Monospace", color: "gray", fontWeight: "bold" }}>
+              Actual:
+            </Typography>
+          </Box>
+          <Box>
+            <FlaggedText text={answer} flags={answerFlags}/>
+          </Box>
         </Box>
       </Box>
     );
