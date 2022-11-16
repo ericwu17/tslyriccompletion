@@ -1,4 +1,7 @@
 import { useSearchParams } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 
 export const ALBUM_ORDER = [
   "Taylor Swift", "Fearless", "Speak Now", "Red", "1989", "Reputation", "Lover",
@@ -70,4 +73,16 @@ const escapeQuestionMarks = s => {
 
 export const generateSongHref = (album, name) => {
   return `/tswift/song/${escapeQuestionMarks(album)}/${escapeQuestionMarks(name)}`;
+};
+
+
+// This function uses the useMediaQuery hook to determine the user's screen size.
+// Then it returns an appropriate value to use in the xs prop of Grid item
+// (remember that a grid is 12 units in each row, therefore a xs of 4 means
+// each row will have 3 chips)
+export const getAlbumChipWidth = () => {
+  const theme = useTheme();
+  const isMediumScreen = useMediaQuery(theme.breakpoints.up("md"));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
+  return isMediumScreen ? ( isLargeScreen ? 3 : 4 ) : 6;
 };

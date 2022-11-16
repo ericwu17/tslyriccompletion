@@ -3,8 +3,10 @@ import axios from "axios";
 import React from "react";
 import {Tooltip, Typography, Box, Grid, Paper, Link, TextField} from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ALBUM_LOGOS, ALBUM_ORDER, generateSongHref, normalizeQuotes } from "../utils/Utils";
-
+import {
+  ALBUM_LOGOS, ALBUM_ORDER,
+  generateSongHref, getAlbumChipWidth, normalizeQuotes
+} from "../utils/Utils";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#E0FFFF",
@@ -16,6 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function SongPage() {
   let { album, name } = useParams();
+  const albumChipWidth = getAlbumChipWidth();
 
   const [unfilteredSongList, setSongList] = React.useState({});
   const [song, setSong] = React.useState({});
@@ -82,7 +85,7 @@ export default function SongPage() {
               return null;
             }
             return (
-              <Grid item xs={3} key={album}>
+              <Grid item xs={albumChipWidth} key={album}>
                 <Item sx={{height: "100%", m: 0.5, p: 2}}>
                   <Box display="flex" justifyContent="center" alignItems="center" width="100%">
                     <Box

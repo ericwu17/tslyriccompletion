@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { Checkbox, Box, Grid, Button, Typography, Paper, Link } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import GameStateDisplay from "./GameStateDisplay";
-import { ALBUM_LOGOS, ALBUM_ORDER, generateSongHref } from "../utils/Utils";
+import { ALBUM_LOGOS, ALBUM_ORDER, generateSongHref, getAlbumChipWidth } from "../utils/Utils";
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -20,6 +20,7 @@ export default function Game() {
   const [gameState, setGameState] = React.useState({});
   const [songList, setSongList] = React.useState({});
   const [flag, setFlag] = React.useState(0);
+  const albumChipWidth = getAlbumChipWidth();
 
   const beginGame = () => {
     // if (!hasStarted) {
@@ -143,7 +144,11 @@ export default function Game() {
             Begin
           </Button>
         </Box>
-        <SongSelection songList={songList} setSongList={setSongList}/>
+        <SongSelection
+          songList={songList}
+          setSongList={setSongList}
+          albumChipWidth={albumChipWidth}
+        />
       </Box>
     );
   } else {
@@ -155,7 +160,7 @@ export default function Game() {
   }
 }
 
-function SongSelection({songList, setSongList}) {
+function SongSelection({songList, setSongList, albumChipWidth}) {
 
   const toggleSong = (album, song) => {
     const currentStatus = songList[album][song];
@@ -225,7 +230,7 @@ function SongSelection({songList, setSongList}) {
         {ALBUM_ORDER.map(album => {
           let songs = songList[album];
           return (
-            <Grid item xs={3} key={album}>
+            <Grid item xs={albumChipWidth} key={album}>
               <Item sx={{height: "100%", mb: 1, p: 1}}>
                 <Box display="flex" justifyContent="center" alignItems="center" width="100%">
                   <Checkbox checked={hasAllSelected(album)} onClick={() => toggleAlbum(album)} />
