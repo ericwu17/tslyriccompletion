@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import React from "react";
-import {Tooltip, Typography, Box, Grid, Paper, Link, TextField} from "@mui/material";
+import {
+  Tooltip, Typography, Box, Grid, Paper, Link, TextField, CircularProgress
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import {
   ALBUM_LOGOS, ALBUM_ORDER,
@@ -38,7 +40,9 @@ export default function SongPage() {
 
 
   if (JSON.stringify(unfilteredSongList) === "{}") {
-    return "still fetching songs...";
+    return (
+      <CircularProgress />
+    );
   }
 
   let songList = {};
