@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { Box, Button, Link, TextField, Typography } from "@mui/material";
+import { Box, Button, Divider, Link, TextField, Typography } from "@mui/material";
 import ResultDisplay from "./ResultDisplay";
 import { ALBUM_LOGOS, generateSongHref, normalizeQuotes } from "../utils/Utils";
 
@@ -164,7 +164,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       }
 
       {completed_question && !terminated &&
-        <Button onClick={goToNextQuestion}>Next Question</Button>
+        <Button onClick={goToNextQuestion} size="large">Next Question</Button>
       }
       {completed_question && terminated &&
         <Box>
@@ -184,7 +184,15 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
         </Box>
       }
 
-      {current_question.answer && <DisplayAnswer question={current_question}/>}
+      {current_question.answer && (
+        <>
+          <Box mb={1}/>
+          <Divider />
+          <Divider />
+          <Box mb={2}/>
+          <DisplayAnswer question={current_question}/>
+        </>
+      )}
     </Box>
   );
 }
@@ -288,12 +296,7 @@ function DisplayAnswer({question}) {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      <Box display="flex" flexDirection="row" alignItems="center">
-        <Box alignSelf="flex-end" mr={1}>
-          <Typography>
-            This question was from:
-          </Typography>
-        </Box>
+      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" width="100%">
         <Typography variant="h4" noWrap>
           <Link href={href} target="_blank">{albumTitle}</Link>
         </Typography>
