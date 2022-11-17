@@ -41,6 +41,10 @@ export default function AboutPage() {
             only one possible successor. (This is an issue with determining which lines are valid
             lines as a prompt).
           </ListItem>
+          <ListItem sx={{ display: "list-item" }}>
+            There are also issues where a short line appears as the prompt, and it isn't
+            possible to know which song the line came from.
+          </ListItem>
         </List>
       </Box>
 
@@ -56,6 +60,9 @@ export default function AboutPage() {
       <Typography>
         Also, I need to improve how this website looks on small screens and mobile devices!
         Right now, the site is best viewed on a computer and is difficult to use on a phone.
+      </Typography>
+      <Typography>
+        Let me know if you have any feature requests or suggestions.
       </Typography>
 
       <Typography variant="h4" sx={{textDecoration: "underline", mt:2, mb: 2}}>
