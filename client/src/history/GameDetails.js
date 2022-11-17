@@ -8,6 +8,8 @@ import {
 } from "@mui/material";
 import InclusionExclusionSection from "./InclusionExclusionSection";
 import { FlaggedText } from "../game/ResultDisplay";
+import { diffChars } from "diff";
+import levenshtein from "js-levenshtein";
 
 export default function GameDetails() {
   const [data, setData] = React.useState({});
@@ -102,12 +104,21 @@ export default function GameDetails() {
 
 
 function GuessDetails({ guess, totalNumGuesses }) {
-  console.log(guess);
-
   const {correct_answer, user_guess, prompt, points_earned, time_elapsed, lifelines_used} = guess;
   const was_multiple_choice = guess.options.length > 0;
 
   const href = generateSongHref(guess.album, guess.song_name);
+
+  let {guessFlags, answerFlags} = generateFlags(user_guess, correct_answer);
+
+  if (lifelines_used.includes("Skip") || (was_multiple_choice && guess.result === "correct")) {
+    answerFlags = answerFlags.map(() => -1);
+    guessFlags = guessFlags.map(() => -1);
+  }
+  if (was_multiple_choice && guess.result === "incorrect") {
+    answerFlags = answerFlags.map(() => 1);
+    guessFlags = guessFlags.map(() => 1);
+  }
 
   return (
     <Box sx={{border: "3px solid #a3c1ad", borderRadius: "5px"}} p={1} width="100%">
@@ -147,7 +158,7 @@ function GuessDetails({ guess, totalNumGuesses }) {
               </Typography>
             </Box>
             <Box>
-              <FlaggedText text={user_guess} />
+              <FlaggedText text={user_guess} flags={guessFlags}/>
             </Box>
           </Box>
           <Box display="flex">
@@ -157,7 +168,7 @@ function GuessDetails({ guess, totalNumGuesses }) {
               </Typography>
             </Box>
             <Box>
-              <FlaggedText text={correct_answer}/>
+              <FlaggedText text={correct_answer} flags={answerFlags}/>
             </Box>
           </Box>
         </Box>
@@ -191,3 +202,59 @@ function GuessDetails({ guess, totalNumGuesses }) {
   );
 }
 
+function generateFlags(guess, answer) {
+
+  // First we need to figure out the optimal amount to truncate the user guess
+  // (This is the truncation amount that minimizes distance)
+  let optimalTruncateAmt = guess.length;
+  let minDist = Infinity;
+  for (let i = guess.length; i >= 0; i --) {
+    let d = levenshtein(guess.slice(0, i), answer);
+    if (d < minDist) {
+      minDist = d;
+      optimalTruncateAmt = i;
+    }
+  }
+
+  // initialize the flags, and set the truncated characters to a yellow
+  // color (flag code = 2)
+  // Note that it is fine if we leave the unaffected indices as "null" instead of setting them to
+  // the integer 0, since our component FlaggedText assumes that all unrecognized flags are 0.
+  let guessFlags =  guess.split("").map(() => null);
+  let answerFlags =  answer.split("").map(() => null);
+
+  for (let i = guess.length; i > optimalTruncateAmt; i --) {
+    guessFlags[i-1] = 2;
+  }
+
+  // truncate the guess
+  guess = guess.slice(0, optimalTruncateAmt);
+
+  // generate diff objects
+  const diffObjects = diffChars(guess, answer, {ignoreCase: true});
+
+  // expand the diff objects into an array of integers.
+  let guessIndex = 0;
+  let answerIndex = 0;
+  for (let d of diffObjects) {
+    if (!d.added && !d.removed) {
+      guessIndex += d.count;
+      answerIndex += d.count;
+    } else if (d.added) {
+      for (let i = 0; i < d.count; i ++) {
+        answerFlags[answerIndex] = 1;
+        answerIndex += 1;
+      }
+    }  else if (d.removed) {
+      for (let i = 0; i < d.count; i ++) {
+        guessFlags[guessIndex] = 1;
+        guessIndex += 1;
+      }
+    }
+  }
+
+  return {
+    guessFlags,
+    answerFlags,
+  };
+}
