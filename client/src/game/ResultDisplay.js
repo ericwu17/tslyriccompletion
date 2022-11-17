@@ -88,8 +88,14 @@ export default function ResultDisplay({guessRes}) {
   );
 }
 
-function FlaggedText({text, flags}) {
+export function FlaggedText({text, flags}) {
   const chars = text.split("");
+
+  if (typeof flags === typeof 0) {
+    // This is for convenience: so that we can use this component to render
+    // text of a single color just by passing an integer to flags.
+    flags = chars.map(() => flags);
+  }
 
   if (!flags || flags.length === 0) {
     flags = chars.map(() => -1);
@@ -103,6 +109,9 @@ function FlaggedText({text, flags}) {
           style.fontWeight = "bold";
         } else if (flags[index] === 2) {
           style.color = "#BDB76B";
+          style.fontWeight = "bold";
+        } else if (flags[index] === 3) {
+          style.color = "#00ab66";
           style.fontWeight = "bold";
         } else if (flags[index] === -1) {
           style.color = "darkgray";
