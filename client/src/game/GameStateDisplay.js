@@ -236,7 +236,7 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
           onClick={() => {consumeLifeline("show_title_album");}}
           disabled={show_title_album === 0}
         >
-          Show song album and name ({show_title_album})
+          Show song album and name ({show_title_album} left)
         </Button>
       }
       {nameHint &&
@@ -260,7 +260,7 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
           onClick={() => {consumeLifeline("show_prev_lines");}}
           disabled={show_prev_lines === 0}
         >
-          Show previous lines ({show_prev_lines})
+          Show previous lines ({show_prev_lines} left)
         </Button>
       }
       {prevLineHint &&
@@ -274,7 +274,7 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
       }
 
       <Button onClick={() => {consumeLifeline("skip");}} disabled={skip === 0}>
-        Skip Question ({skip})
+        Skip Question ({skip} left)
       </Button>
     </Box>
   );
