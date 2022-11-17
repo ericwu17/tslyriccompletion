@@ -296,7 +296,13 @@ function DisplayAnswer({question}) {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" width="100%">
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="center"
+        width="100%"
+      >
         <Typography variant="h4" noWrap>
           <Link href={href} target="_blank">{albumTitle}</Link>
         </Typography>
