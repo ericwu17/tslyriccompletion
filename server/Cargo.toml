@@ -20,6 +20,9 @@ dotenv = "0.15.0"
 [profile.dev.package.sqlx-macros]
 opt-level = 3
 
+[profile.dev]
+opt-level = 'z' # Optimize for size
+
 
 [dependencies.uuid]
 version = "1.2.1"
