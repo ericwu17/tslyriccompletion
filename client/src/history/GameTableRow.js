@@ -4,7 +4,7 @@ import { TableRow, TableCell, Link } from "@mui/material";
 import { parseISO } from "date-fns";
 
 export default function GameTableRow({game, index}) {
-  const name = game.player_name || "<Anonymous>";
+  const name = game.player_name;
 
   const score = game.terminal_score;
   const { num_guesses } = game;
@@ -21,7 +21,12 @@ export default function GameTableRow({game, index}) {
       <TableCell component="th" scope="row">
         {startTime.toLocaleString()}
       </TableCell>
-      <TableCell>{name}</TableCell>
+      {name && <TableCell>{name}</TableCell>}
+      {!name &&
+        <TableCell>
+          <span style={{color:"darkgray", fontWeight: "bold"}}>{"<Anonymous>"}</span>
+        </TableCell>
+      }
       <TableCell align="right">{num_guesses}</TableCell>
       <TableCell align="right">{score}</TableCell>
       <TableCell align="right">

@@ -42,7 +42,7 @@ export default function GameDetails() {
 
   let {game, guesses} = data;
 
-  const name = game.player_name || "<Anonymous>";
+  const name = game.player_name;
 
   const score = game.terminal_score;
 
@@ -67,7 +67,12 @@ export default function GameDetails() {
             </TableRow>
             <TableRow>
               <TableCell><strong>Played By: {}</strong></TableCell>
-              <TableCell>{name}</TableCell>
+              {name && <TableCell>{name}</TableCell>}
+              {!name &&
+                <TableCell>
+                  <span style={{color:"darkgray", fontWeight: "bold"}}>{"<Anonymous>"}</span>
+                </TableCell>
+              }
             </TableRow>
             <TableRow>
               <TableCell><strong>Final Score: {}</strong></TableCell>
