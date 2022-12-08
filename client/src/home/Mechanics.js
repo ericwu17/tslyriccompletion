@@ -4,10 +4,10 @@ import { List, ListItem, Box, Typography, Link } from "@mui/material";
 export default function MechanicsPage() {
   return (
     <Box mt={2} mx={5} mb={30}>
-      <Typography variant="h3" sx={{textDecoration: "underline", mb: 2}}>
+      <Typography variant="h3" sx={{mb: 2}}>
         Taylor Swift Completion Game: Game Mechanics
       </Typography>
-      <Typography variant="h4" sx={{textDecoration: "underline", mt:2, mb: 2}}>
+      <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Overview
       </Typography>
       <Typography>
@@ -20,7 +20,7 @@ export default function MechanicsPage() {
         determined.
       </Typography>
 
-      <Typography variant="h4" sx={{textDecoration: "underline", mt:2, mb: 2}}>
+      <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Selecting the line for the question
       </Typography>
       <Typography>
@@ -57,7 +57,7 @@ export default function MechanicsPage() {
         Hovering over a pink line shows reasons why it is not a valid candidate.
       </Typography>
 
-      <Typography variant="h4" sx={{textDecoration: "underline", mt:2, mb: 2}}>
+      <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Lifelines
       </Typography>
       <Typography>
@@ -80,7 +80,7 @@ export default function MechanicsPage() {
       </List>
 
 
-      <Typography variant="h4" sx={{textDecoration: "underline", mt:2, mb: 2}}>
+      <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Calculating score (and determining correctness)
       </Typography>
       <Typography>

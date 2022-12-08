@@ -66,7 +66,7 @@ export default function SongPage() {
   if (album === undefined) {
     return (
       <Box m={2}>
-        <Typography variant="h3" sx={{textDecoration:"underline"}}>
+        <Typography variant="h3">
           Browse Taylor Swift Lyrics
         </Typography>
         <TextField
@@ -102,7 +102,7 @@ export default function SongPage() {
                       src={ALBUM_LOGOS[album]}
                       mr={1}
                     />
-                    <Typography variant="h4" sx={{textDecoration: "underline"}} noWrap>
+                    <Typography variant="h4" noWrap>
                       {album}
                     </Typography>
                   </Box>

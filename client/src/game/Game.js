@@ -132,7 +132,7 @@ export default function Game() {
   if (!hasStarted) {
     return (
       <Box m={2}>
-        <Typography variant="h3" sx={{textDecoration: "underline"}}>
+        <Typography variant="h3">
           Are you ... Ready For It?
         </Typography>
         <Typography variant="body1">
@@ -234,7 +234,7 @@ function SongSelection({songList, setSongList, albumChipWidth}) {
               <Item sx={{height: "100%", mb: 1, p: 1}}>
                 <Box display="flex" justifyContent="center" alignItems="center" width="100%">
                   <Checkbox checked={hasAllSelected(album)} onClick={() => toggleAlbum(album)} />
-                  <Typography variant="h4" sx={{textDecoration: "underline"}} noWrap>
+                  <Typography variant="h4" noWrap>
                     {album}
                   </Typography>
                   <Box

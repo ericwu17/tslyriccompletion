@@ -4,7 +4,7 @@ import { List, Box, Typography, Link, ListItem } from "@mui/material";
 export default function AboutPage() {
   return (
     <Box mt={2} mx={5} mb={30}>
-      <Typography variant="h3" sx={{textDecoration: "underline", mb: 2}}>
+      <Typography variant="h3" sx={{mb: 2}}>
         Taylor Swift Lyric Completion Game
       </Typography>
       <Typography>
@@ -14,14 +14,14 @@ export default function AboutPage() {
         find the line highlighting to be a little distracting.
       </Typography>
 
-      <Typography variant="h4" sx={{textDecoration: "underline", mt:2, mb: 2}}>
+      <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Details on Game Mechanics
       </Typography>
       <Typography>
         See the <Link href="/tswift/mechanics">mechanics</Link> page.
       </Typography>
 
-      <Typography variant="h4" sx={{textDecoration: "underline", mt:2}}>
+      <Typography variant="h4" sx={{mt:2}}>
         Known issues
       </Typography>
       <Box>
@@ -48,7 +48,7 @@ export default function AboutPage() {
         </List>
       </Box>
 
-      <Typography variant="h4" sx={{textDecoration: "underline", mb: 2}}>
+      <Typography variant="h4" sx={{mb: 2}}>
         Future Ideas for the Taylor Swift Guessing Game?
       </Typography>
       <Typography>
@@ -65,7 +65,7 @@ export default function AboutPage() {
         Let me know if you have any feature requests or suggestions.
       </Typography>
 
-      <Typography variant="h4" sx={{textDecoration: "underline", mt:2, mb: 2}}>
+      <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Acknowledgements
       </Typography>
       <Typography>
@@ -82,7 +82,7 @@ export default function AboutPage() {
         Thanks to my friends Kim and Hannah for being my most frequent testers of early versions of
         this lyric guessing game.
       </Typography>
-      <Typography variant="h4" sx={{textDecoration: "underline", mt:2, mb: 2}}>
+      <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Source Code/Contact Me
       </Typography>
       <Typography>
