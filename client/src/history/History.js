@@ -19,9 +19,9 @@ export default function HistoryPage() {
               <TableRow>
                 <TableCell><strong>Time</strong></TableCell>
                 <TableCell><strong>Player</strong></TableCell>
-                <TableCell align="right"><strong>Number of Guesses</strong></TableCell>
+                <TableCell align="right"><strong>Guesses</strong></TableCell>
                 <TableCell align="right"><strong>Score</strong></TableCell>
-                <TableCell align="right"><strong>Details</strong></TableCell>
+                <TableCell align="right" />
               </TableRow>
             </TableHead>
             <TableBody>
