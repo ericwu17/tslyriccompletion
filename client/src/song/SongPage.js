@@ -143,7 +143,7 @@ export default function SongPage() {
 
     let renderedLines = [];
     for (let lineInfo of lineInfos) {
-      while (lineInfo.text !== lines[0]) {
+      while (lineInfo.text.trim() !== lines[0].trim()) {
         renderedLines.push(<Typography sx={{ fontWeight: "bold" }}>{lines.shift()}</Typography>);
       }
       if (lineInfo.has_bad_successor
