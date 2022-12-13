@@ -2,7 +2,6 @@ use std::collections::HashMap;
 use rocket::time::format_description;
 use serde::Deserialize;
 use serde::Serialize;
-use std::default::Default;
 
 use sqlx::{Pool, MySql, types::{time::PrimitiveDateTime, Json}};
 
@@ -24,102 +23,13 @@ pub struct Game {
 	pub uuid: String,
 	pub start_time: String,
 	pub songlist_sha: String,
-	pub selected_songs: SonglistChoiceDescription,
+	pub selected_songs: Vec<(String, String)>,
 	pub has_terminated: bool,
 	pub terminal_score: Option<i32>,
 	pub player_name: Option<String>,
 	pub num_guesses: i32,
 }
 
-#[derive(Serialize, Debug)]
-
-pub enum SongSet {
-	Song (String, String),
-	Album (String),
-}
-
-#[derive(Serialize, Debug)]
-pub enum SonglistChoiceDescription {
-	Exclude (Vec<SongSet>),
-	Include (Vec<SongSet>),
-}
-
-impl Default for SonglistChoiceDescription {
-	fn default() -> Self {
-		SonglistChoiceDescription::Exclude(vec![])
-	}
-}
-
-impl SonglistChoiceDescription {
-	pub fn from_db(full_songlist: Vec<(String, String)>, selected_songs: HashMap<String, Vec<bool>>) -> Self{
-		// full_songlist represents the list of all possible songs at the time of the selection.
-		// selectedSongs is a hashmap where each key is an album, and the k-th boolean in the vector indicates whether
-		// the k-th song of the album was included. (true means included)
-
-		let mut num_inc = 0;
-		let mut num_exc = 0;
-
-		let mut album_order = full_songlist.iter().map(|x| x.0.clone()).collect::<Vec<String>>();
-		album_order.dedup();  // remove duplicates since full_songlist contains one entry for each song but we only want a list of albums.
-
-		for (_, inc_exc_list) in &selected_songs {
-			for v in inc_exc_list {
-				if *v {
-					num_inc += 1;
-				} else {
-					num_exc += 1;
-				}
-			}
-		}
-
-		// if num_inc > num_exc then we'll describe the songlist based on what's excluded.
-		// otherwise we describe it based on what's included.
-		if num_inc > num_exc {
-			let mut exc_arr: Vec<SongSet> = vec![];
-
-			for album in album_order {
-				let inc_exc_list = selected_songs.get(&album).unwrap();
-				if inc_exc_list.iter().all(|v| *v == false) {
-					exc_arr.push(SongSet::Album(album.clone()));
-					continue;
-				}
-
-				let mut album_songs_iter = full_songlist.iter().filter(|s| s.0 == *album);
-				for v in inc_exc_list {
-					let current_song = album_songs_iter.next().unwrap();
-					if *v == false {
-						exc_arr.push(SongSet::Song(current_song.0.clone(), current_song.1.clone()));
-					}
-				}
-			}
-			Self::Exclude(exc_arr)
-		} else {
-			let mut inc_arr: Vec<SongSet> = vec![];
-
-			for album in album_order {
-				let inc_exc_list = selected_songs.get(&album).unwrap();
-
-				if inc_exc_list.iter().all(|v| *v == true) {
-					inc_arr.push(SongSet::Album(album.clone()));
-					continue;
-				}
-
-				let mut album_songs_iter = full_songlist.iter().filter(|s| s.0 == *album);
-				for v in inc_exc_list {
-					let current_song = album_songs_iter.next().unwrap();
-					if *v == true {
-						inc_arr.push(SongSet::Song(current_song.0.clone(), current_song.1.clone()));
-					}
-				}
-			}
-			Self::Include(inc_arr)
-		}
-
-
-
-
-	}
-}
 
 #[derive(sqlx::FromRow, Debug)]
 pub struct SonglistSchema {
@@ -132,7 +42,6 @@ pub struct Songlist {
 	pub sha1sum: String,
 	pub content: Vec<(String, String)>,
 }
-
 
 #[get("/history/all?<sort>&<search>&<limit>&<include_nameless>")]
 pub async fn get_games(
@@ -204,7 +113,7 @@ pub async fn get_games(
 			let selected_songs =  serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap()).unwrap();
 			let full_songlist = songlists.iter().filter(|s| s.sha1sum == game.songlist_sha).next().unwrap().content.clone();
 
-			let selected_songs_desc = SonglistChoiceDescription::from_db(full_songlist, selected_songs);
+			let selected_songs_desc = get_songs(full_songlist, selected_songs);
 
 			let format = format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
 
@@ -280,10 +189,37 @@ impl Guess {
 }
 
 #[derive(Serialize)]
-pub struct GameWithGuesses {
+struct GameWithGuesses {
 	game: Game,
 	guesses: Vec<Guess>,
 }
+
+fn get_songs (full_songlist: Vec<(String, String)>, selected_songs: HashMap<String, Vec<bool>>) -> Vec<(String, String)> {
+	// full_songlist represents the list of all possible songs at the time of the selection.
+	// selectedSongs is a hashmap where each key is an album, and the k-th boolean in the vector indicates whether
+	// the k-th song of the album was included. (true means included)
+
+	let mut songs: Vec<(String, String)> = Vec::new();
+
+	let mut album_order = full_songlist.iter().map(|x| x.0.clone()).collect::<Vec<String>>();
+	album_order.dedup();  // remove duplicates since full_songlist contains one entry for each song but we only want a list of albums.
+
+
+	for album in album_order {
+		let inc_exc_list = selected_songs.get(&album).unwrap();
+
+		let mut album_songs_iter = full_songlist.iter().filter(|s| s.0 == *album);
+		for is_included in inc_exc_list {
+			let curr_album_song = album_songs_iter.next().unwrap();
+			if *is_included {
+				songs.push(curr_album_song.clone());
+			}
+		}
+	}
+
+	songs
+}
+
 
 
 
@@ -317,7 +253,7 @@ pub async fn get_game(
 	
 	let selected_songs =  serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap()).unwrap();
 	let full_songlist = songlists.iter().filter(|s| s.sha1sum == game.songlist_sha).next().unwrap().content.clone();
-	let selected_songs_desc = SonglistChoiceDescription::from_db(full_songlist, selected_songs);
+	let selected_songs_desc = get_songs(full_songlist, selected_songs);
 
 
 	let guesses: Vec<GuessSchema> = sqlx::query_as(
