@@ -6,7 +6,7 @@ import {
   Box, Table, TableRow, TableCell, Divider,
   TableBody, CircularProgress, Typography, Link
 } from "@mui/material";
-import InclusionExclusionSection from "./InclusionExclusionSection";
+import SongListSection from "./SongListSection";
 import { FlaggedText } from "../game/ResultDisplay";
 import { diffChars } from "diff";
 import levenshtein from "js-levenshtein";
@@ -57,38 +57,47 @@ export default function GameDetails() {
   }
 
   return (
-    <Box m={2} display="flex" flexDirection="column" alignItems="center" gap={1} >
+    <Box m={2} display="flex" flexDirection="column" gap={1} >
       <Box sx={{border: "3px solid #B9D9EB", borderRadius: "5px"}} p={1}>
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell><strong>Start time: {}</strong></TableCell>
-              <TableCell>{startTime.toLocaleString()}</TableCell>
+              <TableCell sx={{whiteSpace:"nowrap"}}>
+                <strong>Start time: {}</strong>
+              </TableCell>
+              <TableCell width="100%">
+                {startTime.toLocaleString()}
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell><strong>Played By: {}</strong></TableCell>
-              {name && <TableCell>{name}</TableCell>}
-              {!name &&
-                <TableCell>
+              <TableCell sx={{whiteSpace:"nowrap"}}>
+                <strong>Played By: {}</strong>
+              </TableCell>
+              <TableCell width="100%">
+                {name ||
                   <span style={{color:"darkgray", fontWeight: "bold"}}>{"<Anonymous>"}</span>
-                </TableCell>
-              }
+                }
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell><strong>Final Score: {}</strong></TableCell>
-              <TableCell>{score}</TableCell>
+              <TableCell sx={{whiteSpace:"nowrap"}}>
+                <strong>Final Score: {}</strong>
+              </TableCell>
+              <TableCell width="100%">
+                {score}
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell><strong>Number of Guesses: {}</strong></TableCell>
-              <TableCell>{numGuesses}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={2}>
-                <InclusionExclusionSection selectedSongs={game.selected_songs}/>
+              <TableCell sx={{whiteSpace:"nowrap"}}>
+                <strong>Number of Guesses: {}</strong>
+              </TableCell>
+              <TableCell width="100%">
+                {numGuesses}
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
+        <SongListSection selectedSongs={game.selected_songs}/>
       </Box>
 
       <Box display="flex" flexDirection="column" gap={1}>

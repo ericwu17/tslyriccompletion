@@ -10,7 +10,7 @@ import {
   generateSongHref, getAlbumChipWidth, normalizeQuotes
 } from "../utils/Utils";
 
-const Item = styled(Paper)(({ theme }) => ({
+export const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#E0FFFF",
   ...theme.typography.body2,
   textAlign: "center",
