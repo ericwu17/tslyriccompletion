@@ -49,7 +49,7 @@ export default function AboutPage() {
       </Box>
 
       <Typography variant="h4" sx={{mb: 2}}>
-        Future Ideas for the Taylor Swift Guessing Game?
+        Future Ideas for the Taylor Swift Lyric Completion Game?
       </Typography>
       <Typography>
         Besides
@@ -62,7 +62,7 @@ export default function AboutPage() {
         Right now, the site is best viewed on a computer and is difficult to use on a phone.
       </Typography>
       <Typography>
-        Let me know if you have any feature requests or suggestions.
+        Let me know if you have any feature requests or suggestions!
       </Typography>
 
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
