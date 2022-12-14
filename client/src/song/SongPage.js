@@ -165,7 +165,7 @@ export default function SongPage() {
           <Tooltip title={
             <div style={{ whiteSpace: "pre-line" }}>{tooltipText}</div>
           } placement="right">
-            <Typography color="pink" sx={{
+            <Typography color="#69b6cf" sx={{
               width: "max-content",
             }}>
               {lines.shift()}

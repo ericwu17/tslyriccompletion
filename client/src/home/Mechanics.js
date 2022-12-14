@@ -53,8 +53,8 @@ export default function MechanicsPage() {
       </Typography>
       <Typography>
         When browsing lyrics on this site, all lines which may show up as a prompt in-game are shown
-        in black, while all lines which are not candidates for in-game prompts are shown in pink.
-        Hovering over a pink line shows reasons why it is not a valid candidate.
+        in black, while all lines which are not candidates for in-game prompts are shown in blue.
+        Hovering over a blue line shows reasons why it is not a valid candidate.
       </Typography>
 
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
