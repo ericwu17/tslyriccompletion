@@ -51,8 +51,8 @@ pub async fn get_games(
 	limit: Option<usize>,
 	include_nameless: Option<bool>,
 ) -> String {
-	let sort = sort.unwrap_or("start_time".to_string());
-	let search = format!("%{}%", search.unwrap_or("".to_string()));
+	let sort = sort.unwrap_or_else(|| "start_time".to_string());
+	let search = format!("%{}%", search.unwrap_or_default());
 	let limit = limit.unwrap_or(34);
 	let include_nameless = include_nameless.unwrap_or(true);
 
@@ -111,7 +111,7 @@ pub async fn get_games(
 	let games: Vec<Game> = games.into_iter()
 		.map(|game| {
 			let selected_songs =  serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap()).unwrap();
-			let full_songlist = songlists.iter().filter(|s| s.sha1sum == game.songlist_sha).next().unwrap().content.clone();
+			let full_songlist = songlists.iter().find(|s| s.sha1sum == game.songlist_sha).unwrap().content.clone();
 
 			let selected_songs_desc = get_songs(full_songlist, selected_songs);
 
@@ -252,7 +252,7 @@ pub async fn get_game(
 	let format = format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
 	
 	let selected_songs =  serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap()).unwrap();
-	let full_songlist = songlists.iter().filter(|s| s.sha1sum == game.songlist_sha).next().unwrap().content.clone();
+	let full_songlist = songlists.iter().find(|s| s.sha1sum == game.songlist_sha).unwrap().content.clone();
 	let selected_songs_desc = get_songs(full_songlist, selected_songs);
 
 

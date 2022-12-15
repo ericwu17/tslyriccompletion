@@ -74,13 +74,13 @@ fn shortest_edit_sequence(
 
   let max = first_length + second_length;
 
-  let mut traversal_history = NegativeArray::new(max as isize);
+  let mut traversal_history = NegativeArray::new(max);
   traversal_history[1] = 0;
 
   // history needs to be able to describe differences from [0..Max + 1] so the history needs to hold 2 more elements above max.
   let mut history: Vec<NegativeArray> = vec![NegativeArray::new(0); (max + 2) as usize];
 
-  for d in 0..=max as isize {
+  for d in 0..=max {
     let mut diagonal = -d;
     while diagonal <= d {
       let mut x: isize;
@@ -282,11 +282,11 @@ pub fn decorate_differences(string: &str, edit_type: &str, edits: &[Edit]) -> St
     for (index, character) in string.chars().enumerate() {
       match maybe_edit {
         Some(edit) => {
-          if index == edit.at as usize {
+          if index == edit.at {
             response.push_str(colour);
           }
           response.push(character);
-          if index == edit.to as usize {
+          if index == edit.to {
             response.push_str(end_colour);
             maybe_edit = edits_1.pop();
           }
@@ -480,14 +480,14 @@ pub mod tests {
 
   #[test]
   fn short_edit_sequence_where_nothing_matches() {
-    let result = shortest_edit_sequence(&"Hze", &"Nod").unwrap();
+    let result = shortest_edit_sequence("Hze", "Nod").unwrap();
     assert_eq!(result.0, 6);
     assert_eq!(result.1, 0);
   }
 
   #[test]
   fn short_edit_sequence_for_empty_string() {
-    let result = shortest_edit_sequence(&"", &"1").unwrap();
+    let result = shortest_edit_sequence("", "1").unwrap();
     assert_eq!(result.0, 1);
     assert_eq!(result.1, -1);
   }
