@@ -2,6 +2,11 @@
 name = "taylorlyricguessingrs"
 version = "0.1.0"
 edition = "2021"
+description = "The back end server of a Taylor Swift Lyric Completion game."
+license = "GPL-2.0-or-later"
+repository = "https://github.com/EricWu2003/taylorlyricguessingrs"
+keywords = ["Taylor Swift", "rocket", "http", "MySQL"]
+categories = ["web-programming::http-server"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
