@@ -49,6 +49,12 @@ export default function GameDetails() {
   const startTime = parseISO(game.start_time);
   let numGuesses = guesses.length;
 
+  const endTime = parseISO(guesses[guesses.length - 1].submit_time);
+
+  const secondsElapsed = (endTime - startTime) / 1000;
+  const numSeconds = secondsElapsed % 60;
+  const numMinutes = Math.floor(secondsElapsed / 60);
+
   let previous_time = parseISO(game.start_time);
   for (let guess of guesses) {
     let time_now = parseISO(guess.submit_time);
@@ -67,6 +73,23 @@ export default function GameDetails() {
               </TableCell>
               <TableCell width="100%">
                 {startTime.toLocaleString()}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={{whiteSpace:"nowrap"}}>
+                <strong>End time: {}</strong>
+              </TableCell>
+              <TableCell width="100%">
+                {endTime.toLocaleString()}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={{whiteSpace:"nowrap"}}>
+                <strong>Time Elapsed: {}</strong>
+              </TableCell>
+              <TableCell width="100%">
+                {numMinutes} {numMinutes === 1 ? "minute" : "minutes"}
+                , {numSeconds} {numSeconds === 1 ? "second" : "seconds"}.
               </TableCell>
             </TableRow>
             <TableRow>
