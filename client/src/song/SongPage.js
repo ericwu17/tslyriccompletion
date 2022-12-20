@@ -26,6 +26,8 @@ export default function SongPage() {
   const [song, setSong] = React.useState({});
   const [searchString, setSearchString] = React.useState("");
 
+  const normalizedSearchString = normalizeQuotes(searchString).toLowerCase();
+
   React.useEffect(() => {
     axios.get("/songs").then((response) => {
       setSongList(response.data);
@@ -49,7 +51,7 @@ export default function SongPage() {
   let shownSongsArr = [];
   for (let albumName of ALBUM_ORDER) {
     let songArr = unfilteredSongList[albumName].filter(
-      song => song.toLowerCase().includes(searchString.toLowerCase())
+      song => song.toLowerCase().includes(normalizedSearchString)
     );
     songList[albumName] = songArr;
     shownSongsArr.push(...songArr.map(song => ({"album": albumName, "name": song})));
@@ -76,7 +78,7 @@ export default function SongPage() {
           }}
           placeholder="Search songs..."
           value={searchString}
-          onChange={event => setSearchString(normalizeQuotes(event.target.value))}
+          onChange={event => setSearchString(event.target.value)}
           autoFocus
           color={shownSongsArr.length === 1 ? "success" : "primary"}
           onKeyDown={onKeyDown}

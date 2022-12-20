@@ -48,7 +48,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
 
   const onKeyDown = e => {
     if (e.key === "Enter" && !completed_question && currentGuess !== "") {
-      submitGuess(currentGuess);
+      submitGuess(normalizeQuotes(currentGuess));
     } else if (e.key === "Enter" && completed_question && !terminated) {
       goToNextQuestion();
     }
@@ -119,7 +119,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       {!isMultipleChoice &&
         <Box display="flex" flexDirection="row">
           <TextField
-            onChange={event => setCurrentGuess(normalizeQuotes(event.target.value))}
+            onChange={event => setCurrentGuess(event.target.value)}
             onKeyDown={onKeyDown}
             value={currentGuess}
             sx={{width: "100%"}}
