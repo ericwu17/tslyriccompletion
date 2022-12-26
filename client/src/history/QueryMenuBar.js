@@ -80,76 +80,85 @@ export default function QueryMenuBar({setGames}) {
   return (
     <Box
       m={1} p={1}
-      display="flex" width="100%"
-      flexWrap="wrap"
+      display="flex" flexDirection="column"
       alignItems="center" justifyContent="center"
       sx={{background:"#B9D9EB", borderRadius: 4}}
     >
-      <Box m={1} display="flex">
-        <Tooltip title="Previous Page">
-          <ArrowBackIcon onClick={() => changePage(-1)}/>
-        </Tooltip>
-      </Box>
+      <Box
+        display="flex" width="100%"
+        flexWrap="wrap"
+        alignItems="center" justifyContent="center"
+      >
+        <Box m={1} display="flex">
+          <Tooltip title="Previous Page">
+            <ArrowBackIcon onClick={() => changePage(-1)}/>
+          </Tooltip>
+        </Box>
 
-      <Divider orientation="vertical" flexItem />
+        <Divider orientation="vertical" flexItem />
 
-      <Box display="flex" alignItems="center" justifyContent="center" m={1}>
-        <Typography mr={0.5}>
-          Sort By:
-        </Typography>
-        <FormControl sx={{ width: 170 }} size="small">
-          <Select
-            value={sortBy}
-            onChange={e => {setSortBy(e.target.value);}}
-          >
-            <MenuItem value="score">
-              Highest Score First
-            </MenuItem>
-            <MenuItem value="start_time">
-              Most Recent First
-            </MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-
-      <Divider orientation="vertical" flexItem />
-
-      <Box display="flex" alignItems="center" justifyContent="center">
-        <Checkbox
-          checked={includeNameless === "true"}
-          onClick={toggleIncludeNameless}
-        />
-        <Box mr={1}>
-          <Typography>
-            Show anonymous games
+        <Box display="flex" alignItems="center" justifyContent="center" m={1}>
+          <Typography mr={0.5}>
+            Sort By:
           </Typography>
+          <FormControl sx={{ width: 170 }} size="small">
+            <Select
+              value={sortBy}
+              onChange={e => {setSortBy(e.target.value);}}
+            >
+              <MenuItem value="score">
+                Highest Score First
+              </MenuItem>
+              <MenuItem value="start_time">
+                Most Recent First
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
+        <Divider orientation="vertical" flexItem />
+
+        <Box display="flex" alignItems="center" justifyContent="center">
+          <Checkbox
+            checked={includeNameless === "true"}
+            onClick={toggleIncludeNameless}
+          />
+          <Box mr={1}>
+            <Typography>
+              Show anonymous games
+            </Typography>
+          </Box>
+        </Box>
+
+        <Divider orientation="vertical" flexItem />
+
+        <Box mx={1}>
+          <TextField
+            placeholder="Search player name..."
+            value={searchString}
+            onChange={e => {setSearchString(e.target.value);}}
+            onKeyDown={e => {
+              if (e.key === "Enter") {
+                refetchGames();
+              }
+            }}
+            onSubmit={refetchGames}
+            size="small"
+          />
+        </Box>
+
+        <Divider orientation="vertical" flexItem />
+
+        <Box m={1} display="flex">
+          <Tooltip title="Next Page">
+            <ArrowForwardIcon onClick={() => changePage(1)}/>
+          </Tooltip>
         </Box>
       </Box>
-
-      <Divider orientation="vertical" flexItem />
-
-      <Box mx={1}>
-        <TextField
-          placeholder="Search player name..."
-          value={searchString}
-          onChange={e => {setSearchString(e.target.value);}}
-          onKeyDown={e => {
-            if (e.key === "Enter") {
-              refetchGames();
-            }
-          }}
-          onSubmit={refetchGames}
-          size="small"
-        />
-      </Box>
-
-      <Divider orientation="vertical" flexItem />
-
-      <Box m={1} display="flex">
-        <Tooltip title="Next Page">
-          <ArrowForwardIcon onClick={() => changePage(1)}/>
-        </Tooltip>
-      </Box>
+      <Divider orientation="horizontal" flexItem/>
+      <Typography>
+        Page {pageNum}
+      </Typography>
     </Box>
   );
 }
