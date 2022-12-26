@@ -43,19 +43,22 @@ pub struct Songlist {
 	pub content: Vec<(String, String)>,
 }
 
-#[get("/history/all?<sort>&<search>&<limit>&<include_nameless>")]
+#[get("/history/all?<sort>&<search>&<limit>&<include_nameless>&<page_num>")]
 pub async fn get_games(
 	pool: &rocket::State<Pool<MySql>>,
 	sort: Option<String>,
 	search: Option<String>,
+	page_num: Option<usize>,
 	limit: Option<usize>,
 	include_nameless: Option<bool>,
 ) -> String {
 	let sort = sort.unwrap_or_else(|| "start_time".to_string());
 	let search = format!("%{}%", search.unwrap_or_default());
-	let limit = limit.unwrap_or(34);
+	let limit = limit.unwrap_or(20); // Default limit is 20 results per page
+	let page_num = page_num.map_or(0, |num| if num > 0 {num} else {1});
 	let include_nameless = include_nameless.unwrap_or(true);
 
+	let query_offset = (page_num - 1) * limit;
 
 	let songlists: Vec<SonglistSchema> = sqlx::query_as(
 		"SELECT * from songlists")
@@ -79,12 +82,12 @@ pub async fn get_games(
 				format!("SELECT *, ({}) as num_guesses from games
 				WHERE (player_name LIKE ? OR player_name IS NULL) AND has_terminated LIKE TRUE
 				ORDER BY terminal_score DESC
-				LIMIT ?", sub_query)
+				LIMIT ? OFFSET ?", sub_query)
 			} else {
 				format!("SELECT *, ({}) as num_guesses from games
 				WHERE (player_name LIKE ?) AND has_terminated LIKE TRUE
 				ORDER BY terminal_score DESC
-				LIMIT ?", sub_query)
+				LIMIT ? OFFSET ?", sub_query)
 			}
 		}
 		_ => {
@@ -92,12 +95,12 @@ pub async fn get_games(
 				format!("SELECT *, ({}) as num_guesses from games
 				WHERE (player_name LIKE ? OR player_name IS NULL) AND has_terminated LIKE TRUE
 				ORDER BY start_time DESC
-				LIMIT ?", sub_query)
+				LIMIT ? OFFSET ?", sub_query)
 			} else {
 				format!("SELECT *, ({}) as num_guesses from games
 				WHERE (player_name LIKE ?) AND has_terminated LIKE TRUE
 				ORDER BY start_time DESC
-				LIMIT ?", sub_query)
+				LIMIT ? OFFSET ?", sub_query)
 			}
 		}
 	};
@@ -105,6 +108,7 @@ pub async fn get_games(
 	let games: Vec<GameSchema> = sqlx::query_as(&query)
 		.bind(search)
 		.bind(limit as i32)
+		.bind(query_offset as i32)
 		.fetch_all(pool.inner())
 		.await.unwrap();
 
