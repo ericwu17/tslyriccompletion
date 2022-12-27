@@ -27,23 +27,27 @@ export default function SongPage() {
   const [unfilteredSongList, setSongList] = React.useState({});
   const [song, setSong] = React.useState({});
   const [searchString, setSearchString] = React.useState("");
+  const [isListLoading, setIsListLoading] = React.useState(true);
+  const [isSongLoading, setIsSongLoading] = React.useState(true);
 
   const normalizedSearchString = normalizeQuotes(searchString).toLowerCase();
 
   React.useEffect(() => {
+    setIsListLoading(true);
     axios.get("/songs").then((response) => {
       setSongList(response.data);
+      setIsListLoading(false);
     });
   }, []);
   React.useEffect(() => {
+    setIsSongLoading(true);
     axios.get(`/songs/${album}/${name}`).then((response) => {
       setSong(response.data);
+      setIsSongLoading(false);
     });
   }, [album, name]);
 
-
-
-  if (JSON.stringify(unfilteredSongList) === "{}") {
+  if (isListLoading || isSongLoading) {
     return (
       <CircularProgress />
     );
