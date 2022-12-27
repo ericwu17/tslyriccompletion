@@ -5,6 +5,8 @@ use serde::Serialize;
 
 use sqlx::{Pool, MySql, types::{time::PrimitiveDateTime, Json}};
 
+pub mod line_history;
+
 #[derive(sqlx::FromRow, Debug)]
 pub struct GameSchema {
 	pub uuid: String,

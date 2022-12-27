@@ -22,6 +22,7 @@ use game::{GameState,
 	claim_game,
 };
 use history::{get_games, get_game};
+use history::line_history::get_line;
 use rocket::State;
 use std::sync::{Arc, Mutex};
 
@@ -97,6 +98,7 @@ async fn main() -> Result<(), rocket::Error> {
 		.mount("/", routes![take_guess])
 		.mount("/", routes![get_games])
 		.mount("/", routes![get_game])
+		.mount("/", routes![get_line])
 		.ignite().await?;
 	
 	let _ = rocket.launch().await?;
