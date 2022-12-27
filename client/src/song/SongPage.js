@@ -2,13 +2,15 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import React from "react";
 import {
-  Tooltip, Typography, Box, Grid, Paper, Link, TextField, CircularProgress
+  Tooltip, Typography, Box, Grid, Paper, Link, TextField, CircularProgress, Popover
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import {
   ALBUM_LOGOS, ALBUM_ORDER,
+  generateLineHistoryHref,
   generateSongHref, getAlbumChipWidth, normalizeQuotes
 } from "../utils/Utils";
+import { LinePopoverContent } from "../history/GuessHistory";
 
 export const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#E0FFFF",
@@ -175,7 +177,9 @@ export default function SongPage() {
           </Tooltip>
         );
       } else {
-        renderedLines.push(<Typography>{lines.shift()}</Typography>);
+        renderedLines.push(
+          <GuessableLine line={lines.shift()} song={name} album={album} />
+        );
       }
     }
 
@@ -203,4 +207,61 @@ export default function SongPage() {
   );
 }
 
+function GuessableLine({album, song, line}) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handlePopoverOpen = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+  const popoverOpen = Boolean(anchorEl);
+
+
+  return (
+    <Box
+      aria-owns={open ? "mouse-over-popover" : undefined}
+      aria-haspopup="true"
+      onMouseEnter={handlePopoverOpen}
+      onMouseLeave={handlePopoverClose}
+      sx={{
+        width: "max-content",
+      }}
+    >
+      <Typography>
+        <Link
+          underline="none" sx={{color:"black"}}
+          href={generateLineHistoryHref(album, song, line)}
+        >
+          {line}
+        </Link>
+      </Typography>
+      <Popover
+        sx={{
+          pointerEvents: "none",
+        }}
+        open={popoverOpen}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "left",
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <LinePopoverContent
+          album={album}
+          song={song}
+          prompt={line}
+        />
+      </Popover>
+    </Box>
+  );
+}
 
