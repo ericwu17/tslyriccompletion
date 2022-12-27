@@ -7,12 +7,13 @@ import {
 import { differenceInSeconds, parseISO } from "date-fns";
 import {
   Box, Table, TableRow, TableCell, Divider,
-  TableBody, CircularProgress, Typography, Link
+  TableBody, CircularProgress, Typography, Link, Popover
 } from "@mui/material";
 import SongListSection from "./SongListSection";
 import { FlaggedText } from "../game/ResultDisplay";
 import { diffChars } from "diff";
 import levenshtein from "js-levenshtein";
+import { LinePopoverContent } from "./GuessHistory";
 
 export default function GameDetails() {
   const [data, setData] = React.useState({});
@@ -146,6 +147,17 @@ export default function GameDetails() {
 function GuessDetails({ guess, totalNumGuesses }) {
   const {correct_answer, user_guess, prompt, points_earned, time_elapsed, lifelines_used} = guess;
   const was_multiple_choice = guess.options.length > 0;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handlePopoverOpen = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const popoverOpen = Boolean(anchorEl);
 
   const href = generateSongHref(guess.album, guess.song_name);
 
@@ -187,10 +199,38 @@ function GuessDetails({ guess, totalNumGuesses }) {
                 Prompt:
               </Typography>
             </Box>
-            <Box>
+            <Box
+              aria-owns={open ? "mouse-over-popover" : undefined}
+              aria-haspopup="true"
+              onMouseEnter={handlePopoverOpen}
+              onMouseLeave={handlePopoverClose}
+            >
               <Link href={generateLineHistoryHref(guess.album, guess.song_name, prompt)}>
                 <FlaggedText text={prompt} flags={3}/>
               </Link>
+              <Popover
+                sx={{
+                  pointerEvents: "none",
+                }}
+                open={popoverOpen}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+                onClose={handlePopoverClose}
+                disableRestoreFocus
+              >
+                <LinePopoverContent
+                  album={guess.album}
+                  song={guess.song_name}
+                  prompt={prompt}
+                />
+              </Popover>
             </Box>
           </Box>
           <Box display="flex">

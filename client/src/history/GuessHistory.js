@@ -183,3 +183,73 @@ function GuessDetails({ guess }) {
     </Box>
   );
 }
+
+const bg = "#d8ecf3";
+
+export function LinePopoverContent({ album, song, prompt }) {
+  const [data, setData] = React.useState({});
+  const [fetchError, setFetchError] = React.useState(false);
+
+  React.useEffect(() => {
+    axios.get(`/history/line?album=${album}&song=${song}&prompt=${prompt}`).then((response) => {
+      setData(response.data);
+      if (response.status !== 200) {
+        setFetchError(true);
+      }
+    }).catch(function() {
+      setFetchError(true);
+    });
+  }, [album, song, prompt]);
+
+  if (fetchError) {
+    return (
+      <Box sx={{background:bg}}>
+        <div>
+          Error! Please report a bug if you see this!
+        </div>
+      </Box>
+    );
+  } else if (JSON.stringify(data) == "{}") {
+    return (
+      <Box sx={{background:bg}}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+
+  return (
+    <Box sx={{background:bg}} p={1}>
+      {data.length == 0 && <Typography> No guesses yet!</Typography>}
+      {data.map((guess, index) => {
+        let {user_guess, correct_answer, lifelines_used} = guess;
+        const was_multiple_choice = guess.options.length > 0;
+
+
+        let {guessFlags} = generateFlags(user_guess, correct_answer);
+
+        if (
+          lifelines_used.includes("Skip") || (was_multiple_choice && guess.result === "correct")
+        ) {
+          guessFlags = guessFlags.map(() => -1);
+        }
+        if (was_multiple_choice && guess.result === "incorrect") {
+          guessFlags = guessFlags.map(() => 1);
+        }
+
+        if (lifelines_used.includes("Skip")) {
+          user_guess = "<Skipped>";
+        }
+
+
+        return (
+          <FlaggedText
+            key={index}
+            text={user_guess}
+            flags={guessFlags}
+          />
+        );
+      })}
+    </Box>
+  );
+}
