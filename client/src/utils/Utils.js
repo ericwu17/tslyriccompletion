@@ -75,6 +75,22 @@ export const generateSongHref = (album, name) => {
   return `/tswift/song/${escapeQuestionMarks(album)}/${escapeQuestionMarks(name)}`;
 };
 
+export const generateGameHref = uuid => {
+  return `/tswift/history/game?id=${uuid}`;
+};
+
+export const generateLineHistoryHref = (album, song, prompt) => {
+  const album_esc = escapeQuestionMarks(album);
+  const song_esc = escapeQuestionMarks(song);
+  const prompt_esc = escapeQuestionMarks(prompt);
+
+  return `/tswift/history/guess?album=${album_esc}&song=${song_esc}&prompt=${prompt_esc}`;
+};
+
+export const unescapeQuestionMarks = s => {
+  return s.replaceAll("%3F", "?");
+};
+
 
 // This function uses the useMediaQuery hook to determine the user's screen size.
 // Then it returns an appropriate value to use in the xs prop of Grid item

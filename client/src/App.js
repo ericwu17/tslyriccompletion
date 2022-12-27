@@ -9,6 +9,7 @@ import Game from "./game/Game";
 import HistoryPage from "./history/History";
 import GameDetails from "./history/GameDetails";
 import MechanicsPage from "./home/Mechanics";
+import GuessHistory from "./history/GuessHistory";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/songs" element={<Navigate to="/song" />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/history/game" element={<GameDetails />} />
+          <Route path="/history/guess" element={<GuessHistory />} />
           <Route path=":any/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -1,6 +1,9 @@
 import axios from "axios";
 import React from "react";
-import { ALBUM_LOGOS, generateSongHref, useSearchParamsState } from "../utils/Utils";
+import {
+  ALBUM_LOGOS, generateLineHistoryHref,
+  generateSongHref, useSearchParamsState
+} from "../utils/Utils";
 import { differenceInSeconds, parseISO } from "date-fns";
 import {
   Box, Table, TableRow, TableCell, Divider,
@@ -185,7 +188,9 @@ function GuessDetails({ guess, totalNumGuesses }) {
               </Typography>
             </Box>
             <Box>
-              <FlaggedText text={prompt} flags={3}/>
+              <Link href={generateLineHistoryHref(guess.album, guess.song_name, prompt)}>
+                <FlaggedText text={prompt} flags={3}/>
+              </Link>
             </Box>
           </Box>
           <Box display="flex">
@@ -239,7 +244,7 @@ function GuessDetails({ guess, totalNumGuesses }) {
   );
 }
 
-function generateFlags(guess, answer) {
+export function generateFlags(guess, answer) {
 
   // First we need to figure out the optimal amount to truncate the user guess
   // (This is the truncation amount that minimizes distance)
