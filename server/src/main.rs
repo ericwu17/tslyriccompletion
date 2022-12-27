@@ -23,8 +23,8 @@ use game::{GameState,
 };
 use history::{get_games, get_game};
 use history::line_history::get_line;
-use rocket::State;
 use std::sync::{Arc, Mutex};
+use song::{get_song, get_song_list};
 
 
 #[macro_use] extern crate rocket;
@@ -34,34 +34,6 @@ use std::sync::{Arc, Mutex};
 fn index() -> &'static str {
     "Hello, world!"
 }
-
-#[get("/songs")]
-fn get_song_list(songs: &State<Vec<Song>>) -> String {
-	let mut s: HashMap<String, Vec<String>> = HashMap::new();
-	for song in songs.iter() {
-		if let Some(v) = s.get(&song.album) {
-			let mut v = v.clone();
-			v.push(song.name.clone());
-			s.insert(song.album.clone(), v);
-		} else {
-			s.insert(song.album.clone(), vec![song.name.clone()]);
-		}
-	}
-
-	serde_json::to_string(&s).unwrap()
-}
-
-#[get("/songs/<album>/<name>")]
-fn get_song(songs: &State<Vec<Song>>, album: &str, name: &str) -> String {
-	for song in songs.iter() {
-		if song.album == album && song.name == name {
-			return serde_json::to_string(&song).unwrap()
-		}
-	}
-
-	"{}".to_string()
-}
-
 
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {

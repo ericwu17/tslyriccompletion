@@ -1,13 +1,23 @@
 use std::collections::HashMap;
 
 use serde::Serialize;
+use rocket::State;
+use sqlx::{Pool, MySql, FromRow};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Song {
 	pub album: String,
 	pub name: String,
 	pub lyrics_raw: String,
-	pub lines: Vec<Line>,
+	pub lines: Vec<Line>
+}
+
+#[derive(Serialize)]
+pub struct ISong {
+	pub album: String,
+	pub name: String,
+	pub lyrics_raw: String,
+	pub lines: Vec<ILine>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -16,6 +26,14 @@ pub struct Line {
 	pub is_exclamatory: bool,
 	pub has_multiple_successors: bool,
 	pub has_bad_successor: bool,
+}
+#[derive(Debug, Serialize)]
+pub struct ILine {
+	pub text: String,
+	pub is_exclamatory: bool,
+	pub has_multiple_successors: bool,
+	pub has_bad_successor: bool,
+	pub num_guesses: usize,
 }
 
 
@@ -149,3 +167,79 @@ impl Song {
 
 // 	false
 // }
+
+
+#[get("/songs")]
+pub fn get_song_list(songs: &State<Vec<Song>>) -> String {
+	let mut s: HashMap<String, Vec<String>> = HashMap::new();
+	for song in songs.iter() {
+		if let Some(v) = s.get(&song.album) {
+			let mut v = v.clone();
+			v.push(song.name.clone());
+			s.insert(song.album.clone(), v);
+		} else {
+			s.insert(song.album.clone(), vec![song.name.clone()]);
+		}
+	}
+
+	serde_json::to_string(&s).unwrap()
+}
+
+#[derive(FromRow, Debug)]
+struct Count {
+	total: i32,
+}
+
+#[get("/songs/<album>/<name>")]
+pub async fn get_song(
+	pool: &rocket::State<Pool<MySql>>,
+	songs: &State<Vec<Song>>,
+	album: &str,
+	name: &str
+) -> String {
+	for song in songs.iter() {
+		if song.album == album && song.name == name {
+			let mut my_song = ISong{
+				album: song.album.clone(),
+				name: song.name.clone(),
+				lyrics_raw: song.lyrics_raw.clone(),
+				lines: vec![],
+			};
+			for line in &song.lines {
+				let is_exclamatory = line.is_exclamatory;
+				let has_multiple_successors = line.has_multiple_successors;
+				let has_bad_successor = line.has_bad_successor;
+				let mut num_guesses = 0;
+
+				if !is_exclamatory & !has_bad_successor && !has_multiple_successors {
+					let count: Count = sqlx::query_as(
+						"SELECT count(1) as total from guesses 
+						WHERE 
+						album LIKE ?
+						AND song_name LIKE ?
+						AND prompt LIKE ?
+						"
+					)
+						.bind(album)
+						.bind(name)
+						.bind(line.text.clone())
+						.fetch_one(pool.inner())
+						.await.unwrap();
+					num_guesses = count.total as usize;
+				}
+				
+				my_song.lines.push(ILine{
+					text: line.text.clone(),
+					is_exclamatory,
+					has_bad_successor,
+					has_multiple_successors,
+					num_guesses,
+				})
+			}
+
+			return serde_json::to_string(&my_song).unwrap()
+		}
+	}
+
+	"{}".to_string()
+}

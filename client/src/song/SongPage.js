@@ -178,7 +178,10 @@ export default function SongPage() {
         );
       } else {
         renderedLines.push(
-          <GuessableLine line={lines.shift()} song={name} album={album} />
+          <GuessableLine
+            line={lines.shift()} song={name}
+            album={album} numGuesses={lineInfo.num_guesses}
+          />
         );
       }
     }
@@ -207,7 +210,7 @@ export default function SongPage() {
   );
 }
 
-function GuessableLine({album, song, line}) {
+function GuessableLine({album, song, line, numGuesses}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handlePopoverOpen = event => {
@@ -235,7 +238,7 @@ function GuessableLine({album, song, line}) {
           underline="none" sx={{color:"black"}}
           href={generateLineHistoryHref(album, song, line)}
         >
-          {line}
+          {line} <sub>{numGuesses}</sub>
         </Link>
       </Typography>
       <Popover
