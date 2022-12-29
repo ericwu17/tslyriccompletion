@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import {
   ALBUM_LOGOS, ALBUM_ORDER,
   generateLineHistoryHref,
-  generateSongHref, getAlbumChipWidth, normalizeQuotes
+  generateSongHref, getAlbumChipWidth, isTouchDevice, normalizeQuotes
 } from "../utils/Utils";
 import { LinePopoverContent } from "../history/GuessHistory";
 
@@ -73,7 +73,7 @@ export default function SongPage() {
 
   if (album === undefined) {
     return (
-      <Box m={2}>
+      <Box m={2} maxWidth="100%">
         <Typography variant="h3">
           Browse Taylor Swift Lyrics
         </Typography>
@@ -174,7 +174,7 @@ export default function SongPage() {
             <div style={{ whiteSpace: "pre-line" }}>{tooltipText}</div>
           } placement="right">
             <Typography color="#69b6cf" sx={{
-              width: "max-content",
+              width: "fit-content",
             }}>
               {lines.shift()}
             </Typography>
@@ -191,7 +191,7 @@ export default function SongPage() {
     }
 
     return (
-      <Box mt={2} ml={5} mb={30}>
+      <Box mt={2} px={5} mb={30} maxWidth="100%">
         <Typography variant="h4">{song.album} : {song.name}</Typography>
         {renderedLines}
       </Box>
@@ -224,7 +224,10 @@ function GuessableLine({album, song, line, numGuesses}) {
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
-  const popoverOpen = Boolean(anchorEl);
+  // We never want to show the popover when the user is on a touchscreen device, because the idea
+  // of the popover was to show info when the user MOUSE OVER the line. Users can't mouse over
+  // lines when using a mobile device.
+  const popoverOpen = Boolean(anchorEl) && !isTouchDevice();
 
 
   return (
@@ -234,7 +237,7 @@ function GuessableLine({album, song, line, numGuesses}) {
       onMouseEnter={handlePopoverOpen}
       onMouseLeave={handlePopoverClose}
       sx={{
-        width: "max-content",
+        width: "fit-content",
       }}
     >
       <Typography>

@@ -102,3 +102,11 @@ export const getAlbumChipWidth = () => {
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
   return isMediumScreen ? ( isLargeScreen ? 3 : 4 ) : 6;
 };
+
+// eslint-disable-next-line max-len
+// https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript
+export function isTouchDevice() {
+  return (("ontouchstart" in window) ||
+     (navigator.maxTouchPoints > 0) ||
+     (navigator.msMaxTouchPoints > 0));
+}

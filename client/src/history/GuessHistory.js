@@ -205,7 +205,7 @@ export function LinePopoverContent({ album, song, prompt }) {
     return (
       <Box sx={{background:bg}}>
         <div>
-          Error! Please report a bug if you see this!
+          Error
         </div>
       </Box>
     );

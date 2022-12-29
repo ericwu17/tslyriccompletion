@@ -3,7 +3,7 @@ import { List, Box, Typography, Link, ListItem } from "@mui/material";
 
 export default function AboutPage() {
   return (
-    <Box mt={2} mx={5} mb={30}>
+    <Box mt={2} mx={5} mb={30} maxWidth="100%">
       <Typography variant="h3" sx={{mb: 2}}>
         Taylor Swift Lyric Completion Game
       </Typography>
@@ -86,9 +86,9 @@ export default function AboutPage() {
         Source Code/Contact Me
       </Typography>
       <Typography>
-        The source code for this project is available at {}
+        The source code for this project is available {}
         <Link href="https://github.com/EricWu2003/taylorlyricguessingrs">
-          https://github.com/EricWu2003/taylorlyricguessingrs
+          here
         </Link>.
         It's written in javascript (React) and Rust.
       </Typography>
