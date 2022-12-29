@@ -19,7 +19,7 @@ const PLAY_URL = "/tswift/play";
 const VIEW_SCORES_URL = "/tswift/history";
 const VIEW_LYRICS_URL = "/tswift/song";
 
-function getWindowSize() {
+export function getWindowSize() {
   const {innerWidth, innerHeight} = window;
   return {innerWidth, innerHeight};
 }
