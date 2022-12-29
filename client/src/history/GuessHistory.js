@@ -211,7 +211,7 @@ export function LinePopoverContent({ album, song, prompt }) {
     );
   } else if (JSON.stringify(data) == "{}") {
     return (
-      <Box sx={{background:bg}}>
+      <Box sx={{background:bg}} overflow="hidden">
         <CircularProgress />
       </Box>
     );
