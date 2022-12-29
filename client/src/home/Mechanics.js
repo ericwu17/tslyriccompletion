@@ -54,7 +54,9 @@ export default function MechanicsPage() {
       <Typography>
         When browsing lyrics on this site, all lines which may show up as a prompt in-game are shown
         in black, while all lines which are not candidates for in-game prompts are shown in blue.
-        Hovering over a blue line shows reasons why it is not a valid candidate.
+        Hovering over a blue line shows reasons why it is not a valid candidate. Hovering over a
+        black line shows all previous guesses made in games by players. For each black line, there
+        is a subscript indicating the number of times that line was played in a game.
       </Typography>
 
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
