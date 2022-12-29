@@ -3,7 +3,7 @@ import { List, ListItem, Box, Typography, Link } from "@mui/material";
 
 export default function MechanicsPage() {
   return (
-    <Box mt={2} mx={5} mb={30}>
+    <Box my={2} mx={5}>
       <Typography variant="h3" sx={{mb: 2}}>
         Taylor Swift Completion Game: Game Mechanics
       </Typography>

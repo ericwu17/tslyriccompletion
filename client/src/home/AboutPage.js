@@ -3,7 +3,7 @@ import { List, Box, Typography, Link, ListItem } from "@mui/material";
 
 export default function AboutPage() {
   return (
-    <Box mt={2} mx={5} mb={30} maxWidth="100%">
+    <Box my={2} mx={5} maxWidth="100%">
       <Typography variant="h3" sx={{mb: 2}}>
         Taylor Swift Lyric Completion Game
       </Typography>

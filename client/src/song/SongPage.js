@@ -191,7 +191,7 @@ export default function SongPage() {
     }
 
     return (
-      <Box mt={2} px={5} mb={30} maxWidth="100%">
+      <Box my={2} px={5} maxWidth="100%">
         <Typography variant="h4">{song.album} : {song.name}</Typography>
         {renderedLines}
       </Box>
@@ -245,7 +245,7 @@ function GuessableLine({album, song, line, numGuesses}) {
           underline="none" sx={{color:"black"}}
           href={generateLineHistoryHref(album, song, line)}
         >
-          {line} <sub>{numGuesses}</sub>
+          {line}<sub>{numGuesses}</sub>
         </Link>
       </Typography>
       <Popover
