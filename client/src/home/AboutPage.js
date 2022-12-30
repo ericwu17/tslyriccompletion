@@ -1,5 +1,8 @@
 import React from "react";
 import { List, Box, Typography, Link, ListItem } from "@mui/material";
+import { PLAY_URL } from "../navbar/Navbar";
+
+const MECHANICS_PAGE_URL = "/tswift/mechanics";
 
 export default function AboutPage() {
   return (
@@ -9,20 +12,63 @@ export default function AboutPage() {
       </Typography>
       <Typography>
         This is a game where your goal is to guess the next line from a random Taylor Swift song!
-        To start playing, press <Link href="/tswift/play">start game</Link> in the navbar! You can
+        To start playing, press <Link href={PLAY_URL}>start game</Link> in the navbar! You can
         also use this site to browse Taylor Swift lyrics, although you might
-        find the line highlighting to be a little distracting.
+        find the line highlighting to be distracting.
       </Typography>
 
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Details on Game Mechanics
       </Typography>
       <Typography>
-        See the <Link href="/tswift/mechanics">mechanics</Link> page.
+        For details about how this game works,
+        see the <Link href={MECHANICS_PAGE_URL}>mechanics page</Link>.
+      </Typography>
+
+      <Typography variant="h4" sx={{mt:2, mb: 2}}>
+        Technologies Used
+      </Typography>
+      <Typography>
+        This site is built with:
+        <List
+          sx = {{
+            listStyleType: "disc",
+            pl: 2,
+            "& .MuiListItem-root": {
+              display: "list-item",
+            },
+          }}
+        >
+          <ListItem disablePadding>
+            <Link href="https://mui.com/">
+              Material UI
+            </Link>
+          </ListItem>
+          <ListItem disablePadding>
+            <Link href="https://reactjs.org/">
+              React js
+            </Link>
+          </ListItem>
+          <ListItem disablePadding>
+            <Link href="https://www.rust-lang.org/">
+              Rust
+            </Link>
+          </ListItem>
+          <ListItem disablePadding>
+            <Link href="https://rocket.rs/">
+              Rocket
+            </Link>
+          </ListItem>
+          <ListItem disablePadding>
+            <Link href="https://dev.mysql.com/doc/refman/8.0/en/what-is-mysql.html">
+              MySQL
+            </Link>
+          </ListItem>
+        </List>
       </Typography>
 
       <Typography variant="h4" sx={{mt:2}}>
-        Known issues
+        Known issues/Limitations
       </Typography>
       <Box>
         <List sx={{ listStyleType: "disc", listStylePosition:"inside" }}>
@@ -38,8 +84,14 @@ export default function AboutPage() {
             the line "I lived, I learned" should technically have multiple different successors
             (it can be followed by "And found out what it was to turn around" or "had you, got
             burned"). However, due to how line breaks are positioned, the game thinks that there is
-            only one possible successor. (This is an issue with determining which lines are valid
-            lines as a prompt).
+            only one possible successor.
+            <ListItem sx={{ display: "list-item" }}>
+              This is an issue with determining which lines are valid
+              lines as a prompt. This could possibly be solved in the future by using a more clever
+              method of determining which lines are valid as a prompt. (See also: {}
+              <i>Selecting the line for the question
+              </i> on the <Link href={MECHANICS_PAGE_URL}> Mechanics Page</Link>.)
+            </ListItem>
           </ListItem>
           <ListItem sx={{ display: "list-item" }}>
             There are also issues where a short line appears as the prompt, and it isn't
@@ -52,17 +104,13 @@ export default function AboutPage() {
         Future Ideas for the Taylor Swift Lyric Completion Game?
       </Typography>
       <Typography>
-        Besides
-        viewing high scores, I also plan to allow you to look at statistics about each line of
-        particular songs. It would be cool to see how many times a certain line was played, and to
-        see which lines are commonly answered correctly/incorrectly.
-      </Typography>
-      <Typography>
-        Also, I need to improve how this website looks on small screens and mobile devices!
-        Right now, the site is best viewed on a computer and is difficult to use on a phone.
-      </Typography>
-      <Typography>
-        Let me know if you have any feature requests or suggestions!
+        I am always trying to fix bugs and improve the user interface.
+        Let me know (by <Link href="mailto:eric.dianhao.wu@gmail.com">email</Link> {}
+        or by {}
+        <Link href="https://github.com/EricWu2003/taylorlyricguessingrs/issues">
+          raising an issue on github
+        </Link>)
+        if you have any feature requests or suggestions!
       </Typography>
 
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
@@ -82,22 +130,21 @@ export default function AboutPage() {
         Thanks to my friends Kim and Hannah for being my most frequent testers of early versions of
         this lyric guessing game.
       </Typography>
+
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
-        Source Code/Contact Me
-      </Typography>
-      <Typography>
-        The source code for this project is available {}
-        <Link href="https://github.com/EricWu2003/taylorlyricguessingrs">
-          here
-        </Link>.
-        It's written in javascript (React) and Rust.
+        Contact Me
       </Typography>
       <Typography>
         My name is Eric, and I'm an undergraduate student at UCLA (expected graduation in spring of
-        2025). I love listening to Taylor Swift (surprise, right?). If you have issues with trying
-        to run this app locally, please reach out -- I'd love to hear from you! My email is
-        eric.dianhao.wu@gmail.com. Also feel free to reach out if you have any feedback about the
-        game, and definitely let me know if you encounter anything you think may be a bug!
+        2025). I love listening to Taylor Swift (surprise, right?), but my other interests include
+        math, computers, Rubik's Cubes, and shorthand systems. If you have any feedback for
+        this site, or issues with
+        running this app locally, please reach out -- I'd love to hear from you! My email is
+        eric.dianhao.wu@gmail.com.
+      </Typography>
+      <Typography>
+        Also please email me if
+        you encounter anything you think may be a bug (or even better, leave an issue on github)!
       </Typography>
     </Box>
   );
