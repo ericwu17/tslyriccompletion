@@ -14,10 +14,10 @@ import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } fr
 // When text starts wrapping, that's when we need to switch to mobile mode.
 const MOBILE_WIDTH = 770;
 
-const HOME_URL = "/tswift";
-const PLAY_URL = "/tswift/play";
-const VIEW_SCORES_URL = "/tswift/history";
-const VIEW_LYRICS_URL = "/tswift/song";
+export const HOME_URL = "/tswift";
+export const PLAY_URL = "/tswift/play";
+export const VIEW_SCORES_URL = "/tswift/history";
+export const VIEW_LYRICS_URL = "/tswift/song";
 
 export function getWindowSize() {
   const {innerWidth, innerHeight} = window;

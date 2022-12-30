@@ -1,22 +1,41 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Box, Link, Typography } from "@mui/material";
+import { HOME_URL } from "../navbar/Navbar";
+
+import TaylorSwiftSorry from "./TaylorSwiftSorry.jpg";
 
 export default function NotFound() {
-  let { any } = useParams();
-
-  // I'm redirecting users to the linux.ucla.edu not-found site
-  // because I think their site is really cool (it has the fortune command
-  // being piped into the cowsay command)
-  window.location.href = `https://linux.ucla.edu/tswift-not-found/${any}`;
-
-
-  // The return statement will never be executed since the user will
-  // have been redirected to the linux.ucla.edu not-found site.
   return (
-    <>
-      <div>
+    <Box
+      mx={4} my={2}
+      display="flex" flexDirection="column"
+      alignItems="center"
+    >
+      <Typography variant="h3">
         Page not found!
-      </div>
-    </>
+      </Typography>
+      <Box my={1} />
+      <Typography>
+        The subdirectory of the URL was not found. Click {}
+        <Link href={HOME_URL}>
+          here
+        </Link> to go to the home page.
+      </Typography>
+
+      <Link href="https://www.youtube.com/watch?v=VuNIsY6JdUw&t=22s">
+        <Box
+          component="img"
+          sx={{
+            width: "100%",
+            maxHeight: "60vh",
+            display: "block",
+            objectFit: "scale-down",
+          }}
+          my={3}
+          alt="Sorry about that!"
+          src={TaylorSwiftSorry}
+        />
+      </Link>
+    </Box>
   );
 }
