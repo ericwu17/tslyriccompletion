@@ -11,6 +11,7 @@ import {
   generateSongHref, getAlbumChipWidth, isTouchDevice, normalizeQuotes
 } from "../utils/Utils";
 import { LinePopoverContent } from "../history/GuessHistory";
+import { NotFoundImg } from "../not-found/NotFound";
 
 export const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#E0FFFF",
@@ -199,17 +200,22 @@ export default function SongPage() {
   }
 
   return (
-    <Box mx={5} my={5}>
-      <div>
+    <Box
+      mx={4} my={2}
+      display="flex" flexDirection="column"
+      alignItems="center"
+    >
+      <Typography>
         Error: song not found! If you're typing in the URL by hand,
         note that the characters must be an exact match (and it's case sensitive!)
-      </div>
-      <div>
+      </Typography>
+      <Typography>
         Album: {album}
-      </div>
-      <div>
+      </Typography>
+      <Typography>
         Name: {name}
-      </div>
+      </Typography>
+      <NotFoundImg />
     </Box>
   );
 }

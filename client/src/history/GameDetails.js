@@ -14,6 +14,7 @@ import { FlaggedText } from "../game/ResultDisplay";
 import { diffChars } from "diff";
 import levenshtein from "js-levenshtein";
 import { LinePopoverContent } from "./GuessHistory";
+import { NotFoundImg } from "../not-found/NotFound";
 
 export default function GameDetails() {
   const [data, setData] = React.useState({});
@@ -33,10 +34,16 @@ export default function GameDetails() {
 
   if (fetchError) {
     return (
-      <div>
-        There was an error fetching the content! Please check the "id" value in the url.
-        If you think this is a bug, please let me (Eric) know.
-      </div>
+      <Box
+        mx={4} my={2}
+        display="flex" flexDirection="column"
+        alignItems="center"
+      >
+        <Typography>
+          No game found with id "{id}"
+        </Typography>
+        <NotFoundImg />
+      </Box>
     );
   } else if (JSON.stringify(data) == "{}") {
     return (

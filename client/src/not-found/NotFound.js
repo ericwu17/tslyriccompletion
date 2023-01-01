@@ -16,26 +16,32 @@ export default function NotFound() {
       </Typography>
       <Box my={1} />
       <Typography>
-        The subdirectory of the URL was not found. Click {}
+        Maybe we got lost in translation. Click {}
         <Link href={HOME_URL}>
           here
         </Link> to go to the home page.
       </Typography>
 
-      <Link href="https://www.youtube.com/watch?v=VuNIsY6JdUw&t=22s">
-        <Box
-          component="img"
-          sx={{
-            width: "100%",
-            maxHeight: "60vh",
-            display: "block",
-            objectFit: "scale-down",
-          }}
-          my={3}
-          alt="Sorry about that!"
-          src={TaylorSwiftSorry}
-        />
-      </Link>
+      <NotFoundImg />
     </Box>
+  );
+}
+
+export function NotFoundImg() {
+  return (
+    <Link href="https://www.youtube.com/watch?v=VuNIsY6JdUw&t=22s">
+      <Box
+        component="img"
+        sx={{
+          width: "100%",
+          maxHeight: "60vh",
+          display: "block",
+          objectFit: "scale-down",
+        }}
+        my={3}
+        alt="Sorry about that!"
+        src={TaylorSwiftSorry}
+      />
+    </Link>
   );
 }
