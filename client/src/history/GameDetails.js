@@ -223,7 +223,7 @@ function GuessDetails({ guess, totalNumGuesses }) {
                   horizontal: "center",
                 }}
                 onClose={handlePopoverClose}
-                disableRestoreFocus
+                disableScrollLock
               >
                 <LinePopoverContent
                   album={guess.album}

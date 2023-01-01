@@ -263,7 +263,7 @@ function GuessableLine({album, song, line, numGuesses}) {
           horizontal: "left",
         }}
         onClose={handlePopoverClose}
-        disableRestoreFocus
+        disableScrollLock
       >
         <LinePopoverContent
           album={album}
