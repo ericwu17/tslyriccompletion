@@ -71,7 +71,7 @@ pub async fn get_line(
 ) -> String {
 	let guesses: Vec<GuessSchema> = sqlx::query_as(
 		"SELECT guesses.*, games.player_name from guesses
-		INNER JOIN games ON guesses.game_uuid=Games.uuid
+		INNER JOIN games ON guesses.game_uuid=games.uuid
 		WHERE
 		album LIKE ?
 		AND song_name LIKE ?
