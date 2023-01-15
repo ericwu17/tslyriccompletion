@@ -13,7 +13,7 @@ The sql server is backed up periodically (weekly) by using the mysqldump command
 A cron job is used to execute this command. Here is the cron file:
 
 ```cron
-58 1 * * 1 mysqldump mydb | gzip > ~/backups/mydb$(date +\%Y-\%m-\%dT\%H:\%M).sql.gz
+58 1 * * 1 mysqldump mydb | gzip > ~/backups/mydb--$(date +\%Y-\%m-\%d--\%H-\%M)-00.sql.gz
 # The line above creates a database backup every monday at 1:58 AM
 # The time is a reference to the song Last Kiss
 ```
