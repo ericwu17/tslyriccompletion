@@ -7,7 +7,35 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText
+} from "@mui/material";
+
+import Satisfaction from "../fonts/Satisfaction.ttf";
+import { createTheme, ThemeProvider, } from "@mui/material/styles";
+
+
+const theme = createTheme({
+  typography: {
+    fontFamily: "Satisfaction, cursive",
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        @font-face {
+          font-family: 'Satisfaction';
+          font-style: normal;
+          font-display: swap;
+          font-weight: 400;
+          src: local('Satisfaction'), 
+            local('Satisfaction-Regular'), url(${Satisfaction}) format('woff2');
+        }
+      `,
+    },
+  },
+});
+
+
 
 // This magic number was chosen to try and get the navbar to look good at all widths.
 // The main concern is that the text on buttons shouldn't need to wrap on multiple lines.
@@ -54,9 +82,12 @@ export default function Navbar() {
         >
           <HomeIcon />
         </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Taylor Swift Lyric Completion Game
-        </Typography>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Taylor Swift Lyric Completion Game
+          </Typography>
+        </ThemeProvider>
         <Button
           color="inherit"
           onClick={() => {window.location.href=PLAY_URL;}}
