@@ -111,9 +111,12 @@ export default function Navbar() {
   } else {
     toolbar = (
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          TS Lyric Completion
-        </Typography>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            TS Lyric Completion
+          </Typography>
+        </ThemeProvider>
         <IconButton
           size="large"
           edge="start"
