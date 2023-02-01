@@ -66,16 +66,16 @@ export default function MechanicsPage() {
         There are currently three types of lifelines: ShowTitleAlbum, ShowPrevLines, and Skip.
       </Typography>
       <List sx={{ listStyleType: "disc", listStylePosition:"inside" }}>
-        <ListItem sx={{ display: "list-item" }}>
+        <ListItem sx={{ display: "list-item", fontFamily:"arial" }}>
           The ShowTitleAlbum lifeline simply shows you the title of the song, as well as its album.
         </ListItem>
-        <ListItem sx={{ display: "list-item" }}>
+        <ListItem sx={{ display: "list-item", fontFamily:"arial" }}>
           The ShowPrevLines lifeline will show the two lines which came before the question's line.
           If there are not enough previous lines because the question's line occurs too early in the
           song, the ShowPrevLines lifeline show everything from the song's first line, and also
           indicate that the lines shown are the initial lines of the song.
         </ListItem>
-        <ListItem sx={{ display: "list-item" }}>
+        <ListItem sx={{ display: "list-item", fontFamily:"arial" }}>
           The Skip lifeline skips the current question, showing the answer and earning 0 points for
           the player.
         </ListItem>

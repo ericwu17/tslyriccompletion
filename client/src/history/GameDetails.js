@@ -193,10 +193,12 @@ function GuessDetails({ guess, totalNumGuesses }) {
             src={ALBUM_LOGOS[guess.album]}
             mr={1}
           />
-          <Link href={href} target="_blank" mr={1}>
-            {guess.album} : {guess.song_name}
-          </Link>
-          {} (Question {guess.order_num+1} of {totalNumGuesses})
+          <Typography>
+            <Link href={href} target="_blank" mr={1}>
+              {guess.album} : {guess.song_name}
+            </Link>
+            {} (Question {guess.order_num+1} of {totalNumGuesses})
+          </Typography>
         </Box>
 
         <Box display="flex" flexDirection="column">
