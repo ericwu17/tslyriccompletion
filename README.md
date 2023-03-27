@@ -6,7 +6,7 @@ The project was originally a
 Then it became a command line interface written in Rust (see the releases on this Github page).
 It has since turned into a web app built with React and Rust!
 
-The project is now live at [https://linux.ucla.edu/tswift](https://linux.ucla.edu/tswift)!
+The project is now live at [http://tslyriccompletion.com](http://tslyriccompletion.com)!
 Thanks to David from the Linux Users group at UCLA for helping me get this project deployed
 and answering my questions about things like apache and ports.
 
@@ -37,10 +37,10 @@ REACT_APP_AXIOS_BASE_URL=http://localhost:3000
 ```
 
 The .env file is needed in the client because when I deploy this app at
-[https://linux.ucla.edu/tswift](https://linux.ucla.edu/tswift), I instead include:
+[http://tslyriccompletion.com](http://tslyriccompletion.com), I instead include:
 
 ```text
-REACT_APP_AXIOS_BASE_URL=https://linux.ucla.edu/tswift/api/
+REACT_APP_AXIOS_BASE_URL=http://tslyriccompletion.com/api/
 ```
 
 Then, navigate to the `server` directory and run `cargo run`. In a separate terminal,
