@@ -30,7 +30,7 @@ export default function GameTableRow({game, index}) {
       <TableCell align="right">{num_guesses}</TableCell>
       <TableCell align="right">{score}</TableCell>
       <TableCell align="right">
-        <Link href={`/tswift/history/game?id=${game.uuid}`}>See Details</Link>
+        <Link href={`/history/game?id=${game.uuid}`}>See Details</Link>
       </TableCell>
     </TableRow>
   );

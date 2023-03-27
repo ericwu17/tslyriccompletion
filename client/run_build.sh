@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PUBLIC_URL=https://linux.ucla.edu/tswift
+export PUBLIC_URL=http://tslyriccompletion.com
 time npm run build
 cd build
 cp -r * /var/www/html

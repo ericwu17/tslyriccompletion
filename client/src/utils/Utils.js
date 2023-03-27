@@ -72,11 +72,11 @@ const escapeQuestionMarks = s => {
 };
 
 export const generateSongHref = (album, name) => {
-  return `/tswift/song/${escapeQuestionMarks(album)}/${escapeQuestionMarks(name)}`;
+  return `/song/${escapeQuestionMarks(album)}/${escapeQuestionMarks(name)}`;
 };
 
 export const generateGameHref = uuid => {
-  return `/tswift/history/game?id=${uuid}`;
+  return `/history/game?id=${uuid}`;
 };
 
 export const generateLineHistoryHref = (album, song, prompt) => {
@@ -84,7 +84,7 @@ export const generateLineHistoryHref = (album, song, prompt) => {
   const song_esc = escapeQuestionMarks(song);
   const prompt_esc = escapeQuestionMarks(prompt);
 
-  return `/tswift/history/guess?album=${album_esc}&song=${song_esc}&prompt=${prompt_esc}`;
+  return `/history/guess?album=${album_esc}&song=${song_esc}&prompt=${prompt_esc}`;
 };
 
 export const unescapeQuestionMarks = s => {

@@ -253,7 +253,7 @@ function SongSelection({songList, setSongList, albumChipWidth}) {
                     display="flex"
                     flexDirection="row"
                     alignItems="center"
-                    key={`/tswift/song/${album}/${song}`}
+                    key={`/song/${album}/${song}`}
                     mb={-2}
                   >
                     <Checkbox

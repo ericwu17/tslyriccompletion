@@ -2,7 +2,7 @@ import React from "react";
 import { List, Box, Typography, Link, ListItem } from "@mui/material";
 import { PLAY_URL } from "../navbar/Navbar";
 
-const MECHANICS_PAGE_URL = "/tswift/mechanics";
+const MECHANICS_PAGE_URL = "/mechanics";
 
 export default function AboutPage() {
   return (
@@ -80,7 +80,7 @@ export default function AboutPage() {
             This mismatch also occurs when the songlist is filtered by a search.
           </ListItem>
           <ListItem sx={{ display: "list-item", fontFamily:"arial" }}>
-            In the song <Link href="/tswift/song/Fearless/You All Over Me">You All Over Me</Link>,
+            In the song <Link href="/song/Fearless/You All Over Me">You All Over Me</Link>,
             the line "I lived, I learned" should technically have multiple different successors
             (it can be followed by "And found out what it was to turn around" or "had you, got
             burned"). However, due to how line breaks are positioned, the game thinks that there is

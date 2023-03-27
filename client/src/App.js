@@ -23,7 +23,7 @@ function App() {
       <CssBaseline />
       <Navbar />
       <Box flexGrow={1}>
-        <BrowserRouter basename="tswift">
+        <BrowserRouter>
           <Routes>
             <Route exact path="/" element={<AboutPage />} />
             <Route exact path="/mechanics" element={<MechanicsPage />} />
