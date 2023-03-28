@@ -23,7 +23,7 @@ export function Footer() {
           </Typography>
           <Typography variant="subtitle2">
             Source code for this site available {}
-            <Link href="https://github.com/EricWu2003/taylorlyricguessingrs">
+            <Link href="https://github.com/EricWu2003/tslyriccompletion">
               here
             </Link> (GitHub link).
           </Typography>

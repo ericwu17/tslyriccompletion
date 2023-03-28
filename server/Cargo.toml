@@ -1,10 +1,10 @@
 [package]
-name = "taylorlyricguessingrs"
+name = "tslyriccompletion"
 version = "0.1.0"
 edition = "2021"
 description = "The back end server of a Taylor Swift Lyric Completion game."
 license = "GPL-2.0-or-later"
-repository = "https://github.com/EricWu2003/taylorlyricguessingrs"
+repository = "https://github.com/EricWu2003/tslyriccompletion"
 keywords = ["Taylor Swift", "rocket", "http", "MySQL"]
 categories = ["web-programming::http-server"]
 

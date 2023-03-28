@@ -1,4 +1,4 @@
-# Taylor Swift Lyric Completion In Rust
+# Taylor Swift Lyric Completion
 
 This is a fun project for fellow Taylor Swift fans who like to complete lyrics.
 The project was originally a

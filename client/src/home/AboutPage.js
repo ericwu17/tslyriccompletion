@@ -107,7 +107,7 @@ export default function AboutPage() {
         I am always trying to fix bugs and improve the user interface.
         Let me know (by <Link href="mailto:eric.dianhao.wu@gmail.com">email</Link> {}
         or by {}
-        <Link href="https://github.com/EricWu2003/taylorlyricguessingrs/issues">
+        <Link href="https://github.com/EricWu2003/tslyriccompletion/issues">
           raising an issue on github
         </Link>)
         if you have any feature requests or suggestions!
