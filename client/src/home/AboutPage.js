@@ -26,6 +26,13 @@ export default function AboutPage() {
       </Typography>
 
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
+        Recent Changes
+      </Typography>
+      <Typography>
+        2023-05-17: Changed album name "Reputation" to "reputation".
+      </Typography>
+
+      <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Technologies Used
       </Typography>
       <Typography>
@@ -111,6 +118,10 @@ export default function AboutPage() {
           raising an issue on github
         </Link>)
         if you have any feature requests or suggestions!
+
+        {/* TODO: make a better interface for the viewing of inclusion/exclusion of songs! */}
+        {/* TODO: fix view scores table for mobile view. Shouldn't need to scroll
+         horizontally to view scores. */}
       </Typography>
 
       <Typography variant="h4" sx={{mt:2, mb: 2}}>

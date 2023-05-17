@@ -47,7 +47,7 @@ fn process_album_name(name: &str) -> String {
 	}
 	name.split('-')
 		.map(|x| 
-			if x != "folklore" && x != "evermore" {
+			if x != "folklore" && x != "evermore" && x != "reputation" {
 				capitalize_first_letter(x)
 			} else {
 				x.to_string()
