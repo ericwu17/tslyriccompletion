@@ -1,5 +1,5 @@
 import React from "react";
-import { TableRow, TableCell, Link } from "@mui/material";
+import { TableRow, TableCell, Link, Box } from "@mui/material";
 
 import { parseISO } from "date-fns";
 
@@ -19,18 +19,39 @@ export default function GameTableRow({game, index}) {
       }}
     >
       <TableCell component="th" scope="row">
-        {startTime.toLocaleString()}
+        {/* The first box has no padding on the left */}
+        <Box>
+          {startTime.toLocaleString()}
+        </Box>
       </TableCell>
-      {name && <TableCell>{name}</TableCell>}
-      {!name &&
+      {name &&
         <TableCell>
-          <span style={{color:"darkgray", fontWeight: "bold"}}>{"<Anonymous>"}</span>
+          <Box pl={1}>
+            {name}
+          </Box>
         </TableCell>
       }
-      <TableCell align="right">{num_guesses}</TableCell>
-      <TableCell align="right">{score}</TableCell>
+      {!name &&
+        <TableCell>
+          <Box pl={1}>
+            <span style={{color:"darkgray", fontWeight: "bold"}}>{"<Anonymous>"}</span>
+          </Box>
+        </TableCell>
+      }
       <TableCell align="right">
-        <Link href={`/history/game?id=${game.uuid}`}>See Details</Link>
+        <Box pl={1}>
+          {num_guesses}
+        </Box>
+      </TableCell>
+      <TableCell align="right">
+        <Box pl={1}>
+          {score}
+        </Box>
+      </TableCell>
+      <TableCell align="right">
+        <Box pl={1}>
+          <Link href={`/history/game?id=${game.uuid}`}>Details</Link>
+        </Box>
       </TableCell>
     </TableRow>
   );

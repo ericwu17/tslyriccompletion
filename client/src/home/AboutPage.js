@@ -29,6 +29,9 @@ export default function AboutPage() {
         Recent Changes
       </Typography>
       <Typography>
+        2023-05-17: Changed style of View Scores page on mobile devices.
+      </Typography>
+      <Typography>
         2023-05-17: Changed album name "Reputation" to "reputation".
       </Typography>
 
