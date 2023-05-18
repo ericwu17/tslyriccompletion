@@ -68,7 +68,12 @@ const escapeQuestionMarks = s => {
   // '%3F', and then this gets interpreted as '?' when the front end communicates with the back end.
 
   // This function is needed because of the song "Question...?"
-  return s.replaceAll("?", "%253F");
+  // and also the song "Forever & always"
+  return s.replaceAll("?", "%253F").replaceAll("&", "%2526");
+};
+const escapeQuestionMarksSingleLevel = s => {
+  // sometimes we want to escape these characters quotes only one level deep
+  return s.replaceAll("?", "%3F").replaceAll("&", "%26");
 };
 
 export const generateSongHref = (album, name) => {
@@ -87,8 +92,16 @@ export const generateLineHistoryHref = (album, song, prompt) => {
   return `/history/guess?album=${album_esc}&song=${song_esc}&prompt=${prompt_esc}`;
 };
 
+export const generateLineBackendAPIHistoryHref = (album, song, prompt) => {
+  const album_esc = escapeQuestionMarksSingleLevel(album);
+  const song_esc = escapeQuestionMarksSingleLevel(song);
+  const prompt_esc = escapeQuestionMarksSingleLevel(prompt);
+
+  return `/history/line?album=${album_esc}&song=${song_esc}&prompt=${prompt_esc}`;
+};
+
 export const unescapeQuestionMarks = s => {
-  return s.replaceAll("%3F", "?");
+  return s.replaceAll("%3F", "?").replaceAll("%26", "&");
 };
 
 

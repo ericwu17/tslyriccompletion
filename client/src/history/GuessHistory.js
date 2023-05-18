@@ -3,7 +3,7 @@ import React from "react";
 import { Typography, Box, CircularProgress, Link, Divider } from "@mui/material";
 import {
   ALBUM_LOGOS, generateGameHref, generateSongHref,
-  unescapeQuestionMarks, useSearchParamsState
+  unescapeQuestionMarks, useSearchParamsState, generateLineBackendAPIHistoryHref,
 } from "../utils/Utils";
 import { generateFlags } from "./GameDetails";
 import { FlaggedText } from "../game/ResultDisplay";
@@ -12,12 +12,12 @@ import { parseISO } from "date-fns";
 export default function GuessHistory() {
   const [data, setData] = React.useState({});
   const [fetchError, setFetchError] = React.useState(false);
-  const album = useSearchParamsState("album", "")[0];
-  const song = useSearchParamsState("song", "")[0];
-  const prompt = useSearchParamsState("prompt", "")[0];
+  const album = unescapeQuestionMarks(useSearchParamsState("album", "")[0]);
+  const song = unescapeQuestionMarks(useSearchParamsState("song", "")[0]);
+  const prompt = unescapeQuestionMarks(useSearchParamsState("prompt", "")[0]);
 
   React.useEffect(() => {
-    axios.get(`/history/line?album=${album}&song=${song}&prompt=${prompt}`).then((response) => {
+    axios.get(generateLineBackendAPIHistoryHref(album, song, prompt)).then((response) => {
       setData(response.data);
       if (response.status !== 200) {
         setFetchError(true);
@@ -25,7 +25,7 @@ export default function GuessHistory() {
     }).catch(function() {
       setFetchError(true);
     });
-  }, []);
+  }, [album, song, prompt]);
 
   if (fetchError) {
     return (
@@ -191,7 +191,7 @@ export function LinePopoverContent({ album, song, prompt }) {
   const [fetchError, setFetchError] = React.useState(false);
 
   React.useEffect(() => {
-    axios.get(`/history/line?album=${album}&song=${song}&prompt=${prompt}`).then((response) => {
+    axios.get(generateLineBackendAPIHistoryHref(album, song, prompt)).then((response) => {
       setData(response.data);
       if (response.status !== 200) {
         setFetchError(true);
