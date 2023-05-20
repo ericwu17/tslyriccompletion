@@ -38,7 +38,7 @@ export default function MechanicsPage() {
       </Typography>
       <Typography>
         There are also some lines which I call "exclamatory", such as {}
-        <Link href="/song/Reputation/Dress">Ah, ha, ha, ha-ah</Link>, {}
+        <Link href="/song/reputation/Dress">Ah, ha, ha, ha-ah</Link>, {}
         <Link href="/song/Speak Now/Haunted">Oh, oh, oh, oh, oh, oh, oh, oh, oh</Link>, or {}
         <Link href="/song/Fearless/Fifteen">La-la-la, la-la-la, la-la-la-la</Link>.
         Can you figure out which songs these lines come from? I certainly can't, and I don't think
