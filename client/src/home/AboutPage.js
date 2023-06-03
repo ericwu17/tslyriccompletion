@@ -29,6 +29,9 @@ export default function AboutPage() {
         Recent Changes
       </Typography>
       <Typography>
+        2023-06-02: Added song "You're Losing Me" to Midnights.
+      </Typography>
+      <Typography>
         2023-05-18: Reduced the default size of the song list display when viewing game history.
       </Typography>
       <Typography>

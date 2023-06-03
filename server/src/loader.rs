@@ -84,6 +84,7 @@ fn process_song_name(name: &str, album: &str) -> String {
 		("me", "ME!"),
 		("come-back-be-here", "come-back...Be-here"),
 		("youre-on-your-own-kid", "you're-on-your-own-kid"),
+		("youre-losing-me", "you're-losing-me"),
 		("wouldve-couldve-shouldve", "would've-could've-should've"),
 		("its-time-to-go", "it's-time-to-go"),
 		("tis-the-damn-season", "'tis-the-damn-season"),
