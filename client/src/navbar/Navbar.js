@@ -68,6 +68,15 @@ export default function Navbar() {
     };
   }, []);
 
+  const onClickStartGame = () => {
+    if (window.location.pathname != PLAY_URL) {
+      window.location.pathname=PLAY_URL;
+    } else {
+      // will begin the game if the user clicks start game
+      document.dispatchEvent(new KeyboardEvent("keydown", {"key": "Enter"}));
+    }
+  };
+
   let toolbar;
   if (windowSize.innerWidth > MOBILE_WIDTH) {
     toolbar = (
@@ -90,7 +99,7 @@ export default function Navbar() {
         </ThemeProvider>
         <Button
           color="inherit"
-          onClick={() => {window.location.href=PLAY_URL;}}
+          onClick={() => onClickStartGame()}
         >
           Start Game
         </Button>

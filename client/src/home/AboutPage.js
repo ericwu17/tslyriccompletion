@@ -29,6 +29,11 @@ export default function AboutPage() {
         Recent Changes
       </Typography>
       <Typography>
+        2023-06-02: Changed the behavior of "Start Game" in Navbar. Now if the button is pressed
+        while on the start game page, the game will begin immediately rather than redirecting
+        the user to the back to the start game page.
+      </Typography>
+      <Typography>
         2023-06-02: Added song "You're Losing Me" to Midnights.
       </Typography>
       <Typography>
