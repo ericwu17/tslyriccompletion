@@ -9,7 +9,6 @@ pub mod loader_v2;
 
 use std::collections::HashMap;
 use crate::song::Song;
-use crate::loader::load_songs_from_files;
 use sqlx::mysql::MySqlPoolOptions;
 use dotenv::dotenv;
 
@@ -43,7 +42,7 @@ async fn main() -> Result<(), rocket::Error> {
 	let db_user = std::env::var("DATABASE_USER").expect("DATABASE_USER must be set.");
 	let db_pw = std::env::var("DATABASE_PASSWORD").expect("DATABASE_PASSWORD must be set.");
 	
-	let songs: Vec<Song> = load_songs_from_files();
+	let songs: Vec<Song> = loader_v2::load_songs_from_files();
 	test_new_loader();
 	let my_hashmap: HashMap<String, GameState> = HashMap::new();
 	let game_state = Arc::new(Mutex::new(my_hashmap));
@@ -82,16 +81,27 @@ async fn main() -> Result<(), rocket::Error> {
 
 
 fn test_new_loader() {
+	// This function asserts that the two loaders generate exactly equal outputs
+
 	let songs1 = loader::load_songs_from_files();
 	let songs2 = loader_v2::load_songs_from_files();
 
 	for song in &songs2 {
 		if !songs1.contains(song) {
-			println!("The following song is not contained:");
+			println!("The following song is extraneous:");
+			println!("{:?}", song);
+			panic!();
+		}
+	}
+
+	for song in &songs1 {
+		if !songs2.contains(song) {
+			println!("The following song is missing:");
 			println!("{:?}", song);
 			panic!();
 		}
 	}
 	println!("{} songs total", &songs2.len());
+	assert!(songs1 == songs2);
 	println!("Test passed for loader v2");
 }
