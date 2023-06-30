@@ -85,8 +85,13 @@ fn test_new_loader() {
 	let songs1 = loader::load_songs_from_files();
 	let songs2 = loader_v2::load_songs_from_files();
 
-	for song in songs2 {
-		assert!(songs1.contains(&song));
+	for song in &songs2 {
+		if !songs1.contains(song) {
+			println!("The following song is not contained:");
+			println!("{:?}", song);
+			panic!();
+		}
 	}
+	println!("{} songs total", &songs2.len());
 	println!("Test passed for loader v2");
 }

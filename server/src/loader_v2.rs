@@ -9,6 +9,8 @@ pub fn load_songs_from_files() -> Vec<Song> {
   for album_dir in PROJECT_DIR.dirs() {
     for song_file in album_dir.files() {
 
+      // Note: the directory names and file names have no effect on the underlying data,
+      // except for changing the order in which the songs and albums will be loaded (and thus displayed)
 
       // each song file always follows the format of:
       // first line: contains album name
