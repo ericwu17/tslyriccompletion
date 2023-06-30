@@ -4,7 +4,7 @@ use serde::Serialize;
 use rocket::State;
 use sqlx::{Pool, MySql, FromRow};
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, PartialEq)]
 pub struct Song {
 	pub album: String,
 	pub name: String,

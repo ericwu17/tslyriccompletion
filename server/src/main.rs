@@ -5,6 +5,7 @@ pub mod game;
 pub mod diff;
 pub mod lifelines;
 pub mod history;
+pub mod loader_v2;
 
 use std::collections::HashMap;
 use crate::song::Song;
@@ -43,6 +44,7 @@ async fn main() -> Result<(), rocket::Error> {
 	let db_pw = std::env::var("DATABASE_PASSWORD").expect("DATABASE_PASSWORD must be set.");
 	
 	let songs: Vec<Song> = load_songs_from_files();
+	test_new_loader();
 	let my_hashmap: HashMap<String, GameState> = HashMap::new();
 	let game_state = Arc::new(Mutex::new(my_hashmap));
 
@@ -76,4 +78,15 @@ async fn main() -> Result<(), rocket::Error> {
 	let _ = rocket.launch().await?;
 
 	Ok(())
+}
+
+
+fn test_new_loader() {
+	let songs1 = loader::load_songs_from_files();
+	let songs2 = loader_v2::load_songs_from_files();
+
+	for song in songs2 {
+		assert!(songs1.contains(&song));
+	}
+	println!("Test passed for loader v2");
 }
