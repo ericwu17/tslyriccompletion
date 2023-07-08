@@ -29,6 +29,9 @@ export default function AboutPage() {
         Recent Changes
       </Typography>
       <Typography>
+        2023-07-08: Added Speak Now From The Vault songs!
+      </Typography>
+      <Typography>
         2023-06-02: Changed the behavior of "Start Game" in Navbar. Now if the button is pressed
         while on the start game page, the game will begin immediately rather than redirecting
         the user to the back to the start game page.

@@ -43,7 +43,7 @@ async fn main() -> Result<(), rocket::Error> {
 	let db_pw = std::env::var("DATABASE_PASSWORD").expect("DATABASE_PASSWORD must be set.");
 	
 	let songs: Vec<Song> = loader_v2::load_songs_from_files();
-	test_new_loader();
+	// test_new_loader();
 	let my_hashmap: HashMap<String, GameState> = HashMap::new();
 	let game_state = Arc::new(Mutex::new(my_hashmap));
 
