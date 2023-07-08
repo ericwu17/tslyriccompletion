@@ -229,7 +229,7 @@ pub async fn init_game(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>
 	let full_songlist_hash = format!("{:X}", hasher.finalize());
 
 
-	let full_songlist_json: sqlx::types::Json<Vec<(String, String)>> = sqlx::types::Json(songs_to_include);
+	let full_songlist_json: sqlx::types::Json<Vec<(String, String)>> = sqlx::types::Json(full_songlist);
 	let songlist_desc_json = sqlx::types::Json(songlist_desc);
 	
 	let _ = sqlx::query("INSERT INTO songlists VALUES (?, ?)")
