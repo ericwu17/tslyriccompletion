@@ -7,8 +7,9 @@ use crate::song::Song;
 use crate::guess_generating::{pick_random_guess, optimal_truncated_dist, pick_distractors, Question};
 use crate::diff::diff_greedy;
 use crate::lifelines::{LifelineInventory, Lifeline};
+use crate::history::{SonglistSchema, Songlist};
 use rand::prelude::SliceRandom;
-use std::collections::{HashMap};
+use std::collections::HashMap;
 use uuid::Uuid;
 use sqlx::{Pool, MySql};
 use sha1::{Sha1, Digest};
@@ -232,14 +233,47 @@ pub async fn init_game(game_state: &State<Arc<Mutex<HashMap<String, GameState>>>
 	let full_songlist_json: sqlx::types::Json<Vec<(String, String)>> = sqlx::types::Json(full_songlist);
 	let songlist_desc_json = sqlx::types::Json(songlist_desc);
 	
-	let _ = sqlx::query("INSERT INTO songlists VALUES (?, ?)")
+	// check if the current songlist SHA already exists
+	let result: Vec<SonglistSchema> = sqlx::query_as("SELECT * FROM songlists WHERE sha1sum LIKE ?")
 		.bind(full_songlist_hash.clone())
-		.bind(full_songlist_json)
 		.fetch_all(pool.inner())
-		.await;
+		.await.unwrap();
+
+	println!("result has length {}", result.len());
+
+	if result.is_empty() {
+		// insert a new record if the current songlist sha is not found
+		let _ = sqlx::query("INSERT INTO songlists (sha1sum, content) VALUES (?, ?)")
+			.bind(full_songlist_hash.clone())
+			.bind(full_songlist_json)
+			.fetch_all(pool.inner())
+			.await;
+	}
+
+	let songlists: Vec<SonglistSchema> = sqlx::query_as("SELECT * FROM songlists WHERE sha1sum LIKE ?")
+		.bind(full_songlist_hash.clone())
+		.fetch_all(pool.inner())
+		.await.unwrap();
+
+	let songlists: Vec<Songlist> = songlists.into_iter()
+		.map(|songlist| Songlist{
+			id: songlist.id,
+			sha1sum: songlist.sha1sum,
+			
+			// We are serializing and then immediately deserializing because I can't figure out
+			// how to convert the type from Json<Vec<(String, String)>> to Vec<(String, String)>
+			content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap()).unwrap(),
+		}).collect();
+	
+	let songlist_id = songlists.get(0)
+		.expect("Expect to have one songlist with appropriate SHA1 sum after inserting the songlist")
+		.id;
+
+
+	// save the game to database
 	let _ = sqlx::query("INSERT INTO games VALUES (?, NOW(), ?, ?, 0, NULL, NULL)")
 		.bind(uuid.clone())
-		.bind(full_songlist_hash.clone())
+		.bind(songlist_id)
 		.bind(songlist_desc_json)
 		.fetch_all(pool.inner())
 		.await;

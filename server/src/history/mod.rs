@@ -11,7 +11,7 @@ pub mod line_history;
 pub struct GameSchema {
 	pub uuid: String,
 	pub start_time: PrimitiveDateTime,
-	pub songlist_sha: String,
+	pub songlist_id: i32,
 	pub selected_songs: Json<HashMap<String, Vec<bool>>>,
 	pub has_terminated: bool,
 	pub terminal_score: Option<i32>,
@@ -24,7 +24,7 @@ pub struct GameSchema {
 pub struct Game {
 	pub uuid: String,
 	pub start_time: String,
-	pub songlist_sha: String,
+	pub songlist_id: i32,
 	pub selected_songs: Vec<(String, String)>,
 	pub has_terminated: bool,
 	pub terminal_score: Option<i32>,
@@ -35,12 +35,14 @@ pub struct Game {
 
 #[derive(sqlx::FromRow, Debug)]
 pub struct SonglistSchema {
+	pub id: i32,
 	pub sha1sum: String,
 	pub content: Json<Vec<(String, String)>>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Songlist {
+	pub id: i32,
 	pub sha1sum: String,
 	pub content: Vec<(String, String)>,
 }
@@ -69,6 +71,7 @@ pub async fn get_games(
 
 	let songlists: Vec<Songlist> = songlists.into_iter()
 		.map(|songlist| Songlist{
+			id: songlist.id,
 			sha1sum: songlist.sha1sum,
 			
 			// We are serializing and then immediately deserializing because I can't figure out
@@ -117,7 +120,7 @@ pub async fn get_games(
 	let games: Vec<Game> = games.into_iter()
 		.map(|game| {
 			let selected_songs =  serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap()).unwrap();
-			let full_songlist = songlists.iter().find(|s| s.sha1sum == game.songlist_sha).unwrap().content.clone();
+			let full_songlist = songlists.iter().find(|s| s.id == game.songlist_id).unwrap().content.clone();
 
 			let selected_songs_desc = get_songs(full_songlist, selected_songs);
 
@@ -126,7 +129,7 @@ pub async fn get_games(
 			Game{
 				uuid: game.uuid,
 				start_time: game.start_time.format(&format).unwrap(),
-				songlist_sha: game.songlist_sha,
+				songlist_id: game.songlist_id,
 				selected_songs: selected_songs_desc,
 				has_terminated: game.has_terminated,
 				terminal_score: game.terminal_score,
@@ -242,6 +245,7 @@ pub async fn get_game(
 
 	let songlists: Vec<Songlist> = songlists.into_iter()
 		.map(|songlist| Songlist{
+			id: songlist.id,
 			sha1sum: songlist.sha1sum,
 			
 			// We are serializing and then immediately deserializing because I can't figure out
@@ -258,7 +262,7 @@ pub async fn get_game(
 	let format = format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
 	
 	let selected_songs =  serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap()).unwrap();
-	let full_songlist = songlists.iter().find(|s| s.sha1sum == game.songlist_sha).unwrap().content.clone();
+	let full_songlist = songlists.iter().find(|s| s.id == game.songlist_id).unwrap().content.clone();
 	let selected_songs_desc = get_songs(full_songlist, selected_songs);
 
 
@@ -274,7 +278,7 @@ pub async fn get_game(
 	let game = Game{
 		uuid: game.uuid,
 		start_time: game.start_time.format(&format).unwrap(),
-		songlist_sha: game.songlist_sha,
+		songlist_id: game.songlist_id,
 		selected_songs: selected_songs_desc,
 		has_terminated: game.has_terminated,
 		terminal_score: game.terminal_score,
