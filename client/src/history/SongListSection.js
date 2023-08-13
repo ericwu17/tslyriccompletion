@@ -5,11 +5,11 @@ import { ALBUM_ORDER, ALBUM_LOGOS, getAlbumChipWidth, generateSongHref } from ".
 import { Item } from "../song/SongPage";
 
 
-export default function SongListSection({selectedSongs}) {
+export default function SongListSection({selectedSongs, songlistId}) {
   const [fullSongList, setFullSongList] = React.useState({});
   const [showDetails, setShowDetails] = React.useState(false);
   React.useEffect(() => {
-    axios.get("/songs").then((response) => {
+    axios.get(`/songs?id=${songlistId}`).then((response) => {
       setFullSongList(response.data);
     });
   }, []);

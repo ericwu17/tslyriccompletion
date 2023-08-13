@@ -131,7 +131,7 @@ export default function GameDetails() {
             </TableRow>
           </TableBody>
         </Table>
-        <SongListSection selectedSongs={game.selected_songs}/>
+        <SongListSection selectedSongs={game.selected_songs} songlistId={game.songlist_id}/>
       </Box>
 
       <Box display="flex" flexDirection="column" gap={1}>

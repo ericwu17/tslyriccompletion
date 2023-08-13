@@ -4,6 +4,8 @@ use serde::Serialize;
 use rocket::State;
 use sqlx::{Pool, MySql, FromRow};
 
+use crate::history::{SonglistSchema, Songlist};
+
 #[derive(Debug, Clone, Serialize, PartialEq)]
 pub struct Song {
 	pub album: String,
@@ -179,6 +181,44 @@ pub fn get_song_list(songs: &State<Vec<Song>>) -> String {
 			s.insert(song.album.clone(), v);
 		} else {
 			s.insert(song.album.clone(), vec![song.name.clone()]);
+		}
+	}
+
+	serde_json::to_string(&s).unwrap()
+}
+
+#[get("/songs?<id>")]
+pub async fn get_song_list_with_id(id: i32, pool: &rocket::State<Pool<MySql>>) -> String {
+
+	let result: Vec<SonglistSchema> = sqlx::query_as("SELECT * FROM songlists WHERE id LIKE ?")
+		.bind(id)
+		.fetch_all(pool.inner())
+		.await.unwrap();
+
+	if result.is_empty() {
+		return "{}".to_string();
+	}
+
+	let songlists: Vec<Songlist> = result.into_iter()
+		.map(|songlist| Songlist{
+			id: songlist.id,
+			sha1sum: songlist.sha1sum,
+			
+			// We are serializing and then immediately deserializing because I can't figure out
+			// how to convert the type from Json<Vec<(String, String)>> to Vec<(String, String)>
+			content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap()).unwrap(),
+		}).collect();
+	
+	let songs = &songlists.get(0).unwrap().content;
+
+	let mut s: HashMap<String, Vec<String>> = HashMap::new();
+	for (album, name) in songs.iter() {
+		if let Some(v) = s.get(album) {
+			let mut v = v.clone();
+			v.push(name.clone());
+			s.insert(album.clone(), v);
+		} else {
+			s.insert(album.clone(), vec![name.clone()]);
 		}
 	}
 
