@@ -24,7 +24,7 @@ use game::{GameState,
 use history::{get_games, get_game};
 use history::line_history::get_line;
 use std::sync::{Arc, Mutex};
-use song::{get_song, get_song_list, get_song_list_with_id};
+use song::{get_song, get_song_list, get_song_list_with_id, get_all_songlists};
 
 
 #[macro_use] extern crate rocket;
@@ -63,6 +63,7 @@ async fn main() -> Result<(), rocket::Error> {
 		.mount("/", routes![index])
 		.mount("/", routes![get_song_list])
 		.mount("/", routes![get_song_list_with_id])
+		.mount("/", routes![get_all_songlists])
 		.mount("/", routes![get_song])
 		.mount("/", routes![init_game])
 		.mount("/", routes![game_lifelines])

@@ -225,6 +225,32 @@ pub async fn get_song_list_with_id(id: i32, pool: &rocket::State<Pool<MySql>>) -
 	serde_json::to_string(&s).unwrap()
 }
 
+#[get("/all_songlists")]
+pub async fn get_all_songlists(pool: &rocket::State<Pool<MySql>>) -> String {
+
+	let all_songlists: Vec<SonglistSchema> = sqlx::query_as("SELECT * FROM songlists")
+		.fetch_all(pool.inner())
+		.await.unwrap();
+	let all_songlists: Vec<Songlist> = all_songlists.into_iter()
+		.map(|songlist| Songlist{
+			id: songlist.id,
+			sha1sum: songlist.sha1sum,
+			
+			// We are serializing and then immediately deserializing because I can't figure out
+			// how to convert the type from Json<Vec<(String, String)>> to Vec<(String, String)>
+			content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap()).unwrap(),
+		}).collect();
+
+	let mut result: HashMap<i32, &Vec<(String, String)>> = HashMap::new();
+	
+	
+	for songlist in all_songlists.iter() {
+		result.insert(songlist.id, &songlist.content);
+	}
+
+	serde_json::to_string(&result).unwrap()
+}
+
 #[derive(FromRow, Debug)]
 struct Count {
 	total: i32,
