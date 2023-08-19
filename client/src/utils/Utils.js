@@ -11,7 +11,7 @@ export const ALBUM_ORDER = [
 export const ALBUM_LOGOS = {
   "Taylor Swift": "https://i.scdn.co/image/ab67616d00001e022f8c0fd72a80a93f8c53b96c",
   "Fearless": "https://i.scdn.co/image/ab67616d00001e02a48964b5d9a3d6968ae3e0de",
-  "Speak Now": "https://i.scdn.co/image/ab67616d00001e02e11a75a2f2ff39cec788a015",
+  "Speak Now": "https://i.scdn.co/image/ab67616d0000b2730b04da4f224b51ff86e0a481",
   "Red": "https://i.scdn.co/image/ab67616d00001e02318443aab3531a0558e79a4d",
   "1989": "https://i.scdn.co/image/ab67616d00001e02332d85510aba3eb28312cfb2",
   "reputation": "https://i.scdn.co/image/ab67616d00001e02da5d5aeeabacacc1263c0f4b",
