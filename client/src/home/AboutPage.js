@@ -28,6 +28,16 @@ export default function AboutPage() {
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Recent Changes
       </Typography>
+
+      <Typography>
+        2023-08-19: You can now copy a list of your selected songs on the start game page.
+        This list can be later used to restore your song selection.
+      </Typography>
+      <Typography>
+        2023-08-19: Pressing Enter on the start game page now does nothing. Pressing the
+        "Start Game" button in the navbar will also do nothing (but will not clear your selection
+        of songs).
+      </Typography>
       <Typography>
         2023-07-08: Added Speak Now From The Vault songs!
       </Typography>

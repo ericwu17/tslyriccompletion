@@ -1,7 +1,11 @@
 import React from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { Checkbox, Box, Grid, Button, Typography, Paper, Link } from "@mui/material";
+import {
+  Checkbox, Box, Grid, Button,
+  Typography, Paper, Link, Alert, Snackbar,
+  Dialog, DialogTitle, DialogActions, DialogContent, TextField
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import GameStateDisplay from "./GameStateDisplay";
 import { ALBUM_LOGOS, ALBUM_ORDER, generateSongHref, getAlbumChipWidth } from "../utils/Utils";
@@ -19,7 +23,6 @@ export default function Game() {
   const [hasStarted, setHasStarted] = React.useState(false);
   const [gameState, setGameState] = React.useState({});
   const [songList, setSongList] = React.useState({});
-  const [flag, setFlag] = React.useState(0);
   const albumChipWidth = getAlbumChipWidth();
 
   const beginGame = () => {
@@ -95,39 +98,6 @@ export default function Game() {
     }
   }, []);
 
-  React.useEffect(() => {
-    const keyDownHandler = event => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        // For some reason, if I call the function beginGame()
-        // right here, it does not properly capture the current songList
-        // (songList will be {} inside the function)
-        // Hence I change an integer flag, and observe
-        // changes to the flag in another useEffect.
-        setFlag(17);
-        document.removeEventListener("keydown", keyDownHandler);
-      }
-    };
-    if (!hasStarted) {
-      document.addEventListener("keydown", keyDownHandler);
-      setFlag(0);
-    } else {
-      document.removeEventListener("keydown", keyDownHandler);
-    }
-
-    return () => {
-      document.removeEventListener("keydown", keyDownHandler);
-    };
-  }, [hasStarted]);
-
-  React.useEffect(() => {
-    if (flag === 17) {
-      // eslint-disable-next-line no-console
-      console.log("calling beginGame due to Enter being pressed!");
-      beginGame();
-    }
-  }, [flag]);
-
 
   if (!hasStarted) {
     return (
@@ -137,7 +107,7 @@ export default function Game() {
         </Typography>
         <Typography variant="body1">
           Select which songs you want to be quizzed on using the checkbox menu below.
-          When you're ready, click "Begin"! (or press the enter key)
+          When you're ready, click "Begin"!
         </Typography>
         <Box sx={{width: "max-content", border: "2px solid green"}}>
           <Button onClick={beginGame} size="large">
@@ -167,6 +137,8 @@ function SongSelection({songList, setSongList, albumChipWidth}) {
     setSongList({...songList, [album]: {...songList[album], [song]: !currentStatus}});
   };
 
+  const [snackBarIsOpen, setSnackBarIsOpen] = React.useState(false);
+  const [importDialogOpen, setImportDialogOpen] = React.useState(false);
 
   const hasAllSelected = album => {
     if (!songList[album]) {
@@ -222,10 +194,44 @@ function SongSelection({songList, setSongList, albumChipWidth}) {
     setSongList(newSongList);
   };
 
+  const copySelectedToClipboard = () => {
+    const selectedSongString = getSelectedSongString(songList);
+    navigator.clipboard.writeText(selectedSongString);
+    setSnackBarIsOpen(true);
+  };
+
   return (
     <Box sx={{ width: "100%" }}>
-      <Button onClick={toggleAll}>{isAllSongsSelected ? "Deselect" : "Select"} all</Button>
-      <Button onClick={invertSelection}>Invert Selection</Button>
+      <Box onClick={copySelectedToClipboard}>
+        <Button>Copy selected songs to clipboard</Button>
+      </Box>
+      <Box>
+        <Button onClick={() => setImportDialogOpen(true)}>Import selection</Button>
+      </Box>
+      <Snackbar
+        open={snackBarIsOpen}
+        autoHideDuration={6000}
+        sx={{ border: "2px solid black" }}
+        onClose={() => setSnackBarIsOpen(false)}
+      >
+        <Alert
+          severity="success"
+          sx={{ width: "100%" }}
+          onClose={() => setSnackBarIsOpen(false)}
+        >
+          Successfully copied to clipboard
+        </Alert>
+      </Snackbar>
+      <ImportSongStringDialog
+        open={importDialogOpen}
+        onClose={() => setImportDialogOpen(false)}
+        setSongList={setSongList}
+        songList={songList}
+      />
+      <Box>
+        <Button onClick={toggleAll}>{isAllSongsSelected ? "Deselect" : "Select"} all</Button>
+        <Button onClick={invertSelection}>Invert Selection</Button>
+      </Box>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         {ALBUM_ORDER.map(album => {
           let songs = songList[album];
@@ -277,3 +283,61 @@ function SongSelection({songList, setSongList, albumChipWidth}) {
   );
 }
 
+function getSelectedSongString(songList) {
+  var result = [];
+  for (let album of ALBUM_ORDER) {
+    for (let song of Object.keys(songList[album])) {
+      if (songList[album][song]) {
+        result.push(song);
+      }
+    }
+  }
+
+  const resultString = result.join("\n");
+  return resultString;
+}
+
+
+
+
+
+function ImportSongStringDialog({open, onClose, setSongList, songList}) {
+  const [currInputStr, setCurrInputStr] = React.useState("");
+
+  const handleCloseDialog = () => {
+    const selectedSongsArr = currInputStr.split("\n");
+    for (let album of ALBUM_ORDER) {
+      for (let song of Object.keys(songList[album])) {
+        songList[album][song] = selectedSongsArr.includes(song);
+      }
+    }
+    setSongList(songList);
+
+    onClose();
+  };
+
+  return (
+    <Dialog
+      onClose={handleCloseDialog}
+      open={open}
+    >
+      <DialogTitle id="customized-dialog-title" onClose={handleCloseDialog}>
+        Please paste selected songs here
+      </DialogTitle>
+      <DialogContent dividers>
+        <TextField
+          style={{textAlign: "left"}}
+          size="small"
+          multiline
+          onChange={event => setCurrInputStr(event.target.value)}
+          value={currInputStr}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCloseDialog}>
+          Save Changes
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}

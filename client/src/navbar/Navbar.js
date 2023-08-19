@@ -70,10 +70,9 @@ export default function Navbar() {
 
   const onClickStartGame = () => {
     if (window.location.pathname != PLAY_URL) {
-      window.location.pathname=PLAY_URL;
+      window.location.href=PLAY_URL;
     } else {
-      // will begin the game if the user clicks start game
-      document.dispatchEvent(new KeyboardEvent("keydown", {"key": "Enter"}));
+      // will not refresh page if the user clicks start game when already at start game page
     }
   };
 
