@@ -23,6 +23,7 @@ export default function Game() {
   const [hasStarted, setHasStarted] = React.useState(false);
   const [gameState, setGameState] = React.useState({});
   const [songList, setSongList] = React.useState({});
+  const [orderedSongList, setOrderedSongList] = React.useState({});
   const albumChipWidth = getAlbumChipWidth();
 
   const beginGame = () => {
@@ -49,6 +50,7 @@ export default function Game() {
 
   React.useEffect(() => {
     axios.get("/songs").then((response) => {
+      setOrderedSongList(JSON.parse(JSON.stringify(response.data)));
       let songs = response.data;
       for (let album of Object.keys(songs)) {
         const names = [...songs[album]];
@@ -117,6 +119,7 @@ export default function Game() {
         <SongSelection
           songList={songList}
           setSongList={setSongList}
+          orderedSongList={orderedSongList}
           albumChipWidth={albumChipWidth}
         />
       </Box>
@@ -130,7 +133,7 @@ export default function Game() {
   }
 }
 
-function SongSelection({songList, setSongList, albumChipWidth}) {
+function SongSelection({songList, setSongList, orderedSongList, albumChipWidth}) {
 
   const toggleSong = (album, song) => {
     const currentStatus = songList[album][song];
@@ -195,7 +198,7 @@ function SongSelection({songList, setSongList, albumChipWidth}) {
   };
 
   const copySelectedToClipboard = () => {
-    const selectedSongString = getSelectedSongString(songList);
+    const selectedSongString = getSelectedSongString(songList, orderedSongList);
     navigator.clipboard.writeText(selectedSongString);
     setSnackBarIsOpen(true);
   };
@@ -256,7 +259,7 @@ function SongSelection({songList, setSongList, albumChipWidth}) {
                     ml={1}
                   />
                 </Box>
-                {songs && Object.keys(songs).map((song, index) =>
+                {songs && orderedSongList[album].map((song, index) =>
                   <Box
                     display="flex"
                     flexDirection="row"
@@ -285,10 +288,10 @@ function SongSelection({songList, setSongList, albumChipWidth}) {
   );
 }
 
-function getSelectedSongString(songList) {
+function getSelectedSongString(songList, orderedSongList) {
   var result = [];
   for (let album of ALBUM_ORDER) {
-    for (let song of Object.keys(songList[album])) {
+    for (let song of orderedSongList[album]) {
       if (songList[album][song]) {
         result.push(song);
       }
