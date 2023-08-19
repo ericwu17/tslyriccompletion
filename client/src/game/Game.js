@@ -202,8 +202,10 @@ function SongSelection({songList, setSongList, albumChipWidth}) {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box onClick={copySelectedToClipboard}>
-        <Button>Copy selected songs to clipboard</Button>
+      <Box>
+        <Button onClick={copySelectedToClipboard}>
+          Copy selected songs to clipboard
+        </Button>
       </Box>
       <Box>
         <Button onClick={() => setImportDialogOpen(true)}>Import selection</Button>

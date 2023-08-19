@@ -1,5 +1,8 @@
 import React from "react";
-import { Box, Grid, Typography, Link, CircularProgress, Checkbox, Button } from "@mui/material";
+import {
+  Box, Grid, Typography, Link, CircularProgress,
+  Checkbox, Button, Snackbar, Alert
+} from "@mui/material";
 import axios from "axios";
 import { ALBUM_ORDER, ALBUM_LOGOS, getAlbumChipWidth, generateSongHref } from "../utils/Utils";
 import { Item } from "../song/SongPage";
@@ -8,6 +11,8 @@ import { Item } from "../song/SongPage";
 export default function SongListSection({selectedSongs, songlistId}) {
   const [fullSongList, setFullSongList] = React.useState({});
   const [showDetails, setShowDetails] = React.useState(false);
+  const [snackBarIsOpen, setSnackBarIsOpen] = React.useState(false);
+
   React.useEffect(() => {
     axios.get(`/songs?id=${songlistId}`).then((response) => {
       setFullSongList(response.data);
@@ -23,6 +28,20 @@ export default function SongListSection({selectedSongs, songlistId}) {
     );
   }
 
+  const copySelectedToClipboard = () => {
+    const selectedSongArr = [];
+
+    for (let album of ALBUM_ORDER) {
+      selectedSongs
+        .filter(song => song[0] == album)
+        .forEach(song => selectedSongArr.push(song[1]));
+    }
+
+    const selectedSongString = selectedSongArr.join("\n");
+    navigator.clipboard.writeText(selectedSongString);
+    setSnackBarIsOpen(true);
+  };
+
   return (
     <>
       <Box mt={1} mb={1}>
@@ -32,10 +51,31 @@ export default function SongListSection({selectedSongs, songlistId}) {
           </strong>
         </Typography>
       </Box>
-      <Box mb={1}>
-        <Button onClick={() => setShowDetails(!showDetails)} variant="contained">
-          {showDetails? "Hide" : "Show"} Details
-        </Button>
+      <Box mb={1} display="flex" flexDirection="row">
+        <Box mx={1}>
+          <Button onClick={() => setShowDetails(!showDetails)} variant="contained">
+            {showDetails? "Hide" : "Show"} Details
+          </Button>
+        </Box>
+        <Box mx={1}>
+          <Button onClick={copySelectedToClipboard} variant="contained">
+            Copy selected songs to clipboard
+          </Button>
+        </Box>
+        <Snackbar
+          open={snackBarIsOpen}
+          autoHideDuration={6000}
+          sx={{ border: "2px solid black" }}
+          onClose={() => setSnackBarIsOpen(false)}
+        >
+          <Alert
+            severity="success"
+            sx={{ width: "100%" }}
+            onClose={() => setSnackBarIsOpen(false)}
+          >
+            Successfully copied to clipboard
+          </Alert>
+        </Snackbar>
       </Box>
 
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
