@@ -121,6 +121,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
           <TextField
             onChange={event => setCurrentGuess(event.target.value)}
             onKeyDown={onKeyDown}
+            placeholder="Enter your guess here..."
             value={currentGuess}
             sx={{width: "100%"}}
           />
