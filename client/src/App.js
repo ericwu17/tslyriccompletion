@@ -11,6 +11,7 @@ import GameDetails from "./history/GameDetails";
 import MechanicsPage from "./home/Mechanics";
 import GuessHistory from "./history/GuessHistory";
 import { Footer } from "./navbar/Footer";
+import { Typography, Link } from "@mui/material";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/history/game" element={<GameDetails />} />
             <Route path="/history/guess" element={<GuessHistory />} />
+            <Route path="/tswift/*"  element={<RedirectPage />}/>
             <Route path=":any/*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
@@ -43,5 +45,20 @@ function App() {
     </Box>
   );
 }
+
+function RedirectPage() {
+  window.location.replace("https://tslyriccompletion.com");
+
+  return (
+    <Typography>
+      This page has moved to {}
+      <Link href="https://tslyriccompletion.com">
+        https://tslyriccompletion.com
+      </Link>.
+      Please click the link if you are not automatically redirected.
+    </Typography>
+  );
+}
+
 
 export default App;
