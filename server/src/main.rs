@@ -1,34 +1,28 @@
-pub mod loader;
-pub mod song;
-pub mod guess_generating;
-pub mod game;
 pub mod diff;
-pub mod lifelines;
+pub mod game;
+pub mod guess_generating;
 pub mod history;
+pub mod lifelines;
+pub mod loader;
 pub mod loader_v2;
+pub mod song;
 
-use std::collections::HashMap;
 use crate::song::Song;
-use sqlx::mysql::MySqlPoolOptions;
 use dotenv::dotenv;
+use sqlx::mysql::MySqlPoolOptions;
+use std::collections::HashMap;
 
-
-use game::{GameState,
-	init_game,
-	game_lifelines,
-	reduce_multiple_choice,
-	next_question,
-	take_guess,
-	claim_game,
+use game::{
+    claim_game, game_lifelines, init_game, next_question, reduce_multiple_choice, take_guess,
+    GameState,
 };
-use history::{get_games, get_game};
 use history::line_history::get_line;
+use history::{get_game, get_games};
+use song::{get_all_songlists, get_song, get_song_list, get_song_list_with_id};
 use std::sync::{Arc, Mutex};
-use song::{get_song, get_song_list, get_song_list_with_id, get_all_songlists};
 
-
-#[macro_use] extern crate rocket;
-
+#[macro_use]
+extern crate rocket;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -37,73 +31,46 @@ fn index() -> &'static str {
 
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
-	std::env::set_var("RUST_BACKTRACE", "1");
-	dotenv().ok();
-	let db_user = std::env::var("DATABASE_USER").expect("DATABASE_USER must be set.");
-	let db_pw = std::env::var("DATABASE_PASSWORD").expect("DATABASE_PASSWORD must be set.");
-	
-	let songs: Vec<Song> = loader_v2::load_songs_from_files();
-	// test_new_loader();
-	let my_hashmap: HashMap<String, GameState> = HashMap::new();
-	let game_state = Arc::new(Mutex::new(my_hashmap));
+    std::env::set_var("RUST_BACKTRACE", "1");
+    dotenv().ok();
+    let db_user = std::env::var("DATABASE_USER").expect("DATABASE_USER must be set.");
+    let db_pw = std::env::var("DATABASE_PASSWORD").expect("DATABASE_PASSWORD must be set.");
 
-	let database_url = format!("mysql://{}:{}@localhost:3306/mydb", db_user, db_pw);
-	println!("Connecting to MySql Database...");
-	let pool = MySqlPoolOptions::new()
-		.max_connections(5)
-		.connect(&database_url)
-		.await
-		.expect("Failed to connect to database");
-	println!("Connection established!");
+    let songs: Vec<Song> = loader_v2::load_songs_from_files();
+    let my_hashmap: HashMap<String, GameState> = HashMap::new();
+    let game_state = Arc::new(Mutex::new(my_hashmap));
 
-	let rocket = rocket::build()
-		.manage(game_state)
-		.manage(songs)
-		.manage(pool)
-		.mount("/", routes![index])
-		.mount("/", routes![get_song_list])
-		.mount("/", routes![get_song_list_with_id])
-		.mount("/", routes![get_all_songlists])
-		.mount("/", routes![get_song])
-		.mount("/", routes![init_game])
-		.mount("/", routes![game_lifelines])
-		.mount("/", routes![reduce_multiple_choice])
-		.mount("/", routes![next_question])
-		.mount("/", routes![claim_game])
-		.mount("/", routes![take_guess])
-		.mount("/", routes![get_games])
-		.mount("/", routes![get_game])
-		.mount("/", routes![get_line])
-		.ignite().await?;
-	
-	let _ = rocket.launch().await?;
+    let database_url = format!("mysql://{}:{}@localhost:3306/mydb", db_user, db_pw);
+    println!("Connecting to MySql Database...");
+    let pool = MySqlPoolOptions::new()
+        .max_connections(5)
+        .connect(&database_url)
+        .await
+        .expect("Failed to connect to database");
+    println!("Connection established!");
 
-	Ok(())
-}
+    let rocket = rocket::build()
+        .manage(game_state)
+        .manage(songs)
+        .manage(pool)
+        .mount("/", routes![index])
+        .mount("/", routes![get_song_list])
+        .mount("/", routes![get_song_list_with_id])
+        .mount("/", routes![get_all_songlists])
+        .mount("/", routes![get_song])
+        .mount("/", routes![init_game])
+        .mount("/", routes![game_lifelines])
+        .mount("/", routes![reduce_multiple_choice])
+        .mount("/", routes![next_question])
+        .mount("/", routes![claim_game])
+        .mount("/", routes![take_guess])
+        .mount("/", routes![get_games])
+        .mount("/", routes![get_game])
+        .mount("/", routes![get_line])
+        .ignite()
+        .await?;
 
+    let _ = rocket.launch().await?;
 
-fn test_new_loader() {
-	// This function asserts that the two loaders generate exactly equal outputs
-
-	let songs1 = loader::load_songs_from_files();
-	let songs2 = loader_v2::load_songs_from_files();
-
-	for song in &songs2 {
-		if !songs1.contains(song) {
-			println!("The following song is extraneous:");
-			println!("{:?}", song);
-			panic!();
-		}
-	}
-
-	for song in &songs1 {
-		if !songs2.contains(song) {
-			println!("The following song is missing:");
-			println!("{:?}", song);
-			panic!();
-		}
-	}
-	println!("{} songs total", &songs2.len());
-	assert!(songs1 == songs2);
-	println!("Test passed for loader v2");
+    Ok(())
 }
