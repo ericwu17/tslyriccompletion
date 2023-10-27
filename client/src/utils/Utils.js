@@ -13,7 +13,7 @@ export const ALBUM_LOGOS = {
   "Fearless": "https://i.scdn.co/image/ab67616d00001e02a48964b5d9a3d6968ae3e0de",
   "Speak Now": "https://i.scdn.co/image/ab67616d0000b2730b04da4f224b51ff86e0a481",
   "Red": "https://i.scdn.co/image/ab67616d00001e02318443aab3531a0558e79a4d",
-  "1989": "https://i.scdn.co/image/ab67616d00001e02332d85510aba3eb28312cfb2",
+  "1989": "https://i.scdn.co/image/ab67616d0000b273612fb31cf6802a4704388cbf",
   "reputation": "https://i.scdn.co/image/ab67616d00001e02da5d5aeeabacacc1263c0f4b",
   "Lover": "https://i.scdn.co/image/ab67616d00001e02e787cffec20aa2a396a61647",
   "folklore": "https://i.scdn.co/image/ab67616d00001e02c288028c2592f400dd0b9233",
