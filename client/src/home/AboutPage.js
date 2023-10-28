@@ -30,6 +30,9 @@ export default function AboutPage() {
       </Typography>
 
       <Typography>
+        2023-10-27: Added 1989 songs from the vault!
+      </Typography>
+      <Typography>
         2023-08-19: You can now copy a list of your selected songs on the start game page.
         This list can be later used to restore your song selection.
       </Typography>
