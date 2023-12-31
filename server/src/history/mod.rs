@@ -1,12 +1,13 @@
+//! Allows users to view guess details and score summaries of past games.
+
 use rocket::time::format_description;
 use serde::Deserialize;
 use serde::Serialize;
-use std::collections::HashMap;
-
 use sqlx::{
     types::{time::PrimitiveDateTime, Json},
     MySql, Pool,
 };
+use std::collections::HashMap;
 
 pub mod line_history;
 
@@ -22,8 +23,8 @@ pub struct GameSchema {
     pub num_guesses: i32,
 }
 
+/// Represents the summary of a past game.
 #[derive(Debug, Serialize)]
-
 pub struct Game {
     pub uuid: String,
     pub start_time: String,
@@ -42,13 +43,19 @@ pub struct SonglistSchema {
     pub content: Json<Vec<(String, String)>>,
 }
 
+/// Represents a list of songs available at a particular point in time.
+/// Any game will draw a subset of songs from a particular `Songlist`.
+/// For example, there's a songlist that contains every album released before Midnights.
 #[derive(Debug, Deserialize)]
 pub struct Songlist {
+    /// `id` is used in a game to indicate which `SongList` is used
     pub id: i32,
     pub sha1sum: String,
     pub content: Vec<(String, String)>,
 }
 
+/// API endpoint to get all past games, with various filtering options.
+/// Results are paginated.
 #[get("/history/all?<sort>&<search>&<limit>&<include_nameless>&<page_num>")]
 pub async fn get_games(
     pool: &rocket::State<Pool<MySql>>,
@@ -187,6 +194,7 @@ pub struct GuessSchema {
     submit_time: PrimitiveDateTime,
 }
 
+/// Represents a single guess within a [`Game`]
 #[derive(Serialize)]
 pub struct Guess {
     game_uuid: String,
@@ -231,20 +239,22 @@ impl Guess {
     }
 }
 
+/// A game with a list of guesses
 #[derive(Serialize)]
 struct GameWithGuesses {
     game: Game,
     guesses: Vec<Guess>,
 }
 
+/// Get selected selected songs in the form of (album, song_name) from a set of boolean arrays.
+///
+/// `full_songlist` represents the list of all possible songs at the time of the selection.
+/// `selectedSongs` is a hashmap where each key is an album, and the k-th boolean in the vector indicates whether
+/// the k-th song of the album was included (true means included).
 fn get_songs(
     full_songlist: Vec<(String, String)>,
     selected_songs: HashMap<String, Vec<bool>>,
 ) -> Vec<(String, String)> {
-    // full_songlist represents the list of all possible songs at the time of the selection.
-    // selectedSongs is a hashmap where each key is an album, and the k-th boolean in the vector indicates whether
-    // the k-th song of the album was included. (true means included)
-
     let mut songs: Vec<(String, String)> = Vec::new();
 
     let mut album_order = full_songlist
@@ -268,6 +278,7 @@ fn get_songs(
     songs
 }
 
+/// API endpoint for getting information about a game along with history of each guess
 #[get("/history/game?<id>")]
 pub async fn get_game(pool: &rocket::State<Pool<MySql>>, id: String) -> String {
     let songlists: Vec<SonglistSchema> = sqlx::query_as("SELECT * from songlists")

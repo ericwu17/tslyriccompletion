@@ -16,9 +16,14 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use uuid::Uuid;
 
+/// If a guess's dist is greater than `MAX_ACCEPTABLE_DIST` from the answer, then the game ends.
 const MAX_ACCEPTABLE_DIST: usize = 13;
+/// A bonus is awarded the guess matches the answer perfectly.
 const POINTS_FOR_PERFECT_MATCH: i32 = 26;
 
+/// An enum representing a shown hint.
+/// The `Skip` variant is classified as a hint, even though it isn't really a hint,
+/// more of a lifeline.
 #[derive(Serialize, Clone, PartialEq, Eq, Debug)]
 pub enum Hint {
     ShowTitle(String),
@@ -39,19 +44,33 @@ impl Hint {
     }
 }
 
+/// A struct representing the current state of a single game in progress.
 #[derive(Clone, Debug)]
 pub struct GameState {
+    /// The player's current score.
     score: i32,
+    /// The number of total guesses made so far.
     guesses_made: i32,
+    /// The current question shown to the player.
     current_question: Question,
+    /// The player's currently available lifelines.
     lifeline_inv: LifelineInventory,
+    /// A collection of the hints shown to the player for the current question.
+    /// This vector gets reset to an empty vec when the player moves on to the next question.
     hints_shown: Vec<Hint>,
+    /// A vector of answer choices, or empty if the current question is not in multiple-choice mode.
     choices: Vec<String>,
+    /// True if the game has ended.
     terminated: bool,
+    /// True if the question has been completed but the next question has not been requested.
     completed_question: bool,
+    /// A vector of songs included in the game. The (String, String) pairs are
+    /// (Album_name, Song_name) pairs.
     included_songs: Vec<(String, String)>,
 }
 
+/// A struct related to [`GameState`]
+/// Used in responses to the player, while [`GameState`] is used by the server to store internal state.
 #[derive(Serialize)]
 pub struct GameStatePublic {
     id: String,
@@ -66,6 +85,9 @@ pub struct GameStatePublic {
     completed_question: bool,
 }
 
+/// A struct representing a string with "flags".
+/// Flags are used to set the color of each character in the string.
+/// This is used when displaying the diffed output of guess vs actual.
 #[derive(Serialize)]
 pub struct FlaggedString {
     flags: Vec<i32>,
@@ -80,25 +102,33 @@ impl FlaggedString {
     }
 }
 
+/// A struct representing a result of a player's guess.
 #[derive(Serialize)]
 pub enum GuessResult {
+    /// Asking for more. Used when the player's guess is on the right track but too short.
+    /// In this case, we tell the player the target_length.
     AFM {
-        // asking for more. Used when the user's guess is on the right track but too short.
         target_length: usize,
         guess_length: usize,
     },
+    /// A correct response. We tell the player how many points they earned, as well as
+    /// a diffed comparison of their answer vs the correct answer.
+    /// We also tell them which new lifeline they earned, if any.
     Correct {
         points_earned: i32,
         user_guess: FlaggedString,
         answer: FlaggedString,
         new_lifeline: Option<Lifeline>,
     },
+    /// An incorrect answer.
     Incorrect {
         user_guess: FlaggedString,
         answer: FlaggedString,
     },
 }
 
+/// This is a combination of a [`GuessResult`] and a [`GameState`] sent back to the player
+/// after each guess.
 #[derive(Serialize)]
 pub struct GuessResultPublic {
     guess_res: GuessResult,
@@ -106,10 +136,12 @@ pub struct GuessResultPublic {
 }
 
 impl GameState {
+    /// Create a new GameState, representing a game played with a subset of songs in `songs_to_include`
+    ///
+    /// This function will modify the argument `songs_to_include`, so that if it's the empty vector,
+    /// it will end up containing all songs in songs. It will also filter out any
+    /// invalid songs in `songs_to_include`.
     pub fn new(songs: &[Song], songs_to_include: &mut Vec<(String, String)>) -> Self {
-        // This function will modify songs_to_include, so that if it's the empty vector,
-        // it will end up containing all songs in songs. It will also filter out any
-        // invalid songs.
         let mut actual_songs_to_include: Vec<(String, String)> = songs_to_include
             .clone()
             .into_iter()
@@ -141,20 +173,13 @@ impl GameState {
         }
     }
 
+    /// convert a [`GameState`] into a [`GameStatePublic`], with the answer hidden.
+    /// since the GameState does not have a UUID, it must be provided.
     pub fn into_public(&self, id: String) -> GameStatePublic {
         GameStatePublic {
             score: self.score,
             guesses_made: self.guesses_made,
-            current_question: Question {
-                song: Song {
-                    album: String::new(),
-                    name: String::new(),
-                    lyrics_raw: String::new(),
-                    lines: vec![],
-                },
-                shown_line: self.current_question.shown_line.clone(),
-                answer: String::new(),
-            },
+            current_question: self.current_question.hide_answer_and_song(),
             lifeline_inv: self.lifeline_inv.clone(),
             hints_shown: self.hints_shown.clone(),
             choices: self.choices.clone(),
@@ -164,6 +189,9 @@ impl GameState {
             completed_question: self.completed_question,
         }
     }
+
+    /// convert a [`GameState`] into a [`GameStatePublic`], with the answer shown.
+    /// since the GameState does not have a UUID, it must be provided.
     pub fn into_public_with_answers(&self, id: String) -> GameStatePublic {
         GameStatePublic {
             score: self.score,
@@ -179,6 +207,7 @@ impl GameState {
         }
     }
 
+    /// returns whether a lifeline `lifeline` has been used in the current question
     pub fn has_used_lifeline(&self, lifeline: Lifeline) -> bool {
         match lifeline {
             Lifeline::ShowPrevLines => {
@@ -207,12 +236,9 @@ impl GameState {
             }
         }
     }
-
-    pub fn increment_score(&mut self) {
-        self.score += 1;
-    }
 }
 
+/// API endpoint to start a new game.
 #[post(
     "/game/start",
     format = "application/json",
@@ -316,6 +342,7 @@ pub async fn init_game(
     serde_json::to_string(&new_game_state.into_public(uuid.clone())).unwrap()
 }
 
+/// API endpoint to use a lifeline specified by `lifeline`.
 #[get("/game/use-lifeline?<id>&<lifeline>")]
 pub async fn game_lifelines(
     game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>,
@@ -414,6 +441,8 @@ pub async fn game_lifelines(
     serde_json::to_string(&res.into_public_with_answers(id.clone())).unwrap()
 }
 
+/// API endpoint to turn the current question into multiple choice.
+/// Returns the new [`GameState`]
 #[get("/game/reduce-multiple-choice?<id>")]
 pub fn reduce_multiple_choice(
     game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>,
@@ -440,6 +469,8 @@ pub fn reduce_multiple_choice(
     "{}".to_owned()
 }
 
+/// API endpoint to advance to the next question. Does nothing if the current question is not completed.
+/// Returns the new [`GameState`]
 #[get("/game/next?<id>")]
 pub fn next_question(
     game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>,
@@ -466,6 +497,9 @@ pub fn next_question(
     "{}".to_owned()
 }
 
+/// API endpoint to claim a game
+/// When a game first ends after an incorrect response, the game is "unclaimed", and so the player name
+/// will be NULL in the database. If the player enters their name, this API endpoint will be called.
 #[get("/game/claim?<id>&<name>")]
 pub async fn claim_game(id: String, name: String, pool: &rocket::State<Pool<MySql>>) -> String {
     let _ = sqlx::query(
@@ -484,6 +518,7 @@ pub async fn claim_game(id: String, name: String, pool: &rocket::State<Pool<MySq
     "{}".to_owned()
 }
 
+/// Submit a guess for a game.
 #[get("/game/submit-guess?<id>&<guess>")]
 pub async fn take_guess(
     game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>,
@@ -652,6 +687,9 @@ pub async fn take_guess(
     serde_json::to_string(&guess_res).unwrap()
 }
 
+/// Calculate the diff flags for `guess` and `answer`,
+/// for a given truncation amount to `guess` known to be the amount which minimizes their distance.
+/// (see function [`optimal_truncated_dist`])
 fn get_flags(
     guess: &str,
     answer: &str,
@@ -703,6 +741,12 @@ fn get_flags(
     )
 }
 
+/// whether `guess` is on the right track to `answer`. If a guess is on the right track,
+/// then the player will be prompted to guess again without penalty.
+///
+/// Note that as implemented, the guess "owuefh" is on the right track to any guess, since
+/// the after truncation of answer, the distance of truncated answer and guess will not exceed
+/// `MAX_ACCEPTABLE_DIST`.
 pub fn is_on_right_track(guess: &str, answer: &str) -> bool {
     let (_, dist) = optimal_truncated_dist(answer, guess);
     dist <= MAX_ACCEPTABLE_DIST

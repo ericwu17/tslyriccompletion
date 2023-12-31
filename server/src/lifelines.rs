@@ -3,6 +3,7 @@ use rand::prelude::*;
 use serde::Serialize;
 use std::fmt;
 
+/// An enum representing one of three possible lifelines.
 #[derive(Serialize, Clone)]
 pub enum Lifeline {
     ShowTitleAlbum,
@@ -30,6 +31,7 @@ impl Lifeline {
     }
 }
 
+/// A struct representing how many of each lifeline a player has available.
 #[derive(Serialize, Clone, Debug)]
 pub struct LifelineInventory {
     show_title_album: i32,

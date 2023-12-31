@@ -4,6 +4,12 @@ use rand::seq::SliceRandom;
 use rand::Rng;
 use serde::Serialize;
 
+/// If there are 16 distractors, then there are 17 answer choices in total.
+const NUM_DISTRACTORS: i32 = 16;
+
+/// A struct representing a question asked to the player.
+/// The field `answer` is the correct answer, and the field `song` is the song that the question
+/// comes from, so these fields should be hidden from the user until the question is answered.
 #[derive(Debug, Clone, Serialize)]
 pub struct Question {
     pub shown_line: String,
@@ -11,10 +17,32 @@ pub struct Question {
     pub answer: String,
 }
 
+impl Question {
+    /// Hides `answer` and `song`
+    pub fn hide_answer_and_song(&self) -> Question {
+        Question {
+            shown_line: self.shown_line.clone(),
+            song: Song {
+                album: String::new(),
+                name: String::new(),
+                lyrics_raw: String::new(),
+                lines: vec![],
+            },
+            answer: String::new(),
+        }
+    }
+}
+
+/// case insensitive edit distance
 fn lowercase_edit_dist(a: &str, b: &str) -> usize {
     edit_distance(&a.to_lowercase(), &b.to_lowercase())
 }
 
+/// Generate the optimal truncation amount `x` of `l1` to minimize the edit distance between strings
+/// `l1[..(l1.len() - x)]` and `l2`.
+///
+/// This function is needed because for each guess a player submits, we calculate the optimal truncation
+/// amount, with the motivation being not to punish players who enter too much text.
 pub fn optimal_truncated_dist(l1: &str, l2: &str) -> (i32, usize) {
     // first we will see how many characters we can truncate from the end of the guess to minimize lowercase_edit_dist(userGuess, answer)
 
@@ -36,7 +64,7 @@ pub fn optimal_truncated_dist(l1: &str, l2: &str) -> (i32, usize) {
     (optimal_k, minimal_dist)
 }
 
-pub fn are_close_enough(s1: &str, s2: &str) -> bool {
+fn are_close_enough(s1: &str, s2: &str) -> bool {
     (edit_distance(s1, s2) as f32 / std::cmp::min(s1.chars().count(), s2.chars().count()) as f32)
         < 0.1_f32
 }
@@ -45,9 +73,11 @@ fn is_acceptable_guess(guess: &Line) -> bool {
     !guess.has_bad_successor && !guess.has_multiple_successors && !guess.is_exclamatory
 }
 
+/// Generates distractor answer choices for a multiple choice question, while ensuring that
+/// the distractors are not too close to the correct answer
+///
 pub fn pick_distractors(correct_answer: &str, songs: &Vec<Song>) -> Vec<String> {
-    const NUM_DISTRACTORS: i32 = 16;
-    let mut distractors: Vec<String> = vec![];
+    let mut distractors = Vec::new();
     for _ in 0..NUM_DISTRACTORS {
         let random_song = songs.choose(&mut rand::thread_rng()).unwrap();
         let mut random_line = random_song
@@ -75,6 +105,7 @@ pub fn pick_distractors(correct_answer: &str, songs: &Vec<Song>) -> Vec<String> 
     distractors
 }
 
+/// Pick a random question from `songs_to_include`
 pub fn pick_random_guess(songs: &[Song], songs_to_include: &[(String, String)]) -> Question {
     let songs: Vec<Song> = songs
         .iter()

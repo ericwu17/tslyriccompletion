@@ -1,32 +1,32 @@
-// This code was copied from https://github.com/justinbarclay/diff
-// Thanks to Justin for implementing the Myers Diff Algorithm.
+//! This code was copied from [https://github.com/justinbarclay/diff](https://github.com/justinbarclay/diff).
+//! Thanks to Justin for implementing the Myers Diff Algorithm.
+//!
+//! An implementation of the greedy version of the Myers Diff Algorithm for Rust.
+//! The Algorithm can be described as such:
+//! Constant MAX ∈ [0,M+N]
+//! Var V: Array [− MAX .. MAX] of Integer
+//! 1. V\[1\] ← 0
+//! 2. For D ← 0 to MAX Do
+//! 3. For k ← −D to D in steps of 2 Do
+//! 4. If k = −D or k ≠ D and V[k − 1] < V[k + 1] Then
+//! 5. x ← V[k + 1]
+//! 6. Else
+//! 7. x ← V[k − 1]+1
+//! 8. y ← x − k
+//! 9. While x < N and y < M and a x + 1 = by + 1 Do (x,y) ← (x+1,y+1)
+//! 10. V\[k\] ← x
+//! 11. If x ≥ N and y ≥ M Then
+//! 12. Length of an SES is D
+//! 13. Stop
+//! 14. Length of an SES is greater than MAX
+//! The full explanation of the algorithm can be found here:time
+//! <http://www.xmailserver.org/diff2.pdf>
 mod negative_array;
 
 use negative_array::NegativeArray;
 
 use std::collections::HashMap;
 use std::fmt;
-
-/// An implementation of the greedy version of the Myers Diff Algorithm for Rust.
-/// The Algorithm can be described as such:
-/// Constant MAX ∈ [0,M+N]
-/// Var V: Array [− MAX .. MAX] of Integer
-/// 1. V[1] ← 0
-/// 2. For D ← 0 to MAX Do
-/// 3. For k ← −D to D in steps of 2 Do
-/// 4. If k = −D or k ≠ D and V[k − 1] < V[k + 1] Then
-/// 5. x ← V[k + 1]
-/// 6. Else
-/// 7. x ← V[k − 1]+1
-/// 8. y ← x − k
-/// 9. While x < N and y < M and a x + 1 = by + 1 Do (x,y) ← (x+1,y+1)
-/// 10. V[k] ← x
-/// 11. If x ≥ N and y ≥ M Then
-/// 12. Length of an SES is D
-/// 13. Stop
-/// 14. Length of an SES is greater than MAX
-/// The full explanation of the algorithm can be found here:time
-/// http://www.xmailserver.org/diff2.pdf
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Operation {
@@ -35,14 +35,13 @@ pub enum Operation {
     Null,
 }
 
-// Display Operation Enum as a String
 impl std::fmt::Display for Operation {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{:?}", self)
     }
 }
 
-// A Structure for describing change
+/// A Structure for describing change
 #[derive(Debug, Clone, PartialEq, Eq, Copy)]
 pub struct Edit {
     pub edit: Operation,

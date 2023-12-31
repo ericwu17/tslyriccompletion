@@ -6,6 +6,9 @@ use sqlx::{FromRow, MySql, Pool};
 
 use crate::history::{Songlist, SonglistSchema};
 
+/// Represents a song with an album and songname.
+/// lyrics_raw is a string of all lines (separated by `\n`),
+/// and lines is a vector of [`Line`] structs containing data about whether lines are good prompts.
 #[derive(Debug, Clone, Serialize, PartialEq)]
 pub struct Song {
     pub album: String,
@@ -153,31 +156,8 @@ impl Song {
     }
 }
 
-// fn line_has_multiple_successors(guess: &Line, lines: &Vec<Line>) -> bool {
-
-// 	let mut possible_continuations = vec![];
-// 	for (index, line) in (&lines[..lines.len()-1]).into_iter().enumerate() {
-// 		if are_close_enough(line.text.as_str(), guess.text.as_str()) {
-// 			possible_continuations.push(lines[index+1].clone());
-// 		}
-// 	}
-// 	for continuation in &possible_continuations {
-// 		if continuation.is_exclamatory {
-// 			return true;
-// 		}
-// 	}
-
-// 	for c1 in &possible_continuations {
-// 		for c2 in &possible_continuations {
-// 			if c1 != c2 {
-// 				return true;
-// 			}
-// 		}
-// 	}
-
-// 	false
-// }
-
+/// API endpoint for getting a list of all songs.
+/// returns a hashmap, where keys are album names and values are song names.
 #[get("/songs")]
 pub fn get_song_list(songs: &State<Vec<Song>>) -> String {
     let mut s: HashMap<String, Vec<String>> = HashMap::new();
@@ -194,6 +174,9 @@ pub fn get_song_list(songs: &State<Vec<Song>>) -> String {
     serde_json::to_string(&s).unwrap()
 }
 
+/// API endpoint for getting a list of all songs, from a particular songlist.
+/// A songlist is a collection of all available songs, at a particular time.
+/// For example, there's a songlist that contains every album released before Midnights.
 #[get("/songs?<id>")]
 pub async fn get_song_list_with_id(id: i32, pool: &rocket::State<Pool<MySql>>) -> String {
     let result: Vec<SonglistSchema> = sqlx::query_as("SELECT * FROM songlists WHERE id LIKE ?")
@@ -235,6 +218,7 @@ pub async fn get_song_list_with_id(id: i32, pool: &rocket::State<Pool<MySql>>) -
     serde_json::to_string(&s).unwrap()
 }
 
+/// API endpoint to get a list of all songlists.
 #[get("/all_songlists")]
 pub async fn get_all_songlists(pool: &rocket::State<Pool<MySql>>) -> String {
     let all_songlists: Vec<SonglistSchema> = sqlx::query_as("SELECT * FROM songlists")
@@ -268,6 +252,7 @@ struct Count {
     total: i32,
 }
 
+/// API endpoint to get a song from album + name.
 #[get("/songs/<album>/<name>")]
 pub async fn get_song(
     pool: &rocket::State<Pool<MySql>>,
