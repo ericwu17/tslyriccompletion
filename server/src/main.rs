@@ -3,7 +3,6 @@ pub mod game;
 pub mod guess_generating;
 pub mod history;
 pub mod lifelines;
-pub mod loader;
 pub mod loader_v2;
 pub mod song;
 
