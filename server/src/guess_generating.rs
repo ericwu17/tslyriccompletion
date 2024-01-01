@@ -109,8 +109,8 @@ pub fn pick_distractors(correct_answer: &str, songs: &Vec<Song>) -> Vec<String> 
 pub fn pick_random_guess(songs: &[Song], songs_to_include: &[(String, String)]) -> Question {
     let songs: Vec<Song> = songs
         .iter()
-        .cloned()
         .filter(|song| songs_to_include.contains(&(song.album.clone(), song.name.clone())))
+        .cloned()
         .collect();
     let random_song = songs.choose(&mut rand::thread_rng()).unwrap();
 
