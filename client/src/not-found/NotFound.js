@@ -16,10 +16,18 @@ export default function NotFound() {
       </Typography>
       <Box my={1} />
       <Typography>
-        Maybe we got lost in translation. Click {}
+        Maybe we got lost in translation. :(
+      </Typography>
+
+      <Typography>
+        Or maybe you just asked for too much.
+      </Typography>
+
+      <Typography>
+        Click {}
         <Link href={HOME_URL}>
           here
-        </Link> to go to the home page.
+        </Link> to return to the home page.
       </Typography>
 
       <NotFoundImg />
