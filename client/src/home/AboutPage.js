@@ -84,28 +84,35 @@ export default function AboutPage() {
             <Link href="https://mui.com/">
               Material UI
             </Link>
+            {" "} used for styles on this webpage.
           </ListItem>
           <ListItem disablePadding>
             <Link href="https://reactjs.org/">
               React js
             </Link>
+            {" "} as a web framework.
           </ListItem>
           <ListItem disablePadding>
             <Link href="https://www.rust-lang.org/">
               Rust
             </Link>
+            {" "} for the server code which runs the game and provides API endpoints.
           </ListItem>
           <ListItem disablePadding>
             <Link href="https://rocket.rs/">
               Rocket
             </Link>
+            {" "} to easily create a HTTP server in rust.
           </ListItem>
           <ListItem disablePadding>
             <Link href="https://dev.mysql.com/doc/refman/8.0/en/what-is-mysql.html">
               MySQL
             </Link>
+            {" "} as a database to store game history.
           </ListItem>
         </List>
+        Note: I am considering remaking this site with plain HTML, CSS and javascript,
+        while keeping the server the same.
       </Typography>
 
       <Typography variant="h4" sx={{mt:2}}>
