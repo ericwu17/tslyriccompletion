@@ -3,7 +3,7 @@ I Almost Do
 [Verse 1]
 I bet this time of night, you're still up
 I bet you're tired from a long hard week
-I bet you're sittin' in your chair by the window$<mult_succ>
+I bet you're sittin' in your chair by the window
 Looking out at the city, and I bet
 Sometimes you wonder 'bout me
 [Chorus]
@@ -11,7 +11,7 @@ And I just wanna tell you
 It takes everything in me not to call you
 And I wish I could run to you
 And I hope you know that
-Every time I don't, I almost do, I almost do$<mult_succ>
+Every time I don't, I almost do, I almost do
 [Verse 2]
 I bet you think I either moved on or hate you
 'Cause each time you reach out, there's no reply
@@ -22,7 +22,7 @@ And I just wanna tell you
 It takes everything in me not to call you
 And I wish I could run to you
 And I hope you know that
-Every time I don't, I almost do, I almost do$<mult_succ>
+Every time I don't, I almost do, I almost do
 [Bridge]
 Oh, we made quite a mess, babe
 It's probably better off this way
@@ -35,10 +35,10 @@ And I just wanna tell you
 It takes everything in me not to call you
 And I wish I could run to you
 And I hope you know that
-Every time I don't, I almost do, I almost do$<mult_succ>
+Every time I don't, I almost do, I almost do
 [Outro]
 I bet this time of night, you're still up
 I bet you're tired from a long hard week
-I bet you're sittin' in your chair by the window$<mult_succ>
+I bet you're sittin' in your chair by the window
 Looking out at the city, and I hope
-Sometimes you wonder 'bout me$<bad_succ>
+Sometimes you wonder 'bout me

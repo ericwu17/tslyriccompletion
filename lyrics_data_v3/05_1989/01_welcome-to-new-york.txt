@@ -8,13 +8,13 @@ Searching for a sound we hadn't heard before
 And it said
 [Chorus]
 Welcome to New York, it's been waiting for you
-Welcome to New York, welcome to New York$<mult_succ>
+Welcome to New York, welcome to New York
 Welcome to New York, it's been waiting for you
-Welcome to New York, welcome to New York$<mult_succ>
-It's a new soundtrack, I could dance to this beat, beat, forevermore$<mult_succ>
+Welcome to New York, welcome to New York
+It's a new soundtrack, I could dance to this beat, beat, forevermore
 The lights are so bright but they never blind me, me
 Welcome to New York, it's been waiting for you
-Welcome to New York, welcome to New York$<mult_succ>
+Welcome to New York, welcome to New York
 [Verse 2]
 When we first dropped our bags on apartment floors
 Took our broken hearts, put them in a drawer
@@ -23,13 +23,13 @@ And you can want who you want
 Boys and boys and girls and girls
 [Chorus]
 Welcome to New York, it's been waiting for you
-Welcome to New York, welcome to New York$<mult_succ>
+Welcome to New York, welcome to New York
 Welcome to New York, it's been waiting for you
-Welcome to New York, welcome to New York$<mult_succ>
-It's a new soundtrack, I could dance to this beat, beat, forevermore$<mult_succ>
+Welcome to New York, welcome to New York
+It's a new soundtrack, I could dance to this beat, beat, forevermore
 The lights are so bright, but they never blind me, me
 Welcome to New York (New York), it's been waiting for you
-Welcome to New York, welcome to New York$<mult_succ>
+Welcome to New York, welcome to New York
 [Bridge]
 Like any great love, it keeps you guessing
 Like any real love, it's ever-changing
@@ -37,16 +37,16 @@ Like any true love, it drives you crazy
 But you know you wouldn't change anything, anything, anything
 [Chorus]
 Welcome to New York, it's been waiting for you
-Welcome to New York, welcome to New York$<mult_succ>
+Welcome to New York, welcome to New York
 Welcome to New York, it's been waiting for you
-Welcome to New York, welcome to New York$<mult_succ>
+Welcome to New York, welcome to New York
 It's a new soundtrack, I could dance to this beat
 The lights are so bright, but they never blind me
 Welcome to New York (New soundtrack)
 It's been waiting for you
-Welcome to New York$<mult_succ>
+Welcome to New York
 The lights are so bright but they never blind me
-Welcome to New York$<mult_succ>
+Welcome to New York
 So bright, they never blind me
-Welcome to New York$<mult_succ>
-Welcome to New York$<bad_succ>
+Welcome to New York
+Welcome to New York

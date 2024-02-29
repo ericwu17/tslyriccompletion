@@ -9,14 +9,14 @@ And maybe it was ego swinging
 Maybe, it was her
 Flashes of the battle come back to me in a blur
 [Chorus]
-All that blood shed, crimson clover$<mult_succ>
+All that blood shed, crimson clover
 Uh-huh, sweet dream was over
 My hand was the one you reached for
-All throughout the Great War$<bad_succ>
-Always remember$<exclamatory><mult_succ>
+All throughout the Great War
+Always remember$<exclamatory>
 Uh-huh, tears on the letter
 I vowed not to cry anymore
-If we survived the Great War$<mult_succ>
+If we survived the Great War
 [Verse 2]
 You drew up some good faith treaties
 I drew curtains closed, drank my poison all alone
@@ -27,16 +27,16 @@ Screaming from a crypt
 Telling me to punish you for things you never did
 So I justified it
 [Chorus]
-All that blood shed, crimson clover$<mult_succ>
+All that blood shed, crimson clover
 Uh-huh, the bombs were close and
 My hand was the one you reached for
-All throughout the Great War$<bad_succ>
-Always remember$<exclamatory><mult_succ>
+All throughout the Great War
+Always remember$<exclamatory>
 Uh-huh, the burning embers
 I vowed not to fight anymore
-If we survived the Great War$<bad_succ><mult_succ>
+If we survived the Great War
 [Post-Chorus]
-Uh-huh, uh-huh$<exclamatory><mult_succ>
+Uh-huh, uh-huh$<exclamatory>
 [Bridge]
 It turned into something bigger
 Somewhere in the haze got a sense I'd been betrayed
@@ -54,14 +54,14 @@ And we will never go back
 To that bloodshed, crimson clover
 Uh-huh, the worst was over
 My hand was the one you reached for
-All throughout the Great War$<bad_succ>
-Always remember$<exclamatory><mult_succ>
+All throughout the Great War
+Always remember$<exclamatory>
 Uh-huh, we burn for better
 I vowed I would always be yours
-'Cause we survived the Great War$<bad_succ><mult_succ>
+'Cause we survived the Great War
 [Outro]
-Uh-huh, uh-huh$<exclamatory><mult_succ>
+Uh-huh, uh-huh$<exclamatory>
 I would always be yours
-'Cause we survived the Great War$<bad_succ><mult_succ>
+'Cause we survived the Great War
 Uh-huh$<exclamatory>
-I vowed I would always be yours$<bad_succ>
+I vowed I would always be yours

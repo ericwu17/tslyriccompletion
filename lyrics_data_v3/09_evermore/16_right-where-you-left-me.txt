@@ -13,43 +13,43 @@ But I, I'm right where you left me
 Help, I'm still at the restaurant
 Still sitting in a corner I haunt
 Cross-legged in the dim light
-They say, "What a sad sight"$<mult_succ>
+They say, "What a sad sight"
 I, I swear you could hear a hair pin drop
 Right when I felt the moment stop
-Glass shattered on the white cloth$<mult_succ>
+Glass shattered on the white cloth
 Everybody moved on, I, I stayed there
-Dust collected on my pinned-up hair$<mult_succ>
+Dust collected on my pinned-up hair
 They expected me to find somewhere
 Some perspective, but I sat and stared
 [Chorus]
 Right where you left me
 You left me no, you left me no
-You left me no choice but to stay here forever$<mult_succ>
+You left me no choice but to stay here forever
 You left me, you left me no, oh, you left me no
-You left me no choice but to stay here forever$<mult_succ>
+You left me no choice but to stay here forever
 [Verse 2]
 Did you ever hear about the girl who got frozen?
 Time went on for everybody else, she won't know it
-She's still twenty-three inside her fantasy$<mult_succ>
+She's still twenty-three inside her fantasy
 How it was supposed to be
 Did you hear about the girl who lives in delusion?
 Breakups happen every day, you don't have to lose it
-She's still twenty-three inside her fantasy$<mult_succ>
+She's still twenty-three inside her fantasy
 And you're sitting in front of me
 [Bridge]
 At the restaurant when I was still the one you want
 Cross-legged in the dim light, everything was just right
 I, I could feel the mascara run
 You told me that you met someone
-Glass shattered on the white cloth$<mult_succ>
+Glass shattered on the white cloth
 Everybody moved on
 [Pre-Chorus]
 Help, I'm still at the restaurant
 Still sitting in a corner I haunt
 Cross-legged in the dim light
-They say, "What a sad sight"$<bad_succ><mult_succ>
+They say, "What a sad sight"
 I, I stayed there$<exclamatory>
-Dust collected on my pinned-up hair$<mult_succ>
+Dust collected on my pinned-up hair
 I'm sure that you got a wife out there
 Kids and Christmas, but I'm unaware
 'Cause I'm right where I cause no harm
@@ -62,7 +62,7 @@ But if you ever think you got it wrong
 I'm right where
 You left me
 You left me no, oh, you left me no
-You left me no choice but to stay here forever$<mult_succ>
+You left me no choice but to stay here forever
 You left me
 You left me no, oh, you left me no
-You left me no choice but to stay here forever$<bad_succ>
+You left me no choice but to stay here forever

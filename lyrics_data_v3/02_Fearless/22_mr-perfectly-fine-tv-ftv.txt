@@ -15,11 +15,11 @@ But it's wonderful to see that you're okay
 [Chorus]
 Hello, Mr. "Perfectly fine"
 How's your heart after breakin' mine?
-Mr. "Always at the right place at the right time," baby$<mult_succ>
+Mr. "Always at the right place at the right time," baby
 Hello, Mr. "Casually cruel"
-Mr. "Everything revolves around you"$<mult_succ>
+Mr. "Everything revolves around you"
 I've been Miss Misery since your goodbye
-And you're Mr. "Perfectly fine"$<mult_succ>
+And you're Mr. "Perfectly fine"
 [Verse 2]
 Mr. "Never told me why"
 Mr. "Never had to see me cry"
@@ -35,11 +35,11 @@ But it's wonderful to see that it never fazed you
 [Chorus]
 Hello, Mr. "Perfectly fine"
 How's your heart after breakin' mine?
-Mr. "Always at the right place at the right time," baby$<mult_succ>
+Mr. "Always at the right place at the right time," baby
 Hello, Mr. "Casually cruel"
-Mr. "Everything revolves around you"$<mult_succ>
+Mr. "Everything revolves around you"
 I've been Miss Misery since your goodbye
-And you're Mr. "Perfectly fine"$<mult_succ>
+And you're Mr. "Perfectly fine"
 [Verse 3]
 So dignified in your well-pressed suit
 So strategized, all the eyes on you
@@ -58,12 +58,12 @@ But by then, you'll be Mr. "Too late"
 [Chorus]
 Goodbye, Mr. "Perfectly fine"
 How's your heart after breakin' mine?
-Mr. "Always at the right place at the right time," baby$<mult_succ>
+Mr. "Always at the right place at the right time," baby
 Goodbye, Mr. "Casually cruel"
-Mr. "Everything revolves around you"$<mult_succ>
+Mr. "Everything revolves around you"
 I've been Miss Misery for the last time
-And you're Mr. "Perfectly fine"$<mult_succ>
+And you're Mr. "Perfectly fine"
 [Outro]
 You're perfectly fine
 Mr. "Look me in the eye and told me you would never go away"
-You said you'd never go away$<bad_succ>
+You said you'd never go away

@@ -13,8 +13,8 @@ And everybody believed in you?
 [Chorus]
 It's alright, just wait and see
 Your string of lights is still bright to me
-Oh, who you are is not where you've been$<mult_succ>
-You're still an innocent, you're still an innocent$<mult_succ>
+Oh, who you are is not where you've been
+You're still an innocent, you're still an innocent
 [Verse 2]
 Did some things you can't speak of
 But at night you live it all again
@@ -29,12 +29,12 @@ Before the monsters caught up to you?
 [Chorus]
 It's alright, just wait and see
 Your string of lights is still bright to me
-Oh, who you are is not where you've been$<mult_succ>
-You're still an innocent$<mult_succ>
+Oh, who you are is not where you've been
+You're still an innocent
 It's okay, life is a tough crowd
 32 and still growing up now
-Who you are is not what you did$<mult_succ>
-You're still an innocent$<mult_succ>
+Who you are is not what you did
+You're still an innocent
 [Bridge]
 Time turns flames to embers
 You'll have new Septembers
@@ -45,12 +45,12 @@ Today is never too late to be brand new, oh
 [Chorus]
 It's alright, just wait and see
 Your string of lights is still bright to me
-Oh, who you are is not where you've been$<mult_succ>
-You're still an innocent$<mult_succ>
+Oh, who you are is not where you've been
+You're still an innocent
 It's okay, life is a tough crowd
 32 and still growing up now
-Who you are is not what you did$<mult_succ>
-You're still an innocent, you're still an innocent$<mult_succ>
+Who you are is not what you did
+You're still an innocent, you're still an innocent
 [Outro]
 Lost your balance on a tightrope, oh
-It's never too late to get it back$<bad_succ>
+It's never too late to get it back

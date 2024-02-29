@@ -12,12 +12,12 @@ Always risin' from the ashes
 Mendin' all her gashes
 You might just have dealt the final blow
 [Chorus]
-Stop, you're losing me$<mult_succ>
-Stop, you're losing me$<mult_succ>
-Stop, you're losing me$<mult_succ>
+Stop, you're losing me
+Stop, you're losing me
+Stop, you're losing me
 I can't find a pulse
 My heart won't start anymore for you
-'Cause you're losing me$<mult_succ>
+'Cause you're losing me
 [Verse 2]
 Every mornin', I glared at you with storms in my eyes
 How can you say that you love someone you can't tell is dyin'?
@@ -30,17 +30,17 @@ Now, you're running down the hallway
 And you know what they all say
 "You don't know what you got until it's gone"
 [Chorus]
-Stop, you're losing me$<mult_succ>
-Stop, you're losing me$<mult_succ>
-Stop, you're losing me$<mult_succ>
+Stop, you're losing me
+Stop, you're losing me
+Stop, you're losing me
 I can't find a pulse
 My heart won't start anymore for you
-'Cause you're losing me$<mult_succ>
-'Cause you're losing me$<mult_succ>
+'Cause you're losing me
+'Cause you're losing me
 Stop (Stop) 'cause you're losing me
 [Post-Chorus]
-My heart won't start anymore (Stop 'cause you're losing me)$<mult_succ>
-My heart won't start anymore (Stop 'cause you're losing me)$<mult_succ>
+My heart won't start anymore (Stop 'cause you're losing me)
+My heart won't start anymore (Stop 'cause you're losing me)
 [Bridge]
 How long could we be a sad song
 'Til we were too far gone to bring back to life?
@@ -58,6 +58,6 @@ And I'm fading, thinkin'
 "To believe, unless you're choosing me"
 [Outro]
 You're losing me
-Stop (Stop, stop), you're losing me$<mult_succ>
-Stop (Stop, stop), you're losing me$<mult_succ>
-I can't find a pulse, my heart won't start anymore$<bad_succ>
+Stop (Stop, stop), you're losing me
+Stop (Stop, stop), you're losing me
+I can't find a pulse, my heart won't start anymore

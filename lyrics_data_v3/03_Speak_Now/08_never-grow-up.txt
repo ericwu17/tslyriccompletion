@@ -9,10 +9,10 @@ To you everything's funny, you got nothing to regret
 I'd give all I have, honey
 If you could stay like that
 [Chorus]
-Oh darling, don't you ever grow up$<mult_succ>
+Oh darling, don't you ever grow up
 Don't you ever grow up, just stay this little
-Oh darling, don't you ever grow up$<mult_succ>
-Don't you ever grow up, it could stay this simple$<mult_succ>
+Oh darling, don't you ever grow up
+Don't you ever grow up, it could stay this simple
 I won't let nobody hurt you, won't let no one break your heart
 And no one will desert you
 Just try to never grow up, never grow up
@@ -25,10 +25,10 @@ But don't make her drop you off around the block
 Remember that she's getting older too
 And don't lose the way that you dance around in your pj's getting ready for school
 [Chorus]
-Oh darling, don't you ever grow up$<mult_succ>
+Oh darling, don't you ever grow up
 Don't you ever grow up, just stay this little
-Oh darling, don't you ever grow up$<mult_succ>
-Don't you ever grow up, it could stay this simple$<mult_succ>
+Oh darling, don't you ever grow up
+Don't you ever grow up, it could stay this simple
 No one's ever burned you, nothing's ever left you scarred
 And even though you want to, just try to never grow up
 [Bridge]
@@ -44,16 +44,16 @@ So I tuck myself in and turn my night light on
 Wish I'd never grown up
 I wish I'd never grown up
 [Chorus]
-Oh, I don't wanna grow up, wish I'd never grown up$<mult_succ>
+Oh, I don't wanna grow up, wish I'd never grown up
 I could still be little
-Oh, I don't wanna grow up, wish I'd never grown up$<mult_succ>
+Oh, I don't wanna grow up, wish I'd never grown up
 It could still be simple
-Oh darling, don't you ever grow up$<mult_succ>
+Oh darling, don't you ever grow up
 Don't you ever grow up, just stay this little
-Oh darling, don't you ever grow up$<mult_succ>
-Don't you ever grow up, it could stay this simple$<mult_succ>
+Oh darling, don't you ever grow up
+Don't you ever grow up, it could stay this simple
 Won't let nobody hurt you
 Won't let no one break your heart
 And even though you want to, please try to never grow up
 Oh, don't you ever grow up
-Oh, never grow up, just never grow up$<bad_succ>
+Oh, never grow up, just never grow up

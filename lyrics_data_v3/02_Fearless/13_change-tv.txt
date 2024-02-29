@@ -13,8 +13,8 @@ Can you feel it now?
 These walls that they put up to hold us back will fall down
 This revolution, the time will come
 For us to finally win
-And we'll sing hallelujah, we'll sing hallelujah$<bad_succ>
-Oh, oh$<exclamatory><mult_succ>
+And we'll sing hallelujah, we'll sing hallelujah
+Oh, oh$<exclamatory>
 [Verse 2]
 So we've been outnumbered, raided, and now cornered
 It's hard to fight when the fight ain't fair
@@ -28,8 +28,8 @@ Can you feel it now?
 These walls that they put up to hold us back will fall down
 This revolution, the time will come
 For us to finally win
-And we'll sing hallelujah, we'll sing hallelujah$<bad_succ>
-Oh, oh$<exclamatory><mult_succ>
+And we'll sing hallelujah, we'll sing hallelujah
+Oh, oh$<exclamatory>
 [Bridge]
 Tonight, we'll stand, get off our knees
 Fight for what we've worked for all these years
@@ -41,5 +41,5 @@ Can you see it now?
 When the walls that they put up to hold us back fell down
 It's a revolution, throw your hands up
 'Cause we never gave in
-And we'll sing hallelujah, we sang hallelujah$<bad_succ>
-Hallelujah$<exclamatory><bad_succ>
+And we'll sing hallelujah, we sang hallelujah
+Hallelujah$<exclamatory>

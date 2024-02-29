@@ -7,7 +7,7 @@ Give me the keys, I'll bring the car back around
 We shouldn't be in this town
 And my so-called friends, they don't know
 I'd drive away before I let you go
-So give me a reason and don't say no, no$<mult_succ>
+So give me a reason and don't say no, no
 There's a chain 'round your throat, piece of paper where I wrote
 "I'll wait for you"
 There's a key on the chain, there's a picture in a frame
@@ -15,19 +15,19 @@ Take it with you
 [Chorus: Taylor Swift & Ed Sheeran]
 And run, like you'd run from the law
 Darling, let's run
-Run from it all$<mult_succ>
+Run from it all
 We can go where our eyes can take us
 Go where no one else is, run
-Ooh, we'll run$<mult_succ>
-Ooh, we'll run$<mult_succ>
-Ooh, we'll run$<mult_succ>
+Ooh, we'll run
+Ooh, we'll run
+Ooh, we'll run
 [Verse 2: Taylor Swift & Ed Sheeran]
 So you laugh like a child
 And I'll sing like no one cares
 No one to be, no one to tell
 I could see this view a hundred times
 Pale blue sky reflected in your eyes
-So give me a reason and don't say no, no$<mult_succ>
+So give me a reason and don't say no, no
 And the note from the locket, you keep it in your pocket
 Since I gave it to you
 There's a heart on your sleeve
@@ -36,12 +36,12 @@ And hold it for you
 [Chorus: Taylor Swift & Ed Sheeran]
 And run, like you'd run from the law
 Darling, let's run
-Run from it all$<mult_succ>
+Run from it all
 We can go like they're trying to chase us
 Go where no one else is, run
-Ooh, we'll run$<mult_succ>
-Ooh, we'll run$<mult_succ>
-Ooh, we'll run$<mult_succ>
+Ooh, we'll run
+Ooh, we'll run
+Ooh, we'll run
 [Bridge: Ed Sheeran & Taylor Swift]
 There's been this hole in my heart
 This thing was a shot in the dark
@@ -53,7 +53,7 @@ Darling, let's run (And we run, and we run, and we run)
 Run from it all (And we run, and we run, and we run)
 We can go where our eyes can take us (And we run, and we run, and we run)
 Go where no one else is, run (And we run, and we run, and we run)
-Ooh, we'll run (And we run, and we run, and we run)$<mult_succ>
-Ooh, we'll run (And we run, and we run, and we run)$<mult_succ>
-Ooh, we'll run (And we run, and we run, and we run)$<mult_succ>
-Ooh, and we'll run$<bad_succ>
+Ooh, we'll run (And we run, and we run, and we run)
+Ooh, we'll run (And we run, and we run, and we run)
+Ooh, we'll run (And we run, and we run, and we run)
+Ooh, and we'll run

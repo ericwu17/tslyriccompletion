@@ -15,9 +15,9 @@ Wonderin' which version of you I might get on the phone, tonight
 Well I stopped pickin' up and this song is to let you know why
 [Chorus]
 Dear John, I see it all now that you're gone
-Don't you think I was too young to be messed with?$<mult_succ>
-The girl in the dress cried the whole way home$<mult_succ>
-I shoulda known$<mult_succ>
+Don't you think I was too young to be messed with?
+The girl in the dress cried the whole way home
+I shoulda known
 [Verse 2]
 Well maybe it's me
 And my blind optimism to blame
@@ -29,13 +29,13 @@ And I look back in regret how I ignored when they said
 "Run as fast as you can"
 [Chorus]
 Dear John, I see it all now that you're gone
-Don't you think I was too young to be messed with?$<mult_succ>
-The girl in the dress cried the whole way home$<mult_succ>
+Don't you think I was too young to be messed with?
+The girl in the dress cried the whole way home
 Dear John, I see it all now, it was wrong
 Don't you think nineteen's too young
 To be played by your dark, twisted games
 When I loved you so?
-I shoulda known$<mult_succ>
+I shoulda known
 [Bridge]
 You are an expert at sorry
 And keeping lines blurry
@@ -46,17 +46,17 @@ But I took your matches
 Before fire could catch me
 So don't look now
 I'm shining like fireworks
-Over your sad empty town, yeah$<bad_succ>
+Over your sad empty town, yeah
 Oh, oh, oh, oh, oh, oh$<exclamatory>
 [Chorus]
 Dear John, I see it all now that you're gone
-Don't you think I was too young to be messed with?$<mult_succ>
-The girl in the dress cried the whole way home$<mult_succ>
+Don't you think I was too young to be messed with?
+The girl in the dress cried the whole way home
 I see it all now that you're gone
-Don't you think I was too young to be messed with?$<mult_succ>
+Don't you think I was too young to be messed with?
 The girl in the dress wrote you a song
-You shoulda known$<mult_succ>
-You shoulda known$<mult_succ>
+You shoulda known
+You shoulda known
 [Outro]
 Don't you think I was too young?
-You shoulda known$<bad_succ>
+You shoulda known

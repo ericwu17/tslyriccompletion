@@ -20,7 +20,7 @@ I wonder if he knows he's all I think about at night
 He's the reason for the teardrops on my guitar
 The only thing that keeps me wishing on a wishing star
 He's the song in the car
-I keep singing, don't know why I do...$<mult_succ>
+I keep singing, don't know why I do...
 [Verse 3]
 Drew walks by me
 Can't he tell that I can't breathe?
@@ -33,7 +33,7 @@ Look in those beautiful eyes and know she's lucky 'cause
 He's the reason for the teardrops on my guitar
 The only thing that keeps me wishing on a wishing star
 He's the song in the car
-I keep singing, don't know why I do...$<mult_succ>
+I keep singing, don't know why I do...
 [Bridge]
 So I drive home alone, as I turn off the light
 I'll put his picture down and maybe get some sleep tonight
@@ -41,9 +41,9 @@ I'll put his picture down and maybe get some sleep tonight
 'Cause he's the reason for the teardrops on my guitar
 The only one who's got enough of me to break my heart
 He's the song in the car
-I keep singing, don't know why I do...$<mult_succ>
+I keep singing, don't know why I do...
 [Outro]
 He's the time taken up, but there's never enough
 And he's all that I need to fall into
 Drew looks at me
-I fake a smile so he won't see$<bad_succ>
+I fake a smile so he won't see

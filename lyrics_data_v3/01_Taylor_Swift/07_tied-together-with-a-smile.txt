@@ -8,11 +8,11 @@ But that's not true, 'cause I know you
 [Chorus]
 Hold on, baby, you're losing it
 The water's high, you're jumping into it
-And letting go and no one knows$<mult_succ>
+And letting go and no one knows
 That you cry, but you don't tell anyone
 That you might not be the golden one
 And you're tied together with a smile
-But you're coming undone$<mult_succ>
+But you're coming undone
 [Verse 2]
 I guess it's true that love was all you wanted
 'Cause you're giving it away like it's extra change
@@ -23,22 +23,22 @@ It's not his price to pay
 [Chorus]
 Hold on, baby, you're losing it
 The water's high, you're jumping into it
-And letting go and no one knows$<mult_succ>
+And letting go and no one knows
 That you cry, but you don't tell anyone
 That you might not be the golden one
 And you're tied together with a smile
-But you're coming undone$<bad_succ><mult_succ>
+But you're coming undone
 Oh, ooh-oh$<exclamatory>
 [Chorus]
 Hold on, baby, you're losing it
 The water's high, you're jumping into it
-And letting go and no one knows$<mult_succ>
+And letting go and no one knows
 That you cry but you don't tell anyone
 That you might not be the golden one
 And you're tied together with a smile
-But you're coming undone$<mult_succ>
+But you're coming undone
 [Outro]
 You're tied together with a smile
-But you're coming undone oh$<bad_succ>
+But you're coming undone oh
 Goodbye, baby$<exclamatory>
-With a smile, baby, baby$<bad_succ>
+With a smile, baby, baby

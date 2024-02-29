@@ -19,13 +19,13 @@ I just may like some explanations
 Can I ask you a question?
 Did you ever have someone kiss you in a crowded room
 And every single one of your friends was makin' fun of you
-But fifteen seconds later, they were clappin' too?$<mult_succ>
+But fifteen seconds later, they were clappin' too?
 Then what did you do?
-Did you leave her house in the middle of the night? Oh$<mult_succ>
+Did you leave her house in the middle of the night? Oh
 Did you wish you'd put up more of a fight, oh
 When she said it was too much?
 Do you wish you could still touch her?
-It's just a question$<mult_succ>
+It's just a question
 [Verse 2]
 Half-moon eyes, bad surprise
 Did you realize out of time?
@@ -41,13 +41,13 @@ I just may like to have a conversation
 Can I ask you a question?
 Did you ever have someone kiss you in a crowded room
 And every single one of your friends was makin' fun of you
-But fifteen seconds later, they were clappin' too?$<mult_succ>
+But fifteen seconds later, they were clappin' too?
 Then what did you do?
-Did you leave her house in the middle of the night? Oh$<mult_succ>
+Did you leave her house in the middle of the night? Oh
 Did you wish you'd put up more of a fight, oh
 When she said it was too much?
 Do you wish you could still touch her?
-It's just a question$<mult_succ>
+It's just a question
 [Bridge]
 Does it feel like everything's just like
 Second best after that meteor strike?
@@ -58,10 +58,10 @@ And right, but tonight
 Can I ask you a question? (Can I ask you a question?)
 Did you ever have someone kiss you in a crowded room (In a crowded room)
 And every single one of your friends was makin' fun of you (Makin' fun of you)
-But fifteen seconds later, they were clappin' too?$<mult_succ>
+But fifteen seconds later, they were clappin' too?
 Then what did you do? (Do)
-Did you leave her house in the middle of the night? Oh$<mult_succ>
+Did you leave her house in the middle of the night? Oh
 Did you wish you'd put up more of a fight, oh (More of a fight)
 When she said it was too much?
 Do you wish you could still touch her?
-It's just a question$<bad_succ>
+It's just a question

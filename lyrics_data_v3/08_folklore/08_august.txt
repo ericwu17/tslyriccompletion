@@ -11,7 +11,7 @@ August slipped away into a moment in time
 'Cause it was never mine
 And I can see us twisted in bedsheets
 August sipped away like a bottle of wine
-'Cause you were never mine$<mult_succ>
+'Cause you were never mine
 [Verse 2]
 Your back beneath the sun
 Wishin' I could write my name on it
@@ -23,7 +23,7 @@ August slipped away into a moment in time
 'Cause it was never mine
 And I can see us twisted in bedsheets
 August sipped away like a bottle of wine
-'Cause you were never mine$<mult_succ>
+'Cause you were never mine
 [Bridge]
 Back when we were still changin' for the better
 Wanting was enough
@@ -40,13 +40,13 @@ August slipped away into a moment in time
 'Cause it was never mine
 And I can see us twisted in bedsheets
 August sipped away like a bottle of wine
-'Cause you were never mine$<mult_succ>
-'Cause you were never mine$<bad_succ><mult_succ>
+'Cause you were never mine
+'Cause you were never mine
 [Outro]
 Never mine$<exclamatory>
 But do you remember?
 Remember when I pulled up and said "Get in the car"
-And then canceled my plans just in case you'd call?$<mult_succ>
+And then canceled my plans just in case you'd call?
 Back when I was livin' for the hope of it all, for the hope of it all
 "Meet me behind the mall"
 (Remember when I pulled up and said "Get in the car")
@@ -54,7 +54,7 @@ Back when I was livin' for the hope of it all, for the hope of it all
 (Back when I was livin' for the hope of it all, for the hope of it all)
 ("Meet me behind the mall")
 Remember when I pulled up and said "Get in the car"
-And then canceled my plans just in case you'd call?$<mult_succ>
+And then canceled my plans just in case you'd call?
 Back when I was livin' for the hope of it all (For the hope of it all)
 For the hope of it all, for the hope of it all
-(For the hope of it all, for the hope of it all)$<bad_succ>
+(For the hope of it all, for the hope of it all)

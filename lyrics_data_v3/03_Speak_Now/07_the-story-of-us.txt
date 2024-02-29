@@ -15,11 +15,11 @@ So many walls up, I can't break through
 [Chorus]
 Now I'm standing alone in a crowded room
 And we're not speaking
-And I'm dying to know$<mult_succ>
-Is it killing you like it's killing me?$<mult_succ>
+And I'm dying to know
+Is it killing you like it's killing me?
 Yeah, I don't know what to say
 Since the twist of fate when it all broke down
-And the story of us looks a lot like a tragedy now$<bad_succ><mult_succ>
+And the story of us looks a lot like a tragedy now
 Next chapter$<exclamatory>
 [Verse 2]
 How'd we end up this way?
@@ -36,11 +36,11 @@ I've never heard silence quite this loud
 [Chorus]
 Now I'm standing alone in a crowded room
 And we're not speaking
-And I'm dying to know$<mult_succ>
-Is it killing you like it's killing me?$<mult_succ>
+And I'm dying to know
+Is it killing you like it's killing me?
 Yeah, and I don't know what to say
-Since the twist of fate, when it all broke down$<mult_succ>
-And the story of us looks a lot like a tragedy now$<mult_succ>
+Since the twist of fate, when it all broke down
+And the story of us looks a lot like a tragedy now
 [Bridge]
 This is looking like a contest
 Of who can act like they care less
@@ -53,16 +53,16 @@ But the story of us might be ending soon
 [Chorus]
 Now I'm standing alone in a crowded room
 And we're not speaking
-And I'm dying to know$<mult_succ>
-Is it killing you like it's killing me?$<mult_succ>
+And I'm dying to know
+Is it killing you like it's killing me?
 Yeah, and I don't know what to say
-Since the twist of fate, when it all broke down$<mult_succ>
+Since the twist of fate, when it all broke down
 And the story of us looks a lot like a tragedy now, now, now
 [Outro]
 And we're not speaking
-And I'm dying to know$<mult_succ>
+And I'm dying to know
 Is it killing you like it's killing me, yeah?
 I don't know what to say since the twist of fate
 'Cause we're going down
-And the story of us looks a lot like a tragedy now$<bad_succ><mult_succ>
-The End$<exclamatory><bad_succ>
+And the story of us looks a lot like a tragedy now
+The End$<exclamatory>

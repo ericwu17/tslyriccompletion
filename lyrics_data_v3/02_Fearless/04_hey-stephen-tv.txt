@@ -1,8 +1,8 @@
 Fearless
 Hey Stephen
 [Intro]
-Mmm-mm, mm-mm$<exclamatory><bad_succ><mult_succ>
-Mmm-mm, mm-mm$<exclamatory><bad_succ><mult_succ>
+Mmm-mm, mm-mm$<exclamatory>
+Mmm-mm, mm-mm$<exclamatory>
 Mmm-mm, mm-mm, yeah$<exclamatory>
 [Verse 1]
 Hey Stephen, I know looks can be deceiving
@@ -18,7 +18,7 @@ I don't always have to be alone
 Can't help it if I wanna kiss you in the rain so
 Come feel this magic I've been feeling since I met you
 Can't help it if there's no one else
-Mmm, I can't help myself$<mult_succ>
+Mmm, I can't help myself
 [Verse 2]
 Hey Stephen, I've been holding back this feeling
 So I got some things to say to you
@@ -33,7 +33,7 @@ I think you and I should stay the same
 Can't help it if I wanna kiss you in the rain so
 Come feel this magic I've been feeling since I met you
 Can't help it if there's no one else
-Mmm, I can't help myself$<mult_succ>
+Mmm, I can't help myself
 [Bridge]
 They're dimming the street lights, you're perfect for me
 Why aren't you here tonight?
@@ -48,17 +48,17 @@ I can't help it if you look like an angel
 Can't help it if I wanna kiss you in the rain so
 Come feel this magic I've been feeling since I met you
 Can't help it if there's no one else
-Mmm, I can't help myself$<mult_succ>
+Mmm, I can't help myself
 If you look like an angel
 Can't help it if I wanna kiss you in the rain so
 Come feel this magic I've been feeling since I met you
 Can't help it if there's no one else
-Mmm, I can't help myself$<bad_succ><mult_succ>
+Mmm, I can't help myself
 [Outro]
 Ah-uh, myself$<exclamatory>
 Mmm-mm, I can't help myself
-I can't help myself$<bad_succ>
-Oh-oh-oh$<exclamatory><bad_succ>
-Mmm-mm, mm-mm$<exclamatory><bad_succ><mult_succ>
-Mmm-mm, mm-mm$<exclamatory><bad_succ><mult_succ>
-Mmm-mm, mm-mm$<exclamatory><bad_succ>
+I can't help myself
+Oh-oh-oh$<exclamatory>
+Mmm-mm, mm-mm$<exclamatory>
+Mmm-mm, mm-mm$<exclamatory>
+Mmm-mm, mm-mm$<exclamatory>

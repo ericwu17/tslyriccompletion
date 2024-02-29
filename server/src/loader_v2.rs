@@ -49,7 +49,7 @@ pub fn load_songs_from_files() -> Vec<Song> {
 
             // songs.push(song);
 
-            let path = Path::new("../lyrics_data_new").join(song_file.path());
+            let path = Path::new("../lyrics_data_v3").join(song_file.path());
             let mut file = File::create(path).unwrap();
             file.write(album_name.as_bytes()).unwrap();
             file.write(b"\n").unwrap();
@@ -72,16 +72,10 @@ pub fn load_songs_from_files() -> Vec<Song> {
 
                 file.write(line.text.as_bytes()).unwrap();
 
-                if line.is_exclamatory || line.has_bad_successor || line.has_multiple_successors {
+                if line.is_exclamatory {
                     file.write(b"$").unwrap();
                     if line.is_exclamatory {
                         file.write(b"<exclamatory>").unwrap();
-                    }
-                    if line.has_bad_successor {
-                        file.write(b"<bad_succ>").unwrap();
-                    }
-                    if line.has_multiple_successors {
-                        file.write(b"<mult_succ>").unwrap();
                     }
                 }
 

@@ -10,9 +10,9 @@ If you say it with your hands
 And I'd be smart to walk away
 But you're quicksand
 [Chorus]
-This slope is treacherous$<mult_succ>
+This slope is treacherous
 This path is reckless
-This slope is treacherous$<bad_succ><mult_succ>
+This slope is treacherous
 And I-I-I like it$<exclamatory>
 [Verse 2]
 I can't decide if it's a choice
@@ -24,9 +24,9 @@ Trained to get along
 Forever going with the flow
 But you're friction
 [Chorus]
-This slope is treacherous$<mult_succ>
+This slope is treacherous
 This path is reckless
-This slope is treacherous$<bad_succ><mult_succ>
+This slope is treacherous
 I, I, I like it (Oh)$<exclamatory>
 [Bridge]
 Two headlights shine through the sleepless night
@@ -35,11 +35,11 @@ Your name has echoed through my mind
 And I just think you should, think you should know
 That nothing safe is worth the drive
 And I would follow you, follow you home
-I'll follow you, follow you home$<mult_succ>
+I'll follow you, follow you home
 [Chorus]
-This hope is treacherous$<mult_succ>
+This hope is treacherous
 This daydream is dangerous
-This hope is treacherous$<bad_succ><mult_succ>
+This hope is treacherous
 I-I-I, I-I-I, I-I-I$<exclamatory>
 [Bridge]
 Two headlights shine through the sleepless night
@@ -48,9 +48,9 @@ Your name has echoed through my mind
 And I just think you should, think you should know
 That nothing safe is worth the drive
 And I would follow you, follow you home
-I'll follow you, follow you home$<mult_succ>
-I'll follow you, follow you home$<mult_succ>
-I'll follow you, follow you home$<mult_succ>
+I'll follow you, follow you home
+I'll follow you, follow you home
+I'll follow you, follow you home
 [Outro]
-This slope is treacherous$<bad_succ><mult_succ>
-I-I-I like it$<exclamatory><bad_succ>
+This slope is treacherous
+I-I-I like it$<exclamatory>

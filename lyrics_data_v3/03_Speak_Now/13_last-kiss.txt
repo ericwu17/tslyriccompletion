@@ -6,7 +6,7 @@ Lit through the darkness at 1:58
 The words that you whispered
 For just us to know
 You told me you loved me
-So why did you go away?$<bad_succ>
+So why did you go away?
 Away$<exclamatory>
 [Verse 2]
 I do recall now the smell of the rain
@@ -21,9 +21,9 @@ But now I'll go sit on the floor
 Wearing your clothes
 All that I know is
 I don't know how to be something you miss
-I never thought we'd have a last kiss$<mult_succ>
+I never thought we'd have a last kiss
 Never imagined we'd end like this
-Your name, forever the name on my lips$<mult_succ>
+Your name, forever the name on my lips
 [Verse 3]
 I do remember the swing of your step
 The life of the party, you're showing off again
@@ -41,7 +41,7 @@ And I'll go sit on the floor
 Wearing your clothes
 All that I know is
 I don't know how to be something you miss
-I never thought we'd have a last kiss$<mult_succ>
+I never thought we'd have a last kiss
 I never imagined we'd end like this
 Your name, forever the name on my lips, ooh
 [Bridge]
@@ -60,11 +60,11 @@ So I'll go sit on the floor
 Wearing your clothes
 All that I know is
 I don't know how to be something you miss
-I never thought we'd have a last kiss$<mult_succ>
+I never thought we'd have a last kiss
 Never imagined we'd end like this
-Your name, forever the name on my lips$<mult_succ>
+Your name, forever the name on my lips
 Just like our last kiss
-Forever the name on my lips$<mult_succ>
-Forever the name on my lips$<mult_succ>
+Forever the name on my lips
+Forever the name on my lips
 [Outro]
-Just like our last$<bad_succ>
+Just like our last

@@ -17,7 +17,7 @@ Get back to me (Get back to me)
 And I should've been there, in the back of your mind
 I shouldn't be asking myself, "Why?"
 You shouldn't be begging for forgiveness at my feet
-You should've said no, baby, and you might still have me$<mult_succ>
+You should've said no, baby, and you might still have me
 [Verse 2]
 You can see that I've been crying
 Baby, you know all the right things to say
@@ -35,12 +35,12 @@ Get back to me (Get back to me)
 And I should've been there, in the back of your mind
 I shouldn't be asking myself, "Why?"
 You shouldn't be begging for forgiveness at my feet
-You should've said no, baby, and you might still have me$<mult_succ>
+You should've said no, baby, and you might still have me
 [Bridge]
 I can't resist
 Before you go tell me this
 Was it worth it?
-Was she worth this?$<bad_succ>
+Was she worth this?
 No no, no, no, no, no$<exclamatory>
 [Chorus]
 You should've said, "No"
@@ -51,4 +51,4 @@ Get back to me (Get back to me)
 And I should've been there, in the back of your mind
 I shouldn't be asking myself, "Why?"
 You shouldn't be begging for forgiveness at my feet
-You should've said no, baby, and you might still have me$<bad_succ>
+You should've said no, baby, and you might still have me

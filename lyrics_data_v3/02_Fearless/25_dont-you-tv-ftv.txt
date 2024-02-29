@@ -7,13 +7,13 @@ I heard she's nothin' like me
 I'm sure she'll make you happy
 [Chorus]
 But don't you, don't you
-Smile at me and ask me how I've been$<mult_succ>
+Smile at me and ask me how I've been
 Don't you say you've
-Missed me if you don't want me again$<mult_succ>
+Missed me if you don't want me again
 You don't know how much I feel I love you still
-So why don't you, don't you?$<bad_succ><mult_succ>
+So why don't you, don't you?
 [Post-Chorus]
-Ah, ah, ah, ah$<exclamatory><bad_succ><mult_succ>
+Ah, ah, ah, ah$<exclamatory>
 Ah, ah, ah$<exclamatory>
 [Verse 2]
 Sometimes, I really wish that I could hate you
@@ -22,11 +22,11 @@ My heart knows what the truth is
 I swore I wouldn't do this
 [Chorus]
 But don't you, don't you
-Smile at me and ask me how I've been$<mult_succ>
+Smile at me and ask me how I've been
 Don't you say you've
-Missed me if you don't want me again$<mult_succ>
+Missed me if you don't want me again
 You don't know how much I feel I love you still
-So why don't you, don't you?$<mult_succ>
+So why don't you, don't you?
 [Bridge]
 So I walk outta here tonight
 Try to go on with my life
@@ -35,11 +35,11 @@ And you can say we're still friends
 So if I see you again
 [Chorus]
 Don't you (Don't you), don't you
-Smile at me and ask me how I've been$<mult_succ>
+Smile at me and ask me how I've been
 Don't you (Don't you) say you've
-Missed me if you don't want me again$<mult_succ>
+Missed me if you don't want me again
 You don't (You don't) know how much I feel I love you still
-So why don't you, don't you?$<bad_succ><mult_succ>
+So why don't you, don't you?
 [Outro]
-Ah, ah, ah, ah$<exclamatory><bad_succ><mult_succ>
-Don't you (Ah, ah, ah)$<exclamatory><bad_succ>
+Ah, ah, ah, ah$<exclamatory>
+Don't you (Ah, ah, ah)$<exclamatory>

@@ -11,11 +11,11 @@ Feeling so Gatsby for that whole year
 So why'd you have to rain on my parade?
 I'm shaking my head and locking the gates
 [Chorus]
-This is why we can't have nice things, darling$<mult_succ>
-Because you break them$<mult_succ>
-I had to take them away$<mult_succ>
+This is why we can't have nice things, darling
+Because you break them
+I had to take them away
 This is why we can't have nice things, honey (Oh)
-Did you think I wouldn't hear all the things you said about me?$<mult_succ>
+Did you think I wouldn't hear all the things you said about me?
 This is why we can't have nice things
 [Verse 2]
 It was so nice being friends again
@@ -30,10 +30,10 @@ But I'm not the only friend you've lost lately (Mm-mm)
 If only you weren't so shady
 [Chorus]
 This is why we can't have nice things, darling (Yeah)
-Because you break them$<mult_succ>
-I had to take them away$<mult_succ>
+Because you break them
+I had to take them away
 This is why we can't have nice (Nice things) things (Baby), honey
-Did you think I wouldn't hear all the things you said about me?$<mult_succ>
+Did you think I wouldn't hear all the things you said about me?
 This is why we can't have
 [Bridge]
 Here's a toast to my real friends
@@ -47,16 +47,16 @@ And here's to you
 Haha, I can't even say it with a straight face
 [Chorus]
 This is why we can't have nice things, darling (Darling)
-Because you break them$<mult_succ>
-I had to take them away$<mult_succ>
+Because you break them
+I had to take them away
 This is why we can't have nice (Uh-uh) things (Oh no), honey (Baby, oh)
-Did you think I wouldn't hear all the things you said about me?$<mult_succ>
-This is why we can't have nice things, darling$<mult_succ>
+Did you think I wouldn't hear all the things you said about me?
+This is why we can't have nice things, darling
 (And here's to my real friends)
-Because you break them$<mult_succ>
+Because you break them
 I had to take them
 (And here's to my baby)
 Nice things, honey
 (He didn't care about that he-said, she-said)
-Did you think I wouldn't hear all the things you said about me?$<mult_succ>
-This is why we can't have nice things$<bad_succ>
+Did you think I wouldn't hear all the things you said about me?
+This is why we can't have nice things

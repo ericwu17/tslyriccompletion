@@ -16,7 +16,7 @@ To stand outside my window throwin' pebbles
 Screamin', "I'm in love with you"
 Wait there in the pourin' rain, comin' back for more
 And don't you leave 'cause I know
-All I need is on the other side of the door$<mult_succ>
+All I need is on the other side of the door
 [Verse 2]
 Me and my stupid pride are sittin' here alone
 Goin' through the photographs, starin' at the phone
@@ -33,7 +33,7 @@ To stand outside my window throwin' pebbles
 Screamin', "I'm in love with you"
 Wait there in the pourin' rain, comin' back for more
 And don't you leave 'cause I know
-All I need is on the other side of the door$<mult_succ>
+All I need is on the other side of the door
 [Bridge]
 And I'll scream out the window
 I can't even look at you
@@ -47,7 +47,7 @@ To stand outside my window throwin' pebbles
 Screamin', "I'm in love with you"
 Wait there in the pourin' rain, comin' back for more
 And don't you leave 'cause I know
-All I need is on the other side of the door$<mult_succ>
+All I need is on the other side of the door
 [Outro]
 With your face and the beautiful eyes
 And the conversation with the little white lies
@@ -55,4 +55,4 @@ And the faded picture of a beautiful night
 You carried me from your car up the stairs
 And I broke down crying, was she worth this mess?
 After everything and that little black dress
-After everything I must confess, I need you$<bad_succ>
+After everything I must confess, I need you

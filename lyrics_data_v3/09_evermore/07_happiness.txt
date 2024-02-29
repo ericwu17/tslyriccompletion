@@ -1,7 +1,7 @@
 evermore
 happiness
 [Verse 1]
-Honey, when I'm above the trees$<mult_succ>
+Honey, when I'm above the trees
 I see this for what it is
 But now I'm right down in it, all the years I've given
 Is just shit we're dividin' up
@@ -10,10 +10,10 @@ I was dancing when the music stopped
 And in the disbelief, I can't face reinvention
 I haven't met the new me yet
 [Chorus]
-There'll be happiness after you$<mult_succ>
+There'll be happiness after you
 But there was happiness because of you
 Both of these things can be true
-There is happiness$<mult_succ>
+There is happiness
 [Post-Chorus]
 Past the blood and bruise
 Past the curses and cries
@@ -21,7 +21,7 @@ Beyond the terror in the nightfall
 Haunted by the look in my eyes
 That would've loved you for a lifetime
 Leave it all behind
-And there is happiness$<mult_succ>
+And there is happiness
 [Verse 2]
 Tell me, when did your winning smile
 Begin to look like a smirk?
@@ -31,18 +31,18 @@ I hope she'll be a beautiful fool
 Who takes my spot next to you
 No, I didn't mean that
 Sorry, I can't see facts through all of my fury
-You haven't met the new me yet$<mult_succ>
+You haven't met the new me yet
 [Chorus]
 There'll be happiness after me
 But there was happiness because of me
 Both of these things, I believe
-There is happiness$<mult_succ>
+There is happiness
 [Post-Chorus]
 In our history, across our great divide
 There is a glorious sunrise
 Dappled with the flickers of light
-From the dress I wore at midnight, leave it all behind$<mult_succ>
-And there is happiness$<mult_succ>
+From the dress I wore at midnight, leave it all behind
+And there is happiness
 [Bridge]
 I can't make it go away by making you a villain
 I guess it's the price I paid for seven years in Heaven
@@ -52,24 +52,24 @@ No one teaches you what to do
 When a good man hurts you
 And you know you hurt him too
 [Verse 3]
-Honey, when I'm above the trees$<mult_succ>
+Honey, when I'm above the trees
 I see it for what it is
 But now my eyes leak acid rain on the pillow where you used to lay your head
 After giving you the best I had
 Tell me what to give after that
 All you want from me now is the green light of forgiveness
-You haven't met the new me yet$<mult_succ>
+You haven't met the new me yet
 And I think she'll give you that
 [Chorus]
-There'll be happiness after you$<mult_succ>
+There'll be happiness after you
 But there was happiness because of you too
 Both of these things can be true
-There is happiness$<mult_succ>
+There is happiness
 [Post-Chorus]
 In our history, across our great divide
 There is a glorious sunrise
 Dappled with the flickers of light
-From the dress I wore at midnight, leave it all behind$<mult_succ>
+From the dress I wore at midnight, leave it all behind
 Oh, leave it all behind
 Leave it all behind
-And there is happiness$<bad_succ>
+And there is happiness

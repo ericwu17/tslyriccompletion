@@ -9,8 +9,8 @@ Even though I'm not the only one
 Who feels the way I do
 [Chorus]
 I'm alone, on my own, and that's all I know
-I'll be strong, I'll be wrong, oh but life goes on$<mult_succ>
-Oh, I'm just a girl, trying to find a place in this world$<mult_succ>
+I'll be strong, I'll be wrong, oh but life goes on
+Oh, I'm just a girl, trying to find a place in this world
 [Verse 2]
 Got the radio on, my old blue jeans
 And I'm wearing my heart on my sleeve
@@ -20,17 +20,17 @@ And tomorrow's just a mystery, oh yeah
 But that's OK
 [Chorus]
 I'm alone, on my own, and that's all I know
-I'll be strong, I'll be wrong, oh but life goes on$<mult_succ>
-Oh, I'm just a girl, trying to find a place in this world$<mult_succ>
+I'll be strong, I'll be wrong, oh but life goes on
+Oh, I'm just a girl, trying to find a place in this world
 [Bridge]
 Maybe I'm just a girl on a mission
 But I'm ready to fly
 [Chorus]
 I'm alone, on my own, and that's all I know
-I'll be strong, I'll be wrong, oh but life goes on$<mult_succ>
+I'll be strong, I'll be wrong, oh but life goes on
 Oh I'm alone, on my own, and that's all I know
 Oh I'm just a girl, trying to find a place in this world
 [Outro]
-Oh I'm just a girl$<bad_succ>
+Oh I'm just a girl
 Oh I'm just a girl, oh, oh$<exclamatory>
-Oh I'm just a girl$<bad_succ>
+Oh I'm just a girl

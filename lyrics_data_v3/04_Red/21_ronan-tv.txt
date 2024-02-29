@@ -1,7 +1,7 @@
 Red
 Ronan
 [Verse 1]
-I remember your bare feet, down the hallway$<mult_succ>
+I remember your bare feet, down the hallway
 I remember your little laugh
 Race cars on the kitchen floor, plastic dinosaurs
 I love you to the moon and back
@@ -15,8 +15,8 @@ You fought it hard like an army guy
 Remember I leaned in and whispered to you
 [Chorus]
 "Come on, baby, with me
-We're going to fly away from here$<mult_succ>
-You were my best four years"$<mult_succ>
+We're going to fly away from here
+You were my best four years"
 [Verse 2]
 I remember the drive home
 When the blind hope turned to crying and screaming, "Why?"
@@ -28,11 +28,11 @@ I remember the last day, when I kissed your face
 And whispered in your ear
 [Chorus]
 "Come on, baby, with me
-We're going to fly away from here$<mult_succ>
+We're going to fly away from here
 Out of this curtained room and this hospital gray, we'll just disappear
 Come on, baby, with me
-We're going to fly away from here$<mult_succ>
-You were my best four years"$<mult_succ>
+We're going to fly away from here
+You were my best four years"
 [Bridge]
 What if I'm standing in your closet trying to talk to you?
 And what if I kept the hand-me-downs you won't grow into?
@@ -40,10 +40,10 @@ And what if I really thought some miracle would see us through?
 What if the miracle was even getting one moment with you?
 [Chorus]
 Come on, baby, with me
-We're going to fly away from here$<mult_succ>
+We're going to fly away from here
 Come on, baby, with me
-We're going to fly away from here$<mult_succ>
+We're going to fly away from here
 You were my best four years
 [Outro]
-I remember your bare feet, down the hallway$<mult_succ>
-I love you to the moon and back$<bad_succ>
+I remember your bare feet, down the hallway
+I love you to the moon and back

@@ -8,12 +8,12 @@ You're not sure which is worse
 [Chorus]
 Because I dropped your hand while dancing
 Left you out there standing
-Crestfallen on the landing$<bad_succ><mult_succ>
-Champagne problems$<exclamatory><mult_succ>
-Your mom's ring in your pocket$<mult_succ>
+Crestfallen on the landing
+Champagne problems$<exclamatory>
+Your mom's ring in your pocket
 My picture in your wallet
-Your heart was glass, I dropped it$<bad_succ>
-Champagne problems$<exclamatory><mult_succ>
+Your heart was glass, I dropped it
+Champagne problems$<exclamatory>
 [Verse 2]
 You told your family for a reason
 You couldn't keep it in
@@ -22,12 +22,12 @@ Now no one's celebrating
 [Chorus]
 Dom Pérignon, you brought it
 No crowd of friends applauded
-Your hometown skeptics called it$<bad_succ>
-Champagne problems$<exclamatory><mult_succ>
+Your hometown skeptics called it
+Champagne problems$<exclamatory>
 You had a speech, you're speechless
 Love slipped beyond your reaches
-And I couldn't give a reason$<bad_succ>
-Champagne problems$<exclamatory><mult_succ>
+And I couldn't give a reason
+Champagne problems$<exclamatory>
 [Bridge]
 Your Midas touch on the Chevy door
 November flush and your flannel cure
@@ -48,12 +48,12 @@ She'll patch up your tapestry that I shred
 [Chorus]
 And hold your hand while dancing
 Never leave you standing
-Crestfallen on the landing$<mult_succ>
+Crestfallen on the landing
 With champagne problems
-Your mom's ring in your pocket$<mult_succ>
+Your mom's ring in your pocket
 Her picture in your wallet
-You won't remember all my$<bad_succ>
-Champagne problems$<exclamatory><mult_succ>
+You won't remember all my
+Champagne problems$<exclamatory>
 [Outro]
-You won't remember all my$<bad_succ>
-Champagne problems$<exclamatory><bad_succ>
+You won't remember all my
+Champagne problems$<exclamatory>

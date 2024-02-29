@@ -15,11 +15,11 @@ Wondering where did my baby go?
 The fast times, the bright lights, the merry go
 Sorry for not making you my centerfold
 [Chorus: Taylor Swift]
-Over and over$<mult_succ>
+Over and over
 Lost again with no surprises
 Disappointments, close your eyes
 And it gets colder and colder
-When the sun goes down$<mult_succ>
+When the sun goes down
 [Verse 2: Matt Berninger with Taylor Swift]
 The question pounds my head
 What's a lifetime of achievement
@@ -35,11 +35,11 @@ It was the one place to be
 The mischief, the gift-wrapped suburban dreams
 Sorry for not winning you an arcade ring
 [Chorus: Taylor Swift & Matt Berninger]
-Over and over$<mult_succ>
+Over and over
 Lost again with no surprises
 Disappointments, close your eyes
 And it gets colder and colder
-When the sun goes down$<mult_succ>
+When the sun goes down
 [Bridge: Taylor Swift, Matt Berninger, Both]
 Were you waiting at our old spot
 In the tree line
@@ -50,7 +50,7 @@ With a big cake, happy birthday
 Did I paint your bluest skies the darkest grey?
 A universe away
 And when I got into the accident
-The sight that flashed before me was your face$<mult_succ>
+The sight that flashed before me was your face
 But when I walked up to the podium, I think that I forgot to say your name
 [Pre-Chorus: Taylor Swift & Matt Berninger]
 I'm on a bench in Coney Island
@@ -58,16 +58,16 @@ Wondering where did my baby go?
 The fast times, the bright lights, the merry go
 Sorry for not making you my centerfold
 [Chorus: Taylor Swift & Matt Berninger]
-Over and over$<mult_succ>
+Over and over
 Lost again with no surprises
 Disappointments, close your eyes
 And it gets colder and colder
-When the sun goes down$<mult_succ>
-When the sun goes down$<mult_succ>
+When the sun goes down
+When the sun goes down
 [Outro: Taylor Swift & Matt Berninger]
-The sight that flashed before me was your face$<mult_succ>
-When the sun goes down$<mult_succ>
+The sight that flashed before me was your face
+When the sun goes down
 But I think that I forgot to say your name
-Over and over$<mult_succ>
+Over and over
 Sorry for not making you my, making you my
-Making you my centerfold$<bad_succ>
+Making you my centerfold

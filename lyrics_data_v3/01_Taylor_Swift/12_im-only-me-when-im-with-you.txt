@@ -16,8 +16,8 @@ Don't wanna fly if you're still on the ground
 It's like no matter what I do
 Well, you drive me crazy half the time
 The other half, I'm only tryna
-Let you know that what I feel is true$<mult_succ>
-And I'm only me when I'm with you$<mult_succ>
+Let you know that what I feel is true
+And I'm only me when I'm with you
 [Verse 2]
 Just a small-town boy and girl
 Living in a crazy world
@@ -34,8 +34,8 @@ Don't wanna fly if you're still on the ground
 It's like no matter what I do
 Well, you drive me crazy half the time
 The other half, I'm only tryna
-Let you know that what I feel is true$<mult_succ>
-And I'm only me when I'm with you$<mult_succ>
+Let you know that what I feel is true
+And I'm only me when I'm with you
 [Bridge]
 When I'm with anybody else
 It's so hard to be myself
@@ -46,9 +46,9 @@ Don't wanna fly if you're still on the ground
 It's like no matter what I do
 Well, you drive me crazy half the time
 The other half, I'm only tryna
-Let you know that what I feel is true$<mult_succ>
+Let you know that what I feel is true
 And I'm only me, who I wanna be
-Well, I'm only me when I'm with you$<bad_succ>
+Well, I'm only me when I'm with you
 [Outro]
-With you$<exclamatory><bad_succ>
-Uh-huh, yeah$<exclamatory><bad_succ>
+With you$<exclamatory>
+Uh-huh, yeah$<exclamatory>

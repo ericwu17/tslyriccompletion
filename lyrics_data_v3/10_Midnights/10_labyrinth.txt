@@ -14,7 +14,7 @@ Uh-oh, I'm fallin' in love
 Oh no, I'm fallin' in love again
 Oh, I'm fallin' in love
 I thought the plane was goin' down
-How'd you turn it right around?$<mult_succ>
+How'd you turn it right around?
 [Verse 2]
 It only feels this raw right now
 Lost in the labyrinth of my mind
@@ -29,19 +29,19 @@ Uh-oh, I'm fallin' in love
 Oh no, I'm fallin' in love again
 Oh, I'm fallin' in love
 I thought the plane was goin' down
-How'd you turn it right around?$<mult_succ>
+How'd you turn it right around?
 Uh-oh, I'm fallin' in love
 Oh no, I'm fallin' in love again
 Oh, I'm fallin' in love
 I thought the plane was goin' down
-How'd you turn it right around?$<mult_succ>
+How'd you turn it right around?
 Uh-oh, I'm fallin' in love
 Oh no, I'm fallin' in love again
 Oh, I'm fallin' in love
 I thought the plane was goin' down
-How'd you turn it right around?$<mult_succ>
+How'd you turn it right around?
 Uh-oh, I'm fallin' in love
 Oh no, I'm fallin' in love again
 Oh, I'm fallin' in love
 I thought the plane was goin' down
-How'd you turn it right around?$<bad_succ>
+How'd you turn it right around?

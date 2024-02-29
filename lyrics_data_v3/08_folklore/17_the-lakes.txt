@@ -8,7 +8,7 @@ These hunters with cell phones
 Take me to the Lakes where all the poets went to die
 I don't belong and, my beloved, neither do you
 Those Windermere peaks look like a perfect place to cry
-I'm setting off, but not without my muse$<mult_succ>
+I'm setting off, but not without my muse
 [Verse 2]
 What should be over burrowed under my skin
 In heart-stopping waves of hurt
@@ -18,7 +18,7 @@ Tell me what are my words worth
 Take me to the Lakes where all the poets went to die
 I don't belong and, my beloved, neither do you
 Those Windermere peaks look like a perfect place to cry
-I'm setting off, but not without my muse$<mult_succ>
+I'm setting off, but not without my muse
 [Bridge]
 I want auroras and sad prose
 I want to watch wisteria grow right over my bare feet
@@ -32,5 +32,5 @@ With my calamitous love and insurmountable grief
 Take me to the Lakes where all the poets went to die
 I don't belong and, my beloved, neither do you
 Those Windermere peaks look like a perfect place to cry
-I'm setting off, but not without my muse$<mult_succ>
-No, not without you$<bad_succ>
+I'm setting off, but not without my muse
+No, not without you

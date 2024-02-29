@@ -12,10 +12,10 @@ Time, curious time
 Gave me no compasses, gave me no signs
 Were there clues I didn't see?
 And isn't it just so pretty to think
-All along there was some$<bad_succ>
+All along there was some
 Invisible string$<exclamatory>
-Tying you to me?$<bad_succ>
-Ooh-ooh-ooh-ooh$<exclamatory><mult_succ>
+Tying you to me?
+Ooh-ooh-ooh-ooh$<exclamatory>
 [Verse 2]
 Bad was the blood of the song in the cab
 On your first trip to LA
@@ -28,10 +28,10 @@ Time, mystical time
 Cutting me open, then healing me fine
 Were there clues I didn't see?
 And isn't it just so pretty to think
-All along there was some$<bad_succ>
+All along there was some
 Invisible string$<exclamatory>
-Tying you to me?$<bad_succ>
-Ooh-ooh-ooh-ooh$<exclamatory><mult_succ>
+Tying you to me?
+Ooh-ooh-ooh-ooh$<exclamatory>
 [Bridge]
 A string that pulled me
 Out of all the wrong arms, right into that dive bar
@@ -53,12 +53,12 @@ Gave me the blues and then purple-pink skies
 And it's cool
 Baby, with me
 And isn't it just so pretty to think
-All along there was some$<bad_succ>
+All along there was some
 Invisible string$<exclamatory>
-Tying you to me?$<bad_succ>
-Ooh-ooh-ooh-ooh$<exclamatory><bad_succ><mult_succ>
-Me$<exclamatory><bad_succ>
-Ooh-ooh-ooh-ooh$<exclamatory><bad_succ><mult_succ>
+Tying you to me?
+Ooh-ooh-ooh-ooh$<exclamatory>
+Me$<exclamatory>
+Ooh-ooh-ooh-ooh$<exclamatory>
 [Outro]
-(Ah-ah-ah)$<exclamatory><bad_succ>
-(Ah-ah-ah)$<exclamatory><bad_succ>
+(Ah-ah-ah)$<exclamatory>
+(Ah-ah-ah)$<exclamatory>
