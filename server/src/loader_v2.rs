@@ -41,6 +41,13 @@ pub fn load_songs_from_files() -> Vec<Song> {
             let song_name = &file_contents[..song_name_length];
             let file_contents = &file_contents[song_name_length + 1..];
 
+            let s = file_contents
+                .replace("in' ", "ing ")
+                .replace("in'\n", "ing\n")
+                .replace("in',", "ing,")
+                .replace("shoulda", "should've");
+            let file_contents = s.as_str();
+
             let song = Song::new(
                 album_name.to_owned(),
                 song_name.to_owned(),
