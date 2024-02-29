@@ -29,15 +29,15 @@ pub struct ISong {
 pub struct Line {
     pub text: String,
     pub is_exclamatory: bool,
-    pub has_multiple_successors: bool,
-    pub has_bad_successor: bool,
+    /// If the Option is `Some`, that means that the line is a bad prompt,
+    /// and the string is a reason why the line is not appropriate to use as a prompt.
+    pub is_bad_prompt: Option<String>,
 }
 #[derive(Debug, Serialize)]
 pub struct ILine {
     pub text: String,
-    pub is_exclamatory: bool,
-    pub has_multiple_successors: bool,
-    pub has_bad_successor: bool,
+    pub is_bad_prompt: Option<String>,
+    /// `num_guesses` is the number of times the line has been played in a game. Used by the client to display a subscript.
     pub num_guesses: usize,
 }
 
@@ -47,110 +47,143 @@ impl PartialEq for Line {
     }
 }
 
+fn calculate_is_exclamatory_heuristic(text: &str) -> bool {
+    // The goal here is to calculate whether a line is "exclamatory". A line like "Oh, oh, oh, whoa" is exclamatory, since it contains many exclamatory words.
+    // We don't want the guessing game's questions to involve exclamatory words, because they are generally difficult to recall or type properly.
+    let exclamatory_words = [
+        "mmmm", "mmm", "mm", "oh", "ohh", "ooh", "la", "na", "no", "my", "uh", "huh", "ahh", "ah",
+        "ha", "yeah", "whoa", "ayy", "i", "eh", "hey", "ra", "di", "da",
+    ];
+
+    let text_lower = text.to_lowercase();
+    let words: Vec<&str> = text_lower
+        .split(|x: char| !x.is_alphabetic())
+        .filter(|x| !x.is_empty())
+        .collect();
+    let num_words = words.len();
+    let exclamatory_words = words
+        .clone()
+        .into_iter()
+        .filter(|x| exclamatory_words.contains(x));
+    let num_exclamatory_words = exclamatory_words.count();
+
+    if num_exclamatory_words as f32 / num_words as f32 >= 0.5 {
+        return true;
+    }
+    // we label short lines as exclamatory too
+    if num_words <= 2 {
+        return true;
+    }
+    return false;
+}
+
 impl Line {
-    pub fn new(text: &str) -> Line {
-        // The goal here is to calculate whether a line is "exclamatory". A line like "Oh, oh, oh, whoa" is exclamatory, since it contains many exclamatory words.
-        // We don't want the guessing game's questions to involve exclamatory words, because they are generally difficult to recall or type properly.
-
+    pub fn new(raw_text: &str) -> Line {
         let mut is_exclamatory = false;
+        let mut is_bad_prompt = None;
 
-        let exclamatory_words = [
-            "mmmm", "mmm", "mm", "oh", "ohh", "ooh", "la", "na", "no", "my", "uh", "huh", "ahh",
-            "ah", "ha", "yeah", "whoa", "ayy", "i", "eh", "hey", "ra", "di", "da",
-        ];
+        let text = if raw_text.contains('$') {
+            // everything before the last `$` is part of the line
+            let num_segments = raw_text.split('$').count();
+            raw_text
+                .split('$')
+                .take(num_segments - 1)
+                .collect::<Vec<&str>>()
+                .join("$")
+        } else {
+            raw_text.to_string()
+        };
 
-        let text_lower = text.to_lowercase();
-        let words: Vec<&str> = text_lower
-            .split(|x: char| !x.is_alphabetic())
-            .filter(|x| !x.is_empty())
-            .collect();
-        let num_words = words.len();
-        let exclamatory_words = words
-            .clone()
-            .into_iter()
-            .filter(|x| exclamatory_words.contains(x));
-        let num_exclamatory_words = exclamatory_words.count();
+        if raw_text.contains('$') {
+            let markers = raw_text.split('$').rev().next().unwrap();
+            if markers.contains("<exclamatory>") {
+                is_exclamatory = true;
+            }
+            if markers.contains("<misc_bad") {
+                let bad_desc = markers
+                    .split_once("<misc_bad ")
+                    .unwrap()
+                    .1
+                    .split_once(">")
+                    .unwrap()
+                    .0;
 
-        if num_exclamatory_words as f32 / num_words as f32 >= 0.5 {
-            is_exclamatory = true;
+                is_bad_prompt = Some(bad_desc.to_string());
+            }
         }
-        // we label short lines as exclamatory to exclude them too
-        if num_words <= 2 {
-            is_exclamatory = true;
+
+        if is_exclamatory != calculate_is_exclamatory_heuristic(&text) {
+            println!("Warning, the following line's exclamatory status does not match the calculated heuristic:");
+            println!("{}", &text);
         }
-
-        // Nevermind, there was too many false positives with this method. :(
-        // // A line is marked as exclamatory if its most common 2 words make up >= 50% of the line's words.
-        // let mut word_frequencies: HashMap<&str, i32> = HashMap::new();
-        // for word in words {
-        // 	if word_frequencies.contains_key(word) {
-        // 		word_frequencies.insert(word, word_frequencies.get(word).unwrap() + 1);
-        // 	} else {
-        // 		word_frequencies.insert(word, 1);
-        // 	}
-        // }
-        // let mut word_freqs: Vec<(&str, i32)> = word_frequencies.into_iter().collect();
-        // word_freqs.sort_by(|(_, a2), (_, b2)| a2.partial_cmp(b2).unwrap_or(Ordering::Equal));
-        // word_freqs.reverse();
-        // let mut num_words_in_two_most_common_words = 0;
-        // num_words_in_two_most_common_words += word_freqs.get(0).unwrap_or(&("", 0)).1;
-        // num_words_in_two_most_common_words += word_freqs.get(1).unwrap_or(&("", 0)).1;
-
-        // if num_words_in_two_most_common_words as f32 / num_words as f32 >= 0.5 {
-        // 	is_exclamatory = true;
-        // }
 
         Line {
             text: text.to_owned(),
             is_exclamatory,
-            has_multiple_successors: false,
-            has_bad_successor: false,
+            is_bad_prompt,
         }
     }
 }
 
 impl Song {
     pub fn new(album: String, name: String, lyrics_raw: String) -> Self {
-        let mut lines: Vec<Line> = lyrics_raw
-            .split('\n')
-            .filter(|x| !(x.starts_with('[') || x.is_empty()))
-            .map(|x| x.trim())
-            .map(Line::new)
-            .collect();
+        let mut lyrics_raw_processed = String::new();
+        let mut lines: Vec<Line> = Vec::new();
+        for raw_line in lyrics_raw.split('\n') {
+            let raw_line = raw_line.trim();
+            if raw_line.is_empty() {
+                continue;
+            }
+            if raw_line.starts_with('[') {
+                lyrics_raw_processed.push_str(raw_line);
+                lyrics_raw_processed.push('\n');
+                continue;
+            }
+            let line = Line::new(raw_line);
+            lyrics_raw_processed.push_str(&line.text);
+            lyrics_raw_processed.push('\n');
+
+            lines.push(line);
+        }
 
         for index in 0..lines.len() - 1 {
             if lines[index + 1].is_exclamatory {
-                lines[index].has_bad_successor = true;
+                lines[index].is_bad_prompt = Some("followed by exclamatory line".to_string());
+            }
+            if lines[index].is_exclamatory {
+                lines[index].is_bad_prompt = Some("is an exclamatory line".to_string());
             }
         }
-        let n = lines.len();
-        lines[n - 1].has_bad_successor = true;
 
-        let mut continuation_map: HashMap<String, Vec<String>> = HashMap::new();
-        for index in 0..lines.len() - 1 {
-            let line = &lines[index];
-            if let Some(continuations) = continuation_map.get(&line.text) {
-                if !continuations.contains(&lines[index + 1].text) {
-                    let mut v = continuations.clone();
-                    v.push(lines[index + 1].text.clone());
-                    continuation_map.insert(line.text.clone(), v);
-                }
-            } else {
-                continuation_map.insert(line.text.clone(), vec![lines[index + 1].text.clone()]);
-            }
-        }
-        for index in 0..lines.len() - 1 {
-            if let Some(continuations) = continuation_map.get(&lines[index].text) {
-                if continuations.len() > 1 {
-                    lines[index].has_multiple_successors = true;
-                }
-            }
-        }
+        let n = lines.len();
+        lines[n - 1].is_bad_prompt = Some("Has no next line".to_string());
+
+        // NOTE: the logic here calculates whether there are multiple successors
+        // let mut continuation_map: HashMap<String, Vec<String>> = HashMap::new();
+        // for index in 0..lines.len() - 1 {
+        //     let line = &lines[index];
+        //     if let Some(continuations) = continuation_map.get(&line.text) {
+        //         if !continuations.contains(&lines[index + 1].text) {
+        //             let mut v = continuations.clone();
+        //             v.push(lines[index + 1].text.clone());
+        //             continuation_map.insert(line.text.clone(), v);
+        //         }
+        //     } else {
+        //         continuation_map.insert(line.text.clone(), vec![lines[index + 1].text.clone()]);
+        //     }
+        // }
+        // for index in 0..lines.len() - 1 {
+        //     if let Some(continuations) = continuation_map.get(&lines[index].text) {
+        //         if continuations.len() > 1 {
+        //             lines[index].has_multiple_successors = true;
+        //         }
+        //     }
+        // }
 
         Song {
             album,
             name,
-            lyrics_raw,
+            lyrics_raw: lyrics_raw_processed,
             lines,
         }
     }
@@ -269,12 +302,10 @@ pub async fn get_song(
                 lines: vec![],
             };
             for line in &song.lines {
-                let is_exclamatory = line.is_exclamatory;
-                let has_multiple_successors = line.has_multiple_successors;
-                let has_bad_successor = line.has_bad_successor;
+                let is_bad_prompt = &line.is_bad_prompt;
                 let mut num_guesses = 0;
 
-                if !is_exclamatory & !has_bad_successor && !has_multiple_successors {
+                if is_bad_prompt.is_none() {
                     let count: Count = sqlx::query_as(
                         "SELECT count(1) as total from guesses 
                         WHERE 
@@ -294,9 +325,7 @@ pub async fn get_song(
 
                 my_song.lines.push(ILine {
                     text: line.text.clone(),
-                    is_exclamatory,
-                    has_bad_successor,
-                    has_multiple_successors,
+                    is_bad_prompt: is_bad_prompt.clone(),
                     num_guesses,
                 })
             }

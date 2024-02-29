@@ -155,21 +155,8 @@ export default function SongPage() {
       while (lineInfo.text.trim() !== lines[0].trim()) {
         renderedLines.push(<Typography sx={{ fontWeight: "bold" }}>{lines.shift()}</Typography>);
       }
-      if (lineInfo.has_bad_successor
-        || lineInfo.has_multiple_successors
-        || lineInfo.is_exclamatory
-      ) {
-        let tooltipText = "";
-        if (lineInfo.has_bad_successor) {
-          tooltipText += "Has a bad successor\n";
-        }
-        if (lineInfo.has_multiple_successors) {
-          tooltipText += "Has multiple different successors\n";
-        }
-        if (lineInfo.is_exclamatory) {
-          tooltipText += "Is an exclamatory line";
-        }
-
+      if (lineInfo.is_bad_prompt != null) {
+        let tooltipText = lineInfo.is_bad_prompt;
         renderedLines.push(
           <Tooltip title={
             <div style={{ whiteSpace: "pre-line" }}>{tooltipText}</div>

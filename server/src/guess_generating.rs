@@ -70,7 +70,7 @@ fn are_close_enough(s1: &str, s2: &str) -> bool {
 }
 
 fn is_acceptable_guess(guess: &Line) -> bool {
-    !guess.has_bad_successor && !guess.has_multiple_successors && !guess.is_exclamatory
+    guess.is_bad_prompt.is_none()
 }
 
 /// Generates distractor answer choices for a multiple choice question, while ensuring that
