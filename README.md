@@ -2,7 +2,7 @@
 
 This is a fun project for fellow Taylor Swift fans who like to complete lyrics.
 The project was originally a
-[command line interface written in Python](https://github.com/EricWu2003/Taylor-Lyric-Guessing-Game).
+[command line interface written in Python](https://github.com/ericwu17/Taylor-Lyric-Guessing-Game).
 Then it became a command line interface written in Rust (see the releases on this Github page).
 It has since turned into a web app built with React and Rust!
 

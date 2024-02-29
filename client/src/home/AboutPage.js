@@ -153,9 +153,8 @@ export default function AboutPage() {
       </Typography>
       <Typography>
         I am always trying to fix bugs and improve the user interface.
-        Let me know (by <Link href="mailto:eric.dianhao.wu@gmail.com">email</Link> {}
-        or by {}
-        <Link href="https://github.com/EricWu2003/tslyriccompletion/issues">
+        Let me know email (see contact me section) or by {}
+        <Link href="https://github.com/ericwu17/tslyriccompletion/issues">
           raising an issue on github
         </Link>)
         if you have any feature requests or suggestions!
@@ -188,7 +187,7 @@ export default function AboutPage() {
         math, computers, Rubik's Cubes, and shorthand systems. If you have any feedback for
         this site, or issues with
         running this app locally, please reach out -- I'd love to hear from you! My email is
-        eric.dianhao.wu@gmail.com.
+        ericwu17 at UCLA's domain name.
       </Typography>
       <Typography>
         Also please email me if
