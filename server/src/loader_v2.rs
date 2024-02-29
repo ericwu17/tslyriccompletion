@@ -8,6 +8,10 @@
 
 use crate::song::Song;
 use include_dir::{include_dir, Dir};
+use std::collections::VecDeque;
+use std::fs::File;
+use std::io::prelude::*;
+use std::path::Path;
 
 /// Directory of lyrics files
 static LYRICS_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/../lyrics_data");
@@ -37,11 +41,52 @@ pub fn load_songs_from_files() -> Vec<Song> {
             let song_name = &file_contents[..song_name_length];
             let file_contents = &file_contents[song_name_length + 1..];
 
-            songs.push(Song::new(
+            let song = Song::new(
                 album_name.to_owned(),
                 song_name.to_owned(),
                 file_contents.to_owned(),
-            ));
+            );
+
+            // songs.push(song);
+
+            let path = Path::new("../lyrics_data_new").join(song_file.path());
+            let mut file = File::create(path).unwrap();
+            file.write(album_name.as_bytes()).unwrap();
+            file.write(b"\n").unwrap();
+            file.write(song_name.as_bytes()).unwrap();
+            file.write(b"\n").unwrap();
+
+            let mut raw_lines = file_contents.split('\n').collect::<VecDeque<_>>();
+            dbg!(file_contents);
+
+            for line in song.lines {
+                while *raw_lines.front().unwrap() != line.text.as_str() {
+                    let raw_line = raw_lines.pop_front().unwrap();
+                    dbg!(raw_line);
+                    if raw_line.starts_with('[') {
+                        println!("writing raw line {}", raw_line);
+                        file.write(raw_line.as_bytes()).unwrap();
+                        file.write(b"\n").unwrap();
+                    }
+                }
+
+                file.write(line.text.as_bytes()).unwrap();
+
+                if line.is_exclamatory || line.has_bad_successor || line.has_multiple_successors {
+                    file.write(b"$").unwrap();
+                    if line.is_exclamatory {
+                        file.write(b"<exclamatory>").unwrap();
+                    }
+                    if line.has_bad_successor {
+                        file.write(b"<bad_succ>").unwrap();
+                    }
+                    if line.has_multiple_successors {
+                        file.write(b"<mult_succ>").unwrap();
+                    }
+                }
+
+                file.write(b"\n").unwrap();
+            }
         }
     }
 
