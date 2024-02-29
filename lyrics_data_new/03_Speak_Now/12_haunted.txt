@@ -1,0 +1,62 @@
+Speak Now
+Haunted
+[Verse 1]
+You and I walk a fragile line
+I have known it all this time$<mult_succ>
+But I never thought I'd live to see it break
+It's getting dark and it's all too quiet
+And I can't trust anything now
+And it's coming over you like it's all a big mistake$<bad_succ>
+[Pre-Chorus]
+Whoa, holding my breath$<exclamatory>
+Won't lose you again
+Something's made your eyes go cold
+[Chorus]
+Come on, come on, don't leave me like this
+I thought I had you figured out$<mult_succ>
+Something's gone terribly wrong$<mult_succ>
+You're all I wanted
+Come on, come on, don't leave me like this
+I thought I had you figured out$<mult_succ>
+Can't breathe whenever you're gone$<mult_succ>
+Can't turn back now, I'm haunted$<mult_succ>
+[Verse 2]
+Stood there and watched you walk away
+From everything we had
+But I still mean every word I said to you
+He will try to take away my pain
+And he just might make me smile
+But the whole time, I'm wishing it was you instead$<bad_succ>
+[Pre-Chorus]
+Oh, holding my breath$<exclamatory>
+Won't see you again
+Something keeps me holding onto nothing
+[Chorus]
+Come on, come on, don't leave me like this
+I thought I had you figured out$<mult_succ>
+Something's gone terribly wrong$<mult_succ>
+You're all I wanted
+Come on, come on, don't leave me like this
+I thought I had you figured out$<mult_succ>
+Can't breathe whenever you're gone$<mult_succ>
+Can't turn back now, I'm haunted$<bad_succ><mult_succ>
+[Bridge]
+I know$<exclamatory><bad_succ><mult_succ>
+I know$<exclamatory><mult_succ>
+I just know
+You're not gone, you can't be gone, no
+[Chorus]
+Come on, come on, don't leave me like this
+I thought I had you figured out$<mult_succ>
+Something's gone terribly wrong$<mult_succ>
+Won't finish what you started
+Come on, come on, don't leave me like this
+I thought I had you figured out$<mult_succ>
+Can't breathe whenever you're gone$<mult_succ>
+Can't go back, I'm haunted$<bad_succ>
+(Oh, oh, oh, oh, oh, oh, oh, oh, oh)$<exclamatory>
+[Outro]
+You and I walk a fragile line
+I have known it all this time$<mult_succ>
+Never ever thought I'd see it break
+Never thought I'd see it$<bad_succ>
