@@ -2,7 +2,7 @@ Taylor Swift
 Our Song
 [Verse 1]
 I was ridin' shotgun with my hair undone
-In the front seat of his car$<mult_succ>
+In the front seat of his car
 He's got a one-hand feel on the steering wheel
 The other on my heart
 I look around, turn the radio down
@@ -18,7 +18,7 @@ When we're on the phone and you talk real slow
 Our song is the way you laugh
 The first date: "Man, I didn't kiss her, and I should have"
 And when I got home 'fore I said amen
-Asking God if he could play it again$<mult_succ>
+Asking God if he could play it again
 [Verse 2]
 I was walking up the front porch steps
 After everything that day
@@ -36,7 +36,7 @@ When we're on the phone and you talk real slow
 Our song is the way you laugh
 The first date: "Man, I didn't kiss her, and I should have"
 And when I got home 'fore I said amen
-Asking God if he could play it again$<bad_succ><mult_succ>
+Asking God if he could play it again
 Da-da-da-da$<exclamatory>
 [Bridge]
 I've heard every album, listened to the radio
@@ -50,11 +50,11 @@ When we're on the phone and he talks real slow
 Our song is the way he laughs
 The first date: "Man, I didn't kiss him, and I should have"
 And when I got home 'fore I said amen
-Asking God if he could play it again$<mult_succ>
-Play it again, oh, yeah$<bad_succ>
+Asking God if he could play it again
+Play it again, oh, yeah
 Oh, oh, yeah$<exclamatory>
 [Outro]
 I was ridin' shotgun with my hair undone
-In the front seat of his car$<mult_succ>
+In the front seat of his car
 I grabbed a pen and an old napkin
-And I wrote down our song$<bad_succ>
+And I wrote down our song

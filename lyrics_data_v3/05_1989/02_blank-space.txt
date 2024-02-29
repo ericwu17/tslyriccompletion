@@ -2,12 +2,12 @@
 Blank Space
 [Verse 1]
 Nice to meet you, where you been?
-I could show you incredible things$<mult_succ>
+I could show you incredible things
 Magic, madness, heaven, sin
 Saw you there, and I thought
 "Oh my God, look at that face
 You look like my next mistake
-Love's a game, wanna play?"$<bad_succ>
+Love's a game, wanna play?"
 Ayy$<exclamatory>
 [Verse 2]
 New money, suit and tie
@@ -24,7 +24,7 @@ Or it's gonna go down in flames
 You can tell me when it's over, mm
 If the high was worth the pain
 Got a long list of ex-lovers
-They'll tell you I'm insane$<mult_succ>
+They'll tell you I'm insane
 'Cause you know I love the players
 And you love the game
 'Cause we're young and we're reckless
@@ -32,17 +32,17 @@ We'll take this way too far
 It'll leave you breathless, hmm
 Or with a nasty scar
 Got a long list of ex-lovers
-They'll tell you I'm insane$<mult_succ>
+They'll tell you I'm insane
 But I've got a blank space, baby
-And I'll write your name$<mult_succ>
+And I'll write your name
 [Verse 3]
 Cherry lips, crystal skies
-I could show you incredible things$<mult_succ>
+I could show you incredible things
 Stolen kisses, pretty lies
 You're the King, baby, I'm your Queen
 Find out what you want
 Be that girl for a month
-Wait, the worst is yet to come$<bad_succ>
+Wait, the worst is yet to come
 Oh, no$<exclamatory>
 [Verse 4]
 Screaming, crying, perfect storms
@@ -59,7 +59,7 @@ Or it's gonna go down in flames
 You can tell me when it's over, mm
 If the high was worth the pain
 Got a long list of ex-lovers
-They'll tell you I'm insane$<mult_succ>
+They'll tell you I'm insane
 'Cause you know I love the players
 And you love the game
 'Cause we're young and we're reckless
@@ -67,21 +67,21 @@ We'll take this way too far
 It'll leave you breathless, hmm
 Or with a nasty scar
 Got a long list of ex-lovers
-They'll tell you I'm insane$<mult_succ>
+They'll tell you I'm insane
 But I've got a blank space, baby
-And I'll write your name$<mult_succ>
+And I'll write your name
 [Bridge]
 Boys only want love if it's torture
-Don't say I didn't, say I didn't warn ya$<mult_succ>
+Don't say I didn't, say I didn't warn ya
 Boys only want love if it's torture
-Don't say I didn't, say I didn't warn ya$<mult_succ>
+Don't say I didn't, say I didn't warn ya
 [Chorus]
 So it's gonna be forever
 Or it's gonna go down in flames
 You can tell me when it's over, mm
 If the high was worth the pain
 Got a long list of ex-lovers
-They'll tell you I'm insane$<mult_succ>
+They'll tell you I'm insane
 'Cause you know I love the players
 And you love the game
 'Cause we're young and we're reckless
@@ -89,6 +89,6 @@ We'll take this way too far
 It'll leave you breathless, hmm
 Or with a nasty scar
 Got a long list of ex-lovers
-They'll tell you I'm insane$<mult_succ>
+They'll tell you I'm insane
 But I've got a blank space, baby
-And I'll write your name$<bad_succ>
+And I'll write your name

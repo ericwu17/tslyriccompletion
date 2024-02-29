@@ -10,13 +10,13 @@ Thinkin' 'bout everything we've been through
 Maybe I've been going back too much lately
 When time stood still and I had you
 [Chorus]
-Come back, come back, come back to me like$<mult_succ>
+Come back, come back, come back to me like
 You would, you would if this was a movie
 Stand in the rain outside till I came out
-Come back, come back, come back to me like$<mult_succ>
+Come back, come back, come back to me like
 You could, you could if you just said you're sorry
 I know that we could work it out somehow
-But if this was a movie you'd be here by now$<mult_succ>
+But if this was a movie you'd be here by now
 [Verse 2]
 I know people change and these things happen
 But I remember how it was back then
@@ -27,13 +27,13 @@ Flashback to the night when you said to me
 "Nothing's gonna change, not for me and you"
 Not before I knew how much I had to lose
 [Chorus]
-Come back, come back, come back to me like$<mult_succ>
+Come back, come back, come back to me like
 You would, you would if this was a movie
 Stand in the rain outside till I came out
-Come back, come back, come back to me like$<mult_succ>
+Come back, come back, come back to me like
 You could, you could if you just said you're sorry
 I know that we could work it out somehow
-But if this was a movie you'd be here by now$<mult_succ>
+But if this was a movie you'd be here by now
 [Bridge]
 If you're out there, if you're somewhere, if you're moving on
 I've been waiting for you every day since you've been gone
@@ -45,16 +45,16 @@ You would before you said it's not that easy
 Before the fight, before I locked you out"
 But I take it all back now
 [Chorus]
-Come back, come back, come back to me like$<mult_succ>
+Come back, come back, come back to me like
 You would, you would if this was a movie
 Stand in the rain outside till I came out
-Come back, come back, come back to me like$<mult_succ>
+Come back, come back, come back to me like
 You could, you could if you just said you're sorry
 I know that we could work it out somehow
-But if this was a movie you'd be here by now$<mult_succ>
+But if this was a movie you'd be here by now
 [Outro]
 You'd be here by now
 It's not the kind of ending you want to see now
 Baby, what about the ending?
 Oh, I thought you'd be here by now
-Thought you'd be here by now$<bad_succ>
+Thought you'd be here by now

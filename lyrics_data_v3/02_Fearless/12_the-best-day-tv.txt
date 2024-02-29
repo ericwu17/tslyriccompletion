@@ -10,7 +10,7 @@ I hug your legs and fall asleep on the way home
 I don't know why all the trees change in the fall
 But I know you're not scared of anything at all
 Don't know if Snow White's house is near or far away
-But I know I had the best day with you today$<mult_succ>
+But I know I had the best day with you today
 [Verse 2]
 I'm thirteen now
 And don't know how my friends could be so mean
@@ -21,7 +21,7 @@ And we talk and window shop 'til I've forgotten all their names
 I don't know who I'm going to talk to now at school
 But I know I'm laughing on the car ride home with you
 Don't know how long it's going to take to feel okay
-But I know I had the best day with you today$<mult_succ>
+But I know I had the best day with you today
 [Bridge]
 I have an excellent father, his strength is making me stronger
 God smiles on my little brother, inside and out
@@ -40,4 +40,4 @@ I know you were on my side even when I was wrong
 And I love you for giving me your eyes
 For staying back and watching me shine
 And I didn't know if you knew, so I'm taking this chance to say
-That I had the best day with you today$<bad_succ>
+That I had the best day with you today

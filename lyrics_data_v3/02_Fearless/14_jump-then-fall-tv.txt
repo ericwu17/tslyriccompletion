@@ -10,7 +10,7 @@ I watch you talk, you didn't notice
 I hear the words but all I can think is
 We should be together
 [Pre-Chorus]
-Every time you smile, I smile$<mult_succ>
+Every time you smile, I smile
 And every time you shine, I'll shine for you
 [Chorus]
 Whoa oh, I'm feeling you, baby
@@ -20,7 +20,7 @@ Jump then fall into me
 Baby, I'm never gonna leave you
 Say that you wanna be with me too
 'Cause I'ma stay through it all
-So jump then fall$<mult_succ>
+So jump then fall
 [Verse 2]
 Well, I like the way your hair falls in your face
 You got the keys to me
@@ -41,14 +41,14 @@ Jump then fall into me
 Baby, I'm never gonna leave you
 Say that you wanna be with me too
 'Cause I'ma stay through it all
-So jump then fall$<mult_succ>
+So jump then fall
 [Bridge]
 The bottom's gonna drop out from under our feet
 I'll catch you, I'll catch you
 When people say things that bring you to your knees
 I'll catch you
 The time is gonna come when you're so mad you could cry
-But I'll hold you through the night until you smile$<bad_succ>
+But I'll hold you through the night until you smile
 [Chorus]
 Whoa oh, I need you, baby$<exclamatory>
 Don't be afraid, please
@@ -57,13 +57,13 @@ Jump then fall into me
 Baby, I'm never gonna leave you
 Say that you wanna be with me too
 'Cause I'ma stay through it all
-So jump then fall$<mult_succ>
+So jump then fall
 Jump then fall, baby
 Jump then fall into me, into me
 [Outro]
-Every time you smile, I smile$<mult_succ>
+Every time you smile, I smile
 And every time you shine, I shine
 And every time you're here
 Baby, I'll show you, I'll show you
 You can jump then fall, jump then fall
-Jump then fall into me, into me, yeah$<bad_succ>
+Jump then fall into me, into me, yeah

@@ -15,10 +15,10 @@ Drop everything now
 Meet me in the pouring rain
 Kiss me on the sidewalk
 Take away the pain
-'Cause I see sparks fly whenever you smile$<mult_succ>
+'Cause I see sparks fly whenever you smile
 Get me with those green eyes, baby, as the lights go down
 Give me something that'll haunt me when you're not around
-'Cause I see sparks fly whenever you smile$<mult_succ>
+'Cause I see sparks fly whenever you smile
 [Verse 2]
 My mind forgets to remind me
 You're a bad idea
@@ -32,10 +32,10 @@ Drop everything now
 Meet me in the pouring rain
 Kiss me on the sidewalk
 Take away the pain
-'Cause I see sparks fly whenever you smile$<mult_succ>
+'Cause I see sparks fly whenever you smile
 Get me with those green eyes, baby, as the lights go down
 Give me something that'll haunt me when you're not around
-'Cause I see sparks fly whenever you smile$<mult_succ>
+'Cause I see sparks fly whenever you smile
 [Bridge]
 I run my fingers through your hair and watch the lights go wild
 Just keep on keeping your eyes on me
@@ -48,11 +48,11 @@ Drop everything now
 Meet me in the pouring rain
 Kiss me on the sidewalk
 Take away the pain
-'Cause I see sparks fly whenever you smile$<mult_succ>
+'Cause I see sparks fly whenever you smile
 Get me with those green eyes, baby, as the lights go down
 Give me something that'll haunt me when you're not around
-'Cause I see sparks fly whenever you smile$<mult_succ>
+'Cause I see sparks fly whenever you smile
 [Outro]
 And the sparks fly
 Oh, baby, smile
-And the sparks fly$<bad_succ>
+And the sparks fly

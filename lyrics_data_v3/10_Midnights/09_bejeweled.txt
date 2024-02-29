@@ -8,7 +8,7 @@ Puttin' someone first only works when you're in their top five
 And by the way, I'm goin' out tonight
 [Chorus]
 Best believe I'm still bejeweled
-When I walk in the room$<mult_succ>
+When I walk in the room
 I can still make the whole place shimmer
 And when I meet the band
 They ask, "Do you have a man?"
@@ -16,10 +16,10 @@ I could still say, "I don't remember"
 Familiarity breeds contempt
 So put me in the basement
 When I want the penthouse of your heart
-Diamonds in my eyes$<mult_succ>
-I polish up real, I polish up real nice$<bad_succ>
+Diamonds in my eyes
+I polish up real, I polish up real nice
 [Post-Chorus]
-Nice$<exclamatory><mult_succ>
+Nice$<exclamatory>
 [Verse 2]
 Baby boy, I think I've been too good of a girl (Too good of a girl)
 Did all the extra credit, then got graded on a curve
@@ -30,7 +30,7 @@ And I miss you (Miss you)
 But I miss sparklin' (Nice)
 [Chorus]
 Best believe I'm still bejeweled
-When I walk in the room$<mult_succ>
+When I walk in the room
 I can still make the whole place shimmer
 And when I meet the band
 They ask, "Do you have a man?"
@@ -38,10 +38,10 @@ I could still say, "I don't remember"
 Familiarity breeds contempt
 So put me in the basement
 When I want the penthouse of your heart
-Diamonds in my eyes$<mult_succ>
-I polish up real, I polish up real nice$<bad_succ>
+Diamonds in my eyes
+I polish up real, I polish up real nice
 [Post-Chorus]
-Nice$<exclamatory><mult_succ>
+Nice$<exclamatory>
 [Bridge]
 Sapphire tears on my face
 Sadness became my whole sky
@@ -49,12 +49,12 @@ But some guy said my aura's moonstone
 Just 'cause he was high
 And we danced all night
 And you can try to change my mind
-But you might have to wait in line$<mult_succ>
+But you might have to wait in line
 What's a girl gonna do?
 A diamond's gotta shine
 [Chorus]
 Best believe I'm still bejeweled
-When I walk in the room$<mult_succ>
+When I walk in the room
 I can still make the whole place shimmer (Shimmer)
 And when I meet the band
 They ask, "Do you have a man?"
@@ -62,14 +62,14 @@ I could still say, "I don't remember"
 Familiarity breeds contempt
 So put me in the basement
 When I want the penthouse of your heart
-Diamonds in my eyes$<mult_succ>
+Diamonds in my eyes
 I polish up real (Nice), I polish up real nice
 [Outro]
 And we danced all night
 And you can try to change my mind
-But you might have to wait in line$<mult_succ>
+But you might have to wait in line
 What's a girl gonna do? What's a girl gonna do?
 I polish up nice
 Best believe I'm still bejeweled
-When I walk in the room$<mult_succ>
-I can still make the whole place shimmer$<bad_succ>
+When I walk in the room
+I can still make the whole place shimmer

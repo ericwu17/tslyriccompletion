@@ -9,8 +9,8 @@ By the way
 [Chorus]
 I hate that stupid old pickup truck you never let me drive
 You're a redneck heartbreak who's really bad at lying
-So watch me strike a match on all my wasted time$<mult_succ>
-As far as I'm concerned, you're just another picture to burn$<mult_succ>
+So watch me strike a match on all my wasted time
+As far as I'm concerned, you're just another picture to burn
 [Verse 2]
 There's no time for tears
 I'm just sitting here planning my revenge
@@ -21,22 +21,22 @@ My daddy's gonna show you how sorry you'll be
 [Chorus]
 'Cause I hate that stupid old pickup truck you never let me drive
 You're a redneck heartbreak who's really bad at lying
-So watch me strike a match on all my wasted time$<mult_succ>
-As far as I'm concerned, you're just another picture to burn$<mult_succ>
+So watch me strike a match on all my wasted time
+As far as I'm concerned, you're just another picture to burn
 [Bridge]
 And if you're missing me, you'd better keep it to yourself
 'Cause coming back around here would be bad for your health
 [Chorus]
 'Cause I hate that stupid old pickup truck you never let me drive
 You're a redneck heartbreak who's really bad at lying
-So watch me strike a match on all my wasted time$<mult_succ>
+So watch me strike a match on all my wasted time
 In case you haven't heard
 I really really hate that
 Stupid old pickup truck you never let me drive
 You're a redneck heartbreak, who's really bad at lying
-So watch me strike a match on all my wasted time$<mult_succ>
-As far as I'm concerned, you're just another picture to burn$<mult_succ>
+So watch me strike a match on all my wasted time
+As far as I'm concerned, you're just another picture to burn
 [Outro]
 Burn, burn, burn, baby, burn
-You're just another picture to burn$<bad_succ>
-Baby, burn$<exclamatory><bad_succ>
+You're just another picture to burn
+Baby, burn$<exclamatory>

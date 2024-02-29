@@ -16,8 +16,8 @@ No proof, one touch, but you felt enough
 You can hear it in the silence (Silence), silence (Silence), you
 You can feel it on the way home (Way home), way home (Way home), you
 You can see it with the lights out (Lights out), lights out (Lights out)
-You are in love, true love$<mult_succ>
-You are in love$<mult_succ>
+You are in love, true love
+You are in love
 [Verse 2]
 Morning, his place
 Burnt toast, Sunday
@@ -35,7 +35,7 @@ And you knew what it was, he is in love
 You can hear it in the silence (Silence), silence (Silence), you
 You can feel it on the way home (Way home), way home (Way home), you
 You can see it with the lights out (Lights out), lights out (Lights out)
-You are in love, true love$<mult_succ>
+You are in love, true love
 [Bridge]
 And so it goes
 You two are dancing in a snow globe, 'round and 'round
@@ -47,16 +47,16 @@ And why I've spent my whole life trying to put it into words
 'Cause you can hear it in the silence
 You can feel it on the way home
 You can see it with the lights out
-You are in love, true love$<mult_succ>
-You are in love$<mult_succ>
+You are in love, true love
+You are in love
 [Chorus]
 You can hear it in the silence (Silence), silence (Silence), you
 You can feel it on the way home (Way home), way home (Way home), you
 You can see it with the lights out (Lights out), lights out (Lights out)
-You are in love, true love$<mult_succ>
-You are in love$<mult_succ>
+You are in love, true love
+You are in love
 You can hear it in the silence (Silence), silence (Silence), you
 You can feel it on the way home (Way home), way home (Way home), you
 You can see it with the lights out (Lights out), lights out (Lights out)
-You are in love, true love$<mult_succ>
-You are in love$<bad_succ>
+You are in love, true love
+You are in love

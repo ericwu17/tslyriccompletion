@@ -11,10 +11,10 @@ Hopin' one of those senior boys will wink at you and say
 "You know, I haven't seen you around before"
 [Chorus]
 'Cause when you're fifteen and somebody tells you they love you
-You're gonna believe them$<mult_succ>
+You're gonna believe them
 And when you're fifteen, feelin' like there's nothin' to figure out
 Well, count to ten, take it in
-This is life before you know who you're gonna be$<bad_succ>
+This is life before you know who you're gonna be
 Fifteen$<exclamatory>
 [Verse 2]
 You sit in class next to a redhead named Abigail
@@ -28,7 +28,7 @@ And you're dancin' 'round your room when the night ends
 When the night ends
 [Chorus]
 'Cause when you're fifteen and somebody tells you they love you
-You're gonna believe them$<mult_succ>
+You're gonna believe them
 And when you're fifteen and your first kiss
 Makes your head spin 'round
 But in your life you'll do things greater than
@@ -44,17 +44,17 @@ To a boy who changed his mind
 And we both cried
 [Chorus]
 'Cause when you're fifteen and somebody tells you they love you
-You're gonna believe them$<mult_succ>
+You're gonna believe them
 And when you're fifteen, don't forget to look before you fall
 I've found time can heal most anything
 And you just might find who you're supposed to be
-I didn't know who I was supposed to be$<bad_succ>
-At fifteen$<exclamatory><bad_succ>
+I didn't know who I was supposed to be
+At fifteen$<exclamatory>
 [Post-Chorus]
-La-la-la, la-la-la, la-la-la-la$<exclamatory><bad_succ><mult_succ>
-La-la-la, la-la-la, la-la-la-la$<exclamatory><bad_succ><mult_succ>
+La-la-la, la-la-la, la-la-la-la$<exclamatory>
+La-la-la, la-la-la, la-la-la-la$<exclamatory>
 La-la-la, la-la-la$<exclamatory>
 [Outro]
 Your very first day
 Take a deep breath, girl
-Take a deep breath as you walk through the doors$<bad_succ>
+Take a deep breath as you walk through the doors

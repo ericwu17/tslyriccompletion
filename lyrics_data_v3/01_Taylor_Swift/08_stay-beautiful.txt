@@ -11,12 +11,12 @@ Will you ever know?
 You're beautiful
 Every little piece, love
 And don't you know
-You're really gonna be someone$<bad_succ>
+You're really gonna be someone
 Ask anyone$<exclamatory>
-And when you find everything you looked for$<mult_succ>
+And when you find everything you looked for
 I hope your life will lead you back to my door
-Oh, but if it don't$<bad_succ><mult_succ>
-Stay beautiful$<exclamatory><mult_succ>
+Oh, but if it don't
+Stay beautiful$<exclamatory>
 [Verse 2]
 Corey finds another way to be the highlight of my day
 I'm taking pictures in my mind so I can save them for a rainy day
@@ -27,12 +27,12 @@ Hey, by the way
 You're beautiful
 Every little piece, love
 And don't you know
-You're really gonna be someone$<bad_succ>
+You're really gonna be someone
 Ask anyone$<exclamatory>
-And when you find everything you looked for$<mult_succ>
+And when you find everything you looked for
 I hope your life will lead you back to my door
-Oh, but if it don't$<bad_succ><mult_succ>
-Stay beautiful$<exclamatory><mult_succ>
+Oh, but if it don't
+Stay beautiful$<exclamatory>
 [Bridge]
 If you and I are a story
 That never gets told
@@ -43,18 +43,18 @@ At least you'll know
 You're beautiful
 Every little piece, love
 And don't you know
-You're really gonna be someone$<bad_succ>
+You're really gonna be someone
 Ask anyone$<exclamatory>
-And when you find everything you looked for$<mult_succ>
+And when you find everything you looked for
 I hope your life will lead you back to my front door
-Oh, but if it don't$<mult_succ>
+Oh, but if it don't
 Will you stay
-Beautiful, beautiful, beautiful?$<mult_succ>
-Beautiful, beautiful, beautiful?$<bad_succ><mult_succ>
+Beautiful, beautiful, beautiful?
+Beautiful, beautiful, beautiful?
 [Outro]
-La la la$<exclamatory><bad_succ>
+La la la$<exclamatory>
 Oh, oh, oh, oh$<exclamatory>
-Oh, but if it don't$<bad_succ><mult_succ>
-Stay beautiful$<exclamatory><bad_succ><mult_succ>
-Stay beautiful$<exclamatory><bad_succ><mult_succ>
-Na, na, na, na, na$<exclamatory><bad_succ>
+Oh, but if it don't
+Stay beautiful$<exclamatory>
+Stay beautiful$<exclamatory>
+Na, na, na, na, na$<exclamatory>

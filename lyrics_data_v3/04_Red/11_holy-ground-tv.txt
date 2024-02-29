@@ -14,7 +14,7 @@ And that was the first day
 And darling it was good
 Never looking down
 And right there where we stood
-Was holy ground$<mult_succ>
+Was holy ground
 [Verse 2]
 Spinning like a girl in a brand new dress
 We had this big wide city all to ourselves
@@ -28,27 +28,27 @@ And I see your face in every crowd
 'Cause darling, it was good
 Never looking down
 And right there where we stood
-Was holy ground$<mult_succ>
+Was holy ground
 [Bridge]
-Tonight, I'm gonna dance$<mult_succ>
+Tonight, I'm gonna dance
 For all that we've been through
 But I don't wanna dance
-If I'm not dancing with you$<mult_succ>
-Tonight, I'm gonna dance$<mult_succ>
+If I'm not dancing with you
+Tonight, I'm gonna dance
 Like you were in this room
 But I don't wanna dance
-If I'm not dancing with you$<mult_succ>
+If I'm not dancing with you
 [Chorus]
 It was good
 Never looking down
 And right there where we stood
-Was holy ground$<mult_succ>
+Was holy ground
 [Outro]
-Tonight, I'm gonna dance$<mult_succ>
+Tonight, I'm gonna dance
 For all that we've been through
 But I don't wanna dance
-If I'm not dancing with you$<mult_succ>
-Tonight, I'm gonna dance$<mult_succ>
+If I'm not dancing with you
+Tonight, I'm gonna dance
 Like you were in this room
 But I don't wanna dance
-If I'm not dancing with you$<bad_succ>
+If I'm not dancing with you

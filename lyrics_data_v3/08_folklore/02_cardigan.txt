@@ -3,36 +3,36 @@ cardigan
 [Verse 1]
 Vintage tee, brand new phone
 High heels on cobblestones
-When you are young, they assume you know nothing$<mult_succ>
-Sequin smile, black lipstick$<bad_succ>
+When you are young, they assume you know nothing
+Sequin smile, black lipstick
 Sensual politics$<exclamatory>
-When you are young, they assume you know nothing$<mult_succ>
+When you are young, they assume you know nothing
 [Chorus]
-But I knew you$<mult_succ>
+But I knew you
 Dancin' in your Levi's
 Drunk under a streetlight, I
-I knew you$<mult_succ>
+I knew you
 Hand under my sweatshirt
 Baby, kiss it better, I
 [Refrain]
 And when I felt like I was an old cardigan
 Under someone's bed
-You put me on and said I was your favorite$<mult_succ>
+You put me on and said I was your favorite
 [Verse 2]
 A friend to all is a friend to none
 Chase two girls, lose the one
-When you are young, they assume you know nothing$<mult_succ>
+When you are young, they assume you know nothing
 [Chorus]
-But I knew you$<mult_succ>
+But I knew you
 Playing hide-and-seek and
 Giving me your weekends, I
-I knew you$<mult_succ>
+I knew you
 Your heartbeat on the High Line
 Once in twenty lifetimes, I
 [Refrain]
 And when I felt like I was an old cardigan
 Under someone's bed
-You put me on and said I was your favorite$<mult_succ>
+You put me on and said I was your favorite
 [Bridge]
 To kiss in cars and downtown bars
 Was all we needed
@@ -42,10 +42,10 @@ But now I'm bleedin'
 'Cause I knew you
 Steppin' on the last train
 Marked me like a bloodstain, I
-I knew you$<mult_succ>
+I knew you
 Tried to change the ending
 Peter losing Wendy, I
-I knew you$<mult_succ>
+I knew you
 Leavin' like a father
 Running like water, I
 And when you are young, they assume you know nothing
@@ -65,4 +65,4 @@ And you'd come back
 [Refrain]
 And when I felt like I was an old cardigan
 Under someone's bed
-You put me on and said I was your favorite$<bad_succ>
+You put me on and said I was your favorite

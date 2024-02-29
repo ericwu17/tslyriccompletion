@@ -13,11 +13,11 @@ But in my mind, I play it back
 Spinning faster than the plane that took you
 [Chorus]
 And this is when the feeling sinks in
-I don't wanna miss you like this$<mult_succ>
-Come back, be here, come back, be here$<mult_succ>
-I guess you're in New York today$<mult_succ>
+I don't wanna miss you like this
+Come back, be here, come back, be here
+I guess you're in New York today
 I don't wanna need you this way
-Come back, be here, come back, be here$<mult_succ>
+Come back, be here, come back, be here
 [Verse 2]
 The delicate beginning rush
 The feeling you can know so much
@@ -31,11 +31,11 @@ That never bring you back to me
 I can't help but wish you took me with you
 [Chorus]
 And this is when the feeling sinks in
-I don't wanna miss you like this$<mult_succ>
-Come back, be here, come back, be here$<mult_succ>
+I don't wanna miss you like this
+Come back, be here, come back, be here
 I guess you're in London today
 And I don't wanna need you this way
-Come back, be here, come back, be here$<mult_succ>
+Come back, be here, come back, be here
 [Bridge]
 This is falling in love in the cruelest way
 This is falling for you when you are worlds away
@@ -44,14 +44,14 @@ But you're in London, and I break down
 'Cause it's not fair that you're not around
 [Chorus]
 This is when the feeling sinks in
-I don't wanna miss you like this$<mult_succ>
-Come back, be here, come back, be here$<mult_succ>
-I guess you're in New York today$<mult_succ>
+I don't wanna miss you like this
+Come back, be here, come back, be here
+I guess you're in New York today
 And I don't wanna need you this way
-Come back, be here, come back, be here$<bad_succ><mult_succ>
+Come back, be here, come back, be here
 [Outro]
-Oh-oh, oh-oh$<exclamatory><mult_succ>
-I don't wanna miss you like this$<bad_succ><mult_succ>
-Oh-oh, oh-oh$<exclamatory><mult_succ>
+Oh-oh, oh-oh$<exclamatory>
+I don't wanna miss you like this
+Oh-oh, oh-oh$<exclamatory>
 Come back, be here
-Come back, be here$<bad_succ>
+Come back, be here

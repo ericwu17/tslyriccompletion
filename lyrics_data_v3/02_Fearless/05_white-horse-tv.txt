@@ -12,8 +12,8 @@ That I'm not a princess, this ain't a fairytale
 I'm not the one you'll sweep off her feet, lead her up the stairwell
 This ain't Hollywood, this is a small town
 I was a dreamer before you went and let me down
-Now it's too late for you and your white horse$<mult_succ>
-To come around$<mult_succ>
+Now it's too late for you and your white horse
+To come around
 [Verse 2]
 Maybe I was naïve, got lost in your eyes
 And never really had a chance
@@ -26,8 +26,8 @@ That I'm not a princess, this ain't a fairytale
 I'm not the one you'll sweep off her feet, lead her up the stairwell
 This ain't Hollywood, this is a small town
 I was a dreamer before you went and let me down
-Now it's too late for you and your white horse$<mult_succ>
-To come around$<mult_succ>
+Now it's too late for you and your white horse
+To come around
 [Bridge]
 And there you are on your knees
 Beggin' for forgiveness, beggin' for me
@@ -40,9 +40,9 @@ Who might actually treat me well
 This is a big world, that was a small town
 There in my rearview mirror disappearing now
 And it's too late for you and your white horse
-Now it's too late for you and your white horse$<mult_succ>
-To catch me now$<bad_succ>
+Now it's too late for you and your white horse
+To catch me now
 [Outro]
 Oh, whoa, whoa, whoa$<exclamatory>
 Try and catch me now, oh
-It's too late to catch me now$<bad_succ>
+It's too late to catch me now

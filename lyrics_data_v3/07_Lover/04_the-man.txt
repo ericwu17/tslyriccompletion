@@ -11,12 +11,12 @@ I'd be an alpha type
 When everyone believes ya
 What's that like?
 [Chorus]
-I'm so sick of running as fast as I can$<mult_succ>
+I'm so sick of running as fast as I can
 Wondering if I'd get there quicker if I was a man
 And I'm so sick of them coming at me again
 'Cause if I was a man, then I'd be the man
-I'd be the man$<mult_succ>
-I'd be the man$<mult_succ>
+I'd be the man
+I'd be the man
 [Verse 2]
 They'd say I hustled, put in the work
 They wouldn't shake their heads and question how much of this I deserve
@@ -26,12 +26,12 @@ Could all be separated from my good ideas and power moves
 And they would toast to me, oh, let the players play
 I'd be just like Leo in Saint-Tropez
 [Chorus]
-I'm so sick of running as fast as I can$<mult_succ>
+I'm so sick of running as fast as I can
 Wondering if I'd get there quicker if I was a man
 And I'm so sick of them coming at me again
 'Cause if I was a man, then I'd be the man
-I'd be the man$<mult_succ>
-I'd be the man$<mult_succ>
+I'd be the man
+I'd be the man
 [Bridge]
 What's it like to brag about raking in dollars
 And getting bitches and models?
@@ -42,18 +42,18 @@ I'd be a bitch, not a baller
 They'd paint me out to be bad
 So, it's okay that I'm mad
 [Chorus]
-I'm so sick of running as fast as I can$<mult_succ>
+I'm so sick of running as fast as I can
 Wondering if I'd get there quicker if I was a man (You know that)
-And I'm so sick of them coming at me again (Coming at me again)$<mult_succ>
+And I'm so sick of them coming at me again (Coming at me again)
 'Cause if I was a man (If I was a man)
 Then I'd be the man (Then I'd be the man)
 I'm so sick of running as fast as I can (As fast as I can)
 Wondering if I'd get there quicker if I was a man (Hey)
-And I'm so sick of them coming at me again (Coming at me again)$<mult_succ>
+And I'm so sick of them coming at me again (Coming at me again)
 'Cause if I was a man (If I was a man), then I'd be the man
-I'd be the man$<mult_succ>
+I'd be the man
 I'd be the man (Oh)
 I'd be the man (Yeah)
 I'd be the man (I'd be the man)
 [Outro]
-If I was a man, then I'd be the man$<bad_succ>
+If I was a man, then I'd be the man

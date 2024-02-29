@@ -9,13 +9,13 @@ I'm listening to the kind of music she doesn't like
 And she'll never know your story like I do
 [Pre-Chorus]
 'Cause she wears short skirts, I wear T-shirts
-She's Cheer Captain and I'm on the bleachers$<mult_succ>
+She's Cheer Captain and I'm on the bleachers
 Dreaming 'bout the day when you wake up and find
 That what you're looking for has been here the whole time
 [Chorus]
 If you could see that I'm the one who understands you
-Been here all along, so why can't you see?$<mult_succ>
-You belong with me, you belong with me$<mult_succ>
+Been here all along, so why can't you see?
+You belong with me, you belong with me
 [Verse 2]
 Walking the streets with you and your worn-out jeans
 I can't help thinking this is how it ought to be
@@ -27,16 +27,16 @@ You say you're fine, I know you better than that
 Hey, whatcha doing with a girl like that?
 [Pre-Chorus]
 She wears high heels, I wear sneakers
-She's Cheer Captain and I'm on the bleachers$<mult_succ>
+She's Cheer Captain and I'm on the bleachers
 Dreaming about the day when you wake up and find
 That what you're looking for has been here the whole time
 [Chorus]
 If you could see that I'm the one who understands you
-Been here all along, so why can't you see?$<mult_succ>
-You belong with me$<mult_succ>
+Been here all along, so why can't you see?
+You belong with me
 Standing by and waiting at your back door
 All this time how could you not know, baby?
-You belong with me, you belong with me$<mult_succ>
+You belong with me, you belong with me
 [Bridge]
 Oh, I remember you driving to my house
 In the middle of the night
@@ -48,13 +48,13 @@ Think I know where you belong
 Think I know it's with me
 [Chorus]
 Can't you see that I'm the one who understands you
-Been here all along, so why can't you see?$<mult_succ>
-You belong with me$<mult_succ>
+Been here all along, so why can't you see?
+You belong with me
 Standing by and waiting at your back door
 All this time how could you not know, baby?
-You belong with me, you belong with me$<mult_succ>
+You belong with me, you belong with me
 [Outro]
-You belong with me$<mult_succ>
+You belong with me
 Have you ever thought just maybe
 You belong with me?
-You belong with me$<bad_succ>
+You belong with me

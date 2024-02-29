@@ -6,34 +6,34 @@ You forget to be clever
 Never be so clever
 You forget to be kind
 [Pre-Chorus]
-And if I didn't know better$<mult_succ>
+And if I didn't know better
 I'd think you were talking to me now
 If I didn't know better
-I'd think you were still around$<mult_succ>
+I'd think you were still around
 [Chorus]
-What died didn't stay dead$<mult_succ>
-What died didn't stay dead$<mult_succ>
+What died didn't stay dead
+What died didn't stay dead
 You're alive, you're alive in my head
-What died didn't stay dead$<mult_succ>
-What died didn't stay dead$<mult_succ>
-You're alive, so alive$<mult_succ>
+What died didn't stay dead
+What died didn't stay dead
+You're alive, so alive
 [Verse 2]
 Never be so polite
 You forget your power
 Never wield such power
 You forget to be polite
 [Pre-Chorus]
-And if I didn't know better$<mult_succ>
+And if I didn't know better
 I'd think you were listening to me now
 If I didn't know better
-I'd think you were still around$<mult_succ>
+I'd think you were still around
 [Chorus]
-What died didn't stay dead$<mult_succ>
-What died didn't stay dead$<mult_succ>
+What died didn't stay dead
+What died didn't stay dead
 You're alive, you're alive in my head
-What died didn't stay dead$<mult_succ>
-What died didn't stay dead$<mult_succ>
-You're alive, so alive$<mult_succ>
+What died didn't stay dead
+What died didn't stay dead
+You're alive, so alive
 [Bridge]
 The autumn chill that wakes me up
 You loved the amber skies so much
@@ -50,18 +50,18 @@ Watched as you signed your name Marjorie
 All your closets of backlogged dreams
 And how you left them all to me
 [Chorus]
-What died didn't stay dead$<mult_succ>
-What died didn't stay dead$<mult_succ>
+What died didn't stay dead
+What died didn't stay dead
 You're alive, you're alive in my head
-What died didn't stay dead$<mult_succ>
-What died didn't stay dead$<mult_succ>
-You're alive, so alive$<mult_succ>
+What died didn't stay dead
+What died didn't stay dead
+You're alive, so alive
 [Outro]
-And if I didn't know better$<mult_succ>
+And if I didn't know better
 I'd think you were singing to me now
 If I didn't know better
-I'd think you were still around$<mult_succ>
-I know better$<mult_succ>
+I'd think you were still around
+I know better
 But I still feel you all around
-I know better$<mult_succ>
-But you're still around$<bad_succ>
+I know better
+But you're still around

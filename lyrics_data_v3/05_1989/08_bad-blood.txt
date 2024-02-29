@@ -2,13 +2,13 @@
 Bad Blood
 [Chorus]
 'Cause baby, now we've got bad blood
-You know it used to be mad love$<mult_succ>
+You know it used to be mad love
 So take a look what you've done
 'Cause baby, now we've got bad blood, hey!
-Now we've got problems$<mult_succ>
+Now we've got problems
 And I don't think we can solve 'em
 You made a really deep cut
-And baby, now we've got bad blood, hey!$<mult_succ>
+And baby, now we've got bad blood, hey!
 [Verse 1]
 Did you have to do this?
 I was thinking that you could be trusted
@@ -24,13 +24,13 @@ Think about the good times
 You and I
 [Chorus]
 'Cause baby, now we've got bad blood
-You know it used to be mad love$<mult_succ>
+You know it used to be mad love
 So take a look what you've done
 'Cause baby, now we've got bad blood, hey!
-Now we've got problems$<mult_succ>
+Now we've got problems
 And I don't think we can solve 'em
 You made a really deep cut
-And baby, now we've got bad blood, hey!$<mult_succ>
+And baby, now we've got bad blood, hey!
 [Verse 2]
 Did you think we'd be fine?
 Still got scars in my back from your knives
@@ -47,36 +47,36 @@ Think about the good times
 You and I
 [Chorus]
 'Cause baby, now we've got bad blood
-You know it used to be mad love$<mult_succ>
+You know it used to be mad love
 So take a look what you've done
 'Cause baby, now we've got bad blood, hey!
-Now we've got problems$<mult_succ>
+Now we've got problems
 And I don't think we can solve 'em
 You made a really deep cut
-And baby, now we've got bad blood, hey!$<mult_succ>
+And baby, now we've got bad blood, hey!
 [Bridge]
 Band-aids don't fix bullet holes
 You say sorry just for show
-If you live like that, you live with ghosts$<mult_succ>
+If you live like that, you live with ghosts
 Band-aids don't fix bullet holes
 You say sorry just for show
-If you live like that, you live with ghosts$<mult_succ>
+If you live like that, you live with ghosts
 If you love like that, blood runs cold!
 [Chorus]
 'Cause baby, now we've got bad blood
-You know it used to be mad love$<mult_succ>
+You know it used to be mad love
 So take a look what you've done
 'Cause baby, now we've got bad blood, hey!
-Now we've got problems$<mult_succ>
+Now we've got problems
 And I don't think we can solve 'em (Think we can solve 'em)
 You made a really deep cut
-And baby, now we've got bad blood, hey!$<mult_succ>
+And baby, now we've got bad blood, hey!
 [Chorus]
 'Cause baby, now we've got bad blood
-You know it used to be mad love$<mult_succ>
+You know it used to be mad love
 So take a look what you've done (Look what you've done)
 'Cause baby, now we've got bad blood, hey!
-Now we've got problems$<mult_succ>
+Now we've got problems
 And I don't think we can solve 'em
 You made a really deep cut
-And baby, now we've got bad blood, hey!$<bad_succ>
+And baby, now we've got bad blood, hey!

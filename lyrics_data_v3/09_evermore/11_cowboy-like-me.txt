@@ -4,16 +4,16 @@ cowboy like me
 And the tennis court was covered up
 With some tent-like thing
 And you asked me to dance
-But I said, "Dancin' is a dangerous game"$<bad_succ>
+But I said, "Dancin' is a dangerous game"
 [Verse 2]
 Oh, I thought$<exclamatory>
 This is gonna be one of those things
 Now I know
-I'm never gonna love again$<mult_succ>
+I'm never gonna love again
 [Chorus]
 I've got some tricks up my sleeve
 Takes one to know one
-You're a cowboy like me$<mult_succ>
+You're a cowboy like me
 [Verse 3]
 Never wanted love
 Just a fancy car
@@ -22,7 +22,7 @@ Like I'm sitting in an airport bar
 [Chorus]
 You had some tricks up your sleeve
 Takes one to know one
-You're a cowboy like me$<mult_succ>
+You're a cowboy like me
 [Post-Chorus 1]
 Perched in the dark
 Telling all the rich folks anything they wanna hear
@@ -36,9 +36,9 @@ Hustling for the good life
 Never thought I'd meet you here
 It could be love
 We could be the way forward
-And I know I'll pay for it$<mult_succ>
+And I know I'll pay for it
 [Chorus]
-You're a cowboy like me$<mult_succ>
+You're a cowboy like me
 [Post-Chorus 1]
 Perched in the dark
 Telling all the rich folks anything they wanna hear
@@ -52,7 +52,7 @@ Hustling for the good life
 Never thought I'd meet you here
 It could be love
 We could be the way forward
-And I know I'll pay for it$<mult_succ>
+And I know I'll pay for it
 [Bridge]
 And the skeletons in both our closets
 Plotted hard to fuck this up
@@ -69,8 +69,8 @@ Forever is the sweetest con
 [Chorus]
 I've had some tricks up my sleeve
 Takes one to know one
-You're a cowboy like me$<mult_succ>
+You're a cowboy like me
 [Outro]
 And I'm never gonna love again
-I'm never gonna love again$<mult_succ>
-I'm never gonna love again$<bad_succ>
+I'm never gonna love again
+I'm never gonna love again

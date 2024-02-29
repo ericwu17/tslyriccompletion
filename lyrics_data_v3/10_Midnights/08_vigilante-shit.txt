@@ -7,13 +7,13 @@ Sometimes I wonder which one'll be your last lie
 They say looks can kill and I might try
 I don't dress for women
 I don't dress for men
-Lately I've been dressin' for revenge$<mult_succ>
+Lately I've been dressin' for revenge
 [Chorus]
 I don't start shit, but I can tell you how it ends
 Don't get sad, get even
-So on the weekends$<mult_succ>
+So on the weekends
 I don't dress for friends
-Lately I've been dressin' for revenge$<mult_succ>
+Lately I've been dressin' for revenge
 [Verse 2]
 She needed cold hard proof, so I gave her some
 She had the envelope, where you think she got it from?
@@ -25,7 +25,7 @@ Lately she's been dressin' for revenge
 [Chorus]
 She don't start shit, but she can tell you how it ends
 Don't get sad, get even
-So on the weekends$<mult_succ>
+So on the weekends
 She don't dress for friends
 Lately she's been dressing for revenge
 [Bridge]
@@ -42,6 +42,6 @@ On my vigilante shit again
 [Chorus]
 I don't start shit, but I can tell you how it ends
 Don't get sad, get even
-So on the weekends$<mult_succ>
+So on the weekends
 I don't dress for friends
-Lately I've been dressin' for revenge$<bad_succ>
+Lately I've been dressin' for revenge
