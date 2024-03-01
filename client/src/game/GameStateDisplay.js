@@ -185,7 +185,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
         </Box>
       }
 
-      {current_question.answer && (
+      {current_question.answers.length > 0 && (
         <>
           <Box mb={1}/>
           <Divider />
@@ -215,7 +215,7 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
               flags: [],
             },
             answer: {
-              text: newGameState.current_question.answer,
+              text: newGameState.current_question.answers[0],
               flags: [],
             },
           }

@@ -47,6 +47,12 @@ what the "actual" correct answer is, by picking whatever next line would have gi
 a higher score. In other words, the game will try to figure out the position in the song 
 where the player is completing the lyric.
 
+When a song has multiple successors, a multiple choice question still has only one
+correct choice out of 17. The correct line is randomly chosen.
+
+The criteria for Asking For more status should be improved, to reduce "false positives".
+The player must submit a guess that is more than half the length of the candidate answer,
+it should be too far any candidate answers to pass.
 
 
 

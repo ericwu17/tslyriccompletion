@@ -8,13 +8,14 @@ use serde::Serialize;
 const NUM_DISTRACTORS: i32 = 16;
 
 /// A struct representing a question asked to the player.
-/// The field `answer` is the correct answer, and the field `song` is the song that the question
+/// The field `answer` is a list of possible answers, and
+/// The field `song` is the song that the question
 /// comes from, so these fields should be hidden from the user until the question is answered.
 #[derive(Debug, Clone, Serialize)]
 pub struct Question {
     pub shown_line: String,
     pub song: Song,
-    pub answer: String,
+    pub answers: Vec<String>,
 }
 
 impl Question {
@@ -28,7 +29,7 @@ impl Question {
                 lyrics_raw: String::new(),
                 lines: vec![],
             },
-            answer: String::new(),
+            answers: Vec::new(),
         }
     }
 }
@@ -76,7 +77,7 @@ fn is_acceptable_guess(guess: &Line) -> bool {
 /// Generates distractor answer choices for a multiple choice question, while ensuring that
 /// the distractors are not too close to the correct answer
 ///
-pub fn pick_distractors(correct_answer: &str, songs: &Vec<Song>) -> Vec<String> {
+pub fn pick_distractors(correct_answers: Vec<String>, songs: &Vec<Song>) -> Vec<String> {
     let mut distractors = Vec::new();
     for _ in 0..NUM_DISTRACTORS {
         let random_song = songs.choose(&mut rand::thread_rng()).unwrap();
@@ -86,7 +87,17 @@ pub fn pick_distractors(correct_answer: &str, songs: &Vec<Song>) -> Vec<String> 
             .unwrap()
             .text
             .as_str();
-        while are_close_enough(random_line, correct_answer) {
+        loop {
+            let mut is_far_from_all_answers = true;
+            for ans in &correct_answers {
+                if are_close_enough(random_line, ans) {
+                    is_far_from_all_answers = false;
+                }
+            }
+            if is_far_from_all_answers {
+                break;
+            }
+
             random_line = random_song
                 .lines
                 .choose(&mut rand::thread_rng())
@@ -120,16 +131,21 @@ pub fn pick_random_guess(songs: &[Song], songs_to_include: &[(String, String)]) 
     while !is_acceptable_guess(random_line) {
         random_line = candidate_lines.choose(&mut rand::thread_rng()).unwrap();
     }
-    let line_num = random_song
-        .lines
-        .iter()
-        .position(|r| r == random_line)
-        .unwrap();
-    let answer = &random_song.lines[line_num + 1];
 
-    Question {
-        shown_line: random_line.text.clone(),
-        answer: answer.text.clone(),
-        song: random_song.clone(),
+    let lines = &random_song.lines;
+    let mut answers = Vec::new();
+    for index in 0..(lines.len() - 1) {
+        let next_line = &lines[index + 1].text;
+        if lines[index].text == random_line.text && !answers.contains(next_line) {
+            answers.push(next_line.clone());
+        }
     }
+
+    let q = Question {
+        shown_line: random_line.text.clone(),
+        answers,
+        song: random_song.clone(),
+    };
+    dbg!(&q.answers);
+    q
 }
