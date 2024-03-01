@@ -141,11 +141,9 @@ pub fn pick_random_guess(songs: &[Song], songs_to_include: &[(String, String)]) 
         }
     }
 
-    let q = Question {
+    Question {
         shown_line: random_line.text.clone(),
         answers,
         song: random_song.clone(),
-    };
-    dbg!(&q.answers);
-    q
+    }
 }
