@@ -421,12 +421,20 @@ pub async fn game_lifelines(
     };
     let gs = res.clone();
 
+    let answer = gs
+        .current_question
+        .answers
+        .choose(&mut rand::thread_rng())
+        .unwrap()
+        .clone();
+
     let _ = sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
         .bind(id.clone())
         .bind(gs.guesses_made)
         .bind(gs.current_question.song.album)
         .bind(gs.current_question.song.name)
         .bind(gs.current_question.shown_line)
+        .bind(answer)
         .bind("skipped")
         .bind("")
         .bind(0)
