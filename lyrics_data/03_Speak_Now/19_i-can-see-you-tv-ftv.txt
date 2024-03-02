@@ -15,7 +15,7 @@ What would you do if we never made a sound?
 ’Cause I can see you waiting down the hall from me
 And I could see you up against the wall with me
 And what would you do? Baby, if you only knew
-That I can see you
+That I can see you$<misc_bad end of chorus>
 [Post-Chorus]
 Uh-uh, uh, uh$<exclamatory>
 [Verse 2]
@@ -36,7 +36,7 @@ And what would you do? Baby, if you only knew
 That I could see you throw your jacket on the floor
 I could see you, make me want you even more
 What would you do? Baby, if you only knew
-That I can see you
+That I can see you$<misc_bad end of chorus>
 [Post-Chorus]
 Uh-uh, uh, uh$<exclamatory>
 [Bridge]
@@ -56,10 +56,9 @@ And what would you do? Baby, if you only knew
 That I could see you throw your jacket on the floor
 I could see you, make me want you even more
 What would you do? Baby, if you only knew
-That I can see you
-Oh, I can see you
+That I can see you$<misc_bad end of chorus>
+Oh, I can see you$<misc_bad end of chorus>
 [Outro]
-Oh, I see you, I see you, baby
-I see you
-(Uh-uh, uh, uh) I see you, I see you, baby$<exclamatory>
+Oh, I see you, I see you, baby$<misc_bad outro>
+I see you, I see you, I see you, baby$<misc_bad outro>
 Oh, baby$<exclamatory>

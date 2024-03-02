@@ -9,7 +9,7 @@ Now, I fear I have fallen from grace
 And I feel like my castle's crumbling down
 And I watch all my bridges burn to the ground
 And you don't want to know me, I will just let you down
-You don't wanna know me now
+You don't wanna know me now$<misc_bad end of chorus>
 [Verse 2: Hayley Williams, Taylor Swift & Hayley Williams]
 Once, I was the great hope for a dynasty
 Crowds would hang on my words and they trusted me
@@ -24,7 +24,7 @@ Falling down like promises that I never kept
 And I feel like my castle's crumbling down
 And I watch all my bridges burn to the ground
 And you don't want to know me, I will just let you down
-You don't wanna know me now
+You don't wanna know me now$<misc_bad end of chorus>
 [Bridge: Taylor Swift]
 My foes and friends watch my reign end
 I don't know how it could've ended this way
@@ -39,4 +39,4 @@ My castle's crumbling down
 And I watch all my bridges burn to the ground
 And you don't want to know me, I will just let you down
 My castle's crumbling down
-You don't wanna know me now, now
+You don't wanna know me now

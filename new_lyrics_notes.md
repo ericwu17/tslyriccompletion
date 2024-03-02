@@ -15,6 +15,8 @@ Below are the changes:
 One thing: for better consistency, we will change all -in' endings to -ing.
 So gettin' -> getting, standin' -> standing, etc.
 
+The mattress line in Better than revenge was finally changed to be about matches.
+
 The position of line breaks may be changed, to alleviate some confusion. In the old lyrics,
 for example, in "You all over me", the game thought that "I lived, I learned" has a unique
 successor, but it really did not have a unique successor.

@@ -1,0 +1,14 @@
+Taylor Swift: TODO
+Fearless: TODO
+Speak Now: DONE!
+Red: TODO
+1989: TODO
+reputation: TODO
+Lover: TODO
+folklore: TODO
+evermore: TODO
+Midnights: TODO
+
+
+Program changes to make:
+fix the FM logic
