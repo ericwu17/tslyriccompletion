@@ -25,7 +25,7 @@ Wrapped up in your arms and our friends were laughing
 Now I'm pacing down the hall, chasing down your street
 Flashback to the night when you said to me
 "Nothing's gonna change, not for me and you"
-Not before I knew how much I had to lose
+Back before I knew how much I had to lose
 [Chorus]
 Come back, come back, come back to me like
 You would, you would if this was a movie
@@ -53,8 +53,8 @@ You could, you could if you just said you're sorry
 I know that we could work it out somehow
 But if this was a movie you'd be here by now
 [Outro]
-You'd be here by now
-It's not the kind of ending you want to see now
-Baby, what about the ending?
-Oh, I thought you'd be here by now
+You'd be here by now$<misc_bad outro>
+It's not the kind of ending you want to see now$<misc_bad outro>
+Baby, what about the ending?$<misc_bad outro>
+Oh, I thought you'd be here by now$<misc_bad outro>
 Thought you'd be here by now

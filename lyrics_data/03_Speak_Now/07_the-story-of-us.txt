@@ -20,7 +20,7 @@ Is it killing you like it's killing me?
 Yeah, I don't know what to say
 Since the twist of fate when it all broke down
 And the story of us looks a lot like a tragedy now
-Next chapter$<exclamatory>
+Next chapter$<bad_misc too short>
 [Verse 2]
 How'd we end up this way?
 See me nervously pulling at my clothes and trying to look busy
@@ -38,7 +38,7 @@ Now I'm standing alone in a crowded room
 And we're not speaking
 And I'm dying to know
 Is it killing you like it's killing me?
-Yeah, and I don't know what to say
+Yeah, I don't know what to say
 Since the twist of fate, when it all broke down
 And the story of us looks a lot like a tragedy now
 [Bridge]
@@ -55,14 +55,15 @@ Now I'm standing alone in a crowded room
 And we're not speaking
 And I'm dying to know
 Is it killing you like it's killing me?
-Yeah, and I don't know what to say
+Yeah, I don't know what to say
 Since the twist of fate, when it all broke down
-And the story of us looks a lot like a tragedy now, now, now
+And the story of us looks a lot like a tragedy now
+Now, now$<exclamatory>
 [Outro]
 And we're not speaking
 And I'm dying to know
-Is it killing you like it's killing me, yeah?
-I don't know what to say since the twist of fate
-'Cause we're going down
+Is it killing you like it's killing me?
+Yeah, I don't know what to say
+Since the twist of fate, 'cause we're going down
 And the story of us looks a lot like a tragedy now
 The End$<exclamatory>
