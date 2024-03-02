@@ -10,7 +10,7 @@ On backroads at night
 And I was right there beside him all summer long
 And then the time we woke up to find that summer gone
 [Chorus]
-But when you think Tim McGraw
+But when you think Tim McGraw$<misc_bad can be confused other line>
 I hope you think my favorite song
 The one we danced to all night long
 The moon like a spotlight on the lake
@@ -59,6 +59,6 @@ I hope you think of me
 Oh, think of me
 Mmmm$<exclamatory>
 [Outro]
-He said the way my blue eyes shine
+He said the way my blue eyes shined
 Put those Georgia stars to shame that night
 I said, "That's a lie"
