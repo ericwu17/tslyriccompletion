@@ -14,6 +14,8 @@ Below are the changes:
 
 One thing: for better consistency, we will change all -in' endings to -ing.
 So gettin' -> getting, standin' -> standing, etc.
+tryna -> trying to
+'fore -> before
 
 The mattress line in Better than revenge was finally changed to be about matches.
 
