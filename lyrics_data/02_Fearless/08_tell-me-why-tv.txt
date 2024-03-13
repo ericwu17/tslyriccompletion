@@ -15,7 +15,7 @@ Makes me run for cover when you're around
 Here's to you and your temper
 Yes, I remember what you said last night
 And I know that you see what you're doing to me
-Tell me why
+Tell me why$<misc_bad end of chorus>
 [Verse 2]
 Well, you could write a book on
 How to ruin someone's perfect day
@@ -31,7 +31,7 @@ Makes me run for cover when you're around
 Here's to you and your temper
 Yes, I remember what you said last night
 And I know that you see what you're doing to me
-Tell me why
+Tell me why$<misc_bad end of chorus>
 [Bridge]
 Why do you have to make me feel small
 So you can feel whole inside?
@@ -47,8 +47,8 @@ You ask me for my love, then you push me around
 Here's to you and your temper
 Yes, I remember what you said last night
 And I know that you see what you're doing to me
-Tell me why (Why)
-Tell me why (Oh)
+Tell me why (Why)$<misc_bad end of chorus>
+Tell me why (Oh)$<misc_bad end of chorus>
 [Outro]
 I take a step back, I let you go
 I told you I'm not bulletproof
