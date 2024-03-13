@@ -14,13 +14,12 @@ Every time you smile, I smile
 And every time you shine, I'll shine for you
 [Chorus]
 Whoa oh, I'm feeling you, baby
-Don't be afraid to
-Jump then fall
+Don't be afraid to jump then fall
 Jump then fall into me
 Baby, I'm never gonna leave you
 Say that you wanna be with me too
 'Cause I'ma stay through it all
-So jump then fall
+So jump then fall$<misc_bad end of chorus>
 [Verse 2]
 Well, I like the way your hair falls in your face
 You got the keys to me
@@ -35,13 +34,12 @@ Take a deep breath and jump then fall into me
 And every time you shine, I'll shine for you
 [Chorus]
 Whoa oh, I'm feeling you, baby
-Don't be afraid to
-Jump then fall
+Don't be afraid to jump then fall
 Jump then fall into me
 Baby, I'm never gonna leave you
 Say that you wanna be with me too
 'Cause I'ma stay through it all
-So jump then fall
+So jump then fall$<misc_bad end of chorus>
 [Bridge]
 The bottom's gonna drop out from under our feet
 I'll catch you, I'll catch you
@@ -50,16 +48,15 @@ I'll catch you
 The time is gonna come when you're so mad you could cry
 But I'll hold you through the night until you smile
 [Chorus]
-Whoa oh, I need you, baby$<exclamatory>
-Don't be afraid, please
-Jump then fall
+Whoa oh, I need you, baby
+Don't be afraid, please jump then fall
 Jump then fall into me
 Baby, I'm never gonna leave you
 Say that you wanna be with me too
 'Cause I'ma stay through it all
-So jump then fall
-Jump then fall, baby
-Jump then fall into me, into me
+So jump then fall$<misc_bad end of chorus>
+Jump then fall, baby$<misc_bad end of chorus>
+Jump then fall into me, into me$<misc_bad end of chorus>
 [Outro]
 Every time you smile, I smile
 And every time you shine, I shine

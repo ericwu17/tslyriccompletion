@@ -41,10 +41,10 @@ It rains when you're here and it rains when you're gone
 'Cause I was there when you said, "forever and always"
 You didn't mean it baby, I don't think so
 [Bridge]
-Oh, back up, baby, back up
-Did you forget everything?
-Back up, baby, back up
-Did you forget everything?
+Oh, back up, baby, back up$<misc_bad bridge is too repetitive>
+Did you forget everything?$<misc_bad bridge is too repetitive>
+Back up, baby, back up$<misc_bad bridge is too repetitive>
+Did you forget everything?$<misc_bad bridge is too repetitive>
 [Chorus]
 'Cause it rains in your bedroom
 Everything is wrong

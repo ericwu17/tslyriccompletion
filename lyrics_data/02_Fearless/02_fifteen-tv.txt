@@ -15,7 +15,7 @@ You're gonna believe them
 And when you're fifteen, feeling like there's nothing to figure out
 Well, count to ten, take it in
 This is life before you know who you're gonna be
-Fifteen$<exclamatory>
+Fifteen$<misc_bad too short>
 [Verse 2]
 You sit in class next to a redhead named Abigail
 And soon enough, you're best friends
@@ -49,12 +49,11 @@ And when you're fifteen, don't forget to look before you fall
 I've found time can heal most anything
 And you just might find who you're supposed to be
 I didn't know who I was supposed to be
-At fifteen$<exclamatory>
+At fifteen$<misc_bad too short>
 [Post-Chorus]
 La-la-la, la-la-la, la-la-la-la$<exclamatory>
 La-la-la, la-la-la, la-la-la-la$<exclamatory>
 La-la-la, la-la-la$<exclamatory>
 [Outro]
-Your very first day
-Take a deep breath, girl
+Your very first day, take a deep breath, girl
 Take a deep breath as you walk through the doors
