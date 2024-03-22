@@ -13,7 +13,7 @@ But you're quicksand
 This slope is treacherous
 This path is reckless
 This slope is treacherous
-And I-I-I like it$<exclamatory>
+And I-I-I like it$<misc_bad end of chorus>
 [Verse 2]
 I can't decide if it's a choice
 Getting swept away
@@ -27,7 +27,7 @@ But you're friction
 This slope is treacherous
 This path is reckless
 This slope is treacherous
-I, I, I like it (Oh)$<exclamatory>
+I-I-I like it$<misc_bad end of chorus>
 [Bridge]
 Two headlights shine through the sleepless night
 And I will get you, get you alone
@@ -53,4 +53,4 @@ I'll follow you, follow you home
 I'll follow you, follow you home
 [Outro]
 This slope is treacherous
-I-I-I like it$<exclamatory>
+I-I-I like it

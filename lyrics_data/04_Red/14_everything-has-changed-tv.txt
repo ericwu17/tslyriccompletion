@@ -1,7 +1,7 @@
 Red
 Everything Has Changed
 [Intro: Ed Sheeran]
-(You good to go?)
+(You good to go?)$<misc_bad intro>
 [Verse 1: Taylor Swift]
 All I knew this morning when I woke
 Is I know something now
@@ -25,7 +25,7 @@ Everything has changed
 All I know is you held the door
 You'll be mine and I'll be yours
 All I know since yesterday
-Is everything has changed
+Is everything has changed$<misc_bad end of chorus>
 [Verse 2: Ed Sheeran & Taylor Swift]
 And all my walls stood tall, painted blue
 And I'll take 'em down, take 'em down
@@ -49,7 +49,7 @@ Everything has changed
 All I know is you held the door
 You'll be mine and I'll be yours
 All I know since yesterday
-Is everything has changed
+Is everything has changed$<misc_bad end of chorus>
 [Bridge: Taylor Swift & Ed Sheeran]
 Come back and tell me why
 I'm feeling like I've missed you all this time
@@ -67,7 +67,7 @@ Everything has changed
 All I know is you held the door
 And you'll be mine and I'll be yours
 All I know since yesterday
-Is everything has changed
+Is everything has changed$<misc_bad end of chorus>
 [Outro: Taylor Swift & Ed Sheeran]
 All I know is we said, "Hello"
 So dust off your highest hopes
