@@ -32,10 +32,10 @@ You called me up again tonight, but
 Ooh-ooh-ooh-ooh-ooh$<exclamatory>
 This time, I'm telling you, I'm telling you
 [Chorus]
-We (We) are never, ever, ever getting back together
+We are never, ever, ever getting back together
 We are never, ever, ever getting back together
 You go talk to your friends, talk to my friends, talk to me
-(Talk to me) But we are never, ever, ever, ever
+But we are never, ever, ever, ever
 Getting back together
 [Post-Chorus]
 Ooh-ooh-ooh-ooh-ooh (Yeah)$<exclamatory>
@@ -49,16 +49,16 @@ Ugh, so he calls me up and he's like, "I still love you"
 And I'm like, "I just, I mean, this is exhausting, you know?
 Like, we are never getting back together, like, ever"
 [Chorus]
-(No) We are never, ever, ever getting back together
-We are never, ever, ever (Ooh) getting back together
+We are never, ever, ever getting back together
+We are never, ever, ever getting back together
 You go talk to your friends, talk to my friends, talk to me
 But we are never, ever, ever, ever
-Getting back together
+Getting back together$<misc_bad end of chorus>
 [Outro]
-We (Ooh-ooh-ooh-ooh-ooh, ooh-ooh-ooh, no)$<exclamatory>
-Getting back together
-We (Ooh-ooh-ooh-ooh-ooh, oh, oh)$<exclamatory>
-Getting back together (Yeah)
-You go talk to your friends, talk to my friends, talk to me
-(Talk to me) But we are never, ever, ever, ever
-Getting back together
+We (Ooh-ooh-ooh-ooh-ooh, ooh-ooh-ooh, no)$<misc_bad outro>
+Getting back together$<misc_bad outro>
+We (Ooh-ooh-ooh-ooh-ooh, oh, oh)$<misc_bad outro>
+Getting back together (Yeah)$<misc_bad outro>
+You go talk to your friends, talk to my friends, talk to me$<misc_bad outro>
+(Talk to me) But we are never, ever, ever, ever$<misc_bad outro>
+Getting back together$<misc_bad outro>

@@ -18,7 +18,7 @@ Just you and me
 This is the last time I'm asking you this
 Put my name at the top of your list
 This is the last time I'm asking you why
-You break my heart in the blink of an eye, eye, eye
+You break my heart in the blink of an eye, eye, eye$<misc_bad end of chorus>
 [Verse 2: Taylor Swift]
 You find yourself at my door
 Just like all those times before
@@ -37,7 +37,7 @@ Just you and me
 This is the last time I'm asking you this
 Put my name at the top of your list
 This is the last time I'm asking you why
-You break my heart in the blink of an eye, eye, eye
+You break my heart in the blink of an eye, eye, eye$<misc_bad end of chorus>
 [Guitar Solo]
 [Bridge: Taylor Swift & Gary Lightbody]
 This is the last time you tell me I've got it wrong
@@ -50,21 +50,21 @@ Oh-ho, oh-ho, oh-ho, oh-ho$<exclamatory>
 This is the last time I'm asking you this
 Put my name at the top of your list
 This is the last time I'm asking you why
-You break my heart in the blink of an eye
+You break my heart in the blink of an eye$<misc_bad end of chorus>
 [Outro: Taylor Swift & Gary Lightbody]
-This is the last time I'm asking you this
-(This is the last time I'm asking you this)
-Put my name at the top of your list
-(Put my name at the top of your list)
-This is the last time I'm asking you why
-(This is the last time I'm asking you why)
-You break my heart in the blink of an eye
-(You break my heart)
-This is the last time I'm asking you, last time I'm asking you
-Last time I'm asking you this
-This is the last time I'm asking you, last time I'm asking you
-Last time I'm asking you this
-This is the last time I'm asking you, last time I'm asking you
-Last time I'm asking you this
-This is the last time I'm asking you, last time I'm asking you
-Last time I'm asking you this
+This is the last time I'm asking you this$<misc_bad outro>
+(This is the last time I'm asking you this)$<misc_bad outro>
+Put my name at the top of your list$<misc_bad outro>
+(Put my name at the top of your list)$<misc_bad outro>
+This is the last time I'm asking you why$<misc_bad outro>
+(This is the last time I'm asking you why)$<misc_bad outro>
+You break my heart in the blink of an eye$<misc_bad outro>
+(You break my heart)$<misc_bad outro>
+This is the last time I'm asking you, last time I'm asking you$<misc_bad outro>
+Last time I'm asking you this$<misc_bad outro>
+This is the last time I'm asking you, last time I'm asking you$<misc_bad outro>
+Last time I'm asking you this$<misc_bad outro>
+This is the last time I'm asking you, last time I'm asking you$<misc_bad outro>
+Last time I'm asking you this$<misc_bad outro>
+This is the last time I'm asking you, last time I'm asking you$<misc_bad outro>
+Last time I'm asking you this$<misc_bad outro>

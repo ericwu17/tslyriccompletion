@@ -1,7 +1,7 @@
 Taylor Swift: DONE!
 Fearless: DONE!
 Speak Now: DONE!
-Red: TODO
+Red: DONE!
 1989: TODO
 reputation: TODO
 Lover: TODO
@@ -11,4 +11,4 @@ Midnights: TODO
 
 
 Program changes to make:
-fix the FM logic
+fix the AFM logic

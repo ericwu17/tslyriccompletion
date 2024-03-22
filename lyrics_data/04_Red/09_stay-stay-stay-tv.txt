@@ -9,7 +9,7 @@ This morning, I said we should talk about it
 'Cause I read you should never leave a fight unresolved
 That's when you came in wearing a football helmet
 And said, "Okay, let's talk"
-And I said
+And I said$<misc_bad too short>
 [Chorus]
 Stay, stay, stay
 I've been loving you for quite some time, time, time
@@ -47,5 +47,5 @@ Stay, stay, stay, stay!
 Stay, stay, stay
 I've been loving you for quite some time, time, time
 You think that it's funny when I'm mad, mad, mad
-But I think that it's best if we both stay
-(Ha-ha-ha, that's so fun)
+But I think that it's best if we both stay$<misc_bad end of song>
+(Ha-ha-ha, that's so fun)$<misc_bad end of song>

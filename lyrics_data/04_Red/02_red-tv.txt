@@ -9,17 +9,17 @@ Like the colors in autumn, so bright, just before they lose it all
 Losing him was blue like I'd never known
 Missing him was dark gray, all alone
 Forgetting him was like trying to know somebody you never met
-But loving him was red
+But loving him was red$<misc_bad exclamatory section>
 [Post-Chorus]
-(Red, red, red)
-(Red, red, red)
-(Red, red, red)
-(Red, red, red)
-But loving him was red
-(Red, red, red)
-(Red, red, red)
-(Red, red, red)
-(Red, red, red)
+(Red, red, red)$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
+But loving him was red$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
 [Verse 2]
 Touching him was like
 Realizing all you ever wanted was right there in front of you
@@ -31,41 +31,39 @@ Regretting him was like
 Wishing you never found out that love could be that strong
 [Chorus]
 Losing him was blue like I'd never known
-Missing him was dark gray, all alone (Woah)
-Forgetting him was like
-Trying to know somebody you never met
-But loving him was red
+Missing him was dark gray, all alone
+Forgetting him was like trying to know somebody you never met
+But loving him was red$<misc_bad exclamatory section>
 [Post-Chorus]
-(Red, red, red)
-(Red, red, red)
-Oh, red (Red, red, red)
-(Red, red, red)
-Burning red (Red, red, red)
-(Red, red, red)
-(Red, red, red)
-(Red, red, red)
+(Red, red, red)$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
+Oh, red (Red, red, red)$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
+Burning red (Red, red, red)$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
+(Red, red, red)$<misc_bad exclamatory section>
 [Bridge]
 Remembering him comes in flashbacks and echoes
 Tell myself it's time now, gotta let go
 But moving on from him is impossible
 When I still see it all in my head
 In burning red
-Loving him was red
+Loving him was red$<misc_bad end of bridge>
 [Chorus]
 Oh, losing him was blue like I'd never known
-Missing him was dark gray, all alone (Woah)
+Missing him was dark gray, all alone
 Forgetting him was like trying to know somebody you never met
-'Cause loving him was red
+'Cause loving him was red$<misc_bad exclamatory section>
 [Post-Chorus]
-(Red, red, red; red, red, red)
-Yeah, yeah, red$<exclamatory>
-(Red, red, red; red, red, red)
-Burning red (Red, red, red; red, red, red)
-(Red, red, red; red, red, red)
+(Red, red, red; red, red, red)$<misc_bad exclamatory section>
+Yeah, yeah, red$<misc_bad exclamatory section>
+(Red, red, red; red, red, red)$<misc_bad exclamatory section>
+Burning red (Red, red, red; red, red, red)$<misc_bad exclamatory section>
+(Red, red, red; red, red, red)$<misc_bad exclamatory section>
 [Breakdown]
-And that's why he's spinning 'round in my head (Red, red, red; red, red, red)
-Comes back to me (Red, red, red; red, red, red), burning red
-(Red, red, red; red, red, red) Yeah, yeah
-(Red, red, red; red, red, red)
+And that's why he's spinning 'round in my head 
+Comes back to me, burning red
+Yeah, yeah$<exclamatory>
 [Outro]
 His love was like driving a new Maserati down a dead-end street

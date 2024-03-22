@@ -41,10 +41,10 @@ Ooh-ooh, dancing with me
 Ooh-ooh, we could get married
 Have ten kids and teach 'em how to dream
 [Post-Chorus]
-(Ooh, hoo, hoo)
-(Ooh, hoo, hoo)
-(Ooh, hoo, hoo)
-(Ooh, hoo, hoo)
+(Ooh, hoo, hoo)$<exclamatory>
+(Ooh, hoo, hoo)$<exclamatory>
+(Ooh, hoo, hoo)$<exclamatory>
+(Ooh, hoo, hoo)$<exclamatory>
 [Chorus]
 Oh my, what a marvelous tune
 It was the best night, never would forget how he moved
@@ -55,8 +55,8 @@ Like we're made of starlight, starlight
 Like we're made of starlight, starlight
 [Breakdown]
 Like we dream impossible dreams
-Like starlight, starlight (Ooh, hoo, hoo)
-Like we dream impossible dreams (Ooh, hoo, hoo)
+Like starlight, starlight
+Like we dream impossible dreams
 [Outro]
-Don't you see the starlight, starlight? (Ooh, hoo, hoo)
+Don't you see the starlight, starlight?
 Don't you dream impossible things?
