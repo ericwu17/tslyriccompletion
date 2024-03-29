@@ -19,7 +19,7 @@ In the middle of the night, in my dreams
 You should see the things we do, baby
 In the middle of the night, in my dreams
 I know I'm gonna be with you, so I take my time
-Are you ready for it?
+Are you ready for it?$<misc_bad end of chorus>
 [Verse 2]
 Knew I was a robber first time that he saw me
 Stealing hearts and running off and never saying sorry
@@ -33,14 +33,14 @@ Never be the same now, now
 I, I, I see how this is gon' go
 Touch me and you'll never be alone
 I-Island breeze and lights down low
-No one has to know (No one has to know)
+No one has to know
 [Chorus]
 In the middle of the night, in my dreams
 You should see the things we do, baby
-In the middle of the night in my dreams
+In the middle of the night, in my dreams
 I know I'm gonna be with you, so I take my time
-Are you ready for it?
-Oh, are you ready for it?
+Are you ready for it?$<misc_bad end of chorus>
+Oh, are you ready for it?$<misc_bad end of chorus>
 [Refrain]
 Baby, let the games begin
 Let the games begin
@@ -54,17 +54,16 @@ Touch me and you'll never be alone
 I-Island breeze and lights down low
 No one has to know
 [Chorus]
-In the middle of the night (Night), in my dreams (My dreams)
-You should see the things we do (We do), baby (Baby), hmm (Eh)
-In the middle of the night, in my dreams (My dreams)
-I know I'm gonna be with you (I know I'm gonna be with you)
-So I take my time
+In the middle of the night, in my dreams
+You should see the things we do, baby
+In the middle of the night, in my dreams
+I know I'm gonna be with you, so I take my time
 In the middle of the night
 [Refrain]
 Baby, let the games begin
 Let the games begin
 Let the games begin
-Are you ready for it?
+Are you ready for it?$<misc_bad confusable with other parts of the song>
 Baby, let the games begin
 Let the games begin
 Let the games begin
