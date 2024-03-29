@@ -42,12 +42,17 @@ export default function SongListSection({selectedSongs, songlistId}) {
     setSnackBarIsOpen(true);
   };
 
+  const numSelectedSongs = selectedSongs.length;
+  const numTotalSongs = Object.values(fullSongList)
+    .map(l => l.length)
+    .reduce((partialSum, a) => partialSum + a, 0);
+
   return (
     <>
       <Box mt={1} mb={1}>
         <Typography>
           <strong>
-            This game was played with the following songs:
+            This game was played with the following songs ({numSelectedSongs}/{numTotalSongs}):
           </strong>
         </Typography>
       </Box>
