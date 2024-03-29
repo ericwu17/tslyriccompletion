@@ -14,11 +14,10 @@ But then something happened one magical night
 [Chorus]
 I forgot that you existed
 And I thought that it would kill me, but it didn't
-And it was so nice
-So peaceful and quiet
+And it was so nice, so peaceful and quiet
 I forgot that you existed
 It isn't love, it isn't hate, it's just indifference
-I forgot that you
+I forgot that you$<misc_bad end of chorus>
 [Verse 2]
 Got out some popcorn
 As soon as my rep started going down, down, down
@@ -33,11 +32,10 @@ But you showed who you are, then one magical night
 [Chorus]
 I forgot that you existed
 And I thought that it would kill me, but it didn't
-And it was so nice
-So peaceful and quiet
+And it was so nice, so peaceful and quiet
 I forgot that you existed
 It isn't love, it isn't hate, it's just indifference
-I forgot that you
+I forgot that you$<misc_bad end of chorus>
 [Bridge]
 Sent me a clear message
 Taught me some hard lessons
@@ -46,10 +44,9 @@ It's all just a blur
 [Chorus]
 I forgot that you existed
 And I thought that it would kill me, but it didn't
-And it was so nice
-So peaceful and quiet
+And it was so nice, so peaceful and quiet
 I forgot that you existed
-I did, I did, I did$<exclamatory>
+I did, I did, I did$<misc_bad confusable with other songs>
 It isn't hate, it's just indifference
 It isn't love, it isn't hate, it's just indifference
-So, yeah$<exclamatory>
+So, yeah

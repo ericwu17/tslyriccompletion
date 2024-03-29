@@ -48,17 +48,17 @@ Barefoot in the kitchen
 Sacred new beginnings
 That became my religion, listen
 [Chorus]
-I hope I never lose you
+I hope I never lose you$<misc_bad confusable>
 I'd never walk Cornelia Street again
-Oh, never again
+Oh, never again$<misc_bad too short>
 And baby, I get mystified by how this city screams your name
 And baby, I'm so terrified of if you ever walk away
 I'd never walk Cornelia Street again
 I'd never walk Cornelia Street again
 [Post-Chorus]
-I don't wanna lose you (Hope it never ends)
-I'd never walk Cornelia Street again
-I don't wanna lose you (Yeah)
+I don't wanna lose you$<misc_bad outro>
+I'd never walk Cornelia Street again$<misc_bad outro>
+I don't wanna lose you$<misc_bad outro>
 [Outro]
-"I rent a place on Cornelia Street"
-I say casually in the car
+"I rent a place on Cornelia Street"$<misc_bad outro>
+I say casually in the car$<misc_bad outro>

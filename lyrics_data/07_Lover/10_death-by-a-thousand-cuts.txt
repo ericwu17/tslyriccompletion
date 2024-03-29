@@ -18,7 +18,7 @@ I look through the windows of this love
 Even though we boarded them up
 Chandelier's still flickering here
 'Cause I can't pretend it's okay when it's not
-It's death by a thousand cuts
+It's death by a thousand cuts$<misc_bad end of chorus>
 [Verse 1]
 I dress to kill my time, I take the long way home
 I ask the traffic lights if it'll be alright
@@ -37,9 +37,9 @@ I look through the windows of this love
 Even though we boarded them up
 Chandelier's still flickering here
 'Cause I can't pretend it's okay when it's not
-It's death by a thousand cuts
+It's death by a thousand cuts$<misc_bad end of chorus>
 [Verse 2]
-My heart, my hips, my body, my love$<exclamatory>
+My heart, my hips, my body, my love
 Trying to find a part of me that you didn't touch
 Gave up on me like I was a bad drug
 Now I'm searching for signs in a haunted club
@@ -47,7 +47,7 @@ Our songs, our films, united we stand
 Our country, guess it was a lawless land
 Quiet my fears with the touch of your hand
 Paper cut stings from our paper-thin plans
-My time, my wine, my spirit, my trust$<exclamatory>
+My time, my wine, my spirit, my trust
 Trying to find a part of me you didn't take up
 Gave you so much, but it wasn't enough
 But I'll be alright, it's just a thousand cuts
@@ -58,11 +58,11 @@ I look through the windows of this love
 Even though we boarded them up
 Chandelier's still flickering here
 'Cause I can't pretend it's okay when it's not
-No, it's not
-It's death by a thousand cuts (You didn't touch)
+No, it's not$<misc_bad too short>
+It's death by a thousand cuts$<misc_bad end of chorus>
 [Post-Chorus]
 Trying to find a part of me that you didn't touch
-My body, my love, my trust (It's death by a thousand cuts)
+My body, my love, my trust
 But it wasn't enough, it wasn't enough, no, no
 [Outro]
 I take the long way home

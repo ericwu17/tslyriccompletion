@@ -13,7 +13,7 @@ Help me hold on to you
 [Chorus]
 I've been the archer, I've been the prey
 Who could ever leave me, darling
-But who could stay?
+But who could stay?$<misc_bad end of chorus>
 [Verse 2]
 Dark side, I search for your dark side
 But what if I'm alright, right, right, right here?
@@ -27,8 +27,7 @@ Help me hold on to you
 [Chorus]
 I've been the archer, I've been the prey
 Screaming, who could ever leave me, darling
-But who could stay?
-(I see right through me, I see right through me)
+But who could stay?$<misc_bad end of chorus>
 [Bridge]
 'Cause they see right through me
 They see right through me
@@ -46,12 +45,11 @@ Help me hold on to you
 [Chorus]
 I've been the archer, I've been the prey
 Who could ever leave me, darling
-But who could stay?
-(I see right through me, I see right through me)
-Who could stay?
-Who could stay?
-Who could stay?
-You could stay
-You could stay
+But who could stay?$<misc_bad confusable>
+Who could stay?$<misc_bad confusable>
+Who could stay?$<misc_bad confusable>
+Who could stay?$<misc_bad confusable>
+You could stay$<misc_bad confusable>
+You could stay$<misc_bad confusable>
 [Outro]
 Combat, I'm ready for combat

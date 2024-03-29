@@ -21,12 +21,9 @@ Threw out our cloaks and our daggers because it's morning now
 It's brighter now, now
 [Chorus]
 I don't wanna look at anything else now that I saw you
-(I can never look away)
 I don't wanna think of anything else now that I thought of you
-(Things will never be the same)
 I've been sleeping so long in a 20-year dark night
-(Now I'm wide awake)
-And now I see daylight (Daylight), I only see daylight (Daylight)
+And now I see daylight, I only see daylight
 I only see daylight, daylight, daylight, daylight
 I only see daylight, daylight, daylight, daylight
 [Bridge]
@@ -42,28 +39,22 @@ Like daylight, like daylight
 Like daylight, daylight
 [Chorus]
 I don't wanna look at anything else now that I saw you
-(I can never look away)
 And I don't wanna think of anything else now that I thought of you
-(Things will never be the same)
 I've been sleeping so long in a 20-year dark night
-(Now I'm wide awake)
-And now I see daylight (I see daylight), I only see daylight (Ah)
+And now I see daylight, I only see daylight
 I only see daylight, daylight, daylight, daylight
-I only see daylight, daylight, daylight, daylight (Ah)
-(And I can still see it all)
 I only see daylight, daylight, daylight, daylight
-(And I can still see it all, back and forth from New York)
 I only see daylight, daylight, daylight, daylight
-(I once believed love would be burning red)
+I only see daylight, daylight, daylight, daylight
 [Outro]
-Like daylight$<exclamatory>
-It's golden like daylight
-You gotta step into the daylight and let it go
-Just let it go, let it go
+Like daylight$<misc_bad outro>
+It's golden like daylight$<misc_bad outro>
+You gotta step into the daylight and let it go$<misc_bad outro>
+Just let it go, let it go$<misc_bad outro>
 [Spoken Outro]
-I wanna be defined by the things that I love
-Not the things I hate
-Not the things I'm afraid of, I'm afraid of
-Or the things that haunt me in the middle of the night
-I, I just think that
-You are what you love
+I wanna be defined by the things that I love$<misc_bad outro>
+Not the things I hate$<misc_bad outro>
+Not the things I'm afraid of, I'm afraid of$<misc_bad outro>
+Or the things that haunt me in the middle of the night$<misc_bad outro>
+I, I just think that$<misc_bad outro>
+You are what you love$<misc_bad outro>

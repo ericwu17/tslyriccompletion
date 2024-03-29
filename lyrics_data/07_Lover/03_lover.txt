@@ -8,9 +8,9 @@ Have I known you twenty seconds or twenty years?
 [Chorus]
 Can I go where you go?
 Can we always be this close?
-Forever and ever, ah
+Forever and ever, and ah
 Take me out, and take me home
-You're my, my, my, my lover$<exclamatory>
+You're my, my, my, my lover$<misc_bad end of chorus>
 [Verse 2]
 We could let our friends crash in the living room
 This is our place, we make the call
@@ -19,9 +19,9 @@ I've loved you three summers now, honey, but I want 'em all
 [Chorus]
 Can I go where you go?
 Can we always be this close?
-Forever and ever, ah
-Take me out, and take me home (Forever and ever)
-You're my, my, my, my lover$<exclamatory>
+Forever and ever, and ah
+Take me out, and take me home
+You're my, my, my, my lover$<misc_bad end of chorus>
 [Bridge]
 Ladies and gentlemen, will you please stand?
 With every guitar string scar on my hand
@@ -34,8 +34,8 @@ And at every table, I'll save you a seat, lover
 [Chorus]
 Can I go where you go?
 Can we always be this close?
-Forever and ever, ah
-Take me out, and take me home (Forever and ever)
-You're my, my, my, my$<exclamatory>
-Oh, you're my, my, my, my$<exclamatory>
-Darling, you're my, my, my, my lover$<exclamatory>
+Forever and ever, and ah
+Take me out, and take me home
+You're my, my, my, my$<misc_bad end of chorus>
+Oh, you're my, my, my, my$<misc_bad end of chorus>
+Darling, you're my, my, my, my lover$<misc_bad end of chorus>

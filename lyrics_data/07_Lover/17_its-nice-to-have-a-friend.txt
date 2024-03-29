@@ -1,8 +1,5 @@
 Lover
 It's Nice To Have A Friend
-[Intro]
-Ooh$<exclamatory>
-Ooh$<exclamatory>
 [Verse 1]
 School bell rings, walk me home
 Sidewalk chalk covered in snow
@@ -11,8 +8,8 @@ Lost my gloves, you give me one
 Video games, you pass me a note
 Sleeping in tents
 [Chorus]
-It's nice to have a friend (Ooh)
-It's nice to have a friend (Ooh)
+It's nice to have a friend$<misc_bad chorus is too repetitive to be interesting>
+It's nice to have a friend$<misc_bad chorus is too repetitive to be interesting>
 [Verse 2]
 Light pink sky, up on the roof
 Sun sinks down, no curfew
@@ -21,18 +18,17 @@ You've been stressed out lately, yeah, me too
 Something gave you the nerve
 To touch my hand
 [Chorus]
-It's nice to have a friend (Ooh)
-It's nice to have a friend (Ooh)
+It's nice to have a friend$<misc_bad chorus is too repetitive to be interesting>
+It's nice to have a friend$<misc_bad chorus is too repetitive to be interesting>
 [Instrumental bridge]
 [Verse 3]
 Church bells ring, carry me home
 Rice on the ground looks like snow
 Call my bluff, call you "Babe"
 Have my back, yeah, every day
-Feels like home, stay in bed
-The whole weekend
+Feels like home, stay in bed the whole weekend
 [Chorus]
-It's nice to have a friend (Ooh)
-It's nice to have a friend (Ooh)
-It's nice to have a friend (Ooh)
+It's nice to have a friend$<misc_bad chorus is too repetitive to be interesting>
+It's nice to have a friend$<misc_bad chorus is too repetitive to be interesting>
+It's nice to have a friend$<misc_bad chorus is too repetitive to be interesting>
 (Ooh)$<exclamatory>
