@@ -42,11 +42,11 @@ You always knew how to push my buttons
 You give me everything and nothing
 This mad, mad love makes you come running
 To stand back where you stood
-I wish you would, I wish you would
-(I wish you would, I wish you would)
-I wish you would, I wish you would
-(I wish you would, I wish you would)
-(I wish I, wish I)$<exclamatory>
+I wish you would, I wish you would$<misc_bad end of bridge>
+(I wish you would, I wish you would)$<misc_bad end of bridge>
+I wish you would, I wish you would$<misc_bad end of bridge>
+(I wish you would, I wish you would)$<misc_bad end of bridge>
+(I wish I, wish I)$<misc_bad end of bridge>
 [Verse 3]
 2AM, here we are
 See your face, hear my voice in the dark
@@ -78,11 +78,11 @@ You always knew how to push my buttons
 You give me everything and nothing
 This mad, mad love makes you come running
 To stand back where you stood
-I wish you would, I wish you would
-(I wish you would, I wish you would)
-I wish you would, I wish you would
-(I wish you would, I wish you would, I wish you would)
-(I, I, I, I, I, I wish I, wish I)$<exclamatory>
-I, I, I, I, I, I wish I, wish I$<exclamatory>
-I, I, I, I, I, I wish I, wish I$<exclamatory>
-I wish you would
+I wish you would, I wish you would$<misc_bad outro>
+(I wish you would, I wish you would)$<misc_bad outro>
+I wish you would, I wish you would$<misc_bad outro>
+(I wish you would, I wish you would, I wish you would)$<misc_bad outro>
+(I, I, I, I, I, I wish I, wish I)$<misc_bad outro>
+I, I, I, I, I, I wish I, wish I$<misc_bad outro>
+I, I, I, I, I, I wish I, wish I$<misc_bad outro>
+I wish you would$<misc_bad outro>

@@ -39,22 +39,20 @@ Staring at the sunset, babe
 Red lips and rosy cheeks
 Say you'll see me again
 Even if it's just in your
-Wildest dreams, ah, ha (Ha, ha)$<exclamatory>
+Wildest dreams, ah, ha$<exclamatory>
 Wildest dreams, ah, ha$<exclamatory>
 [Bridge]
 You'll see me in hindsight
 Tangled up with you all night
 Burning it down
 Someday, when you leave me
-I bet these memories
-Follow you around
+I bet these memories follow you around
 You'll see me in hindsight
 Tangled up with you all night
-Burning (Burning) it (It) down (Down)
+Burning it down
 Someday, when you leave me
-I bet these memories
-Follow (Follow) you (You) around
-(Follow you around)
+I bet these memories follow you around
+(Follow you around)$<misc_bad end of bridge>
 [Breakdown]
 Say you'll remember me
 Standing in a nice dress
@@ -68,9 +66,9 @@ Standing in a nice dress
 Staring at the sunset, babe
 Red lips and rosy cheeks
 Say you'll see me again
-Even if it's just in your (Just pretend, just pretend)
-Wildest dreams, ah, ha (Ah)$<exclamatory>
-In your wildest dreams, ah, ha
 Even if it's just in your
-In your wildest dreams, ah, ha
-In your wildest dreams, ah, ha
+Wildest dreams, ah, ha$<exclamatory>
+In your wildest dreams, ah, ha$<misc_bad outro>
+Even if it's just in your$<misc_bad outro>
+In your wildest dreams, ah, ha$<misc_bad outro>
+In your wildest dreams, ah, ha$<misc_bad outro>

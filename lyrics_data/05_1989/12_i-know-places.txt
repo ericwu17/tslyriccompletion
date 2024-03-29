@@ -20,7 +20,8 @@ They are the hunters, we are the foxes and we run
 Baby, I know places we won't be found
 And they'll be chasing their tails trying to track us down
 'Cause I, I know places we can hide
-I know places, I know places
+I know places$<misc_bad too short>
+I know places$<misc_bad too short>
 [Verse 2]
 Lights flash and we'll run for the fences
 Let them say what they want, we won't hear it
@@ -33,7 +34,7 @@ They are the hunters, we are the foxes, and we run
 Baby, I know places we won't be found
 And they'll be chasing their tails trying to track us down
 'Cause I, I know places we can hide
-I know places
+I know places$<misc_bad too short>
 [Bridge]
 They are the hunters, we are the foxes, and we run
 Just grab my hand and don't ever drop it, my love
@@ -41,11 +42,11 @@ Just grab my hand and don't ever drop it, my love
 Baby, I know places we won't be found
 And they'll be chasing their tails trying to track us down
 'Cause I, I know places we can hide
-I know places
+I know places$<misc_bad too short>
 [Outro]
-They take their shots, but we're bulletproof (I know places)
-And you know for me, it's always you (I know places)
-In the dead of night, your eyes so green (I know places)
-And I know for you, it's always me (I know places)
+They take their shots, but we're bulletproof
+And you know for me, it's always you
+In the dead of night, your eyes so green
+And I know for you, it's always me
 I, I, I, I, I, I, I, I-I$<exclamatory>
 I, I, I, I, I, I, I, I-I$<exclamatory>
