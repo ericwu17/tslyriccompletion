@@ -1,8 +1,7 @@
-use std::collections::HashMap;
-
 use rocket::State;
 use serde::Serialize;
 use sqlx::{FromRow, MySql, Pool};
+use std::collections::{HashMap, HashSet};
 
 use crate::history::{Songlist, SonglistSchema};
 
@@ -15,6 +14,7 @@ pub struct Song {
     pub name: &'static str,
     pub lyrics_raw: &'static str,
     pub lines: Vec<Line>,
+    pub lines_unique: Vec<&'static str>,
 }
 
 #[derive(Serialize)]
@@ -119,6 +119,7 @@ impl Song {
     pub fn new(album: &'static str, name: &'static str, lyrics_raw: &'static str) -> Self {
         let mut lyrics_raw_processed = String::new();
         let mut lines: Vec<Line> = Vec::new();
+        let mut lines_unique: HashSet<&'static str> = HashSet::new();
         for raw_line in lyrics_raw.split('\n') {
             let raw_line = raw_line.trim();
             if raw_line.is_empty() {
@@ -133,6 +134,7 @@ impl Song {
             lyrics_raw_processed.push_str(line.text);
             lyrics_raw_processed.push('\n');
 
+            lines_unique.insert(raw_line);
             lines.push(line);
         }
 
@@ -175,6 +177,7 @@ impl Song {
             name,
             lyrics_raw: Box::leak(lyrics_raw_processed.into_boxed_str()),
             lines,
+            lines_unique: lines_unique.into_iter().collect(),
         }
     }
 }

@@ -459,8 +459,10 @@ pub fn reduce_multiple_choice(
         let mut new_game_state = game_state.clone();
         let answers = new_game_state.current_question.answers.clone();
 
-        // randomly pick an answer to be the correct one
-        let answer = *answers.choose(&mut rand::thread_rng()).unwrap();
+        // we pick the first answer. The answers vec will have already been shuffled.
+        // it's important to pick the first one to remain consistent with the showPrevLines behavior
+        let answer = *answers.first().unwrap();
+
         new_game_state.choices = pick_distractors(answers, songs);
         new_game_state.choices.push(answer);
         new_game_state.choices.shuffle(&mut rand::thread_rng());
@@ -844,11 +846,17 @@ pub fn is_on_right_track(guess: &str, answer: &str) -> bool {
 fn get_previous_lines(question: &Question) -> (String, bool) {
     const PREV_LINES_TO_SHOW: usize = 2;
 
-    let lines = question.song.lines.clone();
+    let preferred_answer = *question.answers.first().unwrap();
+
+    let lines = &question.song.lines;
     let mut answer_position: usize = 0;
     for (index, line) in lines.iter().enumerate() {
-        if line.text == question.shown_line {
+        if line.text == question.shown_line
+            && index < lines.len() - 1
+            && lines[index + 1].text == preferred_answer
+        {
             answer_position = index;
+            break;
         }
     }
     let mut output = String::new();

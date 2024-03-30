@@ -28,6 +28,7 @@ impl Question {
                 name: "",
                 lyrics_raw: "",
                 lines: vec![],
+                lines_unique: vec![],
             },
             answers: Vec::new(),
         }
@@ -70,8 +71,10 @@ fn are_close_enough(s1: &str, s2: &str) -> bool {
         < 0.1_f32
 }
 
-fn is_acceptable_guess(guess: &Line) -> bool {
-    guess.is_bad_prompt.is_none()
+fn is_acceptable_guess(guess: &'static str, lines: &[Line]) -> bool {
+    lines
+        .iter()
+        .any(|l| l.is_bad_prompt.is_none() && l.text == guess)
 }
 
 /// Generates distractor answer choices for a multiple choice question, while ensuring that
@@ -84,12 +87,13 @@ pub fn pick_distractors(
     let mut distractors = Vec::new();
     for _ in 0..NUM_DISTRACTORS {
         let random_song = songs.choose(&mut rand::thread_rng()).unwrap();
-        let mut random_line = random_song
-            .lines
-            .choose(&mut rand::thread_rng())
-            .unwrap()
-            .text;
+        let mut random_line;
         loop {
+            random_line = random_song
+                .lines
+                .choose(&mut rand::thread_rng())
+                .unwrap()
+                .text;
             let mut is_far_from_all_answers = true;
             for ans in &correct_answers {
                 if are_close_enough(random_line, ans) {
@@ -99,12 +103,6 @@ pub fn pick_distractors(
             if is_far_from_all_answers {
                 break;
             }
-
-            random_line = random_song
-                .lines
-                .choose(&mut rand::thread_rng())
-                .unwrap()
-                .text;
         }
         distractors.push(random_line);
     }
@@ -129,24 +127,34 @@ pub fn pick_random_guess(
         .collect();
     let random_song = songs.choose(&mut rand::thread_rng()).unwrap();
 
-    let candidate_lines = &random_song.lines[0..(random_song.lines.len() - 1)];
-
-    let mut random_line = candidate_lines.choose(&mut rand::thread_rng()).unwrap();
-    while !is_acceptable_guess(random_line) {
-        random_line = candidate_lines.choose(&mut rand::thread_rng()).unwrap();
+    let mut random_line = random_song
+        .lines_unique
+        .choose(&mut rand::thread_rng())
+        .unwrap();
+    while !is_acceptable_guess(random_line, &random_song.lines) {
+        random_line = random_song
+            .lines_unique
+            .choose(&mut rand::thread_rng())
+            .unwrap();
     }
 
     let lines = &random_song.lines;
     let mut answers = Vec::new();
     for index in 0..(lines.len() - 1) {
-        let next_line = &lines[index + 1].text;
-        if lines[index].text == random_line.text && !answers.contains(next_line) {
-            answers.push(next_line);
+        let next_line_text = &lines[index + 1].text;
+        if lines[index].text == *random_line && !answers.contains(next_line_text) {
+            answers.push(next_line_text);
         }
     }
 
+    // whenever we reduce to a multiple choice or when we show previous lines, we always
+    // assume that the first answer in the `answers` is the preferred one.
+    // we make this assumption to ensure consistent answers between multiple choice and showPrevLines.
+    // thus it is important to shuffle the answers array here
+    answers.shuffle(&mut rand::thread_rng());
+
     Question {
-        shown_line: random_line.text,
+        shown_line: random_line,
         answers,
         song: random_song.clone(),
     }

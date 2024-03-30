@@ -14,11 +14,6 @@ remove most parentheses from songs
 
 Program changes to make:
 fix the AFM logic
-fix logic for picking lines. If a line is repeated multiple times,
-    it shouldn't be picked much too often.
-    Maybe pick it with a probability proportional to log(n) if the line appears n times.
-check the "show prev line" logic, and confirm it works for lines that appear multiple times
-    specifically, if a player has seen the previous lines, should the player still be able to have the flexibility of answering either part of the song if there are multiple successors?
 
 make a system to report bad lines in songs.
 
