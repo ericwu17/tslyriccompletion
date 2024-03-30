@@ -17,7 +17,4 @@ fix the AFM logic
 
 make a system to report bad lines in songs.
 
-ignore punctuation and spaces in calculating the score!
-    (),.-:;'"? 
-
 mark games stale for 7 days as "complete"

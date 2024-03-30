@@ -1,3 +1,4 @@
+use crate::game::CHARS_TO_IGNORE;
 use crate::song::{Line, Song};
 use edit_distance::edit_distance;
 use rand::seq::SliceRandom;
@@ -36,8 +37,20 @@ impl Question {
 }
 
 /// case insensitive edit distance
-fn lowercase_edit_dist(a: &str, b: &str) -> usize {
-    edit_distance(&a.to_lowercase(), &b.to_lowercase())
+fn lowercase_ignore_punctuation_edit_dist(a: &str, b: &str) -> usize {
+    let a: String = a
+        .chars()
+        .map(|c| c.to_ascii_lowercase())
+        .filter(|c| !CHARS_TO_IGNORE.contains(c))
+        .collect();
+
+    let b: String = b
+        .chars()
+        .map(|c| c.to_ascii_lowercase())
+        .filter(|c| !CHARS_TO_IGNORE.contains(c))
+        .collect();
+
+    edit_distance(&a, &b)
 }
 
 /// Generate the optimal truncation amount `x` of `l1` to minimize the edit distance between strings
@@ -49,14 +62,14 @@ pub fn optimal_truncated_dist(l1: &str, l2: &str) -> (i32, usize) {
     // first we will see how many characters we can truncate from the end of the guess to minimize lowercase_edit_dist(userGuess, answer)
 
     let mut optimal_k = 0;
-    let mut minimal_dist = lowercase_edit_dist(l1, l2);
+    let mut minimal_dist = lowercase_ignore_punctuation_edit_dist(l1, l2);
     let mut k: i32 = 1;
     while l1.len() as i32 - k >= 0 {
         // This part is needed so that k always ends on a character boundary, since slices operate on bytes, not characters.
         while l1.len() as i32 - k >= 0 && !l1.is_char_boundary(l1.len() - k as usize) {
             k += 1;
         }
-        let d = lowercase_edit_dist(&l1[..(l1.len() - k as usize)], l2);
+        let d = lowercase_ignore_punctuation_edit_dist(&l1[..(l1.len() - k as usize)], l2);
         if d < minimal_dist {
             optimal_k = k;
             minimal_dist = d;

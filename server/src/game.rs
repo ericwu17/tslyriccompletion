@@ -16,6 +16,9 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use uuid::Uuid;
 
+/// These characters are to be ignored when taking the edit distance between two strings:
+pub const CHARS_TO_IGNORE: &[char] = &['(', ')', ',', '.', '-', ':', ';', '"', '\'', '?', ' '];
+
 /// If a guess's dist is greater than `MAX_ACCEPTABLE_DIST` from the answer, then the game ends.
 const MAX_ACCEPTABLE_DIST: usize = 13;
 /// A bonus is awarded the guess matches the answer perfectly.
@@ -787,7 +790,7 @@ fn get_flags(
     optimal_truncate_amt: i32,
 ) -> (FlaggedString, FlaggedString) {
     let (_, diffs) = diff_greedy(
-        &guess.to_lowercase()[0..(guess.len() - optimal_truncate_amt as usize)],
+        &guess.to_lowercase()[0..(guess.chars().count() - optimal_truncate_amt as usize)],
         &answer.to_lowercase(),
     )
     .unwrap();
@@ -795,24 +798,30 @@ fn get_flags(
     let mut guess_flags = vec![0; guess.chars().count()];
     let mut ans_flags = vec![0; answer.chars().count()];
     for insertion in diffs.get("insert").unwrap() {
-        for flag in ans_flags
-            .iter_mut()
-            .take(insertion.to + 1)
-            .skip(insertion.at)
-        {
-            *flag = 1;
+        for index in insertion.at..=insertion.to {
+            if index >= answer.chars().count() {
+                continue;
+            }
+            if CHARS_TO_IGNORE.contains(&answer.chars().nth(index).unwrap_or(' ')) {
+                ans_flags[index] = 2;
+            } else {
+                ans_flags[index] = 1;
+            }
         }
     }
     for deletion in diffs.get("delete").unwrap() {
-        for flag in guess_flags
-            .iter_mut()
-            .take(deletion.to + 1)
-            .skip(deletion.at)
-        {
-            *flag = 1;
+        for index in deletion.at..=deletion.to {
+            if index >= guess.chars().count() {
+                continue;
+            }
+            if CHARS_TO_IGNORE.contains(&guess.chars().nth(index).unwrap_or(' ')) {
+                guess_flags[index] = 2;
+            } else {
+                guess_flags[index] = 1;
+            }
         }
     }
-    let num_chars_truncated = guess[(guess.len() - optimal_truncate_amt as usize)..]
+    let num_chars_truncated = guess[(guess.chars().count() - optimal_truncate_amt as usize)..]
         .chars()
         .count();
 

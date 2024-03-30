@@ -293,6 +293,8 @@ function GuessDetails({ guess, totalNumGuesses }) {
   );
 }
 
+const CHARS_TO_IGNORE = ["(", ")", ",", ".", "-", ":", ";", "\"", "'", "?", " "];
+
 export function generateFlags(guess, answer) {
 
   // First we need to figure out the optimal amount to truncate the user guess
@@ -333,12 +335,20 @@ export function generateFlags(guess, answer) {
       answerIndex += d.count;
     } else if (d.added) {
       for (let i = 0; i < d.count; i ++) {
-        answerFlags[answerIndex] = 1;
+        if (CHARS_TO_IGNORE.includes(answer[answerIndex])) {
+          answerFlags[answerIndex] = 2;
+        } else {
+          answerFlags[answerIndex] = 1;
+        }
         answerIndex += 1;
       }
     }  else if (d.removed) {
       for (let i = 0; i < d.count; i ++) {
-        guessFlags[guessIndex] = 1;
+        if (CHARS_TO_IGNORE.includes(guess[guessIndex])) {
+          guessFlags[guessIndex] = 2;
+        } else {
+          guessFlags[guessIndex] = 1;
+        }
         guessIndex += 1;
       }
     }
