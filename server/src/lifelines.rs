@@ -99,9 +99,9 @@ impl fmt::Display for LifelineInventory {
         // operation succeeded or failed. Note that `write!` uses syntax which
         // is very similar to `println!`.
         write!(f, "You currently have:\n\tShow Title Lifelines (?t): {}\n\tShow Previous Lines Lifelines (?p): {}\n\tSkip Question Lifelines (?s): {}", 
-			self.show_title_album.to_string(),
-			self.show_prev_lines.to_string(),
-			self.skip.to_string(),
+			self.show_title_album,
+			self.show_prev_lines,
+			self.skip,
 		)
     }
 }
@@ -114,13 +114,13 @@ impl fmt::Display for Lifeline {
         // is very similar to `println!`.
         match self {
             Lifeline::ShowPrevLines => {
-                write!(f, "{} Lifeline", "Show Previous Lines")
+                write!(f, "Show Previous Lines Lifeline")
             }
             Lifeline::ShowTitleAlbum => {
-                write!(f, "{} Lifeline", "Show Title")
+                write!(f, "Show Title Lifeline")
             }
             Lifeline::Skip => {
-                write!(f, "{} Lifeline", "Skip Question")
+                write!(f, "Skip Question Lifeline")
             }
         }
     }

@@ -13,20 +13,20 @@ const NUM_DISTRACTORS: i32 = 16;
 /// comes from, so these fields should be hidden from the user until the question is answered.
 #[derive(Debug, Clone, Serialize)]
 pub struct Question {
-    pub shown_line: String,
+    pub shown_line: &'static str,
     pub song: Song,
-    pub answers: Vec<String>,
+    pub answers: Vec<&'static str>,
 }
 
 impl Question {
     /// Hides `answer` and `song`
     pub fn hide_answer_and_song(&self) -> Question {
         Question {
-            shown_line: self.shown_line.clone(),
+            shown_line: self.shown_line,
             song: Song {
-                album: String::new(),
-                name: String::new(),
-                lyrics_raw: String::new(),
+                album: "",
+                name: "",
+                lyrics_raw: "",
                 lines: vec![],
             },
             answers: Vec::new(),
@@ -77,7 +77,10 @@ fn is_acceptable_guess(guess: &Line) -> bool {
 /// Generates distractor answer choices for a multiple choice question, while ensuring that
 /// the distractors are not too close to the correct answer
 ///
-pub fn pick_distractors(correct_answers: Vec<String>, songs: &Vec<Song>) -> Vec<String> {
+pub fn pick_distractors(
+    correct_answers: Vec<&'static str>,
+    songs: &Vec<Song>,
+) -> Vec<&'static str> {
     let mut distractors = Vec::new();
     for _ in 0..NUM_DISTRACTORS {
         let random_song = songs.choose(&mut rand::thread_rng()).unwrap();
@@ -85,8 +88,7 @@ pub fn pick_distractors(correct_answers: Vec<String>, songs: &Vec<Song>) -> Vec<
             .lines
             .choose(&mut rand::thread_rng())
             .unwrap()
-            .text
-            .as_str();
+            .text;
         loop {
             let mut is_far_from_all_answers = true;
             for ans in &correct_answers {
@@ -102,25 +104,27 @@ pub fn pick_distractors(correct_answers: Vec<String>, songs: &Vec<Song>) -> Vec<
                 .lines
                 .choose(&mut rand::thread_rng())
                 .unwrap()
-                .text
-                .as_str();
+                .text;
         }
-        distractors.push(random_line.to_owned());
+        distractors.push(random_line);
     }
 
     // This is an easter egg, where there's a small probability for one of the distractors to be a funny quote by Ms. Swift:
     if rand::thread_rng().gen::<i32>() % 100 == 0 {
-        distractors[0] = "umm I think for me...".to_owned();
+        distractors[0] = "umm I think for me...";
     }
 
     distractors
 }
 
 /// Pick a random question from `songs_to_include`
-pub fn pick_random_guess(songs: &[Song], songs_to_include: &[(String, String)]) -> Question {
+pub fn pick_random_guess(
+    songs: &[Song],
+    songs_to_include: &[(&'static str, &'static str)],
+) -> Question {
     let songs: Vec<Song> = songs
         .iter()
-        .filter(|song| songs_to_include.contains(&(song.album.clone(), song.name.clone())))
+        .filter(|song| songs_to_include.contains(&(song.album, song.name)))
         .cloned()
         .collect();
     let random_song = songs.choose(&mut rand::thread_rng()).unwrap();
@@ -137,12 +141,12 @@ pub fn pick_random_guess(songs: &[Song], songs_to_include: &[(String, String)]) 
     for index in 0..(lines.len() - 1) {
         let next_line = &lines[index + 1].text;
         if lines[index].text == random_line.text && !answers.contains(next_line) {
-            answers.push(next_line.clone());
+            answers.push(next_line);
         }
     }
 
     Question {
-        shown_line: random_line.text.clone(),
+        shown_line: random_line.text,
         answers,
         song: random_song.clone(),
     }

@@ -59,14 +59,14 @@ pub struct GameState {
     /// This vector gets reset to an empty vec when the player moves on to the next question.
     hints_shown: Vec<Hint>,
     /// A vector of answer choices, or empty if the current question is not in multiple-choice mode.
-    choices: Vec<String>,
+    choices: Vec<&'static str>,
     /// True if the game has ended.
     terminated: bool,
     /// True if the question has been completed but the next question has not been requested.
     completed_question: bool,
-    /// A vector of songs included in the game. The (String, String) pairs are
+    /// A vector of songs included in the game. The (str, str) pairs are
     /// (Album_name, Song_name) pairs.
-    included_songs: Vec<(String, String)>,
+    included_songs: Vec<(&'static str, &'static str)>,
 }
 
 /// A struct related to [`GameState`]
@@ -79,9 +79,9 @@ pub struct GameStatePublic {
     current_question: Question,
     lifeline_inv: LifelineInventory,
     hints_shown: Vec<Hint>,
-    choices: Vec<String>,
+    choices: Vec<&'static str>,
     terminated: bool,
-    included_songs: Vec<(String, String)>,
+    included_songs: Vec<(&'static str, &'static str)>,
     completed_question: bool,
 }
 
@@ -141,23 +141,19 @@ impl GameState {
     /// This function will modify the argument `songs_to_include`, so that if it's the empty vector,
     /// it will end up containing all songs in songs. It will also filter out any
     /// invalid songs in `songs_to_include`.
-    pub fn new(songs: &[Song], songs_to_include: &mut Vec<(String, String)>) -> Self {
-        let mut actual_songs_to_include: Vec<(String, String)> = songs_to_include
+    pub fn new(songs: &[Song], songs_to_include: &mut Vec<(&str, &str)>) -> Self {
+        let mut actual_songs_to_include: Vec<(&'static str, &'static str)> = songs_to_include
             .clone()
             .into_iter()
-            .filter(|(a, b)| {
+            .filter_map(|(a, b)| {
                 songs
                     .iter()
-                    .filter(|song| song.album == *a && song.name == *b)
-                    .count()
-                    > 0
+                    .find(|song| song.album == a && song.name == b)
+                    .map(|song| (song.album, song.name))
             })
             .collect();
         if actual_songs_to_include.is_empty() {
-            actual_songs_to_include = songs
-                .iter()
-                .map(|song| (song.album.clone(), song.name.clone()))
-                .collect();
+            actual_songs_to_include = songs.iter().map(|song| (song.album, song.name)).collect();
         }
         *songs_to_include = actual_songs_to_include.clone();
         GameState {
@@ -237,7 +233,7 @@ impl GameState {
         }
     }
 
-    fn set_single_answer(&mut self, ans: String) {
+    fn set_single_answer(&mut self, ans: &'static str) {
         self.current_question.answers = vec![ans];
     }
 }
@@ -251,7 +247,7 @@ impl GameState {
 pub async fn init_game(
     game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>,
     songs: &State<Vec<Song>>,
-    songs_to_include: Json<Vec<(String, String)>>,
+    songs_to_include: Json<Vec<(&str, &str)>>,
     pool: &rocket::State<Pool<MySql>>,
 ) -> String {
     let mut songs_to_include = songs_to_include.to_vec();
@@ -263,21 +259,19 @@ pub async fn init_game(
         (*guard).insert(uuid.clone(), new_game_state.clone());
     }
 
-    let full_songlist: Vec<(String, String)> = songs
-        .iter()
-        .map(|song| (song.album.clone(), song.name.clone()))
-        .collect();
-    let mut songlist_desc: HashMap<String, Vec<bool>> = HashMap::new();
+    let full_songlist: Vec<(&'static str, &'static str)> =
+        songs.iter().map(|song| (song.album, song.name)).collect();
+    let mut songlist_desc: HashMap<&'static str, Vec<bool>> = HashMap::new();
     // The for loop below builds out the songlist_desc object, which is a Hashmap mapping album names to a list of boolean values.
     // The list of boolean values represents which songs are included/excluded in the game.
     for song in &full_songlist {
         let is_included = songs_to_include.contains(song);
-        if let Some(v) = songlist_desc.get(&song.0) {
+        if let Some(v) = songlist_desc.get(song.0) {
             let mut v = v.clone();
             v.push(is_included);
-            songlist_desc.insert(song.0.clone(), v);
+            songlist_desc.insert(song.0, v);
         } else {
-            songlist_desc.insert(song.0.clone(), vec![is_included]);
+            songlist_desc.insert(song.0, vec![is_included]);
         }
     }
 
@@ -285,7 +279,7 @@ pub async fn init_game(
     hasher.update(serde_json::to_string(&full_songlist).unwrap().as_bytes());
     let full_songlist_hash = format!("{:X}", hasher.finalize());
 
-    let full_songlist_json: sqlx::types::Json<Vec<(String, String)>> =
+    let full_songlist_json: sqlx::types::Json<Vec<(&'static str, &'static str)>> =
         sqlx::types::Json(full_songlist);
     let songlist_desc_json = sqlx::types::Json(songlist_desc);
 
@@ -320,16 +314,12 @@ pub async fn init_game(
         .map(|songlist| Songlist {
             id: songlist.id,
             sha1sum: songlist.sha1sum,
-
-            // We are serializing and then immediately deserializing because I can't figure out
-            // how to convert the type from Json<Vec<(String, String)>> to Vec<(String, String)>
-            content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap())
-                .unwrap(),
+            content: songlist.content.as_ref().clone(),
         })
         .collect();
 
     let songlist_id = songlists
-        .get(0)
+        .first()
         .expect(
             "Expect to have one songlist with appropriate SHA1 sum after inserting the songlist",
         )
@@ -425,8 +415,7 @@ pub async fn game_lifelines(
         .current_question
         .answers
         .choose(&mut rand::thread_rng())
-        .unwrap()
-        .clone();
+        .unwrap();
 
     let _ = sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
         .bind(id.clone())
@@ -471,9 +460,9 @@ pub fn reduce_multiple_choice(
         let answers = new_game_state.current_question.answers.clone();
 
         // randomly pick an answer to be the correct one
-        let answer = answers.choose(&mut rand::thread_rng()).unwrap().clone();
+        let answer = *answers.choose(&mut rand::thread_rng()).unwrap();
         new_game_state.choices = pick_distractors(answers, songs);
-        new_game_state.choices.push(answer.clone());
+        new_game_state.choices.push(answer);
         new_game_state.choices.shuffle(&mut rand::thread_rng());
         // the question should now have only a single answer
         new_game_state.set_single_answer(answer);
@@ -547,7 +536,7 @@ pub async fn take_guess(
     let guess_res = 'outer_block: {
         let mut guard = game_state.lock().unwrap();
         if let Some(game_state) = (*guard).get(&id) {
-            closest_answer = game_state.current_question.answers[0].clone();
+            closest_answer = game_state.current_question.answers[0];
             if game_state.completed_question {
                 // already guessed, so we do nothing
                 return serde_json::to_string(&game_state.into_public_with_answers(id)).unwrap();
@@ -566,7 +555,7 @@ pub async fn take_guess(
 
             // HANDLE MULTIPLE CHOICE (inside this if statement)
             if !game_state.choices.is_empty() {
-                let correct_answer = game_state.current_question.answers[0].clone();
+                let correct_answer = game_state.current_question.answers[0];
 
                 let mut new_game_state = game_state.clone();
 
@@ -576,7 +565,7 @@ pub async fn take_guess(
                 };
                 let mut ans_flag_str = FlaggedString {
                     flags: vec![0; correct_answer.chars().count()],
-                    text: correct_answer.clone(),
+                    text: correct_answer.to_owned(),
                 };
 
                 if guess == correct_answer {
@@ -631,18 +620,18 @@ pub async fn take_guess(
 
             for ans in possible_answers {
                 // evaluate the answer
-                let (truncate_amt_local, dist) = optimal_truncated_dist(guess, &ans);
+                let (truncate_amt_local, dist) = optimal_truncated_dist(guess, ans);
 
                 if dist <= MAX_ACCEPTABLE_DIST {
                     // the guess is close enough
                     has_correct_continuation = true;
                     if dist < minimal_edit_dist {
-                        closest_answer = ans.clone();
+                        closest_answer = ans;
                         minimal_edit_dist = dist;
                         truncate_amt = truncate_amt_local;
                     }
                 }
-                if is_afm(&ans, guess) {
+                if is_afm(ans, guess) {
                     // this is a possible AFM
                     can_be_afm = true;
                     target_length = ans.len();
@@ -662,7 +651,7 @@ pub async fn take_guess(
 
             let mut maybe_new_lifeline = None;
             let mut new_game_state = game_state.clone();
-            let (guess_flag_str, ans_flag_str) = get_flags(guess, &closest_answer, truncate_amt);
+            let (guess_flag_str, ans_flag_str) = get_flags(guess, closest_answer, truncate_amt);
 
             if has_correct_continuation {
                 // the user got the guess right
@@ -784,7 +773,7 @@ pub async fn take_guess(
 
 fn is_afm(_ans: &str, _guess: &str) -> bool {
     // TODO:
-    return false;
+    false
 }
 
 /// Calculate the diff flags for `guess` and `answer`,

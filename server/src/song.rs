@@ -9,42 +9,36 @@ use crate::history::{Songlist, SonglistSchema};
 /// Represents a song with an album and songname.
 /// lyrics_raw is a string of all lines (separated by `\n`),
 /// and lines is a vector of [`Line`] structs containing data about whether lines are good prompts.
-#[derive(Debug, Clone, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Song {
-    pub album: String,
-    pub name: String,
-    pub lyrics_raw: String,
+    pub album: &'static str,
+    pub name: &'static str,
+    pub lyrics_raw: &'static str,
     pub lines: Vec<Line>,
 }
 
 #[derive(Serialize)]
 pub struct ISong {
-    pub album: String,
-    pub name: String,
-    pub lyrics_raw: String,
+    pub album: &'static str,
+    pub name: &'static str,
+    pub lyrics_raw: &'static str,
     pub lines: Vec<ILine>,
 }
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Line {
-    pub text: String,
+    pub text: &'static str,
     pub is_exclamatory: bool,
     /// If the Option is `Some`, that means that the line is a bad prompt,
     /// and the string is a reason why the line is not appropriate to use as a prompt.
-    pub is_bad_prompt: Option<String>,
+    pub is_bad_prompt: Option<&'static str>,
 }
 #[derive(Debug, Serialize)]
 pub struct ILine {
-    pub text: String,
-    pub is_bad_prompt: Option<String>,
+    pub text: &'static str,
+    pub is_bad_prompt: Option<&'static str>,
     /// `num_guesses` is the number of times the line has been played in a game. Used by the client to display a subscript.
     pub num_guesses: usize,
-}
-
-impl PartialEq for Line {
-    fn eq(&self, other: &Line) -> bool {
-        self.text == other.text
-    }
 }
 
 fn calculate_is_exclamatory_heuristic(text: &str) -> bool {
@@ -74,28 +68,24 @@ fn calculate_is_exclamatory_heuristic(text: &str) -> bool {
     if num_words <= 2 {
         return true;
     }
-    return false;
+    false
 }
 
 impl Line {
-    pub fn new(raw_text: &str) -> Line {
+    pub fn new(raw_text: &'static str) -> Line {
         let mut is_exclamatory = false;
         let mut is_bad_prompt = None;
 
         let text = if raw_text.contains('$') {
-            // everything before the last `$` is part of the line
-            let num_segments = raw_text.split('$').count();
-            raw_text
-                .split('$')
-                .take(num_segments - 1)
-                .collect::<Vec<&str>>()
-                .join("$")
+            // everything before the `$` is part of the line
+            let _num_segments = raw_text.split('$').count();
+            raw_text.split('$').take(1).next().unwrap()
         } else {
-            raw_text.to_string()
+            raw_text
         };
 
         if raw_text.contains('$') {
-            let markers = raw_text.split('$').rev().next().unwrap();
+            let markers = raw_text.split('$').next_back().unwrap();
             if markers.contains("<exclamatory>") {
                 is_exclamatory = true;
             }
@@ -104,21 +94,21 @@ impl Line {
                     .split_once("<misc_bad ")
                     .unwrap()
                     .1
-                    .split_once(">")
+                    .split_once('>')
                     .unwrap()
                     .0;
 
-                is_bad_prompt = Some(bad_desc.to_string());
+                is_bad_prompt = Some(bad_desc);
             }
         }
 
-        if is_exclamatory != calculate_is_exclamatory_heuristic(&text) {
+        if is_exclamatory != calculate_is_exclamatory_heuristic(text) {
             println!("Warning, the following line's exclamatory status does not match the calculated heuristic:");
             println!("{}", &text);
         }
 
         Line {
-            text: text.to_owned(),
+            text,
             is_exclamatory,
             is_bad_prompt,
         }
@@ -126,7 +116,7 @@ impl Line {
 }
 
 impl Song {
-    pub fn new(album: String, name: String, lyrics_raw: String) -> Self {
+    pub fn new(album: &'static str, name: &'static str, lyrics_raw: &'static str) -> Self {
         let mut lyrics_raw_processed = String::new();
         let mut lines: Vec<Line> = Vec::new();
         for raw_line in lyrics_raw.split('\n') {
@@ -140,7 +130,7 @@ impl Song {
                 continue;
             }
             let line = Line::new(raw_line);
-            lyrics_raw_processed.push_str(&line.text);
+            lyrics_raw_processed.push_str(line.text);
             lyrics_raw_processed.push('\n');
 
             lines.push(line);
@@ -148,15 +138,15 @@ impl Song {
 
         for index in 0..lines.len() - 1 {
             if lines[index + 1].is_exclamatory {
-                lines[index].is_bad_prompt = Some("followed by exclamatory line".to_string());
+                lines[index].is_bad_prompt = Some("followed by exclamatory line");
             }
             if lines[index].is_exclamatory {
-                lines[index].is_bad_prompt = Some("is an exclamatory line".to_string());
+                lines[index].is_bad_prompt = Some("is an exclamatory line");
             }
         }
 
         let n = lines.len();
-        lines[n - 1].is_bad_prompt = Some("Has no next line".to_string());
+        lines[n - 1].is_bad_prompt = Some("Has no next line");
 
         // NOTE: the logic here calculates whether there are multiple successors
         // let mut continuation_map: HashMap<String, Vec<String>> = HashMap::new();
@@ -183,7 +173,7 @@ impl Song {
         Song {
             album,
             name,
-            lyrics_raw: lyrics_raw_processed,
+            lyrics_raw: Box::leak(lyrics_raw_processed.into_boxed_str()),
             lines,
         }
     }
@@ -193,14 +183,14 @@ impl Song {
 /// returns a hashmap, where keys are album names and values are song names.
 #[get("/songs")]
 pub fn get_song_list(songs: &State<Vec<Song>>) -> String {
-    let mut s: HashMap<String, Vec<String>> = HashMap::new();
+    let mut s: HashMap<&'static str, Vec<&'static str>> = HashMap::new();
     for song in songs.iter() {
-        if let Some(v) = s.get(&song.album) {
+        if let Some(v) = s.get(song.album) {
             let mut v = v.clone();
-            v.push(song.name.clone());
-            s.insert(song.album.clone(), v);
+            v.push(song.name);
+            s.insert(song.album, v);
         } else {
-            s.insert(song.album.clone(), vec![song.name.clone()]);
+            s.insert(song.album, vec![song.name]);
         }
     }
 
@@ -227,15 +217,11 @@ pub async fn get_song_list_with_id(id: i32, pool: &rocket::State<Pool<MySql>>) -
         .map(|songlist| Songlist {
             id: songlist.id,
             sha1sum: songlist.sha1sum,
-
-            // We are serializing and then immediately deserializing because I can't figure out
-            // how to convert the type from Json<Vec<(String, String)>> to Vec<(String, String)>
-            content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap())
-                .unwrap(),
+            content: songlist.content.as_ref().clone(),
         })
         .collect();
 
-    let songs = &songlists.get(0).unwrap().content;
+    let songs = &songlists.first().unwrap().content;
 
     let mut s: HashMap<String, Vec<String>> = HashMap::new();
     for (album, name) in songs.iter() {
@@ -263,11 +249,7 @@ pub async fn get_all_songlists(pool: &rocket::State<Pool<MySql>>) -> String {
         .map(|songlist| Songlist {
             id: songlist.id,
             sha1sum: songlist.sha1sum,
-
-            // We are serializing and then immediately deserializing because I can't figure out
-            // how to convert the type from Json<Vec<(String, String)>> to Vec<(String, String)>
-            content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap())
-                .unwrap(),
+            content: songlist.content.as_ref().clone(),
         })
         .collect();
 
@@ -296,9 +278,9 @@ pub async fn get_song(
     for song in songs.iter() {
         if song.album == album && song.name == name {
             let mut my_song = ISong {
-                album: song.album.clone(),
-                name: song.name.clone(),
-                lyrics_raw: song.lyrics_raw.clone(),
+                album: song.album,
+                name: song.name,
+                lyrics_raw: song.lyrics_raw,
                 lines: vec![],
             };
             for line in &song.lines {
@@ -316,7 +298,7 @@ pub async fn get_song(
                     )
                     .bind(album)
                     .bind(name)
-                    .bind(line.text.clone())
+                    .bind(line.text)
                     .fetch_one(pool.inner())
                     .await
                     .unwrap();
@@ -324,8 +306,8 @@ pub async fn get_song(
                 }
 
                 my_song.lines.push(ILine {
-                    text: line.text.clone(),
-                    is_bad_prompt: is_bad_prompt.clone(),
+                    text: line.text,
+                    is_bad_prompt: *is_bad_prompt,
                     num_guesses,
                 })
             }
