@@ -5,13 +5,13 @@ Vintage tee, brand new phone
 High heels on cobblestones
 When you are young, they assume you know nothing
 Sequin smile, black lipstick
-Sensual politics$<exclamatory>
+Sensual politics
 When you are young, they assume you know nothing
 [Chorus]
-But I knew you
+But I knew you$<misc_bad confusable>
 Dancing in your Levi's
 Drunk under a streetlight, I
-I knew you
+I knew you$<misc_bad confusable>
 Hand under my sweatshirt
 Baby, kiss it better, I
 [Refrain]
@@ -23,10 +23,10 @@ A friend to all is a friend to none
 Chase two girls, lose the one
 When you are young, they assume you know nothing
 [Chorus]
-But I knew you
+But I knew you$<misc_bad confusable>
 Playing hide-and-seek and
 Giving me your weekends, I
-I knew you
+I knew you$<misc_bad confusable>
 Your heartbeat on the High Line
 Once in twenty lifetimes, I
 [Refrain]
@@ -39,13 +39,13 @@ Was all we needed
 You drew stars around my scars
 But now I'm bleeding
 [Chorus]
-'Cause I knew you
+'Cause I knew you$<misc_bad confusable>
 Stepping on the last train
 Marked me like a bloodstain, I
-I knew you
+I knew you$<misc_bad confusable>
 Tried to change the ending
 Peter losing Wendy, I
-I knew you
+I knew you$<misc_bad confusable>
 Leaving like a father
 Running like water, I
 And when you are young, they assume you know nothing

@@ -5,7 +5,7 @@ Red: DONE!
 1989: DONE!
 reputation: DONE!
 Lover: DONE!
-folklore: TODO
+folklore: DONE!
 evermore: TODO
 Midnights: TODO
 
@@ -23,5 +23,6 @@ check the "show prev line" logic, and confirm it works for lines that appear mul
 make a system to report bad lines in songs.
 
 ignore punctuation and spaces in calculating the score!
+    (),.-:;'"? 
 
 mark games stale for 7 days as "complete"
