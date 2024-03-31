@@ -9,11 +9,11 @@ You're not sure which is worse
 Because I dropped your hand while dancing
 Left you out there standing
 Crestfallen on the landing
-Champagne problems$<exclamatory>
+Champagne problems$<misc_bad too short>
 Your mom's ring in your pocket
 My picture in your wallet
 Your heart was glass, I dropped it
-Champagne problems$<exclamatory>
+Champagne problems$<misc_bad too short>
 [Verse 2]
 You told your family for a reason
 You couldn't keep it in
@@ -23,11 +23,11 @@ Now no one's celebrating
 Dom Pérignon, you brought it
 No crowd of friends applauded
 Your hometown skeptics called it
-Champagne problems$<exclamatory>
+Champagne problems$<misc_bad too short>
 You had a speech, you're speechless
 Love slipped beyond your reaches
 And I couldn't give a reason
-Champagne problems$<exclamatory>
+Champagne problems$<misc_bad too short>
 [Bridge]
 Your Midas touch on the Chevy door
 November flush and your flannel cure
@@ -49,11 +49,11 @@ She'll patch up your tapestry that I shred
 And hold your hand while dancing
 Never leave you standing
 Crestfallen on the landing
-With champagne problems
+With champagne problems$<misc_bad too short>
 Your mom's ring in your pocket
 Her picture in your wallet
 You won't remember all my
-Champagne problems$<exclamatory>
+Champagne problems$<misc_bad too short>
 [Outro]
 You won't remember all my
-Champagne problems$<exclamatory>
+Champagne problems$<misc_bad too short>

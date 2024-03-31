@@ -1,7 +1,7 @@
 evermore
 gold rush
 [Intro]
-Gleaming, twinkling$<exclamatory>
+Gleaming, twinkling
 Eyes like sinking ships on waters
 So inviting, I almost jump in
 [Chorus]
@@ -45,8 +45,8 @@ I can't dare to dream about you anymore
 At dinner parties I won't call you out on your contrarian shit
 And the coastal town we never found will never see a love as pure as it
 'Cause it fades into the gray of my day-old tea
-'Cause it will never be
+'Cause it will never be$<misc_bad end of phrase>
 [Outro]
-Gleaming, twinkling$<exclamatory>
+Gleaming, twinkling
 Eyes like sinking ships on waters
 So inviting, I almost jump in

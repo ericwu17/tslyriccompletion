@@ -15,7 +15,7 @@ Grieving for the living
 Oh, goddamn$<exclamatory>
 My pain fits in the palm of your freezing hand
 Taking mine, but it's been promised to another
-Oh, I can't$<exclamatory>
+Oh, I can't
 Stop you putting roots in my dreamland
 My house of stone, your ivy grows
 And now I'm covered in you
@@ -30,7 +30,7 @@ He wants what's only yours
 Oh, goddamn$<exclamatory>
 My pain fits in the palm of your freezing hand
 Taking mine, but it's been promised to another
-Oh, I can't$<exclamatory>
+Oh, I can't
 Stop you putting roots in my dreamland
 My house of stone, your ivy grows
 And now I'm covered
@@ -51,7 +51,7 @@ And drink my husband's wine
 Oh, goddamn$<exclamatory>
 My pain fits in the palm of your freezing hand
 Taking mine, but it's been promised to another
-Oh, I can't$<exclamatory>
+Oh, I can't
 Stop you putting roots in my dreamland
 My house of stone, your ivy grows
 And now I'm covered in you
@@ -59,17 +59,15 @@ And I'm covered in you
 [Bridge]
 So yeah, it's a fire
 It's a goddamn blaze in the dark
-And you started it
-You started it
+And you started it, you started it
 So yeah, it's a war
 It's the goddamn fight of my life
-And you started it
-You started it
+And you started it, you started it
 [Chorus]
-Oh, I can't$<exclamatory>
+Oh, I can't
 Stop you putting roots in my dreamland
 My house of stone, your ivy grows
-And now I'm covered
-In you, in you
-Now I'm covered in you
-In you$<exclamatory>
+And now I'm covered$<misc_bad end of song>
+In you, in you$<misc_bad end of song>
+Now I'm covered in you$<misc_bad end of song>
+In yo$<misc_bad end of song>u

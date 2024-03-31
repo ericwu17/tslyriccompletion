@@ -55,11 +55,11 @@ Sometimes walking out is the one thing
 That will find you the right thing
 That will find you the right thing
 [Outro]
-And you know in your soul
-You know in your soul
-When it's time to go
-You know, you know, you know, you know
-When it's time to go
-So then you go
-Then you go
-You just go
+And you know in your soul$<misc_bad outro>
+You know in your soul$<misc_bad outro>
+When it's time to go$<misc_bad outro>
+You know, you know, you know, you know$<misc_bad outro>
+When it's time to go$<misc_bad outro>
+So then you go$<misc_bad outro>
+Then you go$<misc_bad outro>
+You just go$<misc_bad outro>

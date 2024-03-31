@@ -55,11 +55,11 @@ Anywhere else is hollow
 I'm begging for you to take my hand
 Wreck my plans, that's my man
 [Outro]
-Hey, that's my man
-That's my man
-Yeah, that's my man
-Every bait-and-switch was a work of art
-That's my man
-Hey, that's my man
-I'm begging for you to take my hand
-Wreck my plans, that's my man
+Hey, that's my man$<misc_bad outro>
+That's my man$<misc_bad outro>
+Yeah, that's my man$<misc_bad outro>
+Every bait-and-switch was a work of art$<misc_bad outro>
+That's my man$<misc_bad outro>
+Hey, that's my man$<misc_bad outro>
+I'm begging for you to take my hand$<misc_bad outro>
+Wreck my plans, that's my man$<misc_bad outro>

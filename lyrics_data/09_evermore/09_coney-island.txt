@@ -15,7 +15,7 @@ Wondering where did my baby go?
 The fast times, the bright lights, the merry go
 Sorry for not making you my centerfold
 [Chorus: Taylor Swift]
-Over and over
+Over and over$<misc_bad too short>
 Lost again with no surprises
 Disappointments, close your eyes
 And it gets colder and colder
@@ -35,7 +35,7 @@ It was the one place to be
 The mischief, the gift-wrapped suburban dreams
 Sorry for not winning you an arcade ring
 [Chorus: Taylor Swift & Matt Berninger]
-Over and over
+Over and over$<misc_bad too short>
 Lost again with no surprises
 Disappointments, close your eyes
 And it gets colder and colder
@@ -58,7 +58,7 @@ Wondering where did my baby go?
 The fast times, the bright lights, the merry go
 Sorry for not making you my centerfold
 [Chorus: Taylor Swift & Matt Berninger]
-Over and over
+Over and over$<misc_bad too short>
 Lost again with no surprises
 Disappointments, close your eyes
 And it gets colder and colder
@@ -68,6 +68,6 @@ When the sun goes down
 The sight that flashed before me was your face
 When the sun goes down
 But I think that I forgot to say your name
-Over and over
+Over and over$<misc_bad too short>
 Sorry for not making you my, making you my
 Making you my centerfold

@@ -6,7 +6,7 @@ Red: DONE!
 reputation: DONE!
 Lover: DONE!
 folklore: DONE!
-evermore: TODO
+evermore: DONE!
 Midnights: TODO
 
 

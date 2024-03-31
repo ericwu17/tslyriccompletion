@@ -14,7 +14,7 @@ And watch you tolerate it
 If it's all in my head, tell me now
 Tell me I've got it wrong somehow
 I know my love should be celebrated
-But you tolerate it
+But you tolerate it$<misc_bad end of chorus>
 [Verse 2]
 I greet you with a battle hero's welcome
 I take your indiscretions all in good fun
@@ -28,7 +28,7 @@ And watch you tolerate it
 If it's all in my head, tell me now
 Tell me I've got it wrong somehow
 I know my love should be celebrated
-But you tolerate it
+But you tolerate it$<misc_bad end of chorus>
 [Bridge]
 While you were out building other worlds, where was I?
 Where's that man who'd throw blankets over my barbed wire?
@@ -45,6 +45,6 @@ Believe me, I could do it
 If it's all in my head, tell me now
 Tell me I've got it wrong somehow
 I know my love should be celebrated
-But you tolerate it
+But you tolerate it$<misc_bad end of chorus>
 [Outro]
 I sit and watch you
