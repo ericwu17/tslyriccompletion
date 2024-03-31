@@ -631,7 +631,11 @@ pub async fn take_guess(
                 if dist <= MAX_ACCEPTABLE_DIST {
                     // the guess is close enough
                     has_correct_continuation = true;
-                    if dist < minimal_edit_dist {
+                    if dist < minimal_edit_dist
+                        || dist == minimal_edit_dist && truncate_amt_local < truncate_amt
+                    {
+                        // we want to save the minimal edit distance, but if two possible answers have the same edit distance,
+                        // we should pick the one which requires truncating the guess by fewer characters.
                         closest_answer = ans;
                         minimal_edit_dist = dist;
                         truncate_amt = truncate_amt_local;
