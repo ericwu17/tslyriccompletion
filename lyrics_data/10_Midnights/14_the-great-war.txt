@@ -13,10 +13,10 @@ All that blood shed, crimson clover
 Uh-huh, sweet dream was over
 My hand was the one you reached for
 All throughout the Great War
-Always remember$<exclamatory>
+Always remember$<misc_bad too short>
 Uh-huh, tears on the letter
 I vowed not to cry anymore
-If we survived the Great War
+If we survived the Great War$<misc_bad end of chorus>
 [Verse 2]
 You drew up some good faith treaties
 I drew curtains closed, drank my poison all alone
@@ -31,17 +31,18 @@ All that blood shed, crimson clover
 Uh-huh, the bombs were close and
 My hand was the one you reached for
 All throughout the Great War
-Always remember$<exclamatory>
+Always remember$<misc_bad too short>
 Uh-huh, the burning embers
 I vowed not to fight anymore
-If we survived the Great War
+If we survived the Great War$<misc_bad end of chorus>
 [Post-Chorus]
 Uh-huh, uh-huh$<exclamatory>
 [Bridge]
 It turned into something bigger
 Somewhere in the haze got a sense I'd been betrayed
 Your finger on my hair pin triggers
-Hold you down on that icy ground, looked up at me with honor and truth
+Soldier down on that icy ground
+Looked up at me with honor and truth
 Broken and blue, so I called off the troops
 That was the night I nearly lost you
 I really thought I lost you
@@ -55,10 +56,10 @@ To that bloodshed, crimson clover
 Uh-huh, the worst was over
 My hand was the one you reached for
 All throughout the Great War
-Always remember$<exclamatory>
-Uh-huh, we burn for better
+Always remember$<misc_bad too short>
+Uh-huh, we're burned for better
 I vowed I would always be yours
-'Cause we survived the Great War
+'Cause we survived the Great War$<misc_bad end of chorus>
 [Outro]
 Uh-huh, uh-huh$<exclamatory>
 I would always be yours

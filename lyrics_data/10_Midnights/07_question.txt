@@ -1,7 +1,7 @@
 Midnights
 Question...?
 [Intro]
-I remember$<exclamatory>
+I remember$<misc_bad too short>
 [Verse 1]
 Good girl, sad boy
 Big city, wrong choices
@@ -12,8 +12,7 @@ Before you painted all my nights
 A color I've searched for since
 But one thing after another
 Fucking situations, circumstances
-Miscommunications and I
-Have to say, by the way
+Miscommunications and I have to say, by the way
 I just may like some explanations
 [Chorus]
 Can I ask you a question?
@@ -21,11 +20,11 @@ Did you ever have someone kiss you in a crowded room
 And every single one of your friends was making fun of you
 But fifteen seconds later, they were clapping too?
 Then what did you do?
-Did you leave her house in the middle of the night? Oh
-Did you wish you'd put up more of a fight, oh
+Did you leave her house in the middle of the night?
+Did you wish you'd put up more of a fight?
 When she said it was too much?
 Do you wish you could still touch her?
-It's just a question
+It's just a question$<misc_bad end of chorus>
 [Verse 2]
 Half-moon eyes, bad surprise
 Did you realize out of time?
@@ -43,25 +42,24 @@ Did you ever have someone kiss you in a crowded room
 And every single one of your friends was making fun of you
 But fifteen seconds later, they were clapping too?
 Then what did you do?
-Did you leave her house in the middle of the night? Oh
-Did you wish you'd put up more of a fight, oh
+Did you leave her house in the middle of the night?
+Did you wish you'd put up more of a fight?
 When she said it was too much?
 Do you wish you could still touch her?
-It's just a question
+It's just a question$<misc_bad end of chorus>
 [Bridge]
 Does it feel like everything's just like
 Second best after that meteor strike?
 And what's that that I heard? That you're still with her?
-That's nice, I'm sure that's what's suitable
-And right, but tonight
+That's nice, I'm sure that's what's suitable and right, but tonight
 [Chorus]
-Can I ask you a question? (Can I ask you a question?)
-Did you ever have someone kiss you in a crowded room (In a crowded room)
-And every single one of your friends was making fun of you (Making fun of you)
+Can I ask you a question?
+Did you ever have someone kiss you in a crowded room
+And every single one of your friends was making fun of you
 But fifteen seconds later, they were clapping too?
-Then what did you do? (Do)
-Did you leave her house in the middle of the night? Oh
-Did you wish you'd put up more of a fight, oh (More of a fight)
+Then what did you do?
+Did you leave her house in the middle of the night?
+Did you wish you'd put up more of a fight?
 When she said it was too much?
 Do you wish you could still touch her?
-It's just a question
+It's just a question$<misc_bad end of chorus>

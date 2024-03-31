@@ -14,7 +14,7 @@ I've got a lot to live without
 I'm never gonna meet
 What could've been, would've been
 What should've been you
-What could've been, would've been you
+What could've been, would've been you$<misc_bad end of chorus>
 [Verse 2]
 Did some bird flap its wings over in Asia?
 Did some force take you because I didn't pray?
@@ -31,11 +31,11 @@ I'm never gonna meet
 What could've been, would've been
 What should've been you
 [Bridge]
-What could've been, would've been you
-What could've been, would've been
-What should've been you
-What could've been, would've been you
-(What could've been, would've been you)
+What could've been, would've been you$<misc_bad bridge too repetitive>
+What could've been, would've been$<misc_bad bridge too repetitive>
+What should've been you$<misc_bad bridge too repetitive>
+What could've been, would've been you$<misc_bad bridge too repetitive>
+What could've been, would've been you$<misc_bad bridge too repetitive>
 [Chorus]
 Goodbye, goodbye, goodbye
 You were bigger than the whole sky

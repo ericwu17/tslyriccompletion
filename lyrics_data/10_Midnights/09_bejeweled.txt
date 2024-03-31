@@ -17,17 +17,17 @@ Familiarity breeds contempt
 So put me in the basement
 When I want the penthouse of your heart
 Diamonds in my eyes
-I polish up real, I polish up real nice
+I polish up real, I polish up real nice$<misc_bad end of chorus>
 [Post-Chorus]
-Nice$<exclamatory>
+Nice$<misc_bad too short>
 [Verse 2]
-Baby boy, I think I've been too good of a girl (Too good of a girl)
+Baby boy, I think I've been too good of a girl
 Did all the extra credit, then got graded on a curve
 I think it's time to teach some lessons
-I made you my world (Huh), have you heard? (Huh)
+I made you my world, have you heard?
 I can reclaim the land
-And I miss you (Miss you)
-But I miss sparkling (Nice)
+And I miss you
+But I miss sparkling
 [Chorus]
 Best believe I'm still bejeweled
 When I walk in the room
@@ -39,9 +39,9 @@ Familiarity breeds contempt
 So put me in the basement
 When I want the penthouse of your heart
 Diamonds in my eyes
-I polish up real, I polish up real nice
+I polish up real, I polish up real nice$<misc_bad end of chorus>
 [Post-Chorus]
-Nice$<exclamatory>
+Nice$<misc_bad too short>
 [Bridge]
 Sapphire tears on my face
 Sadness became my whole sky
@@ -55,7 +55,7 @@ A diamond's gotta shine
 [Chorus]
 Best believe I'm still bejeweled
 When I walk in the room
-I can still make the whole place shimmer (Shimmer)
+I can still make the whole place shimmer
 And when I meet the band
 They ask, "Do you have a man?"
 I could still say, "I don't remember"
@@ -63,7 +63,7 @@ Familiarity breeds contempt
 So put me in the basement
 When I want the penthouse of your heart
 Diamonds in my eyes
-I polish up real (Nice), I polish up real nice
+I polish up real, I polish up real nice$<misc_bad end of chorus>
 [Outro]
 And we danced all night
 And you can try to change my mind

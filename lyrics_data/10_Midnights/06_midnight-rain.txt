@@ -1,11 +1,11 @@
 Midnights
 Midnight Rain
 [Intro]
-Rain$<exclamatory>
+Rain$<misc_bad too short>
 He wanted it comfortable, I wanted that pain
 He wanted a bride, I was making my own name
 Chasing that fame, he stayed the same
-All of me changed like midnight
+All of me changed like midnight$<misc_bad end of phrase>
 [Verse 1]
 My town was a wasteland
 Full of cages, full of fences
@@ -20,7 +20,7 @@ He was sunshine, I was midnight rain
 He wanted it comfortable, I wanted that pain
 He wanted a bride, I was making my own name
 Chasing that fame, he stayed the same
-All of me changed like midnight
+All of me changed like midnight$<misc_bad end of phrase>
 [Verse 2]
 It came like a postcard
 Picture perfect shiny family
@@ -35,11 +35,11 @@ And the life I gave away
 He wanted it comfortable, I wanted that pain
 He wanted a bride, I was making my own name
 Chasing that fame, he stayed the same
-All of me changed like midnight rain
+All of me changed like midnight rain$<misc_bad end of phrase>
 He wanted it comfortable, I wanted that pain
 He wanted a bride, I was making my own name
 Chasing that fame, he stayed the same
-All of me changed like midnight
+All of me changed like midnight$<misc_bad end of phrase>
 [Outro]
 I guess sometimes we all get
 Just what we wanted, just what we wanted
@@ -49,4 +49,4 @@ I guess sometimes we all get
 Some kind of haunted, some kind of haunted
 And I never think of him
 Except on midnights like this
-(Midnights like this, midnights like this)
+Midnights like this, midnights like this

@@ -16,13 +16,12 @@ Flying in a dream
 Stars by the pocketful
 You wanting me
 Tonight feels impossible
-But it's coming down
-No sound, it's all around
+But it's coming down, no sound, it's all around
 [Post-Chorus: Taylor Swift, Lana Del Rey]
-Like snow on the beach
-Like snow on the beach
-Like snow on the beach
-Like snow, ah
+Like snow on the beach$<misc_bad confusable with other line>
+Like snow on the beach$<misc_bad confusable with other line>
+Like snow on the beach$<misc_bad confusable with other line>
+Like snow, ah$<misc_bad end of post-chorus>
 [Verse 2: Taylor Swift, Taylor Swift & Lana Del Rey]
 This scene feels like what I once saw on a screen
 I searched "aurora borealis green"
@@ -39,13 +38,12 @@ Flying in a dream
 Stars by the pocketful
 You wanting me
 Tonight feels impossible
-But it's coming down
-No sound, it's all around
+But it's coming down, no sound, it's all around
 [Post-Chorus: Taylor Swift, Taylor Swift & Lana Del Rey]
-Like snow on the beach
-Like snow on the beach
-Like snow on the beach
-Like snow, ah
+Like snow on the beach$<misc_bad confusable with other line>
+Like snow on the beach$<misc_bad confusable with other line>
+Like snow on the beach$<misc_bad confusable with other line>
+Like snow, ah$<misc_bad end of post-chorus>
 [Bridge: Taylor Swift, Taylor Swift & Lana Del Rey]
 I can't speak, afraid to jinx it
 I don't even dare to wish it
@@ -53,29 +51,27 @@ But your eyes are flying saucers from another planet
 Now I'm all for you like Janet
 Can this be a real thing? Can it?
 [Chorus: Taylor Swift & Lana Del Rey, Taylor Swift]
-Are we falling like snow at the beach? (Snow at the beach)
+Are we falling like snow at the beach?
 Weird, but fucking beautiful
-Flying in a dream (Flying in a dream)
+Flying in a dream
 Stars by the pocketful
-You wanting me (You wanting me)
+You wanting me
 Tonight feels impossible
-But it's coming down
-No sound, it's all around
+But it's coming down, no sound, it's all around
 [Post-Chorus: Taylor Swift, Lana Del Rey]
-Like snow on the beach (Snow on the beach)
-Like snow on the beach (Snow on the beach)
-Like snow on the beach (Snow on the beach)
-Like snow, ah
-It's coming down
-No sound, it's all around
+Like snow on the beach$<misc_bad confusable with other line>
+Like snow on the beach$<misc_bad confusable with other line>
+Like snow on the beach$<misc_bad confusable with other line>
+Like snow, ah$<misc_bad end of post-chorus>
+It's coming down, no sound, it's all around
 [Outro: Taylor Swift]
-Like snow on the beach
-(It's coming down, it's coming down)
-(It's coming down, it's coming down)
-Like snow on the beach
-(It's coming down, it's coming down)
-(It's coming down, it's coming down)
-(It's coming down, it's coming down)
-(It's coming down, it's coming down)
-(It's coming down, it's coming down)
-(It's coming down, it's coming down)
+Like snow on the beach$<misc_bad confusable with other line>
+It's coming down, it's coming down$<misc_bad outro>
+It's coming down, it's coming down$<misc_bad outro>
+Like snow on the beach$<misc_bad confusable with other line>
+It's coming down, it's coming down$<misc_bad outro>
+It's coming down, it's coming down$<misc_bad outro>
+It's coming down, it's coming down$<misc_bad outro>
+It's coming down, it's coming down$<misc_bad outro>
+It's coming down, it's coming down$<misc_bad outro>
+It's coming down, it's coming down$<misc_bad outro>

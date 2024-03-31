@@ -8,7 +8,7 @@ I'll be getting over you my whole life
 [Pre-Chorus]
 You know how scared I am of elevators
 Never trust it if it rises fast
-It can't last
+It can't last$<misc_bad too short>
 [Chorus]
 Uh-oh, I'm falling in love
 Oh no, I'm falling in love again
@@ -23,7 +23,7 @@ You would break your back to make me break a smile
 [Pre-Chorus]
 You know how much I hate
 That everybody just expects me to bounce back
-Just like that
+Just like that$<misc_bad too short>
 [Chorus]
 Uh-oh, I'm falling in love
 Oh no, I'm falling in love again

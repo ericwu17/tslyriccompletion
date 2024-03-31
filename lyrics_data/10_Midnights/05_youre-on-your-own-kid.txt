@@ -5,7 +5,7 @@ Summer went away, still, the yearning stays
 I play it cool with the best of them
 I wait patiently, he's gonna notice me
 It's okay, we're the best of friends
-Anyway$<exclamatory>
+Anyway$<misc_bad too short>
 I hear it in your voice, you're smoking with your boys
 I touch my phone as if it's your face
 I didn't choose this town, I dream of getting out
@@ -18,7 +18,7 @@ I search the party of better bodies
 Just to learn that you never cared
 [Chorus]
 You're on your own, kid
-You always have been
+You always have been$<misc_bad end of chorus>
 [Verse 2]
 I see the great escape, so long, Daisy May
 I picked the petals, he loves me not
@@ -32,7 +32,7 @@ I search the party of better bodies
 Just to learn that my dreams aren't rare
 [Chorus]
 You're on your own, kid
-You always have been
+You always have been$<misc_bad end of chorus>
 [Instrumental Break]
 [Bridge]
 From sprinkler splashes to fireplace ashes
@@ -51,4 +51,4 @@ You've got no reason to be afraid
 You're on your own, kid
 Yeah, you can face this
 You're on your own, kid
-You always have been
+You always have been$<misc_bad end of chorus>

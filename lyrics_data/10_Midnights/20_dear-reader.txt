@@ -17,7 +17,6 @@ Dear reader, bend when you can
 Snap when you have to
 Dear reader, you don't have to answer
 Just 'cause they asked you
-(You should find another)
 Dear reader, the greatest of luxuries is your secrets
 Dear reader, when you aim at the devil
 Make sure you don't miss
@@ -41,6 +40,6 @@ You should find another guiding light, guiding light
 But I shine so bright
 You should find another guiding light, guiding light
 But I shine so bright
-You should find another, you should find another (Guiding light)
-Find another, you should find another
-You should find another
+You should find another, you should find another guiding light$<misc_bad outro>
+Find another, you should find another$<misc_bad outro>
+You should find another$<misc_bad outro>
