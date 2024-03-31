@@ -13,8 +13,6 @@ Midnights: TODO
 remove most parentheses from songs
 
 Program changes to make:
-fix the AFM logic
-
 make a system to report bad lines in songs.
 
 mark games stale for 7 days as "complete"

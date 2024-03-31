@@ -37,7 +37,7 @@ impl Question {
 }
 
 /// case insensitive edit distance
-fn lowercase_ignore_punctuation_edit_dist(a: &str, b: &str) -> usize {
+pub fn lowercase_ignore_punctuation_edit_dist(a: &str, b: &str) -> usize {
     let a: String = a
         .chars()
         .map(|c| c.to_ascii_lowercase())

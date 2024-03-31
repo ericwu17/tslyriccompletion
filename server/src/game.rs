@@ -1,6 +1,7 @@
 use crate::diff::diff_greedy;
 use crate::guess_generating::{
-    optimal_truncated_dist, pick_distractors, pick_random_guess, Question,
+    lowercase_ignore_punctuation_edit_dist, optimal_truncated_dist, pick_distractors,
+    pick_random_guess, Question,
 };
 use crate::history::{Songlist, SonglistSchema};
 use crate::lifelines::{Lifeline, LifelineInventory};
@@ -776,9 +777,14 @@ pub async fn take_guess(
     serde_json::to_string(&guess_res).unwrap()
 }
 
-fn is_afm(_ans: &str, _guess: &str) -> bool {
-    // TODO:
-    false
+fn is_afm(ans: &str, guess: &str) -> bool {
+    if guess.chars().count() >= ans.chars().count() {
+        return false;
+    }
+    let n = guess.chars().count();
+    let ans = ans.chars().take(n).collect::<String>();
+
+    lowercase_ignore_punctuation_edit_dist(&ans, guess) <= (n / 5)
 }
 
 /// Calculate the diff flags for `guess` and `answer`,
