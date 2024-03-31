@@ -12,6 +12,7 @@ import MechanicsPage from "./home/Mechanics";
 import GuessHistory from "./history/GuessHistory";
 import { Footer } from "./navbar/Footer";
 import { Typography, Link } from "@mui/material";
+import FeedbackForm from "./feedback/feedback";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/history/game" element={<GameDetails />} />
             <Route path="/history/guess" element={<GuessHistory />} />
+            <Route path="/feedback" element={<FeedbackForm />} />
             <Route path="/tswift/*"  element={<RedirectPage />}/>
             <Route path=":any/*" element={<NotFound />} />
           </Routes>
