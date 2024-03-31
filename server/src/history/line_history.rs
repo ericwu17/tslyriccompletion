@@ -23,6 +23,12 @@ pub struct GuessSchema {
     player_name: Option<String>,
 }
 
+#[derive(sqlx::FromRow, Debug)]
+pub struct VotesSchema {
+    num_upvotes: i32,
+    num_downvotes: i32,
+}
+
 #[derive(Serialize)]
 pub struct Guess {
     game_uuid: String,
@@ -69,12 +75,19 @@ impl Guess {
     }
 }
 
+#[derive(Serialize)]
+pub struct LineResult {
+    guesses: Vec<Guess>,
+    num_upvotes: i32,
+    num_downvotes: i32,
+}
+
 #[get("/history/line?<album>&<song>&<prompt>")]
 pub async fn get_line(
     pool: &rocket::State<Pool<MySql>>,
-    album: String,
-    song: String,
-    prompt: String,
+    album: &str,
+    song: &str,
+    prompt: &str,
 ) -> String {
     let guesses: Vec<GuessSchema> = sqlx::query_as(
         "SELECT guesses.*, games.player_name from guesses
@@ -95,5 +108,36 @@ pub async fn get_line(
 
     let guesses: Vec<Guess> = guesses.into_iter().map(Guess::from_schema).collect();
 
-    serde_json::to_string(&guesses).unwrap()
+    let votes: Vec<VotesSchema> = sqlx::query_as(
+        "SELECT * FROM votes WHERE album LIKE ? AND song_name LIKE ? AND lyric LIKE ?;",
+    )
+    .bind(album)
+    .bind(song)
+    .bind(prompt)
+    .fetch_all(pool.inner())
+    .await
+    .unwrap();
+
+    let vote_schema = votes.first();
+
+    let num_upvotes;
+    let num_downvotes;
+    match vote_schema {
+        Some(v) => {
+            num_upvotes = v.num_upvotes;
+            num_downvotes = v.num_downvotes;
+        }
+        None => {
+            num_upvotes = 0;
+            num_downvotes = 0;
+        }
+    };
+
+    let line_result = LineResult {
+        guesses,
+        num_downvotes,
+        num_upvotes,
+    };
+
+    serde_json::to_string(&line_result).unwrap()
 }

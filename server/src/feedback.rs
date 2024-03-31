@@ -16,7 +16,7 @@ pub async fn upvote_line(
         .bind(line)
         .fetch_all(pool.inner())
         .await;
-    let _ = sqlx::query("UPDATE votes SET num_upvotes = num_upvotes + 1 WHERE album = ? AND song_name = ? AND lyric = ?;")
+    let _ = sqlx::query("UPDATE votes SET num_upvotes = num_upvotes + 1 WHERE album LIKE ? AND song_name LIKE ? AND lyric LIKE ?;")
         .bind(album)
         .bind(song_name)
         .bind(line)
@@ -40,7 +40,7 @@ pub async fn downvote_line(
         .bind(line)
         .fetch_all(pool.inner())
         .await;
-    let _ = sqlx::query("UPDATE votes SET num_downvotes = num_downvotes + 1 WHERE album = ? AND song_name = ? AND lyric = ?;")
+    let _ = sqlx::query("UPDATE votes SET num_downvotes = num_downvotes + 1 WHERE album LIKE ? AND song_name LIKE ? AND lyric LIKE ?;")
         .bind(album)
         .bind(song_name)
         .bind(line)

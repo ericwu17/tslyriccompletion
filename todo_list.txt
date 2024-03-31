@@ -13,6 +13,6 @@ Midnights: TODO
 remove most parentheses from songs
 
 Program changes to make:
-make a system to report bad lines in songs.
+make a system to report bad lines in songs. (RSS feed for this)
 
 mark games stale for 7 days as "complete"
