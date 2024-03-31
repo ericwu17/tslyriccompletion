@@ -1,4 +1,3 @@
-use crate::diff::diff_greedy;
 use crate::guess_generating::{
     lowercase_ignore_punctuation_edit_dist, optimal_truncated_dist, pick_distractors,
     pick_random_guess, Question,
@@ -89,23 +88,6 @@ pub struct GameStatePublic {
     completed_question: bool,
 }
 
-/// A struct representing a string with "flags".
-/// Flags are used to set the color of each character in the string.
-/// This is used when displaying the diffed output of guess vs actual.
-#[derive(Serialize)]
-pub struct FlaggedString {
-    pub flags: Vec<i32>,
-    pub text: String,
-}
-
-impl FlaggedString {
-    pub fn set_all_flags(&mut self, val: i32) {
-        for i in 0..self.flags.len() {
-            self.flags[i] = val;
-        }
-    }
-}
-
 /// A struct representing a result of a player's guess.
 #[derive(Serialize)]
 pub enum GuessResult {
@@ -120,15 +102,12 @@ pub enum GuessResult {
     /// We also tell them which new lifeline they earned, if any.
     Correct {
         points_earned: i32,
-        user_guess: FlaggedString,
-        answer: FlaggedString,
+        user_guess: String,
+        answer: String,
         new_lifeline: Option<Lifeline>,
     },
     /// An incorrect answer.
-    Incorrect {
-        user_guess: FlaggedString,
-        answer: FlaggedString,
-    },
+    Incorrect { user_guess: String, answer: String },
 }
 
 /// This is a combination of a [`GuessResult`] and a [`GameState`] sent back to the player
@@ -565,15 +544,6 @@ pub async fn take_guess(
 
                 let mut new_game_state = game_state.clone();
 
-                let mut guess_flag_str = FlaggedString {
-                    flags: vec![0; guess.chars().count()],
-                    text: guess.to_string(),
-                };
-                let mut ans_flag_str = FlaggedString {
-                    flags: vec![0; correct_answer.chars().count()],
-                    text: correct_answer.to_owned(),
-                };
-
                 if guess == correct_answer {
                     // The user guessed correctly on a multiple choice question
                     new_game_state.score += 1;
@@ -584,8 +554,8 @@ pub async fn take_guess(
                         game_state: new_game_state.into_public_with_answers(id.clone()),
                         guess_res: GuessResult::Correct {
                             points_earned: 1,
-                            user_guess: guess_flag_str,
-                            answer: ans_flag_str,
+                            user_guess: guess.to_owned(),
+                            answer: correct_answer.to_owned(),
                             new_lifeline: None,
                         },
                     };
@@ -593,9 +563,6 @@ pub async fn take_guess(
                     break 'outer_block res;
                 } else {
                     // The user has guessed wrong and the game is now over
-                    // In a multiple choice situation, we set the flags for both strings' characters all to red.
-                    guess_flag_str.set_all_flags(1);
-                    ans_flag_str.set_all_flags(1);
                     new_game_state.terminated = true;
                     new_game_state.completed_question = true;
                     (*guard).remove(&id);
@@ -603,8 +570,8 @@ pub async fn take_guess(
                     let res = GuessResultPublic {
                         game_state: new_game_state.into_public_with_answers(id.clone()),
                         guess_res: GuessResult::Incorrect {
-                            user_guess: guess_flag_str,
-                            answer: ans_flag_str,
+                            user_guess: guess.to_owned(),
+                            answer: correct_answer.to_owned(),
                         },
                     };
                     outer_game_state = new_game_state.clone();
@@ -661,7 +628,6 @@ pub async fn take_guess(
 
             let mut maybe_new_lifeline = None;
             let mut new_game_state = game_state.clone();
-            let (guess_flag_str, ans_flag_str) = get_flags(guess, closest_answer, truncate_amt);
 
             if has_correct_continuation {
                 // the user got the guess right
@@ -688,8 +654,8 @@ pub async fn take_guess(
                     game_state: new_game_state.into_public_with_answers(id.clone()),
                     guess_res: GuessResult::Correct {
                         points_earned,
-                        user_guess: guess_flag_str,
-                        answer: ans_flag_str,
+                        user_guess: guess.to_owned(),
+                        answer: closest_answer.to_owned(),
                         new_lifeline: maybe_new_lifeline,
                     },
                 };
@@ -704,8 +670,8 @@ pub async fn take_guess(
                 let res = GuessResultPublic {
                     game_state: new_game_state.into_public_with_answers(id.clone()),
                     guess_res: GuessResult::Incorrect {
-                        user_guess: guess_flag_str,
-                        answer: ans_flag_str,
+                        user_guess: guess.to_owned(),
+                        answer: closest_answer.to_owned(),
                     },
                 };
                 outer_game_state = new_game_state.clone();
@@ -789,66 +755,6 @@ fn is_afm(ans: &str, guess: &str) -> bool {
     let ans = ans.chars().take(n).collect::<String>();
 
     lowercase_ignore_punctuation_edit_dist(&ans, guess) <= (n / 5)
-}
-
-/// Calculate the diff flags for `guess` and `answer`,
-/// for a given truncation amount to `guess` known to be the amount which minimizes their distance.
-/// (see function [`optimal_truncated_dist`])
-fn get_flags(
-    guess: &str,
-    answer: &str,
-    optimal_truncate_amt: i32,
-) -> (FlaggedString, FlaggedString) {
-    let (_, diffs) = diff_greedy(
-        &guess.to_lowercase()[0..(guess.chars().count() - optimal_truncate_amt as usize)],
-        &answer.to_lowercase(),
-    )
-    .unwrap();
-
-    let mut guess_flags = vec![0; guess.chars().count()];
-    let mut ans_flags = vec![0; answer.chars().count()];
-    for insertion in diffs.get("insert").unwrap() {
-        for index in insertion.at..=insertion.to {
-            if index >= answer.chars().count() {
-                continue;
-            }
-            if CHARS_TO_IGNORE.contains(&answer.chars().nth(index).unwrap_or(' ')) {
-                ans_flags[index] = 2;
-            } else {
-                ans_flags[index] = 1;
-            }
-        }
-    }
-    for deletion in diffs.get("delete").unwrap() {
-        for index in deletion.at..=deletion.to {
-            if index >= guess.chars().count() {
-                continue;
-            }
-            if CHARS_TO_IGNORE.contains(&guess.chars().nth(index).unwrap_or(' ')) {
-                guess_flags[index] = 2;
-            } else {
-                guess_flags[index] = 1;
-            }
-        }
-    }
-    let num_chars_truncated = guess[(guess.chars().count() - optimal_truncate_amt as usize)..]
-        .chars()
-        .count();
-
-    for i in (guess_flags.len() - num_chars_truncated)..guess_flags.len() {
-        guess_flags[i] = 2;
-    }
-
-    (
-        FlaggedString {
-            flags: guess_flags,
-            text: guess.to_string(),
-        },
-        FlaggedString {
-            flags: ans_flags,
-            text: answer.to_string(),
-        },
-    )
 }
 
 /// whether `guess` is on the right track to `answer`. If a guess is on the right track,

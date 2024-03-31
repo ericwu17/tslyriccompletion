@@ -168,16 +168,13 @@ function GuessDetails({ guess, totalNumGuesses }) {
 
   const href = generateSongHref(guess.album, guess.song_name);
 
-  let {guessFlags, answerFlags} = generateFlags(user_guess, correct_answer);
+  const shouldDisplayGray = lifelines_used.includes("Skip")
+    || (was_multiple_choice && guess.result === "correct");
+  const shouldDisplayRed = was_multiple_choice && guess.result === "incorrect";
 
-  if (lifelines_used.includes("Skip") || (was_multiple_choice && guess.result === "correct")) {
-    answerFlags = answerFlags.map(() => -1);
-    guessFlags = guessFlags.map(() => -1);
-  }
-  if (was_multiple_choice && guess.result === "incorrect") {
-    answerFlags = answerFlags.map(() => 1);
-    guessFlags = guessFlags.map(() => 1);
-  }
+  let {guessFlags, answerFlags} =
+    generateFlags(user_guess, correct_answer, shouldDisplayGray, shouldDisplayRed);
+
 
   return (
     <Box sx={{border: "3px solid #a3c1ad", borderRadius: "5px"}} p={1} width="100%">
@@ -295,7 +292,7 @@ function GuessDetails({ guess, totalNumGuesses }) {
 
 const CHARS_TO_IGNORE = ["(", ")", ",", ".", "-", ":", ";", "\"", "'", "?", " "];
 
-export function generateFlags(guess, answer) {
+export function generateFlags(guess, answer, shouldDisplayGray, shouldDisplayRed) {
 
   // First we need to figure out the optimal amount to truncate the user guess
   // (This is the truncation amount that minimizes distance)
@@ -352,6 +349,15 @@ export function generateFlags(guess, answer) {
         guessIndex += 1;
       }
     }
+  }
+
+  if (shouldDisplayGray) {
+    answerFlags = answerFlags.map(() => -1);
+    guessFlags = guessFlags.map(() => -1);
+  }
+  if (shouldDisplayRed) {
+    answerFlags = answerFlags.map(() => 1);
+    guessFlags = guessFlags.map(() => 1);
   }
 
   return {

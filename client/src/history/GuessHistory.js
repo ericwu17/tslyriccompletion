@@ -112,16 +112,11 @@ function GuessDetails({ guess }) {
   const {correct_answer, user_guess, points_earned, lifelines_used, player_name} = guess;
   const was_multiple_choice = guess.options.length > 0;
 
-  let {guessFlags, answerFlags} = generateFlags(user_guess, correct_answer);
-
-  if (lifelines_used.includes("Skip") || (was_multiple_choice && guess.result === "correct")) {
-    answerFlags = answerFlags.map(() => -1);
-    guessFlags = guessFlags.map(() => -1);
-  }
-  if (was_multiple_choice && guess.result === "incorrect") {
-    answerFlags = answerFlags.map(() => 1);
-    guessFlags = guessFlags.map(() => 1);
-  }
+  const shouldDisplayGray = lifelines_used.includes("Skip")
+    || (was_multiple_choice && guess.result === "correct");
+  const shouldDisplayRed = was_multiple_choice && guess.result === "incorrect";
+  let {guessFlags, answerFlags} =
+    generateFlags(user_guess, correct_answer, shouldDisplayGray, shouldDisplayRed);
 
   const options = { year: "numeric", month: "numeric", day: "numeric" };
   const submit_time = parseISO(guess.submit_time).toLocaleDateString(undefined, options);

@@ -175,8 +175,9 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
         </Box>
       }
 
-
-      {Object.keys(guessResult).length > 0 && <ResultDisplay guessRes={guessResult}/>}
+      {Object.keys(guessResult).length > 0 &&
+        <ResultDisplay guessRes={guessResult} isMultipleChoice={isMultipleChoice}/>
+      }
       {!completed_question &&
         <LifelineSection
           gameState={gameState}
@@ -266,14 +267,8 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
       if (lifelineToUse === "skip") {
         setGuessResult({
           Skipped: {
-            user_guess: {
-              text: "-",
-              flags: [],
-            },
-            answer: {
-              text: newGameState.current_question.answers[0],
-              flags: [],
-            },
+            user_guess: "-",
+            answer: newGameState.current_question.answers[0],
           }
         });
       }
