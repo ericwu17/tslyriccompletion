@@ -30,6 +30,9 @@ export default function AboutPage() {
       </Typography>
 
       <Typography>
+        2024-03-31: Please read <Link href="/changes20240331">this note</Link> about recent updates.
+      </Typography>
+      <Typography>
         2023-10-27: Added 1989 songs from the vault!
       </Typography>
       <Typography>
@@ -37,33 +40,7 @@ export default function AboutPage() {
         This list can be later used to restore your song selection.
       </Typography>
       <Typography>
-        2023-08-19: Pressing Enter on the start game page now does nothing. Pressing the
-        "Start Game" button in the navbar will also do nothing (but will not clear your selection
-        of songs).
-      </Typography>
-      <Typography>
-        2023-07-08: Added Speak Now From The Vault songs!
-      </Typography>
-      <Typography>
-        2023-06-02: Changed the behavior of "Start Game" in Navbar. Now if the button is pressed
-        while on the start game page, the game will begin immediately rather than redirecting
-        the user to the back to the start game page.
-      </Typography>
-      <Typography>
-        2023-06-02: Added song "You're Losing Me" to Midnights.
-      </Typography>
-      <Typography>
-        2023-05-18: Reduced the default size of the song list display when viewing game history.
-      </Typography>
-      <Typography>
-        2023-05-18: Patched a bug where the '&' in "Forever & Always" caused line history pages
-        to be blank.
-      </Typography>
-      <Typography>
-        2023-05-17: Changed style of View Scores page on mobile devices.
-      </Typography>
-      <Typography>
-        2023-05-17: Changed album name "Reputation" to "reputation".
+        View the <Link href="/changelog">full changelog here.</Link>
       </Typography>
 
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
@@ -111,54 +88,15 @@ export default function AboutPage() {
             {" "} as a database to store game history.
           </ListItem>
         </List>
-        Note: I am considering remaking this site with plain HTML, CSS and javascript,
-        while keeping the server the same.
       </Typography>
 
       <Typography variant="h4" sx={{mt:2}}>
-        Known issues/Limitations
-      </Typography>
-      <Box>
-        <List sx={{ listStyleType: "disc", listStylePosition:"inside" }}>
-          <ListItem sx={{ display: "list-item", fontFamily:"arial" }}>
-            When viewing the track list of Red, I removed the song "All Too Well"
-            (non-ten minute version), since it contains duplicate lyrics with the ten minute
-            version. This results in a mismatch between track numbers and songs. (For example,
-            Come Back Be Here is track 18 on Red (TV), but it appears as track 17 on this site).
-            This mismatch also occurs when the songlist is filtered by a search.
-          </ListItem>
-          <ListItem sx={{ display: "list-item", fontFamily:"arial" }}>
-            In the song <Link href="/song/Fearless/You All Over Me">You All Over Me</Link>,
-            the line "I lived, I learned" should technically have multiple different successors
-            (it can be followed by "And found out what it was to turn around" or "had you, got
-            burned"). However, due to how line breaks are positioned, the game thinks that there is
-            only one possible successor.
-            <ListItem sx={{ display: "list-item", fontFamily:"arial" }}>
-              This is an issue with determining which lines are valid
-              lines as a prompt. This could possibly be solved in the future by using a more clever
-              method of determining which lines are valid as a prompt. (See also: {}
-              <i>Selecting the line for the question
-              </i> on the <Link href={MECHANICS_PAGE_URL}> Mechanics Page</Link>.)
-            </ListItem>
-          </ListItem>
-          <ListItem sx={{ display: "list-item", fontFamily:"arial" }}>
-            There are also issues where a short line appears as the prompt, and it isn't
-            possible to know which song the line came from.
-          </ListItem>
-        </List>
-      </Box>
-
-      <Typography variant="h4" sx={{mb: 2}}>
-        Future Ideas for the Taylor Swift Lyric Completion Game?
+        Have ideas on how to improve this site?
       </Typography>
       <Typography>
-        I am always trying to fix bugs and improve the user interface.
-        Let me know (by <Link href="mailto:eric.dianhao.wu@gmail.com">email</Link> {}
-        or by {}
-        <Link href="https://github.com/EricWu2003/tslyriccompletion/issues">
-          raising an issue on github
-        </Link>)
-        if you have any feature requests or suggestions!
+        I am always trying to fix bugs, find and mark bad lyrics, and improve the user interface.
+        Let me know through the <Link href="/feedback">feedback form</Link> {}
+        if you have notice any issues, have feature requests, or suggestions!
       </Typography>
 
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
@@ -188,11 +126,11 @@ export default function AboutPage() {
         math, computers, Rubik's Cubes, and shorthand systems. If you have any feedback for
         this site, or issues with
         running this app locally, please reach out -- I'd love to hear from you! My email is
-        eric.dianhao.wu@gmail.com.
+        ericwu17 at ucla.edu.
       </Typography>
       <Typography>
-        Also please email me if
-        you encounter anything you think may be a bug (or even better, leave an issue on github)!
+        Also please use the <Link href="/feedback">feedback form</Link> if
+        you encounter anything you think may be a bug.
       </Typography>
     </Box>
   );

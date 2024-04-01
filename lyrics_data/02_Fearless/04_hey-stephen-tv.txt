@@ -1,10 +1,9 @@
 Fearless
 Hey Stephen
 [Intro]
-Mmm-mm, mm-mm
-Mmm-mm, mm-mm
-Mmm-mm, mm-mm, yeah
-
+Mmm-mm, mm-mm$<exclamatory>
+Mmm-mm, mm-mm$<exclamatory>
+Mmm-mm, mm-mm, yeah$<exclamatory>
 [Verse 1]
 Hey Stephen, I know looks can be deceiving
 But I know I saw a light in you
@@ -14,14 +13,12 @@ Of all the girls tossing rocks at your window
 I'll be the one waiting there even when it's cold
 Hey Stephen, boy, you might have me believing
 I don't always have to be alone
-
 [Chorus]
 'Cause I can't help it if you look like an angel
 Can't help it if I wanna kiss you in the rain so
 Come feel this magic I've been feeling since I met you
 Can't help it if there's no one else
 Mmm, I can't help myself
-
 [Verse 2]
 Hey Stephen, I've been holding back this feeling
 So I got some things to say to you
@@ -31,14 +28,12 @@ The way you walk, way you talk, way you say my name
 It's beautiful, wonderful, don't you ever change
 Hey Stephen, why are people always leaving?
 I think you and I should stay the same
-
 [Chorus]
 'Cause I can't help it if you look like an angel
 Can't help it if I wanna kiss you in the rain so
 Come feel this magic I've been feeling since I met you
 Can't help it if there's no one else
 Mmm, I can't help myself
-
 [Bridge]
 They're dimming the street lights, you're perfect for me
 Why aren't you here tonight?
@@ -47,8 +42,7 @@ And pull me near and shine, shine, shine
 Hey Stephen, I could give you fifty reasons
 Why I should be the one you choose
 All those other girls, well, they're beautiful
-But would they write a song for you? (Ha-ha-ha)
-
+But would they write a song for you?
 [Chorus]
 I can't help it if you look like an angel
 Can't help it if I wanna kiss you in the rain so
@@ -60,12 +54,11 @@ Can't help it if I wanna kiss you in the rain so
 Come feel this magic I've been feeling since I met you
 Can't help it if there's no one else
 Mmm, I can't help myself
-
 [Outro]
-Ah-uh, myself
-Mmm-mm, I can't help myself
-I can't help myself
-Oh-oh-oh
-Mmm-mm, mm-mm
-Mmm-mm, mm-mm
-Mmm-mm, mm-mm
+Ah-uh, myself$<misc_bad outro>
+Mmm-mm, I can't help myself$<misc_bad outro>
+I can't help myself$<misc_bad outro>
+Oh-oh-oh$<misc_bad outro>
+Mmm-mm, mm-mm$<misc_bad outro>
+Mmm-mm, mm-mm$<misc_bad outro>
+Mmm-mm, mm-mm$<misc_bad outro>

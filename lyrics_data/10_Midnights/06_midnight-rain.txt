@@ -1,12 +1,11 @@
 Midnights
 Midnight Rain
 [Intro]
-Rain
+Rain$<misc_bad too short>
 He wanted it comfortable, I wanted that pain
 He wanted a bride, I was making my own name
 Chasing that fame, he stayed the same
-All of me changed like midnight
-
+All of me changed like midnight$<misc_bad end of phrase>
 [Verse 1]
 My town was a wasteland
 Full of cages, full of fences
@@ -17,13 +16,11 @@ A slow-motion, love potion
 Jumping off things in the ocean
 I broke his heart 'cause he was nice
 He was sunshine, I was midnight rain
-
 [Chorus]
 He wanted it comfortable, I wanted that pain
 He wanted a bride, I was making my own name
 Chasing that fame, he stayed the same
-All of me changed like midnight
-
+All of me changed like midnight$<misc_bad end of phrase>
 [Verse 2]
 It came like a postcard
 Picture perfect shiny family
@@ -34,17 +31,15 @@ A deep portal, time travel
 All the love we unravel
 And the life I gave away
 'Cause he was sunshine, I was midnight rain
-
 [Chorus]
 He wanted it comfortable, I wanted that pain
 He wanted a bride, I was making my own name
 Chasing that fame, he stayed the same
-All of me changed like midnight rain
+All of me changed like midnight rain$<misc_bad end of phrase>
 He wanted it comfortable, I wanted that pain
 He wanted a bride, I was making my own name
 Chasing that fame, he stayed the same
-All of me changed like midnight
-
+All of me changed like midnight$<misc_bad end of phrase>
 [Outro]
 I guess sometimes we all get
 Just what we wanted, just what we wanted
@@ -54,4 +49,4 @@ I guess sometimes we all get
 Some kind of haunted, some kind of haunted
 And I never think of him
 Except on midnights like this
-(Midnights like this, midnights like this)
+Midnights like this, midnights like this

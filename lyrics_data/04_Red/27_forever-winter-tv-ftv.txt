@@ -9,7 +9,6 @@ I call, just checking up on him
 He's up, 3 AM, pacing
 He says, "It's not just a phase I'm in"
 My voice comes out begging
-
 [Chorus]
 All this time I didn't know
 You were breaking down
@@ -17,8 +16,7 @@ I'd fall to pieces on the floor
 If you weren't around
 Too young to know it gets better
 I'll be summer sun for you forever
-Forever winter if you go
-
+Forever winter if you go$<misc_bad end of chorus>
 [Verse 2]
 He seems fine most of the time
 Forcing smiles and never minds
@@ -30,7 +28,6 @@ I call, just checking up on him
 He's up, 5 AM, wasted
 Long gone, not even listening
 My voice comes out screaming
-
 [Chorus]
 All this time I didn't know
 You were breaking down
@@ -38,31 +35,26 @@ I'd fall to pieces on the floor
 If you weren't around
 Too young to know it gets better
 I'll be summer sun for you forever
-Forever winter if you go
-
+Forever winter if you go$<misc_bad end of chorus>
 [Bridge]
 If I was standing there in your apartment
 I'd take that bomb in your head and disarm it
-I'd say I love you even at your darkest and
-Please don't go
-
+I'd say I love you even at your darkest and please don't go
 [Chorus]
-I didn't know
+I didn't know$<misc_bad too short>
 You were breaking down
 I'd fall to pieces on the floor
 If you weren't around
 Too young to know it gets better
 I'll be summer sun for you forever
-Forever winter if you go
-
+Forever winter if you go$<misc_bad end of chorus>
 [Post-Chorus]
 I'll be your summer sun forever
 At 3 AM, pacing
 All this time I didn't know
 At 5 AM, wasted
-I'd be in pieces on the floor
-Forever winter if you go
-
+I'd be in pieces on the floor$<misc_bad end of chorus>
+Forever winter if you go$<misc_bad end of chorus>
 [Outro]
 He says he doesn't believe anything much he hears these days
 I say, "Believe in one thing, I won't go away"

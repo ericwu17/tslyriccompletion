@@ -38,9 +38,9 @@ pub fn load_songs_from_files() -> Vec<Song> {
             let file_contents = &file_contents[song_name_length + 1..];
 
             songs.push(Song::new(
-                album_name.to_owned(),
-                song_name.to_owned(),
-                file_contents.to_owned(),
+                Box::leak(album_name.to_owned().into_boxed_str()),
+                Box::leak(song_name.to_owned().into_boxed_str()),
+                Box::leak(file_contents.to_owned().into_boxed_str()),
             ));
         }
     }

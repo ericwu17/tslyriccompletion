@@ -1,6 +1,6 @@
-use crate::diff::diff_greedy;
 use crate::guess_generating::{
-    optimal_truncated_dist, pick_distractors, pick_random_guess, Question,
+    lowercase_ignore_punctuation_edit_dist, optimal_truncated_dist, pick_distractors,
+    pick_random_guess, Question,
 };
 use crate::history::{Songlist, SonglistSchema};
 use crate::lifelines::{Lifeline, LifelineInventory};
@@ -15,6 +15,9 @@ use sqlx::{MySql, Pool};
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use uuid::Uuid;
+
+/// These characters are to be ignored when taking the edit distance between two strings:
+pub const CHARS_TO_IGNORE: &[char] = &['(', ')', ',', '.', '-', ':', ';', '"', '\'', '?', ' '];
 
 /// If a guess's dist is greater than `MAX_ACCEPTABLE_DIST` from the answer, then the game ends.
 const MAX_ACCEPTABLE_DIST: usize = 13;
@@ -59,14 +62,14 @@ pub struct GameState {
     /// This vector gets reset to an empty vec when the player moves on to the next question.
     hints_shown: Vec<Hint>,
     /// A vector of answer choices, or empty if the current question is not in multiple-choice mode.
-    choices: Vec<String>,
+    choices: Vec<&'static str>,
     /// True if the game has ended.
     terminated: bool,
     /// True if the question has been completed but the next question has not been requested.
     completed_question: bool,
-    /// A vector of songs included in the game. The (String, String) pairs are
+    /// A vector of songs included in the game. The (str, str) pairs are
     /// (Album_name, Song_name) pairs.
-    included_songs: Vec<(String, String)>,
+    included_songs: Vec<(&'static str, &'static str)>,
 }
 
 /// A struct related to [`GameState`]
@@ -79,27 +82,10 @@ pub struct GameStatePublic {
     current_question: Question,
     lifeline_inv: LifelineInventory,
     hints_shown: Vec<Hint>,
-    choices: Vec<String>,
+    choices: Vec<&'static str>,
     terminated: bool,
-    included_songs: Vec<(String, String)>,
+    included_songs: Vec<(&'static str, &'static str)>,
     completed_question: bool,
-}
-
-/// A struct representing a string with "flags".
-/// Flags are used to set the color of each character in the string.
-/// This is used when displaying the diffed output of guess vs actual.
-#[derive(Serialize)]
-pub struct FlaggedString {
-    flags: Vec<i32>,
-    text: String,
-}
-
-impl FlaggedString {
-    pub fn set_all_flags(&mut self, val: i32) {
-        for i in 0..self.flags.len() {
-            self.flags[i] = val;
-        }
-    }
 }
 
 /// A struct representing a result of a player's guess.
@@ -116,15 +102,12 @@ pub enum GuessResult {
     /// We also tell them which new lifeline they earned, if any.
     Correct {
         points_earned: i32,
-        user_guess: FlaggedString,
-        answer: FlaggedString,
+        user_guess: String,
+        answer: String,
         new_lifeline: Option<Lifeline>,
     },
     /// An incorrect answer.
-    Incorrect {
-        user_guess: FlaggedString,
-        answer: FlaggedString,
-    },
+    Incorrect { user_guess: String, answer: String },
 }
 
 /// This is a combination of a [`GuessResult`] and a [`GameState`] sent back to the player
@@ -141,23 +124,19 @@ impl GameState {
     /// This function will modify the argument `songs_to_include`, so that if it's the empty vector,
     /// it will end up containing all songs in songs. It will also filter out any
     /// invalid songs in `songs_to_include`.
-    pub fn new(songs: &[Song], songs_to_include: &mut Vec<(String, String)>) -> Self {
-        let mut actual_songs_to_include: Vec<(String, String)> = songs_to_include
+    pub fn new(songs: &[Song], songs_to_include: &mut Vec<(&str, &str)>) -> Self {
+        let mut actual_songs_to_include: Vec<(&'static str, &'static str)> = songs_to_include
             .clone()
             .into_iter()
-            .filter(|(a, b)| {
+            .filter_map(|(a, b)| {
                 songs
                     .iter()
-                    .filter(|song| song.album == *a && song.name == *b)
-                    .count()
-                    > 0
+                    .find(|song| song.album == a && song.name == b)
+                    .map(|song| (song.album, song.name))
             })
             .collect();
         if actual_songs_to_include.is_empty() {
-            actual_songs_to_include = songs
-                .iter()
-                .map(|song| (song.album.clone(), song.name.clone()))
-                .collect();
+            actual_songs_to_include = songs.iter().map(|song| (song.album, song.name)).collect();
         }
         *songs_to_include = actual_songs_to_include.clone();
         GameState {
@@ -236,6 +215,10 @@ impl GameState {
             }
         }
     }
+
+    fn set_single_answer(&mut self, ans: &'static str) {
+        self.current_question.answers = vec![ans];
+    }
 }
 
 /// API endpoint to start a new game.
@@ -247,7 +230,7 @@ impl GameState {
 pub async fn init_game(
     game_state: &State<Arc<Mutex<HashMap<String, GameState>>>>,
     songs: &State<Vec<Song>>,
-    songs_to_include: Json<Vec<(String, String)>>,
+    songs_to_include: Json<Vec<(&str, &str)>>,
     pool: &rocket::State<Pool<MySql>>,
 ) -> String {
     let mut songs_to_include = songs_to_include.to_vec();
@@ -259,21 +242,19 @@ pub async fn init_game(
         (*guard).insert(uuid.clone(), new_game_state.clone());
     }
 
-    let full_songlist: Vec<(String, String)> = songs
-        .iter()
-        .map(|song| (song.album.clone(), song.name.clone()))
-        .collect();
-    let mut songlist_desc: HashMap<String, Vec<bool>> = HashMap::new();
+    let full_songlist: Vec<(&'static str, &'static str)> =
+        songs.iter().map(|song| (song.album, song.name)).collect();
+    let mut songlist_desc: HashMap<&'static str, Vec<bool>> = HashMap::new();
     // The for loop below builds out the songlist_desc object, which is a Hashmap mapping album names to a list of boolean values.
     // The list of boolean values represents which songs are included/excluded in the game.
     for song in &full_songlist {
         let is_included = songs_to_include.contains(song);
-        if let Some(v) = songlist_desc.get(&song.0) {
+        if let Some(v) = songlist_desc.get(song.0) {
             let mut v = v.clone();
             v.push(is_included);
-            songlist_desc.insert(song.0.clone(), v);
+            songlist_desc.insert(song.0, v);
         } else {
-            songlist_desc.insert(song.0.clone(), vec![is_included]);
+            songlist_desc.insert(song.0, vec![is_included]);
         }
     }
 
@@ -281,7 +262,7 @@ pub async fn init_game(
     hasher.update(serde_json::to_string(&full_songlist).unwrap().as_bytes());
     let full_songlist_hash = format!("{:X}", hasher.finalize());
 
-    let full_songlist_json: sqlx::types::Json<Vec<(String, String)>> =
+    let full_songlist_json: sqlx::types::Json<Vec<(&'static str, &'static str)>> =
         sqlx::types::Json(full_songlist);
     let songlist_desc_json = sqlx::types::Json(songlist_desc);
 
@@ -316,16 +297,12 @@ pub async fn init_game(
         .map(|songlist| Songlist {
             id: songlist.id,
             sha1sum: songlist.sha1sum,
-
-            // We are serializing and then immediately deserializing because I can't figure out
-            // how to convert the type from Json<Vec<(String, String)>> to Vec<(String, String)>
-            content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap())
-                .unwrap(),
+            content: songlist.content.as_ref().clone(),
         })
         .collect();
 
     let songlist_id = songlists
-        .get(0)
+        .first()
         .expect(
             "Expect to have one songlist with appropriate SHA1 sum after inserting the songlist",
         )
@@ -417,13 +394,19 @@ pub async fn game_lifelines(
     };
     let gs = res.clone();
 
+    let answer = gs
+        .current_question
+        .answers
+        .choose(&mut rand::thread_rng())
+        .unwrap();
+
     let _ = sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
         .bind(id.clone())
         .bind(gs.guesses_made)
         .bind(gs.current_question.song.album)
         .bind(gs.current_question.song.name)
         .bind(gs.current_question.shown_line)
-        .bind(gs.current_question.answer)
+        .bind(answer)
         .bind("skipped")
         .bind("")
         .bind(0)
@@ -457,10 +440,17 @@ pub fn reduce_multiple_choice(
         }
 
         let mut new_game_state = game_state.clone();
-        let answer = new_game_state.current_question.answer.clone();
-        new_game_state.choices = pick_distractors(&answer, songs);
+        let answers = new_game_state.current_question.answers.clone();
+
+        // we pick the first answer. The answers vec will have already been shuffled.
+        // it's important to pick the first one to remain consistent with the showPrevLines behavior
+        let answer = *answers.first().unwrap();
+
+        new_game_state.choices = pick_distractors(answers, songs);
         new_game_state.choices.push(answer);
         new_game_state.choices.shuffle(&mut rand::thread_rng());
+        // the question should now have only a single answer
+        new_game_state.set_single_answer(answer);
 
         (*guard).insert(id.clone(), new_game_state.clone());
         return serde_json::to_string(&new_game_state.into_public(id.clone())).unwrap();
@@ -527,50 +517,152 @@ pub async fn take_guess(
     pool: &rocket::State<Pool<MySql>>,
 ) -> String {
     let outer_game_state: GameState;
+    let mut closest_answer;
     let guess_res = 'outer_block: {
         let mut guard = game_state.lock().unwrap();
         if let Some(game_state) = (*guard).get(&id) {
+            closest_answer = game_state.current_question.answers[0];
             if game_state.completed_question {
                 // already guessed, so we do nothing
                 return serde_json::to_string(&game_state.into_public_with_answers(id)).unwrap();
             }
-
-            let question = game_state.current_question.clone();
-
-            if guess.chars().count() < question.answer.chars().count() - 5
-                && guess != "/"
-                && is_on_right_track(guess, &question.answer)
-                && game_state.choices.is_empty()
-                || guess.chars().count() > 150
-            {
-                // The guess was on the right track, but was too short.
+            if guess.chars().count() > 150 {
                 // We also return AFM (refuse to process the guess) if the user submits a ridiculously long guess.
                 let res = GuessResultPublic {
                     game_state: game_state.into_public(id),
                     guess_res: GuessResult::AFM {
-                        target_length: question.answer.chars().count(),
+                        target_length: 0,
                         guess_length: guess.chars().count(),
                     },
                 };
                 return serde_json::to_string(&res).unwrap();
             }
 
-            let (truncate_amt, dist) = optimal_truncated_dist(guess, &question.answer);
-            let mut new_game_state = game_state.clone();
-            let (mut guess_flag_str, mut ans_flag_str) =
-                get_flags(guess, &question.answer, truncate_amt);
-            let points_earned: i32;
-            let mut maybe_new_lifeline = None;
+            // HANDLE MULTIPLE CHOICE (inside this if statement)
+            if !game_state.choices.is_empty() {
+                let correct_answer = game_state.current_question.answers[0];
 
-            if (game_state.choices.is_empty() && dist > MAX_ACCEPTABLE_DIST)
-                || (!game_state.choices.is_empty() && guess != question.answer)
-            {
-                // The user has guessed wrong and the game is now over
-                if !game_state.choices.is_empty() {
-                    // In a multiple choice situation, we set the flags for both strings' characters all to red.
-                    guess_flag_str.set_all_flags(1);
-                    ans_flag_str.set_all_flags(1);
+                let mut new_game_state = game_state.clone();
+
+                if guess == correct_answer {
+                    // The user guessed correctly on a multiple choice question
+                    new_game_state.score += 1;
+                    new_game_state.completed_question = true;
+                    (*guard).insert(id.clone(), new_game_state.clone());
+
+                    let res = GuessResultPublic {
+                        game_state: new_game_state.into_public_with_answers(id.clone()),
+                        guess_res: GuessResult::Correct {
+                            points_earned: 1,
+                            user_guess: guess.to_owned(),
+                            answer: correct_answer.to_owned(),
+                            new_lifeline: None,
+                        },
+                    };
+                    outer_game_state = new_game_state.clone();
+                    break 'outer_block res;
+                } else {
+                    // The user has guessed wrong and the game is now over
+                    new_game_state.terminated = true;
+                    new_game_state.completed_question = true;
+                    (*guard).remove(&id);
+
+                    let res = GuessResultPublic {
+                        game_state: new_game_state.into_public_with_answers(id.clone()),
+                        guess_res: GuessResult::Incorrect {
+                            user_guess: guess.to_owned(),
+                            answer: correct_answer.to_owned(),
+                        },
+                    };
+                    outer_game_state = new_game_state.clone();
+                    break 'outer_block res;
                 }
+            }
+
+            // HANDLE NON MULTIPLE CHOICE
+
+            let question = game_state.current_question.clone();
+            let possible_answers = question.answers.clone();
+
+            let mut has_correct_continuation = false;
+            let mut minimal_edit_dist = 10000;
+            let mut truncate_amt = 0;
+
+            let mut can_be_afm = false;
+            let mut target_length = 0;
+
+            for ans in possible_answers {
+                // evaluate the answer
+                let (truncate_amt_local, dist) = optimal_truncated_dist(guess, ans);
+
+                if dist <= MAX_ACCEPTABLE_DIST {
+                    // the guess is close enough
+                    has_correct_continuation = true;
+                    if dist < minimal_edit_dist
+                        || dist == minimal_edit_dist && truncate_amt_local < truncate_amt
+                    {
+                        // we want to save the minimal edit distance, but if two possible answers have the same edit distance,
+                        // we should pick the one which requires truncating the guess by fewer characters.
+                        closest_answer = ans;
+                        minimal_edit_dist = dist;
+                        truncate_amt = truncate_amt_local;
+                    }
+                }
+                if is_afm(ans, guess) {
+                    // this is a possible AFM
+                    can_be_afm = true;
+                    target_length = ans.len();
+                }
+            }
+
+            if !has_correct_continuation && can_be_afm {
+                let res = GuessResultPublic {
+                    game_state: game_state.into_public(id),
+                    guess_res: GuessResult::AFM {
+                        target_length,
+                        guess_length: guess.chars().count(),
+                    },
+                };
+                return serde_json::to_string(&res).unwrap();
+            }
+
+            let mut maybe_new_lifeline = None;
+            let mut new_game_state = game_state.clone();
+
+            if has_correct_continuation {
+                // the user got the guess right
+                let points_earned = if minimal_edit_dist != 0 {
+                    // The guess was correct but not perfect.
+                    if rand::thread_rng().gen_range(0..MAX_ACCEPTABLE_DIST) > minimal_edit_dist {
+                        maybe_new_lifeline = Some(Lifeline::random_lifeline());
+                    }
+                    (MAX_ACCEPTABLE_DIST - minimal_edit_dist + 1) as i32
+                } else {
+                    // perfect match
+                    maybe_new_lifeline = Some(Lifeline::random_lifeline());
+                    POINTS_FOR_PERFECT_MATCH
+                };
+
+                new_game_state.score += points_earned;
+                new_game_state.completed_question = true;
+                if let Some(new_lifeline) = &maybe_new_lifeline {
+                    new_game_state.lifeline_inv.add_lifeline(new_lifeline);
+                }
+                (*guard).insert(id.clone(), new_game_state.clone());
+
+                let res = GuessResultPublic {
+                    game_state: new_game_state.into_public_with_answers(id.clone()),
+                    guess_res: GuessResult::Correct {
+                        points_earned,
+                        user_guess: guess.to_owned(),
+                        answer: closest_answer.to_owned(),
+                        new_lifeline: maybe_new_lifeline,
+                    },
+                };
+                outer_game_state = new_game_state.clone();
+                break 'outer_block res;
+            } else {
+                // The user has guessed wrong and the game is now over
                 new_game_state.terminated = true;
                 new_game_state.completed_question = true;
                 (*guard).remove(&id);
@@ -578,45 +670,13 @@ pub async fn take_guess(
                 let res = GuessResultPublic {
                     game_state: new_game_state.into_public_with_answers(id.clone()),
                     guess_res: GuessResult::Incorrect {
-                        user_guess: guess_flag_str,
-                        answer: ans_flag_str,
+                        user_guess: guess.to_owned(),
+                        answer: closest_answer.to_owned(),
                     },
                 };
                 outer_game_state = new_game_state.clone();
                 break 'outer_block res;
-            } else if !game_state.choices.is_empty() {
-                // The user got a multiple choice question correct
-                points_earned = 1;
-            } else if dist != 0 {
-                // The guess was correct but not perfect.
-                if rand::thread_rng().gen_range(0..MAX_ACCEPTABLE_DIST) > dist {
-                    maybe_new_lifeline = Some(Lifeline::random_lifeline());
-                }
-                points_earned = (MAX_ACCEPTABLE_DIST - dist + 1) as i32;
-            } else {
-                // perfect match
-                maybe_new_lifeline = Some(Lifeline::random_lifeline());
-                points_earned = POINTS_FOR_PERFECT_MATCH;
             }
-
-            new_game_state.score += points_earned;
-            new_game_state.completed_question = true;
-            if let Some(new_lifeline) = &maybe_new_lifeline {
-                new_game_state.lifeline_inv.add_lifeline(new_lifeline);
-            }
-            (*guard).insert(id.clone(), new_game_state.clone());
-
-            let res = GuessResultPublic {
-                game_state: new_game_state.into_public_with_answers(id.clone()),
-                guess_res: GuessResult::Correct {
-                    points_earned,
-                    user_guess: guess_flag_str,
-                    answer: ans_flag_str,
-                    new_lifeline: maybe_new_lifeline,
-                },
-            };
-            outer_game_state = new_game_state.clone();
-            break 'outer_block res;
         }
         return "{}".to_owned();
     };
@@ -640,7 +700,7 @@ pub async fn take_guess(
             num_points_earned = 0;
             is_correct = false;
         }
-        _ => {
+        GuessResult::AFM { .. } => {
             unreachable!()
         }
     }
@@ -653,7 +713,7 @@ pub async fn take_guess(
         .bind(gs.current_question.song.album)
         .bind(gs.current_question.song.name)
         .bind(gs.current_question.shown_line)
-        .bind(gs.current_question.answer)
+        .bind(closest_answer)
         .bind(if is_correct { "correct" } else { "incorrect" })
         .bind(guess)
         .bind(num_points_earned)
@@ -687,58 +747,14 @@ pub async fn take_guess(
     serde_json::to_string(&guess_res).unwrap()
 }
 
-/// Calculate the diff flags for `guess` and `answer`,
-/// for a given truncation amount to `guess` known to be the amount which minimizes their distance.
-/// (see function [`optimal_truncated_dist`])
-fn get_flags(
-    guess: &str,
-    answer: &str,
-    optimal_truncate_amt: i32,
-) -> (FlaggedString, FlaggedString) {
-    let (_, diffs) = diff_greedy(
-        &guess.to_lowercase()[0..(guess.len() - optimal_truncate_amt as usize)],
-        &answer.to_lowercase(),
-    )
-    .unwrap();
-
-    let mut guess_flags = vec![0; guess.chars().count()];
-    let mut ans_flags = vec![0; answer.chars().count()];
-    for insertion in diffs.get("insert").unwrap() {
-        for flag in ans_flags
-            .iter_mut()
-            .take(insertion.to + 1)
-            .skip(insertion.at)
-        {
-            *flag = 1;
-        }
+fn is_afm(ans: &str, guess: &str) -> bool {
+    if guess.chars().count() >= ans.chars().count() {
+        return false;
     }
-    for deletion in diffs.get("delete").unwrap() {
-        for flag in guess_flags
-            .iter_mut()
-            .take(deletion.to + 1)
-            .skip(deletion.at)
-        {
-            *flag = 1;
-        }
-    }
-    let num_chars_truncated = guess[(guess.len() - optimal_truncate_amt as usize)..]
-        .chars()
-        .count();
+    let n = guess.chars().count();
+    let ans = ans.chars().take(n).collect::<String>();
 
-    for i in (guess_flags.len() - num_chars_truncated)..guess_flags.len() {
-        guess_flags[i] = 2;
-    }
-
-    (
-        FlaggedString {
-            flags: guess_flags,
-            text: guess.to_string(),
-        },
-        FlaggedString {
-            flags: ans_flags,
-            text: answer.to_string(),
-        },
-    )
+    lowercase_ignore_punctuation_edit_dist(&ans, guess) <= (n / 5)
 }
 
 /// whether `guess` is on the right track to `answer`. If a guess is on the right track,
@@ -755,11 +771,17 @@ pub fn is_on_right_track(guess: &str, answer: &str) -> bool {
 fn get_previous_lines(question: &Question) -> (String, bool) {
     const PREV_LINES_TO_SHOW: usize = 2;
 
-    let lines = question.song.lines.clone();
+    let preferred_answer = *question.answers.first().unwrap();
+
+    let lines = &question.song.lines;
     let mut answer_position: usize = 0;
     for (index, line) in lines.iter().enumerate() {
-        if line.text == question.shown_line {
+        if line.text == question.shown_line
+            && index < lines.len() - 1
+            && lines[index + 1].text == preferred_answer
+        {
             answer_position = index;
+            break;
         }
     }
     let mut output = String::new();

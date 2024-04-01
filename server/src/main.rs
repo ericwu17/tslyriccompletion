@@ -1,4 +1,5 @@
 pub mod diff;
+pub mod feedback;
 pub mod game;
 pub mod guess_generating;
 pub mod history;
@@ -11,6 +12,7 @@ use dotenv::dotenv;
 use sqlx::mysql::MySqlPoolOptions;
 use std::collections::HashMap;
 
+use feedback::{downvote_line, get_feedback, upvote_line};
 use game::{
     claim_game, game_lifelines, init_game, next_question, reduce_multiple_choice, take_guess,
     GameState,
@@ -66,6 +68,9 @@ async fn main() -> Result<(), rocket::Error> {
         .mount("/", routes![get_games])
         .mount("/", routes![get_game])
         .mount("/", routes![get_line])
+        .mount("/", routes![upvote_line])
+        .mount("/", routes![downvote_line])
+        .mount("/", routes![get_feedback])
         .ignite()
         .await?;
 

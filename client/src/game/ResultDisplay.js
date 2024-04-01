@@ -1,8 +1,9 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { generateFlags } from "../history/GameDetails";
 
 
-export default function ResultDisplay({guessRes}) {
+export default function ResultDisplay({guessRes, isMultipleChoice}) {
   if (guessRes.AFM) {
     return (
       <Typography>You're on the right track, but your guess was too short!</Typography>
@@ -43,6 +44,10 @@ export default function ResultDisplay({guessRes}) {
 
   if (guessRes.Correct) {
     const {user_guess, answer, points_earned, new_lifeline} = guessRes.Correct;
+    const shouldDisplayGray = isMultipleChoice;
+    const shouldDisplayRed = false;
+    let {guessFlags, answerFlags} =
+      generateFlags(user_guess, answer, shouldDisplayGray, shouldDisplayRed);
     return (
       <Box>
         <Typography>
@@ -52,30 +57,38 @@ export default function ResultDisplay({guessRes}) {
           points
         </Typography>
         {new_lifeline && <Typography>You also got a {new_lifeline} lifeline!</Typography>}
-        {answerComparison(user_guess.text, user_guess.flags, answer.text, answer.flags)}
+        {answerComparison(user_guess, guessFlags, answer, answerFlags)}
       </Box>
     );
   }
 
   if (guessRes.Incorrect) {
     const {user_guess, answer} = guessRes.Incorrect;
+    const shouldDisplayGray = false;
+    const shouldDisplayRed = isMultipleChoice;
+    let {guessFlags, answerFlags} =
+      generateFlags(user_guess, answer, shouldDisplayGray, shouldDisplayRed);
     return (
       <Box>
         <Typography>
           <span style={{color:"#BA0021", fontWeight: "bold"}}>Incorrect!</span> {}
           The Game is now over.
         </Typography>
-        {answerComparison(user_guess.text, user_guess.flags, answer.text, answer.flags)}
+        {answerComparison(user_guess, guessFlags, answer, answerFlags)}
       </Box>
     );
   }
 
   if (guessRes.Skipped) {
     const {user_guess, answer} = guessRes.Skipped;
+    const shouldDisplayGray = true;
+    const shouldDisplayRed = false;
+    let {guessFlags, answerFlags} =
+      generateFlags(user_guess, answer, shouldDisplayGray, shouldDisplayRed);
     return (
       <Box>
         <Typography>Skipped question:</Typography>
-        {answerComparison(user_guess.text, user_guess.flags, answer.text, answer.flags)}
+        {answerComparison(user_guess, guessFlags, answer, answerFlags)}
       </Box>
     );
   }

@@ -8,6 +8,8 @@ import {
 import { generateFlags } from "./GameDetails";
 import { FlaggedText } from "../game/ResultDisplay";
 import { parseISO } from "date-fns";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 export default function GuessHistory() {
   const [data, setData] = React.useState({});
@@ -53,6 +55,9 @@ export default function GuessHistory() {
     );
   }
 
+  const numUpvotes = data.num_upvotes;
+  const numDownvotes = data.num_downvotes;
+  const guesses = data.guesses;
 
   return (
     <Box m={2} display="flex" flexDirection="column" gap={1} >
@@ -74,14 +79,14 @@ export default function GuessHistory() {
             </Link>
           </Typography>
         </Box>
-        {data.length == 1 ?
+        {guesses.length == 1 ?
           (
             <Typography variant="body1">
-              There has been {data.length} guess for the line:
+              There has been {guesses.length} guess for the line:
             </Typography>
           ) : (
             <Typography variant="body1">
-              There have been {data.length} guesses for the line:
+              There have been {guesses.length} guesses for the line:
             </Typography>
           )
         }
@@ -90,10 +95,14 @@ export default function GuessHistory() {
             {unescapeQuestionMarks(prompt)}
           </span>
         </Typography>
+        <Typography>
+          <ThumbUpIcon sx={{ fontSize: "1em" }}/> {numUpvotes} {}
+          <ThumbDownIcon sx={{ fontSize: "1em" }}/> {numDownvotes}
+        </Typography>
       </Box>
 
       <Box display="flex" flexDirection="column" gap={1}>
-        {data.map((object, index) => (<GuessDetails guess={object} key={index}></GuessDetails>))}
+        {guesses.map((object, index) => (<GuessDetails guess={object} key={index}></GuessDetails>))}
       </Box>
     </Box>
   );
@@ -103,16 +112,11 @@ function GuessDetails({ guess }) {
   const {correct_answer, user_guess, points_earned, lifelines_used, player_name} = guess;
   const was_multiple_choice = guess.options.length > 0;
 
-  let {guessFlags, answerFlags} = generateFlags(user_guess, correct_answer);
-
-  if (lifelines_used.includes("Skip") || (was_multiple_choice && guess.result === "correct")) {
-    answerFlags = answerFlags.map(() => -1);
-    guessFlags = guessFlags.map(() => -1);
-  }
-  if (was_multiple_choice && guess.result === "incorrect") {
-    answerFlags = answerFlags.map(() => 1);
-    guessFlags = guessFlags.map(() => 1);
-  }
+  const shouldDisplayGray = lifelines_used.includes("Skip")
+    || (was_multiple_choice && guess.result === "correct");
+  const shouldDisplayRed = was_multiple_choice && guess.result === "incorrect";
+  let {guessFlags, answerFlags} =
+    generateFlags(user_guess, correct_answer, shouldDisplayGray, shouldDisplayRed);
 
   const options = { year: "numeric", month: "numeric", day: "numeric" };
   const submit_time = parseISO(guess.submit_time).toLocaleDateString(undefined, options);
@@ -220,8 +224,8 @@ export function LinePopoverContent({ album, song, prompt }) {
 
   return (
     <Box sx={{background:bg}} p={1}>
-      {data.length == 0 && <Typography> No guesses yet!</Typography>}
-      {data.map((guess, index) => {
+      {data.guesses.length == 0 && <Typography> No guesses yet!</Typography>}
+      {data.guesses.map((guess, index) => {
         let {user_guess, correct_answer, lifelines_used} = guess;
         const was_multiple_choice = guess.options.length > 0;
 

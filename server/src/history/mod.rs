@@ -83,11 +83,7 @@ pub async fn get_games(
         .map(|songlist| Songlist {
             id: songlist.id,
             sha1sum: songlist.sha1sum,
-
-            // We are serializing and then immediately deserializing because I can't figure out
-            // how to convert the type from Json<Vec<(String, String)>> to Vec<(String, String)>
-            content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap())
-                .unwrap(),
+            content: songlist.content.as_ref().clone(),
         })
         .collect();
 
@@ -291,11 +287,7 @@ pub async fn get_game(pool: &rocket::State<Pool<MySql>>, id: String) -> String {
         .map(|songlist| Songlist {
             id: songlist.id,
             sha1sum: songlist.sha1sum,
-
-            // We are serializing and then immediately deserializing because I can't figure out
-            // how to convert the type from Json<Vec<(String, String)>> to Vec<(String, String)>
-            content: serde_json::from_str(&serde_json::to_string(&songlist.content).unwrap())
-                .unwrap(),
+            content: songlist.content.as_ref().clone(),
         })
         .collect();
 

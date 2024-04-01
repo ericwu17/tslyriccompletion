@@ -9,7 +9,6 @@ Like you were my closest friend
 "How'd we end up on the floor, anyway?" You say
 "Your roommate's cheap-ass screw-top rosé, that's how"
 I see you every day now
-
 [Chorus]
 And I chose you
 The one I was dancing with
@@ -18,12 +17,11 @@ Looked up at the sky and it was
 The burgundy on my t-shirt
 When you splashed your wine into me
 And how the blood rushed into my cheeks
-So scarlet, it was
+So scarlet, it was$<misc_bad confusable with other line>
 The mark they saw on my collarbone
 The rust that grew between telephones
 The lips I used to call home
 So scarlet, it was maroon
-
 [Verse 2]
 When the silence came
 We were shaking, blind and hazy
@@ -34,27 +32,24 @@ You were standing hollow-eyed in the hallway
 Carnations you had thought were roses, that's us
 I feel you, no matter what
 The rubies that I gave up
-
 [Chorus]
 And I lost you
 The one I was dancing with
 In New York, no shoes
-Looked up at the sky and it was (Maroon)
+Looked up at the sky and it was maroon
 The burgundy on my t-shirt
 When you splashed your wine into me
 And how the blood rushed into my cheeks
-So scarlet, it was (Maroon)
+So scarlet, it was maroon
 The mark they saw on my collarbone
 The rust that grew between telephones
 The lips I used to call home
 So scarlet, it was maroon
-
 [Bridge]
 And I wake with your memory over me
-That's a real fucking legacy, legacy (It was maroon)
+That's a real fucking legacy, legacy
 And I wake with your memory over me
 That's a real fucking legacy to leave
-
 [Chorus]
 The burgundy on my t-shirt
 When you splashed your wine into me
@@ -64,7 +59,6 @@ The mark they saw on my collarbone
 The rust that grew between telephones
 The lips I used to call home
 So scarlet, it was maroon
-
 [Outro]
-It was maroon
-It was maroon
+It was maroon$<misc_bad outro>
+It was maroon$<misc_bad outro>

@@ -1,9 +1,11 @@
 import React from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { Box, Button, Divider, Link, TextField, Typography } from "@mui/material";
+import { Box, Button, ButtonBase, Divider, Link, TextField, Typography } from "@mui/material";
 import ResultDisplay from "./ResultDisplay";
 import { ALBUM_LOGOS, generateSongHref, normalizeQuotes } from "../utils/Utils";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 const MAX_NAME_LEN = 35;
 
@@ -11,6 +13,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
   const [guessResult, setGuessResult] = React.useState({});
   const [currentGuess, setCurrentGuess] = React.useState("");
   const [currentName, setCurrentName] = React.useState("");
+  const [hasSentFeedback, setHasSentFeedback] = React.useState(false);
 
 
   const { score, current_question, id, completed_question, terminated, choices } = gameState;
@@ -59,7 +62,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       return;
     }
 
-    axios.get(`/game/submit-guess?id=${id}&guess=${guess}`).then((response) => {
+    axios.get(`/game/submit-guess?guess=${guess}&id=${id}`).then((response) => {
       const {game_state, guess_res} = response.data;
       setGameState(game_state);
       setGuessResult(guess_res);
@@ -69,10 +72,28 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
     });
   };
 
+  const sendUpvote = () => {
+    const {song, shown_line} = current_question;
+    const {album, name} = song;
+    axios.get(`/feedback/upvote_line?album=${album}&song_name=${name}&line=${shown_line}`)
+      .then(() => {
+        setHasSentFeedback(true);
+      });
+  };
+  const sendDownvote = () => {
+    const {song, shown_line} = current_question;
+    const {album, name} = song;
+    axios.get(`/feedback/downvote_line?album=${album}&song_name=${name}&line=${shown_line}`)
+      .then(() => {
+        setHasSentFeedback(true);
+      });
+  };
+
   const goToNextQuestion = () => {
     axios.get(`/game/next?id=${id}`).then((response) => {
       setGameState(response.data);
       setGuessResult({});
+      setHasSentFeedback(false);
     });
   };
 
@@ -154,8 +175,9 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
         </Box>
       }
 
-
-      {Object.keys(guessResult).length > 0 && <ResultDisplay guessRes={guessResult}/>}
+      {Object.keys(guessResult).length > 0 &&
+        <ResultDisplay guessRes={guessResult} isMultipleChoice={isMultipleChoice}/>
+      }
       {!completed_question &&
         <LifelineSection
           gameState={gameState}
@@ -164,8 +186,43 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
         />
       }
 
-      {completed_question && !terminated &&
-        <Button onClick={goToNextQuestion} size="large">Next Question</Button>
+      {completed_question &&
+        <Box display="flex" flexDirection="row" alignItems="center" m={1}>
+          {!terminated &&
+            <Box m={1}>
+              <Button onClick={goToNextQuestion} size="large">Next Question</Button>
+            </Box>
+          }
+          {!hasSentFeedback &&
+            <>
+              <Typography>
+                Was this a good question?
+              </Typography>
+              <ButtonBase onClick={sendUpvote}>
+                <Box m={1}>
+                  <ThumbUpIcon/>
+                </Box>
+              </ButtonBase>
+              <ButtonBase onClick={sendDownvote}>
+                <Box m={1}>
+                  <ThumbDownIcon />
+                </Box>
+              </ButtonBase>
+            </>
+          }
+          {hasSentFeedback &&
+            <>
+              <Typography>
+                Thanks, your feedback has been recorded.
+                To write more details, please use the {}
+                {/* eslint-disable-next-line */}
+                <Link href={`/feedback?album=${current_question.song.album}&song_name=${current_question.song.name}&line=${current_question.shown_line}`}>
+                  feedback form
+                </Link>.
+              </Typography>
+            </>
+          }
+        </Box>
       }
       {completed_question && terminated &&
         <Box>
@@ -185,7 +242,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
         </Box>
       }
 
-      {current_question.answer && (
+      {current_question.answers.length > 0 && (
         <>
           <Box mb={1}/>
           <Divider />
@@ -210,14 +267,8 @@ function LifelineSection({gameState, setGameState, setGuessResult}) {
       if (lifelineToUse === "skip") {
         setGuessResult({
           Skipped: {
-            user_guess: {
-              text: "-",
-              flags: [],
-            },
-            answer: {
-              text: newGameState.current_question.answer,
-              flags: [],
-            },
+            user_guess: "-",
+            answer: newGameState.current_question.answers[0],
           }
         });
       }

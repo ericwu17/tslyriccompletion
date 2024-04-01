@@ -1,7 +1,6 @@
 import React  from "react";
 import { Divider, Box, Typography, Link, IconButton } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import EmailIcon from "@mui/icons-material/Email";
 
 export function Footer() {
   return (
@@ -10,10 +9,7 @@ export function Footer() {
       <Box p={1} display="flex">
         <Box flexGrow={1}>
           <Typography variant="subtitle2">
-            Taylor Swift Lyric Completion Game by {}
-            <Link href="mailto:eric.dianhao.wu@gmail.com">
-              Eric Wu
-            </Link>.
+            Taylor Swift Lyric Completion Game by Eric Wu
           </Typography>
           <Typography variant="subtitle2">
             This site is licensed under {}
@@ -23,15 +19,12 @@ export function Footer() {
           </Typography>
           <Typography variant="subtitle2">
             Source code for this site available {}
-            <Link href="https://github.com/EricWu2003/tslyriccompletion">
+            <Link href="https://github.com/ericwu17/tslyriccompletion">
               here
             </Link> (GitHub link).
           </Typography>
         </Box>
-        <IconButton href="mailto:eric.dianhao.wu@gmail.com">
-          <EmailIcon fontSize="large" />
-        </IconButton>
-        <IconButton href="https://github.com/EricWu2003">
+        <IconButton href="https://github.com/ericwu17">
           <GitHubIcon fontSize="large" />
         </IconButton>
       </Box>

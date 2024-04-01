@@ -4,13 +4,12 @@ Out Of The Woods
 Looking at it now
 It all seems so simple
 We were lying on your couch
-I remember
+I remember$<misc_bad too short>
 You took a Polaroid of us
-Then discovered (Then discovered)
+Then discovered$<misc_bad too short>
 The rest of the world was black and white
 But we were in screaming color
 And I remember thinking
-
 [Chorus]
 Are we out of the woods yet? Are we out of the woods yet?
 Are we out of the woods yet? Are we out of the woods?
@@ -20,32 +19,29 @@ Are we out of the woods yet? Are we out of the woods yet?
 Are we out of the woods yet? Are we out of the woods?
 Are we in the clear yet? Are we in the clear yet?
 Are we in the clear yet, in the clear yet? Good
-(Are we out of the woods?)
-
+(Are we out of the woods?)$<misc_bad end of chorus>
 [Verse 2]
 Looking at it now
-Last December (Last December)
+Last December$<misc_bad too short>
 We were built to fall apart
-Then fall back together (Back together)
+Then fall back together
 Ooh, your necklace hanging from my neck
 The night we couldn't quite forget
-When we decided, we decided
+When we decided$<misc_bad too short>
 To move the furniture so we could dance
 Baby, like we stood a chance
 Two paper airplanes flying, flying, flying
 And I remember thinking
-
 [Chorus]
 Are we out of the woods yet? Are we out of the woods yet?
 Are we out of the woods yet? Are we out of the woods?
 Are we in the clear yet? Are we in the clear yet?
 Are we in the clear yet, in the clear yet? Good
 Are we out of the woods yet? Are we out of the woods yet?
-Are we out of the woods yet? (Oh) Are we out of the woods?
+Are we out of the woods yet? Are we out of the woods?
 Are we in the clear yet? Are we in the clear yet?
 Are we in the clear yet, in the clear yet? Good
-(Are we out of the woods?)
-
+(Are we out of the woods?)$<misc_bad end of chorus>
 [Bridge]
 Remember when you hit the brakes too soon?
 Twenty stitches in a hospital room
@@ -57,13 +53,12 @@ But the monsters turned out to be just trees
 When the sun came up, you were looking at me
 You were looking at me, ooh
 You were looking at me
-(Are we out of the woods yet? Are we out of the woods yet?)
-(Are we out of the woods yet? Are we out of the woods?)
-I remember
-(Are we in the clear yet? Are we in the clear yet?)
-(Are we in the clear yet, in the clear yet? Good)
-Oh, I remember
-
+(Are we out of the woods yet? Are we out of the woods yet?)$<misc_bad background>
+(Are we out of the woods yet? Are we out of the woods?)$<misc_bad background>
+I remember$<misc_bad background>
+(Are we in the clear yet? Are we in the clear yet?)$<misc_bad background>
+(Are we in the clear yet, in the clear yet? Good)$<misc_bad background>
+Oh, I remember$<misc_bad background>
 [Chorus]
 Are we out of the woods yet? Are we out of the woods yet? (Yeah)
 Are we out of the woods yet? Are we out of the woods?
@@ -73,7 +68,6 @@ Are we out of the woods yet? Are we out of the woods yet?
 Are we out of the woods yet? Are we out of the woods?
 Are we in the clear yet? (Yeah) Are we in the clear yet? (Yeah)
 Are we in the clear yet, in the clear yet? Good
-
 [Chorus]
 Are we out of the woods yet? Are we out of the woods yet?
 Are we out of the woods yet? Are we out of the woods?

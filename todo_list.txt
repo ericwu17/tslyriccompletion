@@ -1,0 +1,17 @@
+Taylor Swift: DONE!
+Fearless: DONE!
+Speak Now: DONE!
+Red: DONE!
+1989: DONE!
+reputation: DONE!
+Lover: DONE!
+folklore: DONE!
+evermore: DONE!
+Midnights: DONE!
+
+remove most parentheses from songs
+
+Program changes to make:
+make a system to report bad lines in songs. (RSS feed for this)
+
+mark games stale for 7 days as "complete"
