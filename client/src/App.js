@@ -13,6 +13,8 @@ import GuessHistory from "./history/GuessHistory";
 import { Footer } from "./navbar/Footer";
 import { Typography, Link } from "@mui/material";
 import FeedbackForm from "./feedback/feedback";
+import Changelog from "./changelog/changelog";
+import Changes20240331 from "./changelog/changes20240331";
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
             <Route path="/history/game" element={<GameDetails />} />
             <Route path="/history/guess" element={<GuessHistory />} />
             <Route path="/feedback" element={<FeedbackForm />} />
+            <Route path="/changelog" element={<Changelog />} />
+            <Route path="/changes20240331" element={<Changes20240331 />} />
             <Route path="/tswift/*"  element={<RedirectPage />}/>
             <Route path=":any/*" element={<NotFound />} />
           </Routes>

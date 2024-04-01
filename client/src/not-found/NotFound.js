@@ -24,6 +24,10 @@ export default function NotFound() {
       </Typography>
 
       <Typography>
+        If this was a bug, please report it through the <Link href="/feedback">feedback form</Link>.
+      </Typography>
+
+      <Typography>
         Click {}
         <Link href={HOME_URL}>
           here

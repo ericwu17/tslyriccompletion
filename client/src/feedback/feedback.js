@@ -131,8 +131,23 @@ export default function FeedbackForm() {
       }
       {hasSent &&
         <>
-          <Typography>
+          <Typography variant="h5">
             Your feedback has been received, thank you.
+          </Typography>
+          <Typography>
+            Album: {album}
+          </Typography>
+          <Typography>
+            Song: {song}
+          </Typography>
+          <Typography>
+            Lyric: {lyric}
+          </Typography>
+          <Typography>
+            Message: {msg}
+          </Typography>
+          <Typography>
+            Contact: {contact}
           </Typography>
         </>
       }
