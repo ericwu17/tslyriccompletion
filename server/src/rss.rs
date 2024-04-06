@@ -36,19 +36,22 @@ pub async fn get_recent_feedback_rss(pool: &rocket::State<Pool<MySql>>) -> Strin
     for f in recent_feedbacks {
         let mut entry = Entry::default();
         entry.set_title("New Feedback");
-        entry.set_updated(Utc::now());
 
         let time_format =
             format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
-        let feedback_time = f.time.format(&time_format).unwrap();
+        let feedback_time_str = f.time.format(&time_format).unwrap();
+        let feedback_time_chrono: DateTime<Utc> = DateTime::parse_from_rfc3339(&feedback_time_str)
+            .unwrap()
+            .into();
 
         let mut content = Content::default();
         content.set_content_type("html".to_string());
         content.set_value(format!(
             "<p>Time: {}</p><p>Album: {}</p><p>Song: {}</p><p>Lyric: {}</p><p>Message:{}</p><p>Contact: {}</p>",
-            feedback_time, f.album, f.song_name, f.lyric, f.message, f.contact,
+            feedback_time_str, f.album, f.song_name, f.lyric, f.message, f.contact,
         ));
 
+        entry.set_updated(feedback_time_chrono);
         entry.set_content(content);
         feed_entries.push(entry);
     }
