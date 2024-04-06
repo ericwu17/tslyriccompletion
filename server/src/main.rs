@@ -8,6 +8,7 @@ pub mod loader_v2;
 pub mod rss;
 pub mod song;
 
+use crate::rss::RecentVotesCache;
 use crate::song::Song;
 use dotenv::dotenv;
 use sqlx::mysql::MySqlPoolOptions;
@@ -20,7 +21,7 @@ use game::{
 };
 use history::line_history::get_line;
 use history::{get_game, get_games};
-use rss::get_recent_feedback_rss;
+use rss::{get_recent_feedback_rss, get_recent_votes_rss};
 use song::{get_all_songlists, get_song, get_song_list, get_song_list_with_id};
 use std::sync::{Arc, Mutex};
 
@@ -42,6 +43,7 @@ async fn main() -> Result<(), rocket::Error> {
     let songs: Vec<Song> = loader_v2::load_songs_from_files();
     let my_hashmap: HashMap<String, GameState> = HashMap::new();
     let game_state = Arc::new(Mutex::new(my_hashmap));
+    let votes_cache = Arc::new(Mutex::new(RecentVotesCache::new()));
 
     let database_url = format!("mysql://{}:{}@localhost:3306/mydb", db_user, db_pw);
     println!("Connecting to MySql Database...");
@@ -56,6 +58,7 @@ async fn main() -> Result<(), rocket::Error> {
         .manage(game_state)
         .manage(songs)
         .manage(pool)
+        .manage(votes_cache)
         .mount("/", routes![index])
         .mount("/", routes![get_song_list])
         .mount("/", routes![get_song_list_with_id])
@@ -74,6 +77,7 @@ async fn main() -> Result<(), rocket::Error> {
         .mount("/", routes![downvote_line])
         .mount("/", routes![get_feedback])
         .mount("/", routes![get_recent_feedback_rss])
+        .mount("/", routes![get_recent_votes_rss])
         .ignite()
         .await?;
 

@@ -1,6 +1,9 @@
+use crate::rss::{RecentVotesCache, VoteEvent};
+use chrono::prelude::*;
 use rocket::serde::json::Json;
 use serde::Deserialize;
 use sqlx::{MySql, Pool};
+use std::sync::{Arc, Mutex};
 
 /// API endpoint to upvote a line
 #[get("/feedback/upvote_line?<album>&<song_name>&<line>")]
@@ -9,6 +12,7 @@ pub async fn upvote_line(
     song_name: &str,
     line: &str,
     pool: &rocket::State<Pool<MySql>>,
+    vote_cache: &rocket::State<Arc<Mutex<RecentVotesCache>>>,
 ) -> String {
     let _ = sqlx::query("INSERT IGNORE INTO votes (album, song_name, lyric, num_upvotes, num_downvotes) VALUES (?, ?, ?, 0, 0);")
         .bind(album)
@@ -22,6 +26,16 @@ pub async fn upvote_line(
         .bind(line)
         .fetch_all(pool.inner())
         .await;
+    {
+        let mut guard = vote_cache.lock().unwrap();
+        guard.add(VoteEvent {
+            time: Utc::now(),
+            album: album.to_string(),
+            song_name: song_name.to_string(),
+            lyric: line.to_string(),
+            is_upvote: true,
+        });
+    }
 
     "".to_owned()
 }
@@ -33,6 +47,7 @@ pub async fn downvote_line(
     song_name: &str,
     line: &str,
     pool: &rocket::State<Pool<MySql>>,
+    vote_cache: &rocket::State<Arc<Mutex<RecentVotesCache>>>,
 ) -> String {
     let _ = sqlx::query("INSERT IGNORE INTO votes (album, song_name, lyric, num_upvotes, num_downvotes) VALUES (?, ?, ?, 0, 0);")
         .bind(album)
@@ -46,6 +61,17 @@ pub async fn downvote_line(
         .bind(line)
         .fetch_all(pool.inner())
         .await;
+
+    {
+        let mut guard = vote_cache.lock().unwrap();
+        guard.add(VoteEvent {
+            time: Utc::now(),
+            album: album.to_string(),
+            song_name: song_name.to_string(),
+            lyric: line.to_string(),
+            is_upvote: false,
+        });
+    }
 
     "".to_owned()
 }
