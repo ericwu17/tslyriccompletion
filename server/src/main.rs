@@ -5,6 +5,7 @@ pub mod guess_generating;
 pub mod history;
 pub mod lifelines;
 pub mod loader_v2;
+pub mod rss;
 pub mod song;
 
 use crate::song::Song;
@@ -19,6 +20,7 @@ use game::{
 };
 use history::line_history::get_line;
 use history::{get_game, get_games};
+use rss::get_recent_feedback_rss;
 use song::{get_all_songlists, get_song, get_song_list, get_song_list_with_id};
 use std::sync::{Arc, Mutex};
 
@@ -71,6 +73,7 @@ async fn main() -> Result<(), rocket::Error> {
         .mount("/", routes![upvote_line])
         .mount("/", routes![downvote_line])
         .mount("/", routes![get_feedback])
+        .mount("/", routes![get_recent_feedback_rss])
         .ignite()
         .await?;
 

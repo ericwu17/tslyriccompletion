@@ -20,6 +20,8 @@ serde_json = { version = "1.0", features = ["raw_value"] }
 sqlx = { version = "0.6.2", features = [ "runtime-tokio-rustls", "mysql", "json", "time"]}
 sha1 = "0.10.5"
 dotenv = "0.15.0"
+atom_syndication = "0.12.2"
+chrono = "0.4.37"
 
 [profile.dev.package.sqlx-macros]
 opt-level = 3
