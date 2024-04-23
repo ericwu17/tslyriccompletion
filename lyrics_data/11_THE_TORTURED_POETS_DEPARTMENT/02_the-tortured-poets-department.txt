@@ -1,7 +1,5 @@
 THE TORTURED POETS DEPARTMENT
 The Tortured Poets Department
-[Intro]
-(Ooh)
 
 [Verse 1]
 You left your typewriter at my apartment
@@ -22,9 +20,9 @@ This ain't the Chelsea Hotel, we're modern idiots"
 And who's gonna hold you like me?
 
 [Post-Chorus]
-Nobody
-No-fucking-body
-Nobody
+Nobody$<misc_bad too short>
+No-fucking-body$<misc_bad too short>
+Nobody$<misc_bad too short>
 
 [Verse 2]
 You smoked, then ate seven bars of chocolate
@@ -38,52 +36,39 @@ I chose this cyclone with you
 
 [Chorus]
 And who's gonna hold you like me?
-(Who's gonna hold you? Who's gonna hold you?)
 And who's gonna know you like me?
-(Who's gonna hold you?)
 I laughed in your face and said
 "You're not Dylan Thomas, I'm not Patti Smith
 This ain't the Chelsea Hotel, we're modern idiots"
 And who's gonna hold you like me?
-(Who's gonna hold you? Who's gonna hold you?)
 
 [Post-Chorus]
-Nobody
-(Who's gonna hold you? Who's gonna hold you?)
-No-fucking-body
-(Who's gonna hold you? Gonna know you? Gonna control you?)
-Nobody
+No-fucking-body$<misc_bad too short>
+Nobody$<misc_bad too short>
+Nobody$<misc_bad too short>
+
 [Bridge]
 Sometimes, I wonder if you're gonna screw this up with me
 But you told Lucy you'd kill yourself if I ever leave
 And I had said that to Jack about you, so I felt seen
 Everyone we know understands why it's meant to be
-'Cause we're crazy
+'Cause we're crazy$<misc_bad too short>
 So tell me, who else is gonna know me?
 At dinner, you take my ring off my middle finger
 And put it on the one people put wedding rings on
 And that's the closest I've come to my heart exploding
 
 [Chorus]
-Who's gonna hold you? (Who?) Me
-Who's gonna know you? (Who?) Me
+Who's gonna hold you? Me
+Who's gonna know you? Me
 And you're not Dylan Thomas, I'm not Patti Smith
 This ain't the Chelsea Hotel, we're two idiots
 Who's gonna hold you?
 
 [Post-Chorus]
 Who's gonna hold you?
-Who's gonna hold you?
-Who's gonna hold you?
-Who's gonna hold you?
-Who's gonna hold you?
-Who's gonna hold you?
-Who's gonna hold you?
-Gonna know you? Gonna control you?
 
 [Outro]
 You left your typewriter at my apartment
 Straight from the tortured poets department
-Who else decodes you? (Ooh-ooh)
-(Ooh-ooh)
-(Ooh-ooh)
+Who else decodes you?
