@@ -1,9 +1,9 @@
 THE TORTURED POETS DEPARTMENT
 So Long, London
 [Intro]
-So (So) long (Long), London (London)
-So (So) long (Long), London (London)
-So (So) long (Long), London (London)
+So (So) long (Long), London (London)$<misc_bad intro>
+So (So) long (Long), London (London)$<misc_bad intro>
+So (So) long (Long), London (London)$<misc_bad intro>
 
 [Verse 1]
 I saw, in my mind, fairy lights through the mist
@@ -18,7 +18,7 @@ Thinking, how much sad did you think I had
 Did you think I had in me?
 Oh, the tragedy
 So long, London
-You'll find someone
+You'll find someone$<misc_bad end of chorus>
 
 [Verse 2]
 I didn't opt in to be your odd man out
@@ -29,10 +29,10 @@ The spirit was gone, we would never come to
 And I'm pissed off you let me give you all that youth for free
 
 [Chorus]
-For so long, London
+For so long, London$<misc_bad confusable with the other lines>
 Stitches undone
 Two graves, one gun
-I'll find someone
+I'll find someone$<misc_bad end of chorus>
 
 [Bridge]
 And you say I abandoned the ship
@@ -49,8 +49,8 @@ So how much sad did you think I had
 Did you think I had in me?
 How much tragedy?
 Just how low did you
-Think I'd go 'fore I'd self-implode?
-'Fore I'd have to go be free?
+Think I'd go before I'd self-implode?
+Before I'd have to go be free?$<misc_bad end of chorus>
 
 [Verse 3]
 You swore that you loved me, but where were the clues?
@@ -60,11 +60,11 @@ And I'm just getting color back into my face
 I'm just mad as hell 'cause I loved this place for
 
 [Chorus]
-So (So) long (Long), London (London)
-Had (Had) a (A) good (Good) run (Run)
-A moment (Moment) of warm sun (Sun)
-But I'm (I'm) not (Not) the (The) one (One)
-So (So) long (Long), London (London)
-Stitches (Stitches) undone (Undone)
-Two (Two) graves (Graves), one gun (Gun)
-You'll (You'll) find (Find) someone
+So long, London
+Had a good run
+A moment of warm sun
+But I'm not the one
+So long, London
+Stitches undone
+Two graves, one gun
+You'll find someone$<misc_bad end of chorus>
