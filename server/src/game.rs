@@ -17,7 +17,7 @@ use std::sync::{Arc, Mutex};
 use uuid::Uuid;
 
 /// These characters are to be ignored when taking the edit distance between two strings:
-pub const CHARS_TO_IGNORE: &[char] = &['(', ')', ',', '.', '-', ':', ';', '"', '\'', '?', ' '];
+pub const CHARS_TO_IGNORE: &[char] = &['(', ')', ',', '.', '-', ':', ';', '"', '\'', '?', '!', ' '];
 
 /// If a guess's dist is greater than `MAX_ACCEPTABLE_DIST` from the answer, then the game ends.
 const MAX_ACCEPTABLE_DIST: usize = 13;
