@@ -16,7 +16,7 @@ People need a key to get to, the only one is mine
 I read about it in a book when I was a precocious child
 No mid-sized city hopes and small-town fears
 I'm there most of the year 'cause I hate it here
-I hate it here
+I hate it here$<misc_bad end of chorus>
 
 [Verse 2]
 My friends used to play a game where
@@ -36,12 +36,13 @@ When they found a better planet, only the gentle survived
 I dreamed about it in the dark, the night I felt like I might die
 No mid-sized city hopes and small-town fears
 I'm there most of the year 'cause I hate it here
-I hate it here
+I hate it here$<misc_bad end of chorus>
 
 [Bridge]
 I'm lonely, but I'm good
 I'm bitter, but I swear I'm fine
-I'll save all my romanticism for my inner life and I'll get lost on purpose
+I'll save all my romanticism for my inner life
+And I'll get lost on purpose
 This place made me feel worthless
 Lucid dreams like electricity, the current flies through me
 And in my fantasies, I rise above it
@@ -53,7 +54,7 @@ People need a key to get to, the only one is mine
 I read about it in a book when I was a precocious child
 No mid-sized city hopes and small-town fears
 I'm there most of the year 'cause I hate it here
-I hate it here
+I hate it here$<misc_bad end of chorus>
 
 [Outro]
 Quick, quick, tell me something awful

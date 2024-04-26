@@ -16,7 +16,7 @@ When the truth comes out, it's quiet
 So, they killed Cassandra first 'cause she feared the worst
 And tried to tell the town
 So, they filled my cell with snakes, I regret to say
-Do you believe me now?
+Do you believe me now?$<misc_bad end of chorus>
 
 [Verse 2]
 I was in my tower weaving nightmares
@@ -28,7 +28,7 @@ What happens if it becomes who you are?
 So, they killed Cassandra first 'cause she feared the worst
 And tried to tell the town
 So, they set my life in flames, I regret to say
-Do you believe me now?
+Do you believe me now?$<misc_bad end of chorus>
 
 [Bridge]
 They knew, they knew, they knew the whole time
@@ -49,12 +49,10 @@ I pass it and lose track of what I'm saying
 So, they killed Cassandra first 'cause she feared the worst
 And tried to tell the town
 So, they filled my cell with snakes, I regret to say
-Do you believe me now?
+Do you believe me now?$<misc_bad end of chorus>
 
 [Bridge]
-Ah, ah-ah-ah, ah
-I was onto something
-Ah-ah-ah, ah
+I was onto something$<misc_bad too generic>
 They all said nothing
 Blood's thick but nothing like a payroll
 Bet they never spared a prayer for my soul

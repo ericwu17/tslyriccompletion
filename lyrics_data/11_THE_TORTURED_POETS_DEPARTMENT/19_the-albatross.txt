@@ -12,7 +12,7 @@ They tried to warn him about her
 Cross your thoughtless heart
 Only liquor anoints you
 She's the albatross
-She is here to destroy you
+She is here to destroy you$<misc_bad end of chorus>
 
 [Verse 2]
 Wise men once said
@@ -30,7 +30,7 @@ She is here to destroy you
 Devils that you know
 Raise worse hell than a stranger
 She's the death you chose
-You're in terrible danger
+You're in terrible danger$<misc_bad end of chorus>
 
 [Bridge]
 And when that sky rains fire on you
@@ -55,10 +55,9 @@ I swept in at the rescue
 The devil that you know
 Looks now more like an angel
 I'm the life you chose
-And all this terrible danger (Ah)
+And all this terrible danger$<misc_bad end of chorus>
 
 [Outro]
-(This terrible danger; Ah)
-So cross your thoughtless heart (Ah)
-She's the albatross (Ah)
+So cross your thoughtless heart
+She's the albatross
 She is here to destroy you
