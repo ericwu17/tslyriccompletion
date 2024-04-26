@@ -290,7 +290,7 @@ function GuessDetails({ guess, totalNumGuesses }) {
   );
 }
 
-const CHARS_TO_IGNORE = ["(", ")", ",", ".", "-", ":", ";", "\"", "'", "?", " "];
+const CHARS_TO_IGNORE = ["(", ")", ",", ".", "-", ":", ";", "\"", "'", "?", "!", " "];
 
 export function generateFlags(guess, answer, shouldDisplayGray, shouldDisplayRed) {
 

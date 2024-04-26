@@ -5,7 +5,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 export const ALBUM_ORDER = [
   "Taylor Swift", "Fearless", "Speak Now", "Red", "1989", "reputation", "Lover",
-  "folklore", "evermore", "Midnights"
+  "folklore", "evermore", "Midnights", "THE TORTURED POETS DEPARTMENT",
 ];
 
 export const ALBUM_LOGOS = {
@@ -19,6 +19,8 @@ export const ALBUM_LOGOS = {
   "folklore": "https://i.scdn.co/image/ab67616d00001e02c288028c2592f400dd0b9233",
   "evermore": "https://i.scdn.co/image/ab67616d00001e0290fd9741e1838115cd90b3b6",
   "Midnights": "https://i.scdn.co/image/ab67616d0000b273ada1a886fc3150dc695168a7",
+  "THE TORTURED POETS DEPARTMENT":
+    "https://i.scdn.co/image/ab67616d00001e028ecc33f195df6aa257c39eaa",
 };
 
 export const normalizeQuotes = string => {
