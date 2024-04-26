@@ -30,6 +30,9 @@ export default function AboutPage() {
       </Typography>
 
       <Typography>
+        2024-04-25: Added lyrics for THE TORTURED POETS DEPARTMENT!
+      </Typography>
+      <Typography>
         2024-03-31: Please read <Link href="/changes20240331">this note</Link> about recent updates.
       </Typography>
       <Typography>
