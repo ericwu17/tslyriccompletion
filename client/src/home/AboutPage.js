@@ -124,8 +124,12 @@ export default function AboutPage() {
         Contact Me
       </Typography>
       <Typography>
-        My name is Eric, and I'm an undergraduate student at UCLA (expected graduation in spring of
-        2025). I love listening to Taylor Swift (surprise, right?), but my other interests include
+        My name is Eric, and I'm an undergraduate student at UCLA (expected graduation in {" "}
+        <span style={{textDecoration: "line-through"}}>
+          spring of 2025
+        </span>{" "}
+        March 2026).
+        I love listening to Taylor Swift (surprise, right?), but my other interests include
         math, computers, Rubik's Cubes, and shorthand systems. If you have any feedback for
         this site, or issues with
         running this app locally, please reach out -- I'd love to hear from you! My email is
