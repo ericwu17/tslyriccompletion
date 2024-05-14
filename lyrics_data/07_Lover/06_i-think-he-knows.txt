@@ -43,9 +43,9 @@ I want you, bless my soul
 And I ain't gotta tell him, I think he knows
 I think he knows
 [Post-Chorus]
-I want you, bless my
-I want you, bless my
-I want you, bless my
+I want you, bless my$<misc_bad confusable>
+I want you, bless my$<misc_bad confusable>
+I want you, bless my$<misc_bad confusable>
 I want you, bless my soul
 [Bridge]
 Lyrical smile, indigo eyes, hand on my thigh
@@ -65,11 +65,11 @@ I want you, bless my soul
 And I ain't gotta tell him, I think he knows
 I think he knows
 [Post-Chorus]
-I want you, bless my
-I want you, bless my
-I want you, bless my
+I want you, bless my$<misc_bad confusable>
+I want you, bless my$<misc_bad confusable>
+I want you, bless my$<misc_bad confusable>
 I want you, bless my soul
-I want you, bless my
-I want you, bless my
+I want you, bless my$<misc_bad confusable>
+I want you, bless my$<misc_bad confusable>
 I want you, bless my soul
 And I ain't gotta tell him, I think he knows
