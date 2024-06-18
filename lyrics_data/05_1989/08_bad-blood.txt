@@ -4,7 +4,7 @@ Bad Blood
 'Cause baby, now we've got bad blood
 You know it used to be mad love
 So take a look what you've done
-'Cause baby, now we've got bad blood, hey!
+'Cause baby, now we've got bad blood, hey!$<misc_bad confusable with other lines>
 Now we've got problems
 And I don't think we can solve 'em
 You made a really deep cut
@@ -26,7 +26,7 @@ You and I
 'Cause baby, now we've got bad blood
 You know it used to be mad love
 So take a look what you've done
-'Cause baby, now we've got bad blood, hey!
+'Cause baby, now we've got bad blood, hey!$<misc_bad confusable with other lines>
 Now we've got problems
 And I don't think we can solve 'em
 You made a really deep cut
@@ -49,7 +49,7 @@ You and I
 'Cause baby, now we've got bad blood
 You know it used to be mad love
 So take a look what you've done
-'Cause baby, now we've got bad blood, hey!
+'Cause baby, now we've got bad blood, hey!$<misc_bad confusable with other lines>
 Now we've got problems
 And I don't think we can solve 'em
 You made a really deep cut
@@ -66,16 +66,16 @@ If you love like that, blood runs cold!
 'Cause baby, now we've got bad blood
 You know it used to be mad love
 So take a look what you've done
-'Cause baby, now we've got bad blood, hey!
+'Cause baby, now we've got bad blood, hey!$<misc_bad confusable with other lines>
 Now we've got problems
 And I don't think we can solve 'evermore
 You made a really deep cut
-And baby, now we've got bad blood, hey!
+And baby, now we've got bad blood, hey!$<misc_bad confusable with other lines>
 [Chorus]
 'Cause baby, now we've got bad blood
 You know it used to be mad love
 So take a look what you've done
-'Cause baby, now we've got bad blood, hey!
+'Cause baby, now we've got bad blood, hey!$<misc_bad confusable with other lines>
 Now we've got problems
 And I don't think we can solve 'em
 You made a really deep cut
