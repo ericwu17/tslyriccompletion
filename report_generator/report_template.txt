@@ -1,0 +1,51 @@
+TSLC Report Generated on: $generation_time$
+
+This summary covers a period from $start_time$ to $end_time$.
+
+================================================================================
+OVERALL STATS
+================================================================================
+
+Number of games played:         $total_games$
+Number of guesses made:         $total_guesses$
+Number of incomplete games:     $incomplete_games$
+Number of completed games:      $complete_games$
+
+Average guesses per game:       $avg_guesses_per_game$
+Median guesses per game:        $med_guesses_per_game$
+Highest guesses per game:       $max_guesses_per_game$
+    By player                   $max_guesses_per_game_player$
+
+Average scoring game:           $avg_score_game$
+Median scoring game:            $med_score_game$
+Highest scoring game:           $max_score_game$
+    By player                   $max_score_game_player$
+
+================================================================================
+TERMINATED GAMES ($complete_games$)
+================================================================================
+
+*REPEAT* $terminated_games$
+$player_name$ scored $terminal_score$ in $num_guesses$ guesses.
+    https://tslyriccompletion.com/history/game?id=$uuid$
+*END_REPEAT*
+
+================================================================================
+UNTERMINATED GAMES ($incomplete_games$)
+================================================================================
+
+*REPEAT* $unterminated_games$
+$num_guesses$ guesses:
+    https://tslyriccompletion.com/history/game?id=$uuid$
+*END_REPEAT*
+
+================================================================================
+TERMINAL GUESSES, NON MULTIPLE CHOICE ($num_terminal_guesses$)
+================================================================================
+
+*REPEAT* $terminal_guesses$
+Prompt: $prompt$
+Guess:  $user_guess$
+Actual: $correct_answer$
+    https://tslyriccompletion.com/history/game?id=$game_uuid$
+*END_REPEAT*
