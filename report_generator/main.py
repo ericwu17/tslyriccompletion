@@ -1,5 +1,7 @@
 import datetime
 import mysql.connector
+import smtplib
+from email.message import EmailMessage
 
 ANON_PLAYER = "<anon>"
 
@@ -171,4 +173,27 @@ cnx.close()
 
 
 
-print(final_report_string)
+
+## SEND EMAIL HERE
+
+with open("./.env") as f:
+    for line in f.readlines():
+        if line.startswith("EMAIL_ADDRESS="):
+            EMAIL_ADDRESS = line.strip().strip("EMAIL_ADDRESS=")
+        if line.startswith("EMAIL_PASS="):
+            EMAIL_PASSWORD = line.strip().strip("EMAIL_PASS=")
+        if line.startswith("EMAIL_RECIPIENT="):
+            EMAIL_RECIPIENT = line.strip().strip("EMAIL_RECIPIENT=")
+
+
+
+msg = EmailMessage()
+msg['Subject'] = f"""TSLC Monthly Report {end_time.strftime("%Y-%m-%d")}"""
+msg['From'] = EMAIL_ADDRESS
+msg['To'] = EMAIL_RECIPIENT
+msg.set_content('Please find the report attached.\n')
+msg.add_attachment(final_report_string.encode("utf-8"), maintype='application', subtype='octet-stream', filename="report.txt")
+
+with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+    smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD) 
+    smtp.send_message(msg)
