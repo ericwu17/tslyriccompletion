@@ -58,6 +58,6 @@ I'm the life you chose
 And all this terrible danger$<misc_bad end of chorus>
 
 [Outro]
-So cross your thoughtless heart
+So cross your thoughtless heart$<misc_bad confusable with other lines>
 She's the albatross
 She is here to destroy you
