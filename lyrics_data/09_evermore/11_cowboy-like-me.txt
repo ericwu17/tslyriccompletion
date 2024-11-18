@@ -7,7 +7,7 @@ And you asked me to dance
 But I said, "Dancing is a dangerous game"
 [Verse 2]
 Oh, I thought this is gonna be one of those things
-Now I know I'm never gonna love again
+Now I know I'm never gonna love again$<misc_bad confusable with other lines>
 [Chorus]
 I've got some tricks up my sleeve
 Takes one to know one
