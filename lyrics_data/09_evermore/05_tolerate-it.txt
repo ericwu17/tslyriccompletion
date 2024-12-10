@@ -3,7 +3,7 @@ tolerate it
 [Verse 1]
 I sit and watch you reading with your head low
 I wake and watch you breathing with your eyes closed
-I sit and watch you
+I sit and watch you$<misc_bad confusable>
 I notice everything you do or don't do
 You're so much older and wiser, and I
 [Chorus 1]
