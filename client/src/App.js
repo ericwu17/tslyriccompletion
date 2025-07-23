@@ -15,6 +15,7 @@ import { Typography, Link } from "@mui/material";
 import FeedbackForm from "./feedback/feedback";
 import Changelog from "./changelog/changelog";
 import Changes20240331 from "./changelog/changes20240331";
+import StatsPage from "./stats/stats";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/song/:album/:name" element={<SongPage />} />
             <Route path="/song/:album" element={<SongPage />} />
             <Route path="/songs" element={<Navigate to="/song" />} />
+            <Route path="/stats" element={<StatsPage />} />
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/history/game" element={<GameDetails />} />
             <Route path="/history/guess" element={<GuessHistory />} />

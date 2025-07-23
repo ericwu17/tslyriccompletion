@@ -7,9 +7,11 @@ pub mod lifelines;
 pub mod loader_v2;
 pub mod rss;
 pub mod song;
+pub mod stats;
 
 use crate::rss::RecentVotesCache;
 use crate::song::Song;
+use crate::stats::{get_stats, StatsResponse};
 use dotenv::dotenv;
 use sqlx::mysql::MySqlPoolOptions;
 use std::collections::HashMap;
@@ -44,6 +46,7 @@ async fn main() -> Result<(), rocket::Error> {
     let my_hashmap: HashMap<String, GameState> = HashMap::new();
     let game_state = Arc::new(Mutex::new(my_hashmap));
     let votes_cache = Arc::new(Mutex::new(RecentVotesCache::new()));
+    let stats_cache: Arc<Mutex<Option<StatsResponse>>> = Default::default();
 
     let database_url = format!("mysql://{}:{}@localhost:3306/mydb", db_user, db_pw);
     println!("Connecting to MySql Database...");
@@ -59,7 +62,9 @@ async fn main() -> Result<(), rocket::Error> {
         .manage(songs)
         .manage(pool)
         .manage(votes_cache)
+        .manage(stats_cache)
         .mount("/", routes![index])
+        .mount("/", routes![get_stats])
         .mount("/", routes![get_song_list])
         .mount("/", routes![get_song_list_with_id])
         .mount("/", routes![get_all_songlists])

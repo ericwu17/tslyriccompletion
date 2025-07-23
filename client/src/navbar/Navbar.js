@@ -46,6 +46,7 @@ export const HOME_URL = "/";
 export const PLAY_URL = "/play";
 export const VIEW_SCORES_URL = "/history";
 export const VIEW_LYRICS_URL = "/song";
+export const VIEW_STATS_URL = "/stats";
 
 export function getWindowSize() {
   const {innerWidth, innerHeight} = window;
@@ -106,13 +107,19 @@ export default function Navbar() {
           color="inherit"
           onClick={() => {window.location.href=VIEW_SCORES_URL;}}
         >
-          View Scores
+          Scores
+        </Button>
+        <Button
+          color="inherit"
+          onClick={() => {window.location.href=VIEW_STATS_URL;}}
+        >
+          Stats
         </Button>
         <Button
           color="inherit"
           onClick={() => {window.location.href=VIEW_LYRICS_URL;}}
         >
-          View Lyrics
+          Lyrics
         </Button>
       </Toolbar>
     );
@@ -190,14 +197,21 @@ function HamburgerMenu() {
         <ListItem disablePadding>
           <ListItemButton onClick={() => window.location.href = VIEW_SCORES_URL}>
             <ListItemText>
-              View Scores
+              Scores
+            </ListItemText>
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => window.location.href = VIEW_STATS_URL}>
+            <ListItemText>
+              Stats
             </ListItemText>
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
           <ListItemButton onClick={() => window.location.href = VIEW_LYRICS_URL}>
             <ListItemText>
-              View Lyrics
+              Lyrics
             </ListItemText>
           </ListItemButton>
         </ListItem>
