@@ -65,15 +65,22 @@ export default function StatsPage() {
   };
 
   return (
-    <Box my={2} mx={5} display="flex" flexDirection="column" alignItems="center">
-      <Typography variant="h3" sx={{ mb: 2 }}>
-        Taylor Swift Lyric Completion Game Statistics
-      </Typography>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      width="fit-content"
+      minWidth="100%"
+    >
+      <Box my={1} mx={1}>
+        <Typography variant="h3" sx={{ mb: 2 }}>
+          Taylor Swift Lyric Completion Game Statistics
+        </Typography>
+      </Box>
 
       <Typography>
         Statistics generated on {stats_generation_time} UTC.
       </Typography>
-
 
       <Table aria-label="simple table">
         <TableHead>
