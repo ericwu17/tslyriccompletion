@@ -19,7 +19,7 @@ const MOBILE_WIDTH = 850;
 
 const BAR_BG_COLOR = "#B9D9EB";
 
-export default function QueryMenuBar({setGames}) {
+export default function QueryMenuBar({setGames, setIsLoading}) {
   const [windowSize, setWindowSize] = React.useState(getWindowSize());
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [sortBy, setSortBy] = useSearchParamsState("sortBy", "score");
@@ -49,12 +49,14 @@ export default function QueryMenuBar({setGames}) {
   };
 
   const refetchGames = () => {
+    setIsLoading(true);
     axios.get(
       // eslint-disable-next-line max-len
       `/history/all?sort=${sortBy}&search=${searchString}&include_nameless=${includeNameless}&page_num=${pageNum}&limit=${limit}`
     ).then((response) => {
       let games = response.data;
       setGames(games);
+      setIsLoading(false);
     });
   };
 

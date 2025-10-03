@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Table, TableBody, TableCell,
+import { Box, CircularProgress, Table, TableBody, TableCell,
   TableHead, TableRow
 } from "@mui/material";
 import QueryMenuBar from "./QueryMenuBar";
@@ -7,12 +7,23 @@ import GameTableRow from "./GameTableRow";
 
 export default function HistoryPage() {
   const [games, setGames] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const isMobile = window.innerWidth < 600;
 
+  const loadingIconTable = (
+    <TableRow>
+      <TableCell colSpan={5}>
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <CircularProgress />
+        </Box>
+      </TableCell>
+    </TableRow>
+  );
+
   return (
     <Box m={2} display="flex" flexDirection="column" alignItems="center">
-      <QueryMenuBar setGames={setGames} />
+      <QueryMenuBar setGames={setGames} setIsLoading={setIsLoading} />
 
       {!isMobile &&
         <Box maxWidth="100%">
@@ -27,9 +38,13 @@ export default function HistoryPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {games.map((game, index) => (
-                <GameTableRow game={game} index={index} key={game.uuid} />
-              ))}
+              {isLoading ?
+                loadingIconTable
+                :
+                games.map((game, index) => (
+                  <GameTableRow game={game} index={index} key={game.uuid} />
+                ))
+              }
             </TableBody>
           </Table>
         </Box>
@@ -65,9 +80,13 @@ export default function HistoryPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {games.map((game, index) => (
-                <GameTableRow game={game} index={index} key={game.uuid} />
-              ))}
+              {isLoading ?
+                loadingIconTable
+                :
+                games.map((game, index) => (
+                  <GameTableRow game={game} index={index} key={game.uuid} />
+                ))
+              }
             </TableBody>
           </Table>
         </Box>
