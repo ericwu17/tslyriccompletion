@@ -86,7 +86,7 @@ export default function SongListSection({selectedSongs, songlistId}) {
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         {ALBUM_ORDER.map(album => {
           let songs = fullSongList[album];
-          if (songs.length === 0) {
+          if (!songs || songs.length === 0) {
             return null;
           }
           const numSongsSelected = selectedSongs.filter(
