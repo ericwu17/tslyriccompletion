@@ -30,6 +30,9 @@ export default function AboutPage() {
       </Typography>
 
       <Typography>
+        2025-10-03: Added lyrics for The Life of a Showgirl!
+      </Typography>
+      <Typography>
         2024-04-25: Added lyrics for THE TORTURED POETS DEPARTMENT!
       </Typography>
       <Typography>
