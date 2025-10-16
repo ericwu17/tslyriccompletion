@@ -105,6 +105,28 @@ export default function AboutPage() {
         if you have notice any issues, have feature requests, or suggestions!
       </Typography>
 
+      <Typography variant="h4" sx={{mt:2}}>
+        Other Taylor Swift games
+      </Typography>
+      <Typography>
+        <List
+          sx = {{
+            listStyleType: "disc",
+            pl: 2,
+            "& .MuiListItem-root": {
+              display: "list-item",
+            },
+          }}
+        >
+          <ListItem disablePadding>
+            <Link href="https://ts-lyrics-quiz.netlify.app">TS Lyrics Quiz</Link>
+          </ListItem>
+          <ListItem disablePadding>
+            <Link href="https://jasminex21.shinyapps.io/tayLyrics">tayLyrics</Link>
+          </ListItem>
+        </List>
+      </Typography>
+
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Acknowledgements
       </Typography>
