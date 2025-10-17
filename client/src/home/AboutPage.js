@@ -124,6 +124,9 @@ export default function AboutPage() {
           <ListItem disablePadding>
             <Link href="https://jasminex21.shinyapps.io/tayLyrics">tayLyrics</Link>
           </ListItem>
+          <ListItem disablePadding>
+            <Link href="https://www.tssongguesser.com">TS song guesser</Link>
+          </ListItem>
         </List>
       </Typography>
 
