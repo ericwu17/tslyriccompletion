@@ -127,6 +127,9 @@ export default function AboutPage() {
           <ListItem disablePadding>
             <Link href="https://www.tssongguesser.com">TS song guesser</Link>
           </ListItem>
+          <ListItem disablePadding>
+            <Link href="https://www.techyonic.co/swiftle">Swiftle</Link>
+          </ListItem>
         </List>
       </Typography>
 
