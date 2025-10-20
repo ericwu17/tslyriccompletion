@@ -122,7 +122,7 @@ export default function AboutPage() {
             <Link href="https://ts-lyrics-quiz.netlify.app">TS Lyrics Quiz</Link>
           </ListItem>
           <ListItem disablePadding>
-            <Link href="https://jasminex21.shinyapps.io/tayLyrics">tayLyrics</Link>
+            <Link href="https://taylyrics.lyriguessr.xyz">tayLyrics</Link>
           </ListItem>
           <ListItem disablePadding>
             <Link href="https://www.tssongguesser.com">TS song guesser</Link>
