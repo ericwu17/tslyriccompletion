@@ -50,6 +50,11 @@ const NOT_ROMANTIC_SONGS_DATA = [
   },
   {
     "album": "Speak Now",
+    "name": "Mean",
+    "description": " is a response to harsh criticism.",
+  },
+  {
+    "album": "Speak Now",
     "name": "Never Grow Up",
     "description": " is for a baby of one of Taylor's friends.",
   },
@@ -134,6 +139,11 @@ const NOT_ROMANTIC_SONGS_DATA = [
     "album": "reputation",
     "name": "This Is Why We Can't Have Nice Things",
     "description": " is also about betrayal and drama.",
+  },
+  {
+    "album": "Lover",
+    "name": "I Forgot That You Existed",
+    "description": " is about forgiving somebody you hated.",
   },
   {
     "album": "Lover",
@@ -229,6 +239,11 @@ const NOT_ROMANTIC_SONGS_DATA = [
   {
     "album": "Midnights",
     "name": "Vigilante Shit",
+    "description": " is about vigilante shit.",
+  },
+  {
+    "album": "Midnights",
+    "name": "Bejeweled",
     "description": " is about empowerment, and self confidence.",
   },
   {
