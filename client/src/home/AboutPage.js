@@ -30,6 +30,10 @@ export default function AboutPage() {
       </Typography>
 
       <Typography>
+        2025-10-24: Added a page for Taylor Swift songs that are not romantic: {" "}
+        <Link href="/not-romantic">/not-romantic</Link>
+      </Typography>
+      <Typography>
         2025-10-03: Added lyrics for The Life of a Showgirl!
       </Typography>
       <Typography>

@@ -15,6 +15,7 @@ import { Typography, Link } from "@mui/material";
 import FeedbackForm from "./feedback/feedback";
 import Changelog from "./changelog/changelog";
 import Changes20240331 from "./changelog/changes20240331";
+import NotRomanticPage from "./not-romantic/not-romantic";
 import StatsPage from "./stats/stats";
 
 function App() {
@@ -44,6 +45,12 @@ function App() {
             <Route path="/feedback" element={<FeedbackForm />} />
             <Route path="/changelog" element={<Changelog />} />
             <Route path="/changes20240331" element={<Changes20240331 />} />
+            <Route path="not-romantic" element={<NotRomanticPage/>}/>
+
+            {
+              /* Note: the route /tswift exists
+              to redirect the Linux Users Group page to my new site */
+            }
             <Route path="/tswift/*"  element={<RedirectPage />}/>
             <Route path=":any/*" element={<NotFound />} />
           </Routes>
