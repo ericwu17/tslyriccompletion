@@ -1,6 +1,7 @@
 import React from "react";
 import { List, Box, Typography, Link, ListItem } from "@mui/material";
 import { PLAY_URL } from "../navbar/Navbar";
+import { getRecentChangelogEntries } from "../changelog/changelog";
 
 const MECHANICS_PAGE_URL = "/mechanics";
 
@@ -28,27 +29,7 @@ export default function AboutPage() {
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Recent Changes
       </Typography>
-
-      <Typography>
-        2025-10-24: Added a page for Taylor Swift songs that are not romantic: {" "}
-        <Link href="/not-romantic">/not-romantic</Link>
-      </Typography>
-      <Typography>
-        2025-10-03: Added lyrics for The Life of a Showgirl!
-      </Typography>
-      <Typography>
-        2024-04-25: Added lyrics for THE TORTURED POETS DEPARTMENT!
-      </Typography>
-      <Typography>
-        2024-03-31: Please read <Link href="/changes20240331">this note</Link> about recent updates.
-      </Typography>
-      <Typography>
-        2023-10-27: Added 1989 songs from the vault!
-      </Typography>
-      <Typography>
-        2023-08-19: You can now copy a list of your selected songs on the start game page.
-        This list can be later used to restore your song selection.
-      </Typography>
+      {getRecentChangelogEntries()}
       <Typography>
         View the <Link href="/changelog">full changelog here.</Link>
       </Typography>
