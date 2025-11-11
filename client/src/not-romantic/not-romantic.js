@@ -328,11 +328,6 @@ const NOT_ROMANTIC_SONGS_DATA = [
   },
   {
     "album": "The Life of a Showgirl",
-    "name": "Eldest Daughter",
-    "description": " is about being an eldest daughter.",
-  },
-  {
-    "album": "The Life of a Showgirl",
     "name": "Actually Romantic",
     "description": " is actually about a one-sided adversarial relationship.",
   },
