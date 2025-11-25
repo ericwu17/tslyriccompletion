@@ -69,14 +69,6 @@ export default function Navbar() {
     };
   }, []);
 
-  const onClickStartGame = () => {
-    if (window.location.pathname != PLAY_URL) {
-      window.location.href=PLAY_URL;
-    } else {
-      // will not refresh page if the user clicks start game when already at start game page
-    }
-  };
-
   let toolbar;
   if (windowSize.innerWidth > MOBILE_WIDTH) {
     toolbar = (
@@ -99,7 +91,7 @@ export default function Navbar() {
         </ThemeProvider>
         <Button
           color="inherit"
-          onClick={() => onClickStartGame()}
+          onClick={() => {window.location.href=PLAY_URL;}}
         >
           Start Game
         </Button>
