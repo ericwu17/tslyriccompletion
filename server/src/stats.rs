@@ -27,7 +27,7 @@ pub struct StatsData {
 
 #[derive(FromRow, Debug)]
 struct Count {
-    total: i32,
+    total: Option<i32>,
 }
 
 /// API endpoint for getting statistics from the database.
@@ -199,12 +199,12 @@ async fn get_stats_from_recent_period(
     let num_lifelines_used = num_lifelines_used.total;
 
     StatsData {
-        num_games,
-        num_guesses,
-        multiple_choice_guesses,
-        free_response_guesses,
-        skipped,
-        num_lifelines_earned,
-        num_lifelines_used,
+        num_games: num_games.unwrap_or_default(),
+        num_guesses: num_guesses.unwrap_or_default(),
+        multiple_choice_guesses: multiple_choice_guesses.unwrap_or_default(),
+        free_response_guesses: free_response_guesses.unwrap_or_default(),
+        skipped: skipped.unwrap_or_default(),
+        num_lifelines_earned: num_lifelines_earned.unwrap_or_default(),
+        num_lifelines_used: num_lifelines_used.unwrap_or_default(),
     }
 }
