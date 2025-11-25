@@ -93,7 +93,7 @@ export default function Navbar() {
           color="inherit"
           onClick={() => {window.location.href=PLAY_URL;}}
         >
-          Start Game
+          Play Game
         </Button>
         <Button
           color="inherit"
@@ -182,7 +182,7 @@ function HamburgerMenu() {
         <ListItem disablePadding>
           <ListItemButton onClick={() => window.location.href = PLAY_URL}>
             <ListItemText>
-              Start Game
+              Play Game
             </ListItemText>
           </ListItemButton>
         </ListItem>
