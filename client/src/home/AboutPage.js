@@ -1,5 +1,5 @@
 import React from "react";
-import { List, Box, Typography, Link, ListItem } from "@mui/material";
+import { List, Box, Typography, Link, ListItem, Button } from "@mui/material";
 import { PLAY_URL } from "../navbar/Navbar";
 import { getRecentChangelogEntries } from "../changelog/changelog";
 
@@ -13,10 +13,15 @@ export default function AboutPage() {
       </Typography>
       <Typography>
         This is a game where your goal is to guess the next line from a random Taylor Swift song!
-        To start playing, press <Link href={PLAY_URL}>start game</Link> in the navbar! You can
-        also use this site to browse Taylor Swift lyrics, although you might
+        To start playing, press the <Link href={PLAY_URL}>play game</Link> button below!
+        You can also use this site to browse Taylor Swift lyrics, although you might
         find the line highlighting to be distracting.
       </Typography>
+      <Box sx={{width: "max-content", border: "2px solid green", mt: 2, mb: 2}}>
+        <Button onClick={() => {window.location.href=PLAY_URL;}} size="large">
+          Play Game
+        </Button>
+      </Box>
 
       <Typography variant="h4" sx={{mt:2, mb: 2}}>
         Details on Game Mechanics
