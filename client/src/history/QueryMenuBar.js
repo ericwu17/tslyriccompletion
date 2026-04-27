@@ -39,6 +39,8 @@ export default function QueryMenuBar({setGames, setIsLoading}) {
     setLimit(PAGE_SIZE_LIMIT.toString());
   }
 
+  // This is used to abort the in-flight request, when the query parameters change.
+  const abortControllerRef = React.useRef(null);
 
   const toggleIncludeNameless = () => {
     if (includeNameless === "true") {
@@ -50,13 +52,27 @@ export default function QueryMenuBar({setGames, setIsLoading}) {
 
   const refetchGames = () => {
     setIsLoading(true);
+    // Cancel any previous request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    // Create new abort controller for this request
+    abortControllerRef.current = new AbortController();
+
     axios.get(
       // eslint-disable-next-line max-len
-      `/history/all?sort=${sortBy}&search=${searchString}&include_nameless=${includeNameless}&page_num=${pageNum}&limit=${limit}`
+      `/history/all?sort=${sortBy}&search=${searchString}&include_nameless=${includeNameless}&page_num=${pageNum}&limit=${limit}`,
+      { signal: abortControllerRef.current.signal }
     ).then((response) => {
       let games = response.data;
       setGames(games);
       setIsLoading(false);
+    }).catch((error) => {
+      // Ignore abort errors, handle other errors
+      if (error.code !== "ECONNABORTED") {
+        console.error("Error fetching games:", error);
+      }
     });
   };
 
