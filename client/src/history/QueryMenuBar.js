@@ -103,7 +103,17 @@ export default function QueryMenuBar({setGames, setIsLoading}) {
 
   React.useEffect(() => {
     refetchGames();
-  }, [sortBy, includeNameless, pageNum]);
+  }, [pageNum]);
+
+  React.useEffect(() => {
+    const oldPageNum = pageNum;
+    setPageNum(1);
+    if (oldPageNum == 1) {
+      // call refetch here, since updating the pageNum wouldn't trigger a refetch on its own
+      refetchGames();
+    }
+
+  }, [sortBy, includeNameless]);
 
   React.useEffect(() => {
     function handleWindowResize() {
