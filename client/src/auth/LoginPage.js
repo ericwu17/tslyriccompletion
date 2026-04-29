@@ -10,15 +10,12 @@ import {
   Typography,
   Alert,
   CircularProgress,
-  FormControlLabel,
-  Checkbox,
   Link as MuiLink,
 } from "@mui/material";
 
 export function LoginPage() {
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [validationError, setValidationError] = useState("");
 
@@ -89,17 +86,6 @@ export function LoginPage() {
               disabled={isLoading}
               fullWidth
               placeholder="Enter your password"
-            />
-
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  disabled={isLoading}
-                />
-              }
-              label="Remember me"
             />
 
             <Button
