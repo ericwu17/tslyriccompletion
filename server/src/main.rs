@@ -8,6 +8,7 @@ pub mod loader_v2;
 pub mod rss;
 pub mod song;
 pub mod stats;
+pub mod auth;
 
 use crate::rss::RecentVotesCache;
 use crate::song::Song;
@@ -25,6 +26,9 @@ use history::line_history::get_line;
 use history::{get_game, get_games};
 use rss::{get_recent_feedback_rss, get_recent_votes_rss};
 use song::{get_all_songlists, get_song, get_song_list, get_song_list_with_id};
+use auth::signup::signup;
+use auth::login::login;
+use auth::logout::logout;
 use std::sync::{Arc, Mutex};
 
 #[macro_use]
@@ -83,6 +87,9 @@ async fn main() -> Result<(), rocket::Error> {
         .mount("/", routes![get_feedback])
         .mount("/", routes![get_recent_feedback_rss])
         .mount("/", routes![get_recent_votes_rss])
+        .mount("/", routes![signup])
+        .mount("/", routes![login])
+        .mount("/", routes![logout])
         .ignite()
         .await?;
 

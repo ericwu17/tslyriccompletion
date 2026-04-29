@@ -8,8 +8,11 @@ import IconButton from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
-  CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText
+  CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem
 } from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/useAuth";
 
 import Satisfaction from "../fonts/Satisfaction.ttf";
 import { createTheme, ThemeProvider, } from "@mui/material/styles";
@@ -56,7 +59,9 @@ export function getWindowSize() {
 export default function Navbar() {
   const [windowSize, setWindowSize] = React.useState(getWindowSize());
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = React.useState(false);
-
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const { isLoggedIn, user, logout } = useAuth();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     function handleWindowResize() {
@@ -68,6 +73,20 @@ export default function Navbar() {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
+
+  const handleUserMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleUserMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    handleUserMenuClose();
+    navigate("/");
+  };
 
   let toolbar;
   if (windowSize.innerWidth > MOBILE_WIDTH) {
@@ -113,6 +132,44 @@ export default function Navbar() {
         >
           Lyrics
         </Button>
+        {isLoggedIn ? (
+          <>
+            <IconButton
+              color="inherit"
+              onClick={handleUserMenuOpen}
+              title={`Logged in as ${user?.username}`}
+            >
+              <AccountCircleIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleUserMenuClose}
+            >
+              <MenuItem disabled>
+                {user?.username}
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>
+                Logout
+              </MenuItem>
+            </Menu>
+          </>
+        ) : (
+          <>
+            <Button
+              color="inherit"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </Button>
+            <Button
+              color="inherit"
+              onClick={() => navigate("/signup")}
+            >
+              Sign Up
+            </Button>
+          </>
+        )}
       </Toolbar>
     );
   } else {
@@ -124,6 +181,33 @@ export default function Navbar() {
             TS Lyric Completion
           </Typography>
         </ThemeProvider>
+        {isLoggedIn && (
+          <IconButton
+            size="large"
+            color="inherit"
+            onClick={handleUserMenuOpen}
+            title={`Logged in as ${user?.username}`}
+            sx={{ mr: 1 }}
+          >
+            <AccountCircleIcon />
+          </IconButton>
+        )}
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleUserMenuClose}
+        >
+          {isLoggedIn && (
+            <>
+              <MenuItem disabled>
+                {user?.username}
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>
+                Logout
+              </MenuItem>
+            </>
+          )}
+        </Menu>
         <IconButton
           size="large"
           edge="start"
@@ -163,6 +247,14 @@ export default function Navbar() {
 }
 
 function HamburgerMenu() {
+  const { isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
   return (
     <Box
       sx={{ width: "auto", background: "#3874CB", color:"white"}}
@@ -207,6 +299,32 @@ function HamburgerMenu() {
             </ListItemText>
           </ListItemButton>
         </ListItem>
+        {isLoggedIn ? (
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleLogout}>
+              <ListItemText>
+                Logout
+              </ListItemText>
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          <>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/login")}>
+                <ListItemText>
+                  Login
+                </ListItemText>
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/signup")}>
+                <ListItemText>
+                  Sign Up
+                </ListItemText>
+              </ListItemButton>
+            </ListItem>
+          </>
+        )}
       </List>
     </Box>
   );

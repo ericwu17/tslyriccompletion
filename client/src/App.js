@@ -17,8 +17,11 @@ import Changelog from "./changelog/changelog";
 import Changes20240331 from "./changelog/changes20240331";
 import NotRomanticPage from "./not-romantic/not-romantic";
 import StatsPage from "./stats/stats";
+import { SignupPage } from "./auth/SignupPage";
+import { LoginPage } from "./auth/LoginPage";
+import { AuthProvider } from "./context/AuthContext";
 
-function App() {
+function AppContent() {
   return (
     <Box
       className="App" display="flex" flexDirection="column" height="100vh"
@@ -29,35 +32,45 @@ function App() {
       <CssBaseline />
       <Navbar />
       <Box flexGrow={1}>
-        <BrowserRouter>
-          <Routes>
-            <Route exact path="/" element={<AboutPage />} />
-            <Route exact path="/mechanics" element={<MechanicsPage />} />
-            <Route exact path="/play" element={<Game />} />
-            <Route exact path="/song" element={<SongPage />} />
-            <Route path="/song/:album/:name" element={<SongPage />} />
-            <Route path="/song/:album" element={<SongPage />} />
-            <Route path="/songs" element={<Navigate to="/song" />} />
-            <Route path="/stats" element={<StatsPage />} />
-            <Route path="/history" element={<HistoryPage />} />
-            <Route path="/history/game" element={<GameDetails />} />
-            <Route path="/history/guess" element={<GuessHistory />} />
-            <Route path="/feedback" element={<FeedbackForm />} />
-            <Route path="/changelog" element={<Changelog />} />
-            <Route path="/changes20240331" element={<Changes20240331 />} />
-            <Route path="not-romantic" element={<NotRomanticPage/>}/>
+        <Routes>
+          <Route exact path="/" element={<AboutPage />} />
+          <Route exact path="/mechanics" element={<MechanicsPage />} />
+          <Route exact path="/play" element={<Game />} />
+          <Route exact path="/song" element={<SongPage />} />
+          <Route path="/song/:album/:name" element={<SongPage />} />
+          <Route path="/song/:album" element={<SongPage />} />
+          <Route path="/songs" element={<Navigate to="/song" />} />
+          <Route path="/stats" element={<StatsPage />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/history/game" element={<GameDetails />} />
+          <Route path="/history/guess" element={<GuessHistory />} />
+          <Route path="/feedback" element={<FeedbackForm />} />
+          <Route path="/changelog" element={<Changelog />} />
+          <Route path="/changes20240331" element={<Changes20240331 />} />
+          <Route path="not-romantic" element={<NotRomanticPage/>}/>
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />
 
-            {
-              /* Note: the route /tswift exists
-              to redirect the Linux Users Group page to my new site */
-            }
-            <Route path="/tswift/*"  element={<RedirectPage />}/>
-            <Route path=":any/*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+          {
+            /* Note: the route /tswift exists
+            to redirect the Linux Users Group page to my new site */
+          }
+          <Route path="/tswift/*"  element={<RedirectPage />}/>
+          <Route path=":any/*" element={<NotFound />} />
+        </Routes>
       </Box>
       <Footer />
     </Box>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
