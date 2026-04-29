@@ -6,6 +6,25 @@ use rand::Rng;
 use sha1::{Digest, Sha1};
 use chrono::Duration;
 use chrono::Utc;
+use rocket::request::{FromRequest, Request, Outcome};
+
+/// Request guard to extract User-Agent header
+pub struct UserAgent(pub String);
+
+#[rocket::async_trait]
+impl<'r> FromRequest<'r> for UserAgent {
+    type Error = ();
+
+    async fn from_request(request: &'r Request<'_>) -> Outcome<Self, Self::Error> {
+        let user_agent = request
+            .headers()
+            .get_one("User-Agent")
+            .map(|s| s.to_string())
+            .unwrap_or_else(|| "Unknown".to_string());
+
+        Outcome::Success(UserAgent(user_agent))
+    }
+}
 
 /// Hashes a password using bcrypt
 pub fn hash_password(password: &str) -> Result<String, bcrypt::BcryptError> {

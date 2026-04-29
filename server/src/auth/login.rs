@@ -4,7 +4,7 @@ use rocket::http::Status;
 use serde::Deserialize;
 use sqlx::{MySql, Pool};
 
-use super::{verify_password, generate_token, hash_token, get_session_expiry, AuthResponse, ErrorResponse};
+use super::{verify_password, generate_token, hash_token, get_session_expiry, AuthResponse, ErrorResponse, UserAgent};
 
 #[derive(Deserialize)]
 pub struct LoginRequest {
@@ -15,6 +15,7 @@ pub struct LoginRequest {
 #[post("/auth/login", format = "json", data = "<req>")]
 pub async fn login(
     pool: &State<Pool<MySql>>,
+    user_agent: UserAgent,
     req: Json<LoginRequest>,
 ) -> Result<Json<AuthResponse>, (Status, Json<ErrorResponse>)> {
     // Query user by username or email
@@ -63,11 +64,12 @@ pub async fn login(
 
     // Insert session into database
     sqlx::query(
-        "INSERT INTO user_sessions (token_hash, user_id, expires_at, created_at) VALUES (?, ?, ?, NOW())"
+        "INSERT INTO user_sessions (token_hash, user_id, expires_at, created_at, user_agent) VALUES (?, ?, ?, NOW(), ?)"
     )
     .bind(&token_hash)
     .bind(user_id)
     .bind(expires_at.to_rfc3339())
+    .bind(&user_agent.0)
     .execute(pool.inner())
     .await
     .map_err(|_| (
