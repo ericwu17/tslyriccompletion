@@ -108,6 +108,11 @@ export function LoginPage() {
               Sign up here
             </MuiLink>
           </Typography>
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            <MuiLink component={Link} to="/auth/reset-password">
+              Forgot password?
+            </MuiLink>
+          </Typography>
         </Box>
       </Paper>
     </Container>

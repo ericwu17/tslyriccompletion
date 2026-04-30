@@ -124,6 +124,70 @@ export function AuthProvider({ children }) {
     }
   }, [token]);
 
+  const requestEmailVerification = useCallback(async (email) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await axios.post("/auth/verify-email-request", { email });
+      return { success: true };
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || "Failed to send verification email";
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const verifyEmail = useCallback(async (email, token) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await axios.post("/auth/verify-email", { email, token });
+      return { success: true };
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || "Failed to verify email";
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const requestPasswordReset = useCallback(async (email) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await axios.post("/auth/password-reset-request", { email });
+      return { success: true };
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || "Failed to send password reset email";
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const resetPassword = useCallback(async (email, token, newPassword) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await axios.post("/auth/reset-password", { 
+        email, 
+        token, 
+        new_password: newPassword 
+      });
+      return { success: true };
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || "Failed to reset password";
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   const isLoggedIn = !!token && !!user;
 
   return (
@@ -137,6 +201,10 @@ export function AuthProvider({ children }) {
         signup,
         login,
         logout,
+        requestEmailVerification,
+        verifyEmail,
+        requestPasswordReset,
+        resetPassword,
       }}
     >
       {children}

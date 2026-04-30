@@ -1,12 +1,19 @@
 pub mod login;
 pub mod logout;
 pub mod signup;
+pub mod verify_email;
+pub mod password_reset;
 
 use rand::Rng;
 use sha1::{Digest, Sha1};
 use chrono::Duration;
 use chrono::Utc;
 use rocket::request::{FromRequest, Request, Outcome};
+use std::env;
+use lettre::message::{Mailbox, header::ContentType};
+use lettre::transport::smtp::authentication::Credentials;
+use lettre::{Message, SmtpTransport, Transport};
+
 
 /// Request guard to extract User-Agent header
 pub struct UserAgent(pub String);
@@ -76,4 +83,36 @@ pub struct AuthResponse {
 #[derive(serde::Deserialize, serde::Serialize, Debug)]
 pub struct ErrorResponse {
     pub error: String,
+}
+
+/// Returns the expiration datetime for an email verification token (24 hours from now)
+pub fn get_email_token_expiry() -> chrono::DateTime<Utc> {
+    Utc::now() + Duration::hours(24)
+}
+
+/// Sends an email with the given subject and body
+pub fn send_email(to: &str, subject: &str, body: &str) -> Result<(), String> {
+    let from_email = env::var("EMAIL_FROM").map_err(|_| "EMAIL_FROM not set")?;
+    let email_password = env::var("EMAIL_PASS").map_err(|_| "EMAIL_PASS not set")?;
+
+    let email = Message::builder()
+        .from(Mailbox::new(Some("tslyriccompletion".to_owned()), from_email.parse().unwrap()))
+        .to(Mailbox::new(None, to.parse().unwrap()))
+        .subject(subject)
+        .header(ContentType::TEXT_PLAIN)
+        .body(String::from(body))
+        .unwrap();
+
+    let creds = Credentials::new(from_email, email_password);
+
+    let mailer = SmtpTransport::relay("smtp.gmail.com")
+        .unwrap()
+        .credentials(creds)
+        .build();
+
+    // Send the email
+    match mailer.send(&email) {
+        Ok(_) => Ok(()),
+        Err(_) => Err("Error sending email".to_string()),
+    }
 }

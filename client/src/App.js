@@ -19,6 +19,8 @@ import NotRomanticPage from "./not-romantic/not-romantic";
 import StatsPage from "./stats/stats";
 import { SignupPage } from "./auth/SignupPage";
 import { LoginPage } from "./auth/LoginPage";
+import { EmailVerificationPage } from "./auth/EmailVerificationPage";
+import { PasswordResetPage } from "./auth/PasswordResetPage";
 import { AuthProvider } from "./context/AuthContext";
 
 function AppContent() {
@@ -48,8 +50,14 @@ function AppContent() {
           <Route path="/changelog" element={<Changelog />} />
           <Route path="/changes20240331" element={<Changes20240331 />} />
           <Route path="not-romantic" element={<NotRomanticPage/>}/>
+          <Route path="/auth/signup" element={<SignupPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/auth/verify-email" element={<EmailVerificationPage />} />
+          <Route path="/verify-email" element={<EmailVerificationPage />} />
+          <Route path="/auth/reset-password" element={<PasswordResetPage />} />
+          <Route path="/reset-password" element={<PasswordResetPage />} />
 
           {
             /* Note: the route /tswift exists

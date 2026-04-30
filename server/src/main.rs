@@ -29,6 +29,8 @@ use song::{get_all_songlists, get_song, get_song_list, get_song_list_with_id};
 use auth::signup::signup;
 use auth::login::login;
 use auth::logout::logout;
+use auth::verify_email::{request_email_verification, verify_email};
+use auth::password_reset::{request_password_reset, reset_password};
 use std::sync::{Arc, Mutex};
 
 #[macro_use]
@@ -90,6 +92,10 @@ async fn main() -> Result<(), rocket::Error> {
         .mount("/", routes![signup])
         .mount("/", routes![login])
         .mount("/", routes![logout])
+        .mount("/", routes![request_email_verification])
+        .mount("/", routes![verify_email])
+        .mount("/", routes![request_password_reset])
+        .mount("/", routes![reset_password])
         .ignite()
         .await?;
 
