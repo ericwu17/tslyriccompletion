@@ -52,15 +52,15 @@ export const VIEW_LYRICS_URL = "/song";
 export const VIEW_STATS_URL = "/stats";
 
 export function getWindowSize() {
-  const {innerWidth, innerHeight} = window;
-  return {innerWidth, innerHeight};
+  const { innerWidth, innerHeight } = window;
+  return { innerWidth, innerHeight };
 }
 
 export default function Navbar() {
   const [windowSize, setWindowSize] = React.useState(getWindowSize());
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { isLoggedIn, user, logout } = useAuth();
+  const { isLoggedIn, userProfile, logout } = useAuth();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -102,7 +102,7 @@ export default function Navbar() {
           color="inherit"
           aria-label="menu"
           sx={{ mr: 2 }}
-          onClick={() => {window.location.href=HOME_URL;}}
+          onClick={() => { window.location.href = HOME_URL; }}
         >
           <HomeIcon />
         </IconButton>
@@ -114,25 +114,25 @@ export default function Navbar() {
         </ThemeProvider>
         <Button
           color="inherit"
-          onClick={() => {window.location.href=PLAY_URL;}}
+          onClick={() => { window.location.href = PLAY_URL; }}
         >
           Play Game
         </Button>
         <Button
           color="inherit"
-          onClick={() => {window.location.href=VIEW_SCORES_URL;}}
+          onClick={() => { window.location.href = VIEW_SCORES_URL; }}
         >
           Scores
         </Button>
         <Button
           color="inherit"
-          onClick={() => {window.location.href=VIEW_STATS_URL;}}
+          onClick={() => { window.location.href = VIEW_STATS_URL; }}
         >
           Stats
         </Button>
         <Button
           color="inherit"
-          onClick={() => {window.location.href=VIEW_LYRICS_URL;}}
+          onClick={() => { window.location.href = VIEW_LYRICS_URL; }}
         >
           Lyrics
         </Button>
@@ -141,7 +141,7 @@ export default function Navbar() {
             <IconButton
               color="inherit"
               onClick={handleUserMenuOpen}
-              title={`Logged in as ${user?.username}`}
+              title={`Logged in as ${userProfile?.username}`}
             >
               <AccountCircleIcon />
             </IconButton>
@@ -151,7 +151,7 @@ export default function Navbar() {
               onClose={handleUserMenuClose}
             >
               <MenuItem disabled>
-                {user?.username}
+                {userProfile?.username}
               </MenuItem>
               <MenuItem onClick={goToProfile}>
                 My Profile
@@ -193,7 +193,7 @@ export default function Navbar() {
             size="large"
             color="inherit"
             onClick={handleUserMenuOpen}
-            title={`Logged in as ${user?.username}`}
+            title={`Logged in as ${userProfile?.username}`}
             sx={{ mr: 1 }}
           >
             <AccountCircleIcon />
@@ -207,7 +207,7 @@ export default function Navbar() {
           {isLoggedIn && (
             <>
               <MenuItem disabled>
-                {user?.username}
+                {userProfile?.username}
               </MenuItem>
               <MenuItem onClick={goToProfile}>
                 My Profile
@@ -224,7 +224,7 @@ export default function Navbar() {
           color="inherit"
           aria-label="menu"
           sx={{ mr: 2 }}
-          onClick={() => {setHamburgerMenuIsOpen(true);}}
+          onClick={() => { setHamburgerMenuIsOpen(true); }}
         >
           <MenuIcon />
         </IconButton>
@@ -267,17 +267,17 @@ function HamburgerMenu() {
 
   return (
     <Box
-      sx={{ width: "auto", background: "#3874CB", color:"white"}}
+      sx={{ width: "auto", background: "#3874CB", color: "white" }}
       role="presentation"
     >
       <List>
         <ListItem disablePadding>
           <ListItemButton onClick={() => window.location.href = HOME_URL}>
-            <ListItemText sx={{flexGrow:0, marginRight:1}}>
+            <ListItemText sx={{ flexGrow: 0, marginRight: 1 }}>
               Home
             </ListItemText>
             <ListItemIcon>
-              <HomeIcon sx={{ color: "white" }}/>
+              <HomeIcon sx={{ color: "white" }} />
             </ListItemIcon>
           </ListItemButton>
         </ListItem>

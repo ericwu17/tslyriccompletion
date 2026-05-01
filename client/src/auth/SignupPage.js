@@ -21,8 +21,12 @@ export function SignupPage() {
   const [error, setError] = useState("");
   const [validationError, setValidationError] = useState("");
 
-  const { signup, isLoading } = useAuth();
+  const { signup, isLoading, isLoggedIn } = useAuth();
   const navigate = useNavigate();
+
+  if (isLoggedIn) {
+    navigate("/");
+  }
 
   const validateForm = () => {
     setValidationError("");
@@ -104,6 +108,13 @@ export function SignupPage() {
           Create an Account
         </Typography>
 
+        <Typography align="center"  sx={{ m: 3 }}>
+          An email is not necessary to create an account, but you can leave one so that
+          you can reset your password in case you forget it!
+
+          TODO: make emails optional.
+        </Typography>
+
         <form onSubmit={handleSubmit}>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
           {validationError && <Alert severity="warning" sx={{ mb: 2 }}>{validationError}</Alert>}
@@ -119,7 +130,7 @@ export function SignupPage() {
             />
 
             <TextField
-              label="Email"
+              label="Email (optional)"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

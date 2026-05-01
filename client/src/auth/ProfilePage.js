@@ -35,11 +35,7 @@ export function ProfilePage() {
       setIsLoading(true);
       setError("");
       try {
-        const response = await axios.get("/auth/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get("/auth/profile");
         setProfile(response.data);
       } catch (err) {
         const errorMsg = err.response?.data?.error || "Failed to load profile";

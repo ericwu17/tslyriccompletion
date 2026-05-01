@@ -4,28 +4,44 @@ import axios from "axios";
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const setProfileAndTokenFromToken = (token) => {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    // Make a request to the profile page, to confirm that the server still
+    // knows that we're logged in, and validates our session token
+    axios.get("/auth/profile",).then((response) => {
+      if (response.status != 200) {
+        logoutOnFrontend();
+      } else {
+        setToken(token);
+        setUserProfile(response.data);
+      }
+    });
+  };
+
 
   // Load auth state from localStorage on mount
   useEffect(() => {
     const savedToken = localStorage.getItem("authToken");
-    const savedUser = localStorage.getItem("authUser");
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
-    }
+    setProfileAndTokenFromToken(savedToken);
   }, []);
+
+  const logoutOnFrontend = () => {
+    // log out on front end
+    setUserProfile(null);
+    setToken(null);
+    localStorage.removeItem("authToken");
+  };
 
   // Add token to axios default headers when it changes
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-    }
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }, [token]);
 
   const signup = useCallback(async (username, email, password) => {
@@ -38,21 +54,18 @@ export function AuthProvider({ children }) {
         password,
       });
 
-      const { token: newToken, user_id, username: returnedUsername, expires_at } = response.data;
+      const { token: newToken, username: returnedUsername } = response.data;
 
-      const userData = {
-        user_id,
+      const newUserProfile = {
         username: returnedUsername,
         email,
-        expires_at,
       };
 
       setToken(newToken);
-      setUser(userData);
+      setUserProfile(newUserProfile);
       localStorage.setItem("authToken", newToken);
-      localStorage.setItem("authUser", JSON.stringify(userData));
 
-      return { success: true, data: userData };
+      return { success: true };
     } catch (err) {
       const errorMsg = err.response?.data?.error || "Signup failed";
       setError(errorMsg);
@@ -71,20 +84,17 @@ export function AuthProvider({ children }) {
         password,
       });
 
-      const { token: newToken, user_id, username: returnedUsername, expires_at } = response.data;
+      const { token: newToken, username: returnedUsername } = response.data;
 
-      const userData = {
-        user_id,
+      const newUserProfile = {
         username: returnedUsername,
-        expires_at,
       };
 
       setToken(newToken);
-      setUser(userData);
+      setUserProfile(newUserProfile);
       localStorage.setItem("authToken", newToken);
-      localStorage.setItem("authUser", JSON.stringify(userData));
 
-      return { success: true, data: userData };
+      return { success: true };
     } catch (err) {
       const errorMsg = err.response?.data?.error || "Login failed";
       setError(errorMsg);
@@ -108,11 +118,7 @@ export function AuthProvider({ children }) {
         }
       }
 
-      setUser(null);
-      setToken(null);
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("authUser");
-      delete axios.defaults.headers.common["Authorization"];
+      logoutOnFrontend();
 
       return { success: true };
     } catch (err) {
@@ -173,10 +179,10 @@ export function AuthProvider({ children }) {
     setIsLoading(true);
     setError(null);
     try {
-      await axios.post("/auth/reset-password", { 
-        email, 
-        token, 
-        new_password: newPassword 
+      await axios.post("/auth/reset-password", {
+        email,
+        token,
+        new_password: newPassword
       });
       return { success: true };
     } catch (err) {
@@ -188,12 +194,12 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const isLoggedIn = !!token && !!user;
+  const isLoggedIn = !!token && !!userProfile;
 
   return (
     <AuthContext.Provider
       value={{
-        user,
+        userProfile,
         token,
         isLoggedIn,
         isLoading,

@@ -19,9 +19,12 @@ export function LoginPage() {
   const [error, setError] = useState("");
   const [validationError, setValidationError] = useState("");
 
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  if (isLoggedIn) {
+    navigate("/");
+  }
 
   const validateForm = () => {
     setValidationError("");
@@ -104,7 +107,7 @@ export function LoginPage() {
         <Box sx={{ mt: 3, textAlign: "center" }}>
           <Typography variant="body2">
             Don't have an account?{" "}
-            <MuiLink component={Link} to="/signup">
+            <MuiLink component={Link} to="/auth/signup">
               Sign up here
             </MuiLink>
           </Typography>
