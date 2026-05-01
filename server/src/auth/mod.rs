@@ -1,19 +1,20 @@
 pub mod login;
 pub mod logout;
+pub mod password_reset;
+pub mod profile;
 pub mod signup;
 pub mod verify_email;
-pub mod password_reset;
+pub mod bearer_token;
 
-use rand::Rng;
-use sha1::{Digest, Sha1};
 use chrono::Duration;
 use chrono::Utc;
-use rocket::request::{FromRequest, Request, Outcome};
-use std::env;
-use lettre::message::{Mailbox, header::ContentType};
+use lettre::message::{header::ContentType, Mailbox};
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
-
+use rand::Rng;
+use rocket::request::{FromRequest, Outcome, Request};
+use sha1::{Digest, Sha1};
+use std::env;
 
 /// Request guard to extract User-Agent header
 pub struct UserAgent(pub String);
@@ -69,7 +70,10 @@ pub fn get_session_expiry() -> chrono::DateTime<Utc> {
 
 /// Validates that a username contains only allowed characters [a-zA-Z0-9_-]
 pub fn is_valid_username_format(username: &str) -> bool {
-    username.chars().all(|c| c.is_alphanumeric() || c == '_' || c == '-') && username.len() >= 6
+    username
+        .chars()
+        .all(|c| c.is_alphanumeric() || c == '_' || c == '-')
+        && username.len() >= 6
 }
 
 #[derive(serde::Deserialize, serde::Serialize, Debug)]
@@ -96,7 +100,10 @@ pub fn send_email(to: &str, subject: &str, body: &str) -> Result<(), String> {
     let email_password = env::var("EMAIL_PASS").map_err(|_| "EMAIL_PASS not set")?;
 
     let email = Message::builder()
-        .from(Mailbox::new(Some("tslyriccompletion".to_owned()), from_email.parse().unwrap()))
+        .from(Mailbox::new(
+            Some("tslyriccompletion".to_owned()),
+            from_email.parse().unwrap(),
+        ))
         .to(Mailbox::new(None, to.parse().unwrap()))
         .subject(subject)
         .header(ContentType::TEXT_PLAIN)

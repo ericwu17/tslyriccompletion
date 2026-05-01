@@ -1,10 +1,12 @@
+use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::State;
-use rocket::http::Status;
 use serde::{Deserialize, Serialize};
 use sqlx::{MySql, Pool};
 
-use super::{generate_token, hash_token, get_email_token_expiry, send_email, hash_password, ErrorResponse};
+use super::{
+    generate_token, get_email_token_expiry, hash_password, hash_token, send_email, ErrorResponse,
+};
 
 #[derive(Deserialize)]
 pub struct RequestPasswordResetRequest {
@@ -35,18 +37,18 @@ pub async fn request_password_reset(
     req: Json<RequestPasswordResetRequest>,
 ) -> Result<Json<RequestPasswordResetResponse>, (Status, Json<ErrorResponse>)> {
     // Check if user exists
-    let user: Option<(i32,)> = sqlx::query_as(
-        "SELECT user_id FROM users WHERE email = ?"
-    )
-    .bind(&req.email)
-    .fetch_optional(pool.inner())
-    .await
-    .map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Database error".to_string(),
-        }),
-    ))?;
+    let user: Option<(i32,)> = sqlx::query_as("SELECT user_id FROM users WHERE email = ?")
+        .bind(&req.email)
+        .fetch_optional(pool.inner())
+        .await
+        .map_err(|_| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: "Database error".to_string(),
+                }),
+            )
+        })?;
 
     let (user_id,) = user.ok_or((
         Status::NotFound,
@@ -61,18 +63,18 @@ pub async fn request_password_reset(
     let expires_at = get_email_token_expiry();
 
     // Delete any existing password reset tokens for this user
-    sqlx::query(
-        "DELETE FROM user_tokens WHERE user_id = ? AND token_type = 'password_reset'"
-    )
-    .bind(user_id)
-    .execute(pool.inner())
-    .await
-    .map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Database error".to_string(),
-        }),
-    ))?;
+    sqlx::query("DELETE FROM user_tokens WHERE user_id = ? AND token_type = 'password_reset'")
+        .bind(user_id)
+        .execute(pool.inner())
+        .await
+        .map_err(|_| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: "Database error".to_string(),
+                }),
+            )
+        })?;
 
     // Insert new reset token
     sqlx::query(
@@ -91,21 +93,29 @@ pub async fn request_password_reset(
     ))?;
 
     // Send email with reset link
-    let frontend_url = std::env::var("FRONTEND_URL").unwrap_or_else(|_| "http://localhost:3000".to_string());
-    let reset_link = format!("{}/auth/reset-password?email={}&token={}", frontend_url, urlencoding::encode(&req.email), token);
-    
+    let frontend_url =
+        std::env::var("FRONTEND_URL").unwrap_or_else(|_| "http://localhost:3000".to_string());
+    let reset_link = format!(
+        "{}/auth/reset-password?email={}&token={}",
+        frontend_url,
+        urlencoding::encode(&req.email),
+        token
+    );
+
     let subject = "Reset Your Password - TS Lyric Completion";
     let body = format!(
         "Click the link below to reset your password:\n\n{}\n\nThis link expires in 24 hours.\n\nIf you didn't request this, please ignore this email.",
         reset_link
     );
 
-    send_email(&req.email, subject, &body).map_err(|e| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: format!("Failed to send email: {}", e),
-        }),
-    ))?;
+    send_email(&req.email, subject, &body).map_err(|e| {
+        (
+            Status::InternalServerError,
+            Json(ErrorResponse {
+                error: format!("Failed to send email: {}", e),
+            }),
+        )
+    })?;
 
     Ok(Json(RequestPasswordResetResponse {
         message: "Password reset email sent".to_string(),
@@ -129,18 +139,18 @@ pub async fn reset_password(
     }
 
     // Check if user exists with this email
-    let user: Option<(i32,)> = sqlx::query_as(
-        "SELECT user_id FROM users WHERE email = ?"
-    )
-    .bind(&req.email)
-    .fetch_optional(pool.inner())
-    .await
-    .map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Database error".to_string(),
-        }),
-    ))?;
+    let user: Option<(i32,)> = sqlx::query_as("SELECT user_id FROM users WHERE email = ?")
+        .bind(&req.email)
+        .fetch_optional(pool.inner())
+        .await
+        .map_err(|_| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: "Database error".to_string(),
+                }),
+            )
+        })?;
 
     let (user_id,) = user.ok_or((
         Status::NotFound,
@@ -177,12 +187,14 @@ pub async fn reset_password(
     }
 
     // Hash the new password
-    let password_hash = hash_password(&req.new_password).map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Failed to hash password".to_string(),
-        }),
-    ))?;
+    let password_hash = hash_password(&req.new_password).map_err(|_| {
+        (
+            Status::InternalServerError,
+            Json(ErrorResponse {
+                error: "Failed to hash password".to_string(),
+            }),
+        )
+    })?;
 
     // Update user's password
     sqlx::query("UPDATE users SET password_hash = ? WHERE user_id = ?")
@@ -190,32 +202,43 @@ pub async fn reset_password(
         .bind(user_id)
         .execute(pool.inner())
         .await
-        .map_err(|_| (
-            Status::InternalServerError,
-            Json(ErrorResponse {
-                error: "Failed to reset password".to_string(),
-            }),
-        ))?;
+        .map_err(|_| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: "Failed to reset password".to_string(),
+                }),
+            )
+        })?;
 
     // Delete the used token
     sqlx::query("DELETE FROM user_tokens WHERE token_hash = ?")
         .bind(&token_hash)
         .execute(pool.inner())
         .await
-        .map_err(|_| (
-            Status::InternalServerError,
-            Json(ErrorResponse {
-                error: "Failed to cleanup token".to_string(),
-            }),
-        ))?;
+        .map_err(|_| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: "Failed to cleanup token".to_string(),
+                }),
+            )
+        })?;
 
     // Send confirmation email
-    send_email(&req.email, "Password changed", "Your password to log in to tslyriccompletion.com has been changed successfully.").map_err(|e| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: format!("Failed to send email: {}", e),
-        }),
-    ))?;
+    send_email(
+        &req.email,
+        "Password changed",
+        "Your password to log in to tslyriccompletion.com has been changed successfully.",
+    )
+    .map_err(|e| {
+        (
+            Status::InternalServerError,
+            Json(ErrorResponse {
+                error: format!("Failed to send email: {}", e),
+            }),
+        )
+    })?;
 
     Ok(Json(ResetPasswordResponse {
         message: "Password reset successfully".to_string(),

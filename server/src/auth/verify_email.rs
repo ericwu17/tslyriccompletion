@@ -1,10 +1,10 @@
+use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::State;
-use rocket::http::Status;
 use serde::{Deserialize, Serialize};
 use sqlx::{MySql, Pool};
 
-use super::{generate_token, hash_token, get_email_token_expiry, send_email, ErrorResponse};
+use super::{generate_token, get_email_token_expiry, hash_token, send_email, ErrorResponse};
 
 #[derive(Deserialize)]
 pub struct RequestEmailVerificationRequest {
@@ -34,18 +34,19 @@ pub async fn request_email_verification(
     req: Json<RequestEmailVerificationRequest>,
 ) -> Result<Json<RequestEmailVerificationResponse>, (Status, Json<ErrorResponse>)> {
     // Check if user exists
-    let user: Option<(i32, bool)> = sqlx::query_as(
-        "SELECT user_id, email_verified FROM users WHERE email = ?"
-    )
-    .bind(&req.email)
-    .fetch_optional(pool.inner())
-    .await
-    .map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Database error".to_string(),
-        }),
-    ))?;
+    let user: Option<(i32, bool)> =
+        sqlx::query_as("SELECT user_id, email_verified FROM users WHERE email = ?")
+            .bind(&req.email)
+            .fetch_optional(pool.inner())
+            .await
+            .map_err(|_| {
+                (
+                    Status::InternalServerError,
+                    Json(ErrorResponse {
+                        error: "Database error".to_string(),
+                    }),
+                )
+            })?;
 
     let (user_id, email_verified) = user.ok_or((
         Status::NotFound,
@@ -70,18 +71,18 @@ pub async fn request_email_verification(
     let expires_at = get_email_token_expiry();
 
     // Delete any existing verification tokens for this user
-    sqlx::query(
-        "DELETE FROM user_tokens WHERE user_id = ? AND token_type = 'email_verification'"
-    )
-    .bind(user_id)
-    .execute(pool.inner())
-    .await
-    .map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Database error".to_string(),
-        }),
-    ))?;
+    sqlx::query("DELETE FROM user_tokens WHERE user_id = ? AND token_type = 'email_verification'")
+        .bind(user_id)
+        .execute(pool.inner())
+        .await
+        .map_err(|_| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: "Database error".to_string(),
+                }),
+            )
+        })?;
 
     // Insert new verification token
     sqlx::query(
@@ -100,21 +101,29 @@ pub async fn request_email_verification(
     ))?;
 
     // Send email with verification link
-    let frontend_url = std::env::var("FRONTEND_URL").unwrap_or_else(|_| "http://localhost:3000".to_string());
-    let verification_link = format!("{}/auth/verify-email?email={}&token={}", frontend_url, urlencoding::encode(&req.email), token);
-    
+    let frontend_url =
+        std::env::var("FRONTEND_URL").unwrap_or_else(|_| "http://localhost:3000".to_string());
+    let verification_link = format!(
+        "{}/auth/verify-email?email={}&token={}",
+        frontend_url,
+        urlencoding::encode(&req.email),
+        token
+    );
+
     let subject = "Verify Your Email";
     let body = format!(
         "Click the link below to verify your email:\n\n{}\n\nThis link expires in 24 hours.",
         verification_link
     );
 
-    send_email(&req.email, subject, &body).map_err(|e| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: format!("Failed to send email: {}", e),
-        }),
-    ))?;
+    send_email(&req.email, subject, &body).map_err(|e| {
+        (
+            Status::InternalServerError,
+            Json(ErrorResponse {
+                error: format!("Failed to send email: {}", e),
+            }),
+        )
+    })?;
 
     Ok(Json(RequestEmailVerificationResponse {
         message: "Verification email sent".to_string(),
@@ -128,18 +137,18 @@ pub async fn verify_email(
     req: Json<VerifyEmailRequest>,
 ) -> Result<Json<VerifyEmailResponse>, (Status, Json<ErrorResponse>)> {
     // Check if user exists with this email
-    let user: Option<(i32,)> = sqlx::query_as(
-        "SELECT user_id FROM users WHERE email = ?"
-    )
-    .bind(&req.email)
-    .fetch_optional(pool.inner())
-    .await
-    .map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Database error".to_string(),
-        }),
-    ))?;
+    let user: Option<(i32,)> = sqlx::query_as("SELECT user_id FROM users WHERE email = ?")
+        .bind(&req.email)
+        .fetch_optional(pool.inner())
+        .await
+        .map_err(|_| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: "Database error".to_string(),
+                }),
+            )
+        })?;
 
     let (user_id,) = user.ok_or((
         Status::NotFound,
@@ -180,32 +189,43 @@ pub async fn verify_email(
         .bind(user_id)
         .execute(pool.inner())
         .await
-        .map_err(|_| (
-            Status::InternalServerError,
-            Json(ErrorResponse {
-                error: "Failed to verify email".to_string(),
-            }),
-        ))?;
+        .map_err(|_| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: "Failed to verify email".to_string(),
+                }),
+            )
+        })?;
 
     // Delete the used token
     sqlx::query("DELETE FROM user_tokens WHERE token_hash = ?")
         .bind(&token_hash)
         .execute(pool.inner())
         .await
-        .map_err(|_| (
-            Status::InternalServerError,
-            Json(ErrorResponse {
-                error: "Failed to cleanup token".to_string(),
-            }),
-        ))?;
+        .map_err(|_| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: "Failed to cleanup token".to_string(),
+                }),
+            )
+        })?;
 
     // Send confirmation email to user
-    send_email(&req.email, "Email Verification Success", "Your email to log in to tslyriccompletion.com has been verified successfully.").map_err(|e| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: format!("Failed to send email: {}", e),
-        }),
-    ))?;
+    send_email(
+        &req.email,
+        "Email Verification Success",
+        "Your email to log in to tslyriccompletion.com has been verified successfully.",
+    )
+    .map_err(|e| {
+        (
+            Status::InternalServerError,
+            Json(ErrorResponse {
+                error: format!("Failed to send email: {}", e),
+            }),
+        )
+    })?;
 
     Ok(Json(VerifyEmailResponse {
         message: "Email verified successfully".to_string(),

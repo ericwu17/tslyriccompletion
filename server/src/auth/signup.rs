@@ -1,10 +1,13 @@
+use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::State;
-use rocket::http::Status;
 use serde::{Deserialize, Serialize};
 use sqlx::{MySql, Pool};
 
-use super::{hash_password, generate_token, hash_token, get_session_expiry, ErrorResponse, is_valid_username_format, UserAgent};
+use super::{
+    generate_token, get_session_expiry, hash_password, hash_token, is_valid_username_format,
+    ErrorResponse, UserAgent,
+};
 
 #[derive(Deserialize)]
 pub struct SignupRequest {
@@ -41,7 +44,8 @@ pub async fn signup(
         return Err((
             Status::BadRequest,
             Json(ErrorResponse {
-                error: "Username can only contain letters, numbers, underscores, and hyphens".to_string(),
+                error: "Username can only contain letters, numbers, underscores, and hyphens"
+                    .to_string(),
             }),
         ));
     }
@@ -66,16 +70,19 @@ pub async fn signup(
     }
 
     // Check if username already exists
-    let existing_user: Option<(i32,)> = sqlx::query_as("SELECT user_id FROM users WHERE username = ?")
-        .bind(&req.username)
-        .fetch_optional(pool.inner())
-        .await
-        .map_err(|_| (
-            Status::InternalServerError,
-            Json(ErrorResponse {
-                error: "Database error".to_string(),
-            }),
-        ))?;
+    let existing_user: Option<(i32,)> =
+        sqlx::query_as("SELECT user_id FROM users WHERE username = ?")
+            .bind(&req.username)
+            .fetch_optional(pool.inner())
+            .await
+            .map_err(|_| {
+                (
+                    Status::InternalServerError,
+                    Json(ErrorResponse {
+                        error: "Database error".to_string(),
+                    }),
+                )
+            })?;
 
     if existing_user.is_some() {
         return Err((
@@ -87,16 +94,19 @@ pub async fn signup(
     }
 
     // Check if email already exists
-    let existing_email: Option<(i32,)> = sqlx::query_as("SELECT user_id FROM users WHERE email = ?")
-        .bind(&req.email)
-        .fetch_optional(pool.inner())
-        .await
-        .map_err(|_| (
-            Status::InternalServerError,
-            Json(ErrorResponse {
-                error: "Database error".to_string(),
-            }),
-        ))?;
+    let existing_email: Option<(i32,)> =
+        sqlx::query_as("SELECT user_id FROM users WHERE email = ?")
+            .bind(&req.email)
+            .fetch_optional(pool.inner())
+            .await
+            .map_err(|_| {
+                (
+                    Status::InternalServerError,
+                    Json(ErrorResponse {
+                        error: "Database error".to_string(),
+                    }),
+                )
+            })?;
 
     if existing_email.is_some() {
         return Err((
@@ -108,16 +118,19 @@ pub async fn signup(
     }
 
     // Check that username is not someone else's email
-    let username_as_email: Option<(i32,)> = sqlx::query_as("SELECT user_id FROM users WHERE email = ?")
-        .bind(&req.username)
-        .fetch_optional(pool.inner())
-        .await
-        .map_err(|_| (
-            Status::InternalServerError,
-            Json(ErrorResponse {
-                error: "Database error".to_string(),
-            }),
-        ))?;
+    let username_as_email: Option<(i32,)> =
+        sqlx::query_as("SELECT user_id FROM users WHERE email = ?")
+            .bind(&req.username)
+            .fetch_optional(pool.inner())
+            .await
+            .map_err(|_| {
+                (
+                    Status::InternalServerError,
+                    Json(ErrorResponse {
+                        error: "Database error".to_string(),
+                    }),
+                )
+            })?;
 
     if username_as_email.is_some() {
         return Err((
@@ -129,16 +142,19 @@ pub async fn signup(
     }
 
     // Check that email is not someone else's username
-    let email_as_username: Option<(i32,)> = sqlx::query_as("SELECT user_id FROM users WHERE username = ?")
-        .bind(&req.email)
-        .fetch_optional(pool.inner())
-        .await
-        .map_err(|_| (
-            Status::InternalServerError,
-            Json(ErrorResponse {
-                error: "Database error".to_string(),
-            }),
-        ))?;
+    let email_as_username: Option<(i32,)> =
+        sqlx::query_as("SELECT user_id FROM users WHERE username = ?")
+            .bind(&req.email)
+            .fetch_optional(pool.inner())
+            .await
+            .map_err(|_| {
+                (
+                    Status::InternalServerError,
+                    Json(ErrorResponse {
+                        error: "Database error".to_string(),
+                    }),
+                )
+            })?;
 
     if email_as_username.is_some() {
         return Err((
@@ -150,12 +166,14 @@ pub async fn signup(
     }
 
     // Hash password
-    let password_hash = hash_password(&req.password).map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Failed to hash password".to_string(),
-        }),
-    ))?;
+    let password_hash = hash_password(&req.password).map_err(|_| {
+        (
+            Status::InternalServerError,
+            Json(ErrorResponse {
+                error: "Failed to hash password".to_string(),
+            }),
+        )
+    })?;
 
     // Insert user into database
     let result = sqlx::query(

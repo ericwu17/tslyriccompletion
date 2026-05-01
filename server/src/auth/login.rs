@@ -1,10 +1,13 @@
+use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::State;
-use rocket::http::Status;
 use serde::Deserialize;
 use sqlx::{MySql, Pool};
 
-use super::{verify_password, generate_token, hash_token, get_session_expiry, AuthResponse, ErrorResponse, UserAgent};
+use super::{
+    generate_token, get_session_expiry, hash_token, verify_password, AuthResponse, ErrorResponse,
+    UserAgent,
+};
 
 #[derive(Deserialize)]
 pub struct LoginRequest {
@@ -20,18 +23,20 @@ pub async fn login(
 ) -> Result<Json<AuthResponse>, (Status, Json<ErrorResponse>)> {
     // Query user by username or email
     let user: Option<(i32, String, String)> = sqlx::query_as(
-        "SELECT user_id, username, password_hash FROM users WHERE username = ? OR email = ?"
+        "SELECT user_id, username, password_hash FROM users WHERE username = ? OR email = ?",
     )
     .bind(&req.username_or_email)
     .bind(&req.username_or_email)
     .fetch_optional(pool.inner())
     .await
-    .map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Database error".to_string(),
-        }),
-    ))?;
+    .map_err(|_| {
+        (
+            Status::InternalServerError,
+            Json(ErrorResponse {
+                error: "Database error".to_string(),
+            }),
+        )
+    })?;
 
     let (user_id, username, password_hash) = user.ok_or((
         Status::Unauthorized,
@@ -41,12 +46,14 @@ pub async fn login(
     ))?;
 
     // Verify password
-    let password_valid = verify_password(&req.password, &password_hash).map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Failed to verify password".to_string(),
-        }),
-    ))?;
+    let password_valid = verify_password(&req.password, &password_hash).map_err(|_| {
+        (
+            Status::InternalServerError,
+            Json(ErrorResponse {
+                error: "Failed to verify password".to_string(),
+            }),
+        )
+    })?;
 
     if !password_valid {
         return Err((

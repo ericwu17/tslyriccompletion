@@ -1,6 +1,6 @@
+use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::State;
-use rocket::http::Status;
 use serde::Deserialize;
 use sqlx::{MySql, Pool};
 
@@ -19,16 +19,19 @@ pub async fn logout(
     let token_hash = hash_token(&req.token);
 
     // Check if token exists
-    let session: Option<(String,)> = sqlx::query_as("SELECT token_hash FROM user_sessions WHERE token_hash = ?")
-        .bind(&token_hash)
-        .fetch_optional(pool.inner())
-        .await
-        .map_err(|_| (
-            Status::InternalServerError,
-            Json(ErrorResponse {
-                error: "Database error".to_string(),
-            }),
-        ))?;
+    let session: Option<(String,)> =
+        sqlx::query_as("SELECT token_hash FROM user_sessions WHERE token_hash = ?")
+            .bind(&token_hash)
+            .fetch_optional(pool.inner())
+            .await
+            .map_err(|_| {
+                (
+                    Status::InternalServerError,
+                    Json(ErrorResponse {
+                        error: "Database error".to_string(),
+                    }),
+                )
+            })?;
 
     if session.is_none() {
         return Err((
@@ -44,12 +47,14 @@ pub async fn logout(
         .bind(&token_hash)
         .execute(pool.inner())
         .await
-        .map_err(|_| (
-            Status::InternalServerError,
-            Json(ErrorResponse {
-                error: "Failed to logout".to_string(),
-            }),
-        ))?;
+        .map_err(|_| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: "Failed to logout".to_string(),
+                }),
+            )
+        })?;
 
     Ok(())
 }

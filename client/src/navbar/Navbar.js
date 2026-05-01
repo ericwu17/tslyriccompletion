@@ -88,6 +88,10 @@ export default function Navbar() {
     navigate("/");
   };
 
+  const goToProfile = () => {
+    navigate("/auth/profile");
+  };
+
   let toolbar;
   if (windowSize.innerWidth > MOBILE_WIDTH) {
     toolbar = (
@@ -149,6 +153,9 @@ export default function Navbar() {
               <MenuItem disabled>
                 {user?.username}
               </MenuItem>
+              <MenuItem onClick={goToProfile}>
+                My Profile
+              </MenuItem>
               <MenuItem onClick={handleLogout}>
                 Logout
               </MenuItem>
@@ -158,13 +165,13 @@ export default function Navbar() {
           <>
             <Button
               color="inherit"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/auth/login")}
             >
               Login
             </Button>
             <Button
               color="inherit"
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate("/auth/signup")}
             >
               Sign Up
             </Button>
@@ -201,6 +208,9 @@ export default function Navbar() {
             <>
               <MenuItem disabled>
                 {user?.username}
+              </MenuItem>
+              <MenuItem onClick={goToProfile}>
+                My Profile
               </MenuItem>
               <MenuItem onClick={handleLogout}>
                 Logout
