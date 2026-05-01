@@ -11,6 +11,11 @@ import {
   Alert,
   CircularProgress,
   Link as MuiLink,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 
 export function SignupPage() {
@@ -20,6 +25,7 @@ export function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [validationError, setValidationError] = useState("");
+  const [showEmailConfirmation, setShowEmailConfirmation] = useState(false);
 
   const { signup, isLoading, isLoggedIn } = useAuth();
   const navigate = useNavigate();
@@ -56,15 +62,13 @@ export function SignupPage() {
       return false;
     }
 
-    if (!email.trim()) {
-      setValidationError("Email is required");
-      return false;
-    }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setValidationError("Please enter a valid email address");
-      return false;
+    if (email.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        setValidationError("Please enter a valid email address");
+        return false;
+      }
     }
 
     if (!password) {
@@ -93,12 +97,32 @@ export function SignupPage() {
       return;
     }
 
-    const result = await signup(username, email, password);
+    // If email is blank, show confirmation dialog instead of submitting
+    if (!email.trim()) {
+      setShowEmailConfirmation(true);
+      return;
+    }
+
+    // Otherwise proceed with signup
+    await performSignup();
+  };
+
+  const performSignup = async () => {
+    const result = await signup(username, email.trim(), password);
     if (result.success) {
       navigate("/play");
     } else {
       setError(result.error);
     }
+  };
+
+  const handleConfirmNoEmail = () => {
+    setShowEmailConfirmation(false);
+    performSignup();
+  };
+
+  const handleCancelNoEmail = () => {
+    setShowEmailConfirmation(false);
   };
 
   return (
@@ -108,11 +132,9 @@ export function SignupPage() {
           Create an Account
         </Typography>
 
-        <Typography align="center"  sx={{ m: 3 }}>
+        <Typography align="center" sx={{ m: 3 }}>
           An email is not necessary to create an account, but you can leave one so that
           you can reset your password in case you forget it!
-
-          TODO: make emails optional.
         </Typography>
 
         <form onSubmit={handleSubmit}>
@@ -181,6 +203,32 @@ export function SignupPage() {
           </Typography>
         </Box>
       </Paper>
+
+      <Dialog
+        open={showEmailConfirmation}
+        onClose={handleCancelNoEmail}
+        aria-labelledby="email-confirmation-title"
+        aria-describedby="email-confirmation-description"
+      >
+        <DialogTitle id="email-confirmation-title">
+          Sign Up Without Email?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="email-confirmation-description">
+            Are you sure you want to sign up without providing an email?
+            <strong> You will not be able to change this later!</strong> This means you won't be able to
+            reset your password if you forget it.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelNoEmail} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmNoEmail} color="error" variant="contained">
+            Continue Without Email
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

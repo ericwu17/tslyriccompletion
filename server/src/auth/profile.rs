@@ -10,7 +10,7 @@ use super::ErrorResponse;
 #[derive(Serialize)]
 pub struct UserProfile {
     pub username: String,
-    pub email: String,
+    pub email: Option<String>,
     pub email_verified: bool,
 }
 
@@ -46,7 +46,7 @@ pub async fn get_profile(
     ))?;
 
     // Get the user's profile information
-    let user: Option<(String, String, bool)> =
+    let user: Option<(String, Option<String>, bool)> =
         sqlx::query_as("SELECT username, email, email_verified FROM users WHERE user_id = ?")
             .bind(user_id)
             .fetch_optional(pool.inner())

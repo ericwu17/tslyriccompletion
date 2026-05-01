@@ -4,6 +4,8 @@ use rocket::State;
 use serde::{Deserialize, Serialize};
 use sqlx::{MySql, Pool};
 
+use crate::auth::{get_email_token_expiry, send_email};
+
 use super::{
     generate_token, get_session_expiry, hash_password, hash_token, is_valid_username_format,
     ErrorResponse, UserAgent,
@@ -30,6 +32,13 @@ pub async fn signup(
     user_agent: UserAgent,
     req: Json<SignupRequest>,
 ) -> Result<Json<SignupResponse>, (Status, Json<ErrorResponse>)> {
+    // TODO: emails are optional
+    let maybe_email = if req.email.is_empty() {
+        None
+    } else {
+        Some(req.email.clone())
+    };
+
     // Validation
     if req.username.len() < 6 || req.username.len() > 50 {
         return Err((
@@ -60,13 +69,62 @@ pub async fn signup(
     }
 
     // Validate email format (basic check)
-    if !req.email.contains('@') || req.email.len() > 100 {
-        return Err((
-            Status::BadRequest,
-            Json(ErrorResponse {
-                error: "Invalid email address".to_string(),
-            }),
-        ));
+    if let Some(email) = maybe_email.clone() {
+        if !email.contains('@') || email.len() > 100 {
+            return Err((
+                Status::BadRequest,
+                Json(ErrorResponse {
+                    error: "Invalid email address".to_string(),
+                }),
+            ));
+        }
+
+        // Check if email already exists
+        let existing_email: Option<(i32,)> =
+            sqlx::query_as("SELECT user_id FROM users WHERE email = ?")
+                .bind(&email)
+                .fetch_optional(pool.inner())
+                .await
+                .map_err(|_| {
+                    (
+                        Status::InternalServerError,
+                        Json(ErrorResponse {
+                            error: "Database error".to_string(),
+                        }),
+                    )
+                })?;
+        if existing_email.is_some() {
+            return Err((
+                Status::Conflict,
+                Json(ErrorResponse {
+                    error: "Email already registered".to_string(),
+                }),
+            ));
+        }
+
+        // Check that email is not someone else's username
+        let email_as_username: Option<(i32,)> =
+            sqlx::query_as("SELECT user_id FROM users WHERE username = ?")
+                .bind(&email)
+                .fetch_optional(pool.inner())
+                .await
+                .map_err(|_| {
+                    (
+                        Status::InternalServerError,
+                        Json(ErrorResponse {
+                            error: "Database error".to_string(),
+                        }),
+                    )
+                })?;
+
+        if email_as_username.is_some() {
+            return Err((
+                Status::BadRequest,
+                Json(ErrorResponse {
+                    error: "Email cannot be someone else's username".to_string(),
+                }),
+            ));
+        }
     }
 
     // Check if username already exists
@@ -89,30 +147,6 @@ pub async fn signup(
             Status::Conflict,
             Json(ErrorResponse {
                 error: "Username already exists".to_string(),
-            }),
-        ));
-    }
-
-    // Check if email already exists
-    let existing_email: Option<(i32,)> =
-        sqlx::query_as("SELECT user_id FROM users WHERE email = ?")
-            .bind(&req.email)
-            .fetch_optional(pool.inner())
-            .await
-            .map_err(|_| {
-                (
-                    Status::InternalServerError,
-                    Json(ErrorResponse {
-                        error: "Database error".to_string(),
-                    }),
-                )
-            })?;
-
-    if existing_email.is_some() {
-        return Err((
-            Status::Conflict,
-            Json(ErrorResponse {
-                error: "Email already registered".to_string(),
             }),
         ));
     }
@@ -141,30 +175,6 @@ pub async fn signup(
         ));
     }
 
-    // Check that email is not someone else's username
-    let email_as_username: Option<(i32,)> =
-        sqlx::query_as("SELECT user_id FROM users WHERE username = ?")
-            .bind(&req.email)
-            .fetch_optional(pool.inner())
-            .await
-            .map_err(|_| {
-                (
-                    Status::InternalServerError,
-                    Json(ErrorResponse {
-                        error: "Database error".to_string(),
-                    }),
-                )
-            })?;
-
-    if email_as_username.is_some() {
-        return Err((
-            Status::BadRequest,
-            Json(ErrorResponse {
-                error: "Email cannot be someone else's username".to_string(),
-            }),
-        ));
-    }
-
     // Hash password
     let password_hash = hash_password(&req.password).map_err(|_| {
         (
@@ -180,7 +190,7 @@ pub async fn signup(
         "INSERT INTO users (username, email, password_hash, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())"
     )
     .bind(&req.username)
-    .bind(&req.email)
+    .bind(&maybe_email)
     .bind(&password_hash)
     .execute(pool.inner())
     .await
@@ -192,6 +202,71 @@ pub async fn signup(
     ))?;
 
     let user_id = result.last_insert_id() as i32;
+
+    if let Some(email) = maybe_email.clone() {
+        // Generate verification token
+        let email_verify_token = generate_token();
+        let email_verify_token_hash = hash_token(&email_verify_token);
+        let expires_at = get_email_token_expiry();
+
+        // Delete any existing verification tokens for this user
+        sqlx::query(
+            "DELETE FROM user_tokens WHERE user_id = ? AND token_type = 'email_verification'",
+        )
+        .bind(user_id)
+        .execute(pool.inner())
+        .await
+        .map_err(|_| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: "Database error".to_string(),
+                }),
+            )
+        })?;
+
+        // Insert new verification token
+        sqlx::query(
+        "INSERT INTO user_tokens (token_hash, user_id, token_type, expires_at) VALUES (?, ?, 'email_verification', ?)"
+    )
+    .bind(&email_verify_token_hash)
+    .bind(user_id)
+    .bind(expires_at.to_rfc3339())
+    .execute(pool.inner())
+    .await
+    .map_err(|_| (
+        Status::InternalServerError,
+        Json(ErrorResponse {
+            error: "Failed to create verification token".to_string(),
+        }),
+    ))?;
+
+        // Send email with verification link
+        let frontend_url =
+            std::env::var("FRONTEND_URL").unwrap_or_else(|_| "http://localhost:3000".to_string());
+        let verification_link = format!(
+            "{}/auth/verify-email?email={}&token={}",
+            frontend_url,
+            urlencoding::encode(&email),
+            email_verify_token
+        );
+
+        let subject = "Verify Your Email";
+        let body = format!(
+        "Thanks for signing up for a Taylor Swift Lyric Completion Account! Your username is: {}\n\nClick the link below to verify your email:\n\n{}\n\n. This link expires in 24 hours.",
+        req.username,
+        verification_link,
+    );
+
+        send_email(&email, subject, &body).map_err(|e| {
+            (
+                Status::InternalServerError,
+                Json(ErrorResponse {
+                    error: format!("Failed to send email: {}", e),
+                }),
+            )
+        })?;
+    }
 
     // Generate session token
     let token = generate_token();

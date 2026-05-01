@@ -320,14 +320,14 @@ function HamburgerMenu() {
         ) : (
           <>
             <ListItem disablePadding>
-              <ListItemButton onClick={() => navigate("/login")}>
+              <ListItemButton onClick={() => navigate("/auth/login")}>
                 <ListItemText>
                   Login
                 </ListItemText>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton onClick={() => navigate("/signup")}>
+              <ListItemButton onClick={() => navigate("/auth/signup")}>
                 <ListItemText>
                   Sign Up
                 </ListItemText>

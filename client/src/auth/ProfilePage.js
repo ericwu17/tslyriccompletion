@@ -13,6 +13,7 @@ import {
   Card,
   CardContent,
   Chip,
+  Snackbar,
 } from "@mui/material";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -24,6 +25,9 @@ export function ProfilePage() {
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [isVerifyEmailLoading, setIsVerifyEmailLoading] = useState(false);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -54,6 +58,20 @@ export function ProfilePage() {
   const handleLogout = async () => {
     await logout();
     navigate("/");
+  };
+
+  const handleRequestEmailVerification = async () => {
+    setIsVerifyEmailLoading(true);
+    try {
+      await axios.post("/auth/verify-email-request");
+      setSnackbarMessage("Verification email sent! Check your inbox.");
+      setSnackbarOpen(true);
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || "Failed to send verification email";
+      setError(errorMsg);
+    } finally {
+      setIsVerifyEmailLoading(false);
+    }
   };
 
   if (!isLoggedIn) {
@@ -104,49 +122,52 @@ export function ProfilePage() {
             </Card>
 
             {/* Email Card */}
-            <Card>
-              <CardContent>
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
-                  <Box>
-                    <Typography color="textSecondary" gutterBottom>
-                      Email Address
-                    </Typography>
-                    <Typography variant="h6">
-                      {profile.email}
-                    </Typography>
+            {profile.email &&
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
+                    <Box>
+                      <Typography color="textSecondary" gutterBottom>
+                        Email Address
+                      </Typography>
+                      <Typography variant="h6">
+                        {profile.email}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      {profile.email_verified ? (
+                        <Chip
+                          icon={<VerifiedIcon />}
+                          label="Verified"
+                          color="success"
+                          variant="outlined"
+                        />
+                      ) : (
+                        <Chip
+                          icon={<ErrorIcon />}
+                          label="Not Verified"
+                          color="error"
+                          variant="outlined"
+                        />
+                      )}
+                    </Box>
                   </Box>
-                  <Box>
-                    {profile.email_verified ? (
-                      <Chip
-                        icon={<VerifiedIcon />}
-                        label="Verified"
-                        color="success"
-                        variant="outlined"
-                      />
-                    ) : (
-                      <Chip
-                        icon={<ErrorIcon />}
-                        label="Not Verified"
-                        color="error"
-                        variant="outlined"
-                      />
-                    )}
-                  </Box>
-                </Box>
 
-                {!profile.email_verified && (
-                  <Button
-                    variant="contained"
-                    color="warning"
-                    size="small"
-                    onClick={() => navigate("/auth/verify-email")}
-                    sx={{ mt: 2 }}
-                  >
-                    Verify Email
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
+                  {!profile.email_verified && (
+                    <Button
+                      variant="contained"
+                      color="warning"
+                      size="small"
+                      onClick={handleRequestEmailVerification}
+                      disabled={isVerifyEmailLoading}
+                      sx={{ mt: 2 }}
+                    >
+                      {isVerifyEmailLoading ? "Sending..." : "Verify Email"}
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            }
 
             {/* Action Buttons */}
             <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
@@ -170,6 +191,13 @@ export function ProfilePage() {
           </Box>
         )}
       </Paper>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+        message={snackbarMessage}
+      />
     </Container>
   );
 }

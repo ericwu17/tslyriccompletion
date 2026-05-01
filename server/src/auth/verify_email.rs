@@ -4,6 +4,8 @@ use rocket::State;
 use serde::{Deserialize, Serialize};
 use sqlx::{MySql, Pool};
 
+use crate::auth::bearer_token::BearerToken;
+
 use super::{generate_token, get_email_token_expiry, hash_token, send_email, ErrorResponse};
 
 #[derive(Deserialize)]
@@ -28,15 +30,40 @@ pub struct VerifyEmailResponse {
 }
 
 /// Sends an email verification email to the user
-#[post("/auth/verify-email-request", format = "json", data = "<req>")]
+#[post("/auth/verify-email-request")]
 pub async fn request_email_verification(
     pool: &State<Pool<MySql>>,
-    req: Json<RequestEmailVerificationRequest>,
+    bearer_token: BearerToken,
 ) -> Result<Json<RequestEmailVerificationResponse>, (Status, Json<ErrorResponse>)> {
-    // Check if user exists
-    let user: Option<(i32, bool)> =
-        sqlx::query_as("SELECT user_id, email_verified FROM users WHERE email = ?")
-            .bind(&req.email)
+    let token_hash = super::hash_token(&bearer_token.0);
+
+    // Look up the session to get the user_id
+    let session: Option<(i32,)> = sqlx::query_as(
+        "SELECT user_id FROM user_sessions WHERE token_hash = ? AND expires_at > NOW()",
+    )
+    .bind(&token_hash)
+    .fetch_optional(pool.inner())
+    .await
+    .map_err(|_| {
+        (
+            Status::InternalServerError,
+            Json(ErrorResponse {
+                error: "Database error".to_string(),
+            }),
+        )
+    })?;
+
+    let (user_id,) = session.ok_or((
+        Status::Unauthorized,
+        Json(ErrorResponse {
+            error: "Invalid or expired session token".to_string(),
+        }),
+    ))?;
+
+    // Check user's email and email verification status
+    let db_email_res: Option<(String, bool)> =
+        sqlx::query_as("SELECT email, email_verified FROM users WHERE user_id = ?")
+            .bind(user_id)
             .fetch_optional(pool.inner())
             .await
             .map_err(|_| {
@@ -48,7 +75,7 @@ pub async fn request_email_verification(
                 )
             })?;
 
-    let (user_id, email_verified) = user.ok_or((
+    let (email, email_verified) = db_email_res.ok_or((
         Status::NotFound,
         Json(ErrorResponse {
             error: "Email not found".to_string(),
@@ -66,8 +93,8 @@ pub async fn request_email_verification(
     }
 
     // Generate verification token
-    let token = generate_token();
-    let token_hash = hash_token(&token);
+    let email_verify_token = generate_token();
+    let email_verify_token_hash = hash_token(&email_verify_token);
     let expires_at = get_email_token_expiry();
 
     // Delete any existing verification tokens for this user
@@ -88,7 +115,7 @@ pub async fn request_email_verification(
     sqlx::query(
         "INSERT INTO user_tokens (token_hash, user_id, token_type, expires_at) VALUES (?, ?, 'email_verification', ?)"
     )
-    .bind(&token_hash)
+    .bind(&email_verify_token_hash)
     .bind(user_id)
     .bind(expires_at.to_rfc3339())
     .execute(pool.inner())
@@ -106,17 +133,17 @@ pub async fn request_email_verification(
     let verification_link = format!(
         "{}/auth/verify-email?email={}&token={}",
         frontend_url,
-        urlencoding::encode(&req.email),
-        token
+        urlencoding::encode(&email),
+        email_verify_token
     );
 
     let subject = "Verify Your Email";
     let body = format!(
-        "Click the link below to verify your email:\n\n{}\n\nThis link expires in 24 hours.",
-        verification_link
+        "Click the link below to verify your email:\n\n{}\n\n This link expires in 24 hours.",
+        verification_link,
     );
 
-    send_email(&req.email, subject, &body).map_err(|e| {
+    send_email(&email, subject, &body).map_err(|e| {
         (
             Status::InternalServerError,
             Json(ErrorResponse {
