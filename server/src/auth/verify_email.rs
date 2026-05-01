@@ -62,7 +62,7 @@ pub async fn request_email_verification(
 
     // Check user's email and email verification status
     let db_email_res: Option<(String, bool)> =
-        sqlx::query_as("SELECT email, email_verified FROM users WHERE user_id = ?")
+        sqlx::query_as("SELECT email, email_verified FROM users WHERE user_id = ? AND email IS NOT NULL")
             .bind(user_id)
             .fetch_optional(pool.inner())
             .await
@@ -164,7 +164,7 @@ pub async fn verify_email(
     req: Json<VerifyEmailRequest>,
 ) -> Result<Json<VerifyEmailResponse>, (Status, Json<ErrorResponse>)> {
     // Check if user exists with this email
-    let user: Option<(i32,)> = sqlx::query_as("SELECT user_id FROM users WHERE email = ?")
+    let user: Option<(i32,)> = sqlx::query_as("SELECT user_id FROM users WHERE email = ? AND email IS NOT NULL")
         .bind(&req.email)
         .fetch_optional(pool.inner())
         .await

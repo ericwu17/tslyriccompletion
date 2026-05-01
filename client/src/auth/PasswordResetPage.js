@@ -20,6 +20,7 @@ export function PasswordResetPage() {
   const navigate = useNavigate();
 
   const [step, setStep] = useState("request"); // "request" or "reset"
+  const [identifier, setIdentifier] = useState(searchParams.get("email") || "");
   const [email, setEmail] = useState(searchParams.get("email") || "");
   const [token, setToken] = useState(searchParams.get("token") || "");
   const [newPassword, setNewPassword] = useState("");
@@ -41,20 +42,14 @@ export function PasswordResetPage() {
     setError("");
     setMessage("");
 
-    if (!email.trim()) {
-      setError("Email is required");
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address");
+    if (!identifier.trim()) {
+      setError("Username or email is required");
       return;
     }
 
     setIsLoading(true);
     try {
-      await axios.post("/auth/password-reset-request", { email });
+      await axios.post("/auth/password-reset-request", { identifier: identifier.trim() });
       setMessage("Password reset email sent! Check your inbox for the reset link.");
       setStep("token-entry");
     } catch (err) {
@@ -149,6 +144,7 @@ export function PasswordResetPage() {
             color="primary"
             onClick={() => {
               setStep("request");
+              setIdentifier("");
               setEmail("");
               setToken("");
               setNewPassword("");
@@ -179,13 +175,12 @@ export function PasswordResetPage() {
           <form onSubmit={handleRequestReset}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Typography color="textSecondary" sx={{ mb: 1 }}>
-                Enter your email address to receive a password reset link.
+                Enter your username or email address to receive a password reset link.
               </Typography>
               <TextField
-                label="Email Address"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                label="Username or Email"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
                 fullWidth
                 disabled={isLoading}
               />
