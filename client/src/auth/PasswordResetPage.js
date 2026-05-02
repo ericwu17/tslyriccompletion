@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -19,23 +19,23 @@ export function PasswordResetPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const [step, setStep] = useState("request"); // "request" or "reset"
+  const email = searchParams.get("email") || "";
+  const token = searchParams.get("token") || "";
+
+  var step;
+  if (token != "" && email != "") {
+    step = "reset";
+  } else {
+    step = "request";
+  }
+
   const [identifier, setIdentifier] = useState(searchParams.get("email") || "");
-  const [email, setEmail] = useState(searchParams.get("email") || "");
-  const [token, setToken] = useState(searchParams.get("token") || "");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [resetStatus, setResetStatus] = useState(null); // "success" or "error"
-
-  // Auto-load reset form if token and email are in URL
-  useEffect(() => {
-    if (searchParams.get("token") && searchParams.get("email")) {
-      setStep("reset");
-    }
-  }, [searchParams]);
 
   const handleRequestReset = async (e) => {
     e.preventDefault();
@@ -51,7 +51,6 @@ export function PasswordResetPage() {
     try {
       await axios.post("/auth/password-reset-request", { identifier: identifier.trim() });
       setMessage("Password reset email sent! Check your inbox for the reset link.");
-      setStep("token-entry");
     } catch (err) {
       setError(err.response?.data?.error || "Failed to send password reset email");
     } finally {
@@ -64,12 +63,12 @@ export function PasswordResetPage() {
     setError("");
 
     if (!email.trim()) {
-      setError("Email is required");
+      setError("Email is required, please use the password reset link you were emailed.");
       return;
     }
 
     if (!token.trim()) {
-      setError("Reset token is required");
+      setError("Reset token is required, please use the password reset link you were emailed.");
       return;
     }
 
@@ -139,23 +138,15 @@ export function PasswordResetPage() {
           <Alert severity="error" sx={{ mb: 3 }}>
             {error}
           </Alert>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              setStep("request");
-              setIdentifier("");
-              setEmail("");
-              setToken("");
-              setNewPassword("");
-              setConfirmPassword("");
-              setError("");
-              setResetStatus(null);
-            }}
-          >
-            Try Again
-          </Button>
         </Card>
+      </Container>
+    );
+  }
+
+  if (message) {
+    return (
+      <Container maxWidth="sm" sx={{ py: 4 }}>
+        <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>
       </Container>
     );
   }
@@ -168,8 +159,10 @@ export function PasswordResetPage() {
           Reset Password
         </Typography>
 
-        {error && <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError("")}>{error}</Alert>}
-        {message && <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>}
+        {error &&
+          <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError("")}>{error}</Alert>
+        }
+
 
         {step === "request" ? (
           <form onSubmit={handleRequestReset}>
@@ -202,28 +195,12 @@ export function PasswordResetPage() {
               </Button>
             </Box>
           </form>
-        ) : step === "token-entry" ? (
+        ) : (
           <form onSubmit={handleResetPassword}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Typography color="textSecondary" sx={{ mb: 1 }}>
                 Enter the reset token from your email and your new password.
               </Typography>
-              <TextField
-                label="Email Address"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                fullWidth
-                disabled={isLoading}
-              />
-              <TextField
-                label="Reset Token"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                fullWidth
-                disabled={isLoading}
-                placeholder="Paste the token from your email"
-              />
               <TextField
                 label="New Password"
                 type="password"
@@ -253,62 +230,12 @@ export function PasswordResetPage() {
               <Button
                 variant="text"
                 onClick={() => {
-                  setStep("request");
                   setError("");
                   setMessage("");
                 }}
                 disabled={isLoading}
               >
                 Back to Request Reset
-              </Button>
-            </Box>
-          </form>
-        ) : (
-          <form onSubmit={handleResetPassword}>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              <Typography color="textSecondary" sx={{ mb: 1 }}>
-                Enter your new password.
-              </Typography>
-              <TextField
-                label="Email Address"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                fullWidth
-                disabled={isLoading}
-              />
-              <TextField
-                label="Reset Token"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                fullWidth
-                disabled={isLoading}
-              />
-              <TextField
-                label="New Password"
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                fullWidth
-                disabled={isLoading}
-              />
-              <TextField
-                label="Confirm Password"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                fullWidth
-                disabled={isLoading}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                disabled={isLoading}
-                sx={{ mt: 1 }}
-              >
-                {isLoading ? <CircularProgress size={24} /> : "Reset Password"}
               </Button>
             </Box>
           </form>
