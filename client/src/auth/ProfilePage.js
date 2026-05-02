@@ -85,7 +85,9 @@ export function ProfilePage() {
   if (isLoading) {
     return (
       <Container maxWidth="sm" sx={{ py: 4 }}>
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
+        <Box sx={
+          { display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }
+        }>
           <CircularProgress />
         </Box>
       </Container>
@@ -125,7 +127,14 @@ export function ProfilePage() {
             {profile.email &&
               <Card>
                 <CardContent>
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
+                  <Box sx={
+                    {
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      mb: 1
+                    }
+                  }>
                     <Box>
                       <Typography color="textSecondary" gutterBottom>
                         Email Address
@@ -171,14 +180,6 @@ export function ProfilePage() {
 
             {/* Action Buttons */}
             <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={() => navigate("/play")}
-              >
-                Back to Game
-              </Button>
               <Button
                 variant="outlined"
                 color="error"
