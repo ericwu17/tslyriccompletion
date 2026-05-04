@@ -6,6 +6,7 @@ import ResultDisplay from "./ResultDisplay";
 import { ALBUM_LOGOS, generateSongHref, normalizeQuotes } from "../utils/Utils";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { useAuth } from "../auth/useAuth";
 
 const MAX_NAME_LEN = 35;
 
@@ -15,6 +16,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
   const [currentName, setCurrentName] = React.useState("");
   const [hasSentFeedback, setHasSentFeedback] = React.useState(false);
 
+  const { isLoggedIn, userProfile } = useAuth();
 
   const { score, current_question, id, completed_question, terminated, choices } = gameState;
 
@@ -225,21 +227,37 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
         </Box>
       }
       {completed_question && terminated &&
-        <Box>
-          <Typography sx={{color:"#BA0021"}}>
-            Good game! Better luck next time!
-            Leave your name if you want to be remembered ({MAX_NAME_LEN} characters max):
-          </Typography>
+        (isLoggedIn ? (
           <Box>
-            <TextField
-              placeholder="Enter your name..."
-              onChange={event => setCurrentName(event.target.value)}
-              onKeyDown={claimboxOnKeyDown}
-              value={currentName}
-            />
-            <Button onClick={beginAgain} sx={{width:"min-content"}}>Play Again</Button>
+            <Typography sx={{color:"#BA0021"}}>
+              Good game! Better luck next time!
+              You are logged in as {userProfile.username} and this game has been saved.
+            </Typography>
+            <Box>
+              <Button onClick={beginAgain} sx={{width:"min-content"}}>Play Again</Button>
+            </Box>
           </Box>
-        </Box>
+        ) : (
+          <Box>
+            <Typography sx={{color:"#BA0021"}}>
+              Good game! Better luck next time!
+              You can now create an account if you'd like your
+              future games to be automatically saved!
+            </Typography>
+            <Typography sx={{color:"#BA0021"}}>
+              Leave your name if you want to be remembered ({MAX_NAME_LEN} characters max):
+            </Typography>
+            <Box>
+              <TextField
+                placeholder="Enter your name..."
+                onChange={event => setCurrentName(event.target.value)}
+                onKeyDown={claimboxOnKeyDown}
+                value={currentName}
+              />
+              <Button onClick={beginAgain} sx={{width:"min-content"}}>Play Again</Button>
+            </Box>
+          </Box>
+        ))
       }
 
       {current_question.answers.length > 0 && (
