@@ -1,10 +1,10 @@
+pub mod bearer_token;
 pub mod login;
 pub mod logout;
 pub mod password_reset;
 pub mod profile;
 pub mod signup;
 pub mod verify_email;
-pub mod bearer_token;
 
 use chrono::Duration;
 use chrono::Utc;

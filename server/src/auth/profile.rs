@@ -1,9 +1,9 @@
+use super::bearer_token::BearerToken;
 use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::State;
 use serde::Serialize;
 use sqlx::{MySql, Pool};
-use super::bearer_token::BearerToken;
 
 use super::ErrorResponse;
 

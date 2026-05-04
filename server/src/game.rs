@@ -1,3 +1,5 @@
+use crate::auth::bearer_token::BearerToken;
+use crate::auth::hash_token;
 use crate::guess_generating::{
     lowercase_ignore_punctuation_edit_dist, optimal_truncated_dist, pick_distractors,
     pick_random_guess, Question,
@@ -5,8 +7,6 @@ use crate::guess_generating::{
 use crate::history::{Songlist, SonglistSchema};
 use crate::lifelines::{Lifeline, LifelineInventory};
 use crate::song::Song;
-use crate::auth::bearer_token::BearerToken;
-use crate::auth::{hash_token};
 use rand::prelude::SliceRandom;
 use rand::Rng;
 use rocket::serde::json::Json;
@@ -132,7 +132,11 @@ impl GameState {
     /// This function will modify the argument `songs_to_include`, so that if it's the empty vector,
     /// it will end up containing all songs in songs. It will also filter out any
     /// invalid songs in `songs_to_include`.
-    pub fn new(songs: &[Song], songs_to_include: &mut Vec<(&str, &str)>, user_id: Option<i32>) -> Self {
+    pub fn new(
+        songs: &[Song],
+        songs_to_include: &mut Vec<(&str, &str)>,
+        user_id: Option<i32>,
+    ) -> Self {
         let mut actual_songs_to_include: Vec<(&'static str, &'static str)> = songs_to_include
             .clone()
             .into_iter()
@@ -255,7 +259,7 @@ pub async fn init_game(
         .fetch_optional(pool.inner())
         .await
         .unwrap_or(None);
-        
+
         session.map(|(id,)| id)
     } else {
         None
@@ -523,19 +527,19 @@ pub fn next_question(
 #[get("/game/claim?<id>&<name>")]
 pub async fn claim_game(id: String, name: String, pool: &rocket::State<Pool<MySql>>) -> String {
     // Check if the game already has a user_id
-    let game_user_id: Option<(Option<i32>,)> = sqlx::query_as(
-        "SELECT user_id FROM games WHERE uuid = ?"
-    )
-    .bind(&id)
-    .fetch_optional(pool.inner())
-    .await
-    .unwrap_or(None);
+    let game_user_id: Option<(Option<i32>,)> =
+        sqlx::query_as("SELECT user_id FROM games WHERE uuid = ?")
+            .bind(&id)
+            .fetch_optional(pool.inner())
+            .await
+            .unwrap_or(None);
 
     // If the game already has a user_id, don't allow claiming with a name
     if let Some((Some(_user_id),)) = game_user_id {
         return serde_json::to_string(&serde_json::json!({
             "error": "Cannot claim a game that is already associated with a user"
-        })).unwrap();
+        }))
+        .unwrap();
     }
 
     let _ = sqlx::query(
