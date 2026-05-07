@@ -53,7 +53,7 @@ export default function GameDetails() {
 
   let {game, guesses} = data;
 
-  const name = game.player_name;
+  const name = game.username || game.player_name;
 
   const score = game.terminal_score;
 

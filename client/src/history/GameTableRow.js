@@ -4,7 +4,7 @@ import { TableRow, TableCell, Link, Box } from "@mui/material";
 import { parseISO } from "date-fns";
 
 export default function GameTableRow({game, index}) {
-  const name = game.player_name;
+  const name = game.username || game.player_name;
 
   const score = game.terminal_score;
   const { num_guesses } = game;

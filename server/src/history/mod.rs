@@ -21,6 +21,8 @@ pub struct GameSchema {
     pub terminal_score: Option<i32>,
     pub player_name: Option<String>,
     pub num_guesses: i32,
+    pub user_id: Option<i32>,
+    pub username: Option<String>,
 }
 
 /// Represents the summary of a past game.
@@ -33,6 +35,7 @@ pub struct Game {
     pub has_terminated: bool,
     pub terminal_score: Option<i32>,
     pub player_name: Option<String>,
+    pub username: Option<String>,
     pub num_guesses: i32,
 }
 
@@ -87,13 +90,16 @@ pub async fn get_games(
         })
         .collect();
 
+    // TODO: future optimization potential: store a final number of guesses, instead of using this subquery every time.
+    // Smaller TODO: could refactor this logic to be clearer.
     let sub_query = "select count(*) from guesses where game_uuid like uuid";
 
     let query = match sort.as_str() {
         "score" => {
             if include_nameless {
                 format!(
-                    "SELECT *, ({}) as num_guesses from games
+                    "SELECT *, ({}) as num_guesses, users.username from games
+                    LEFT JOIN users ON games.user_id = users.user_id
 				WHERE (player_name LIKE ? OR player_name IS NULL) AND has_terminated LIKE TRUE
 				ORDER BY terminal_score DESC
 				LIMIT ? OFFSET ?",
@@ -101,7 +107,8 @@ pub async fn get_games(
                 )
             } else {
                 format!(
-                    "SELECT *, ({}) as num_guesses from games
+                    "SELECT *, ({}) as num_guesses, users.username from games
+                    LEFT JOIN users ON games.user_id = users.user_id
 				WHERE (player_name LIKE ?) AND has_terminated LIKE TRUE
 				ORDER BY terminal_score DESC
 				LIMIT ? OFFSET ?",
@@ -112,7 +119,8 @@ pub async fn get_games(
         _ => {
             if include_nameless {
                 format!(
-                    "SELECT *, ({}) as num_guesses from games
+                    "SELECT *, ({}) as num_guesses, users.username from games
+                    LEFT JOIN users ON games.user_id = users.user_id
 				WHERE (player_name LIKE ? OR player_name IS NULL) AND has_terminated LIKE TRUE
 				ORDER BY start_time DESC
 				LIMIT ? OFFSET ?",
@@ -120,7 +128,8 @@ pub async fn get_games(
                 )
             } else {
                 format!(
-                    "SELECT *, ({}) as num_guesses from games
+                    "SELECT *, ({}) as num_guesses, users.username from games
+                    LEFT JOIN users ON games.user_id = users.user_id
 				WHERE (player_name LIKE ?) AND has_terminated LIKE TRUE
 				ORDER BY start_time DESC
 				LIMIT ? OFFSET ?",
@@ -166,6 +175,7 @@ pub async fn get_games(
                 terminal_score: game.terminal_score,
                 player_name: game.player_name,
                 num_guesses: game.num_guesses,
+                username: game.username,
             }
         })
         .collect();
@@ -292,7 +302,8 @@ pub async fn get_game(pool: &rocket::State<Pool<MySql>>, id: String) -> String {
         .collect();
 
     let game: GameSchema = sqlx::query_as(
-        "SELECT *, (select count(*) from guesses where game_uuid like uuid) as num_guesses from games
+        "SELECT *, (select count(*) from guesses where game_uuid like uuid) as num_guesses, users.username from games
+        LEFT JOIN users ON games.user_id = users.user_id
         WHERE uuid LIKE ?")
         .bind(id.clone())
         .fetch_one(pool.inner())
@@ -329,6 +340,7 @@ pub async fn get_game(pool: &rocket::State<Pool<MySql>>, id: String) -> String {
         has_terminated: game.has_terminated,
         terminal_score: game.terminal_score,
         player_name: game.player_name,
+        username: game.username,
         num_guesses: guesses.len() as i32,
     };
 
