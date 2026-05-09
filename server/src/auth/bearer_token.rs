@@ -12,7 +12,7 @@ impl<'r> FromRequest<'r> for BearerToken {
         let auth_header = match request.headers().get_one("Authorization") {
             Some(header) => header,
             None => {
-                return Outcome::Failure((
+                return Outcome::Error((
                     Status::Unauthorized,
                     "Missing Authorization header".to_string(),
                 ))
@@ -20,7 +20,7 @@ impl<'r> FromRequest<'r> for BearerToken {
         };
 
         if !auth_header.starts_with("Bearer ") {
-            return Outcome::Failure((
+            return Outcome::Error((
                 Status::Unauthorized,
                 "Invalid Authorization header format".to_string(),
             ));
