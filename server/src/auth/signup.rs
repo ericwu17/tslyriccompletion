@@ -191,7 +191,7 @@ pub async fn signup(
     )
     .bind(&email_verify_token_hash)
     .bind(user_id)
-    .bind(expires_at.to_rfc3339())
+    .bind(expires_at.format("%Y-%m-%d %H:%M:%S").to_string())
     .execute(pool.inner())
     .await
     .unwrap();
@@ -234,7 +234,7 @@ pub async fn signup(
     )
     .bind(&token_hash)
     .bind(user_id)
-    .bind(expires_at.to_rfc3339())
+    .bind(expires_at.format("%Y-%m-%d %H:%M:%S").to_string())
     .bind(&user_agent.0)
     .execute(pool.inner())
     .await
@@ -244,6 +244,6 @@ pub async fn signup(
         token,
         user_id,
         username: req.username.clone(),
-        expires_at: expires_at.to_rfc3339(),
+        expires_at: expires_at.format("%Y-%m-%d %H:%M:%S").to_string(),
     }))
 }

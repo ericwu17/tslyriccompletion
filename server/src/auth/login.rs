@@ -75,7 +75,7 @@ pub async fn login(
     )
     .bind(&token_hash)
     .bind(user_id)
-    .bind(expires_at.to_rfc3339())
+    .bind(expires_at.format("%Y-%m-%d %H:%M:%S").to_string())
     .bind(&user_agent.0)
     .execute(pool.inner())
     .await
@@ -90,6 +90,6 @@ pub async fn login(
         token,
         user_id,
         username,
-        expires_at: expires_at.to_rfc3339(),
+        expires_at: expires_at.format("%Y-%m-%d %H:%M:%S").to_string(),
     }))
 }

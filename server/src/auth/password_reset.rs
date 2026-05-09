@@ -115,7 +115,7 @@ pub async fn request_password_reset(
     )
     .bind(&token_hash)
     .bind(user_id)
-    .bind(expires_at.to_rfc3339())
+    .bind(expires_at.format("%Y-%m-%d %H:%M:%S").to_string())
     .execute(pool.inner())
     .await
     .map_err(|_| (
