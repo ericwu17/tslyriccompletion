@@ -22,6 +22,8 @@ export function ProfilePage() {
   const navigate = useNavigate();
   const { token, isLoggedIn, logout } = useAuth();
 
+  const [changeEmailMessageIsOpen, setChangeEmailDialogIsOpen] = useState(false);
+
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -177,6 +179,64 @@ export function ProfilePage() {
                 </CardContent>
               </Card>
             }
+
+            <Card>
+              <Box m={2} onClick={() => setChangeEmailDialogIsOpen(!changeEmailMessageIsOpen)}>
+                <Button>Change email or username</Button>
+              </Box>
+              {changeEmailMessageIsOpen &&
+              <Box m={2}>
+                <Typography>
+                  To change your email or username,
+                  send an email to tslyriccompletion@gmail.com, from the old email address
+                  on your account.
+                </Typography>
+                <Typography>
+                  You cannot change your email/username if you did not sign up
+                  with an email address.
+                </Typography>
+                <Typography>
+                  At some point in the future, if I feel inspired to do more work on this site,
+                  I'll automate the process of changing your email/username
+                  so that it's easier for users (lol).
+                  This would also make it possible to change your
+                  username or add an email address if you did not previously sign up with one :)
+                </Typography>
+              </Box>
+              }
+            </Card>
+
+            {/* BEGIN TEMPORARY NOTICE */}
+            <Box>
+              <Card>
+                <CardContent>
+                  <Typography>
+                    This page is currently under construction...
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+            <Box>
+              <Card>
+                <CardContent>
+                  <Typography>
+                    More information will be displayed on this page in the future,
+                    such as: your high scores, saved songlists, or other things
+                    that I haven't thought about yet.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+            <Box>
+              <Card>
+                <CardContent>
+                  <Typography>
+                    You can send me an email at tslyriccompletion@gmail.com to suggest ideas.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+            {/* END TEMPORARY NOTICE */}
 
             {/* Action Buttons */}
             <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
