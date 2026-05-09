@@ -90,57 +90,29 @@ pub async fn get_games(
         })
         .collect();
 
-    // TODO: future optimization potential: store a final number of guesses, instead of using this subquery every time.
-    // Smaller TODO: could refactor this logic to be clearer.
-    let sub_query = "select count(*) from guesses where game_uuid like uuid";
-
-    let query = match sort.as_str() {
-        "score" => {
-            if include_nameless {
-                format!(
-                    "SELECT *, ({}) as num_guesses, users.username from games
-                    LEFT JOIN users ON games.user_id = users.user_id
-				WHERE (player_name LIKE ? OR player_name IS NULL) AND has_terminated LIKE TRUE
-				ORDER BY terminal_score DESC
-				LIMIT ? OFFSET ?",
-                    sub_query
-                )
-            } else {
-                format!(
-                    "SELECT *, ({}) as num_guesses, users.username from games
-                    LEFT JOIN users ON games.user_id = users.user_id
-				WHERE (player_name LIKE ?) AND has_terminated LIKE TRUE
-				ORDER BY terminal_score DESC
-				LIMIT ? OFFSET ?",
-                    sub_query
-                )
-            }
-        }
-        _ => {
-            if include_nameless {
-                format!(
-                    "SELECT *, ({}) as num_guesses, users.username from games
-                    LEFT JOIN users ON games.user_id = users.user_id
-				WHERE (player_name LIKE ? OR player_name IS NULL) AND has_terminated LIKE TRUE
-				ORDER BY start_time DESC
-				LIMIT ? OFFSET ?",
-                    sub_query
-                )
-            } else {
-                format!(
-                    "SELECT *, ({}) as num_guesses, users.username from games
-                    LEFT JOIN users ON games.user_id = users.user_id
-				WHERE (player_name LIKE ?) AND has_terminated LIKE TRUE
-				ORDER BY start_time DESC
-				LIMIT ? OFFSET ?",
-                    sub_query
-                )
-            }
-        }
+    let order_by_clause = match sort.as_str() {
+        "score" => "ORDER BY terminal_score DESC",
+        _ => "ORDER BY start_time DESC",
     };
 
+    let where_clause = if include_nameless {
+        "WHERE (player_name LIKE ? OR username LIKE ? OR (player_name IS NULL AND username IS NULL)) AND has_terminated LIKE TRUE"
+    } else {
+        "WHERE (player_name LIKE ? OR username LIKE ?) AND has_terminated LIKE TRUE"
+    };
+
+    let query = format!(
+        "SELECT *, users.username from games
+        LEFT JOIN users ON games.user_id = users.user_id
+        {}
+        {}
+        LIMIT ? OFFSET ?",
+        where_clause, order_by_clause
+    );
+
     let games: Vec<GameSchema> = sqlx::query_as(&query)
-        .bind(search)
+        .bind(&search)
+        .bind(&search)
         .bind(limit as i32)
         .bind(query_offset as i32)
         .fetch_all(pool.inner())

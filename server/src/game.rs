@@ -310,11 +310,12 @@ pub async fn init_game(
 
     if result.is_empty() {
         // insert a new record if the current songlist sha is not found
-        let _ = sqlx::query("INSERT INTO songlists (sha1sum, content) VALUES (?, ?)")
+        sqlx::query("INSERT INTO songlists (sha1sum, content) VALUES (?, ?)")
             .bind(full_songlist_hash.clone())
             .bind(full_songlist_json)
             .fetch_all(pool.inner())
-            .await;
+            .await
+            .unwrap();
     }
 
     let songlists: Vec<SonglistSchema> =
@@ -341,13 +342,14 @@ pub async fn init_game(
         .id;
 
     // save the game to database, including user_id if user is logged in
-    let _ = sqlx::query("INSERT INTO games VALUES (?, NOW(), ?, ?, 0, NULL, NULL, ?)")
+    sqlx::query("INSERT INTO games VALUES (?, NOW(), ?, ?, 0, NULL, NULL, ?, 0)")
         .bind(uuid.clone())
         .bind(songlist_id)
         .bind(songlist_desc_json)
         .bind(user_id)
         .fetch_all(pool.inner())
-        .await;
+        .await
+        .unwrap();
 
     serde_json::to_string(&new_game_state.into_public(uuid.clone())).unwrap()
 }
@@ -433,7 +435,7 @@ pub async fn game_lifelines(
         .choose(&mut rand::thread_rng())
         .unwrap();
 
-    let _ = sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
+    sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
         .bind(id.clone())
         .bind(gs.guesses_made)
         .bind(gs.current_question.song.album)
@@ -452,7 +454,14 @@ pub async fn game_lifelines(
         ))
         .bind(sqlx::types::Json(gs.choices))
         .fetch_all(pool.inner())
-        .await;
+        .await
+        .unwrap();
+
+    sqlx::query("UPDATE games SET num_guesses = num_guesses + 1 WHERE uuid = ?;")
+        .bind(&id)
+        .fetch_all(pool.inner())
+        .await
+        .unwrap();
 
     serde_json::to_string(&res.into_public_with_answers(id.clone())).unwrap()
 }
@@ -757,7 +766,7 @@ pub async fn take_guess(
     // If the code runs to this point, then the guess is either correct or incorrect (not AFM state).
     // We can now record the guess into the database before returning.
 
-    let _ = sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
+    sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
         .bind(id.clone())
         .bind(gs.guesses_made)
         .bind(gs.current_question.song.album)
@@ -776,7 +785,14 @@ pub async fn take_guess(
         ))
         .bind(sqlx::types::Json(gs.choices))
         .fetch_all(pool.inner())
-        .await;
+        .await
+        .unwrap();
+
+    sqlx::query("UPDATE games SET num_guesses = num_guesses + 1 WHERE uuid = ?;")
+        .bind(&id)
+        .fetch_all(pool.inner())
+        .await
+        .unwrap();
 
     if !is_correct {
         let _ = sqlx::query(
