@@ -85,14 +85,7 @@ pub async fn signup(
                 .bind(&email)
                 .fetch_optional(pool.inner())
                 .await
-                .map_err(|_| {
-                    (
-                        Status::InternalServerError,
-                        Json(ErrorResponse {
-                            error: "Database error".to_string(),
-                        }),
-                    )
-                })?;
+                .unwrap();
         if existing_email.is_some() {
             return Err((
                 Status::Conflict,
@@ -108,14 +101,7 @@ pub async fn signup(
                 .bind(&email)
                 .fetch_optional(pool.inner())
                 .await
-                .map_err(|_| {
-                    (
-                        Status::InternalServerError,
-                        Json(ErrorResponse {
-                            error: "Database error".to_string(),
-                        }),
-                    )
-                })?;
+                .unwrap();
 
         if email_as_username.is_some() {
             return Err((
@@ -133,14 +119,7 @@ pub async fn signup(
             .bind(&req.username)
             .fetch_optional(pool.inner())
             .await
-            .map_err(|_| {
-                (
-                    Status::InternalServerError,
-                    Json(ErrorResponse {
-                        error: "Database error".to_string(),
-                    }),
-                )
-            })?;
+            .unwrap();
 
     if existing_user.is_some() {
         return Err((
@@ -157,14 +136,7 @@ pub async fn signup(
             .bind(&req.username)
             .fetch_optional(pool.inner())
             .await
-            .map_err(|_| {
-                (
-                    Status::InternalServerError,
-                    Json(ErrorResponse {
-                        error: "Database error".to_string(),
-                    }),
-                )
-            })?;
+            .unwrap();
 
     if username_as_email.is_some() {
         return Err((
@@ -194,12 +166,7 @@ pub async fn signup(
     .bind(&password_hash)
     .execute(pool.inner())
     .await
-    .map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Failed to create user".to_string(),
-        }),
-    ))?;
+    .unwrap();
 
     let user_id = result.last_insert_id() as i32;
 
@@ -216,14 +183,7 @@ pub async fn signup(
         .bind(user_id)
         .execute(pool.inner())
         .await
-        .map_err(|_| {
-            (
-                Status::InternalServerError,
-                Json(ErrorResponse {
-                    error: "Database error".to_string(),
-                }),
-            )
-        })?;
+        .unwrap();
 
         // Insert new verification token
         sqlx::query(
@@ -234,12 +194,7 @@ pub async fn signup(
     .bind(expires_at.to_rfc3339())
     .execute(pool.inner())
     .await
-    .map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Failed to create verification token".to_string(),
-        }),
-    ))?;
+    .unwrap();
 
         // Send email with verification link
         let frontend_url =
@@ -283,12 +238,7 @@ pub async fn signup(
     .bind(&user_agent.0)
     .execute(pool.inner())
     .await
-    .map_err(|_| (
-        Status::InternalServerError,
-        Json(ErrorResponse {
-            error: "Failed to create session".to_string(),
-        }),
-    ))?;
+    .unwrap();
 
     Ok(Json(SignupResponse {
         token,
