@@ -10,6 +10,7 @@ import { FlaggedText } from "../game/ResultDisplay";
 import { parseISO } from "date-fns";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { PlayerNameDisplay } from "./GameTableRow";
 
 export default function GuessHistory() {
   const [data, setData] = React.useState({});
@@ -109,7 +110,7 @@ export default function GuessHistory() {
 }
 
 function GuessDetails({ guess }) {
-  const {correct_answer, user_guess, points_earned, lifelines_used, player_name} = guess;
+  const {correct_answer, user_guess, points_earned, lifelines_used, player_name, username} = guess;
   const was_multiple_choice = guess.options.length > 0;
 
   const shouldDisplayGray = lifelines_used.includes("Skip")
@@ -126,9 +127,8 @@ function GuessDetails({ guess }) {
       <Box display="flex" flexDirection="column">
         <Box display="flex" alignItems="center">
           <Typography>
-            Guessed by {player_name ?
-              (<span style={{color:"#00ab66"}}>{player_name}</span>):
-              (<span style={{color:"darkgray", fontWeight: "bold"}}>{"<Anonymous>"}</span>)
+            Guessed by {
+              <PlayerNameDisplay name={player_name} username={username}/>
             } on {}
             <Link href={generateGameHref(guess.game_uuid)}>
               {submit_time}

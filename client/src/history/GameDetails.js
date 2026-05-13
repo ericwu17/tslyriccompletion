@@ -15,6 +15,7 @@ import { diffChars } from "diff";
 import levenshtein from "js-levenshtein";
 import { LinePopoverContent } from "./GuessHistory";
 import { NotFoundImg } from "../not-found/NotFound";
+import { PlayerNameDisplay } from "./GameTableRow";
 
 export default function GameDetails() {
   const [data, setData] = React.useState({});
@@ -52,8 +53,6 @@ export default function GameDetails() {
   }
 
   let {game, guesses} = data;
-
-  const name = game.username || game.player_name;
 
   const score = game.terminal_score;
 
@@ -108,9 +107,7 @@ export default function GameDetails() {
                 <strong>Played By: {}</strong>
               </TableCell>
               <TableCell width="100%">
-                {name ||
-                  <span style={{color:"darkgray", fontWeight: "bold"}}>{"<Anonymous>"}</span>
-                }
+                <PlayerNameDisplay name={game.player_name} username={game.username} />
               </TableCell>
             </TableRow>
             <TableRow>
