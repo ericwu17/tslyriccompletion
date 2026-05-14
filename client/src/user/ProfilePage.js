@@ -18,6 +18,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import NotFound from "../not-found/NotFound";
 
 export function ProfilePage() {
   const { username } = useParams();
@@ -27,6 +28,7 @@ export function ProfilePage() {
   const [gamesLoading, setGamesLoading] = useState(true);
   const [gamesError, setGamesError] = useState("");
   const [page, setPage] = useState(1);
+  const [userNotFound, setUserNotFound] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
   const fetchGames = useCallback(async (pageNum = 1) => {
@@ -45,11 +47,12 @@ export function ProfilePage() {
       setHasMore(newGames.length === 10);
     } catch (err) {
       if (err.response?.status == 404) {
-        navigate("/user-not-found");
+        setUserNotFound(true);
+      } else {
+        const errorMsg =
+          err.response?.data?.error || "Failed to load games";
+        setGamesError(errorMsg);
       }
-      const errorMsg =
-        err.response?.data?.error || "Failed to load games";
-      setGamesError(errorMsg);
     } finally {
       setGamesLoading(false);
     }
@@ -73,6 +76,11 @@ export function ProfilePage() {
           <CircularProgress />
         </Box>
       </Container>
+    );
+  }
+  if (userNotFound) {
+    return (
+      <NotFound />
     );
   }
 
