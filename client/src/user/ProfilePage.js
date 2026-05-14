@@ -27,6 +27,9 @@ export function ProfilePage() {
   const [games, setGames] = useState([]);
   const [gamesLoading, setGamesLoading] = useState(true);
   const [gamesError, setGamesError] = useState("");
+  const [profile, setProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [profileError, setProfileError] = useState("");
   const [page, setPage] = useState(1);
   const [userNotFound, setUserNotFound] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -58,9 +61,30 @@ export function ProfilePage() {
     }
   }, [username]);
 
+  const fetchProfile = useCallback(async () => {
+    setProfileLoading(true);
+    setProfileError("");
+    try {
+      const response = await axios.get(`/users/${username}/profile`);
+      setProfile(response.data);
+    } catch (err) {
+      if (err.response?.status == 404) {
+        setUserNotFound(true);
+      } else {
+        const errorMsg =
+          err.response?.data?.error || "Failed to load profile";
+        setProfileError(errorMsg);
+      }
+    } finally {
+      setProfileLoading(false);
+    }
+  }, [username]);
+
   useEffect(() => {
+    setPage(1);
     fetchGames();
-  }, [username, fetchGames]);
+    fetchProfile();
+  }, [username, fetchGames, fetchProfile]);
 
   if (gamesLoading) {
     return (
@@ -87,7 +111,7 @@ export function ProfilePage() {
   if (gamesError) {
     return (
       <Container maxWidth="sm" sx={{ py: 4 }}>
-        <Alert severity="error">{gamesError.description}</Alert>
+        Error fetching games
       </Container>
     );
   }
@@ -103,6 +127,38 @@ export function ProfilePage() {
         >
           {username}&apos;s Profile
         </Typography>
+
+        <Card sx={{ mb: 3 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Profile Summary
+            </Typography>
+            {profileError && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {profileError}
+              </Alert>
+            )}
+            {profileLoading ? (
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <CircularProgress size={20} />
+                <Typography>Loading profile...</Typography>
+              </Box>
+            ) : profile ? (
+              <Box>
+                <Typography>
+                  <strong>Games played:</strong> {profile.games_played}
+                </Typography>
+                <Typography>
+                  <strong>Guesses made:</strong> {profile.guesses_made}
+                </Typography>
+                <Typography>
+                  <strong>Account created:</strong>{" "}
+                  {new Date(profile.created_at).toLocaleDateString()}
+                </Typography>
+              </Box>
+            ) : null}
+          </CardContent>
+        </Card>
 
         <Card>
           <CardContent>

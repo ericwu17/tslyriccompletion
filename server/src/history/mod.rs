@@ -158,124 +158,6 @@ pub async fn get_games(
     serde_json::to_string(&games).unwrap()
 }
 
-/// API endpoint to get games for the authenticated user.
-/// Results are paginated.
-#[get("/auth/games?<page_num>&<limit>")]
-pub async fn get_user_games(
-    pool: &rocket::State<Pool<MySql>>,
-    bearer_token: BearerToken,
-    page_num: Option<usize>,
-    limit: Option<usize>,
-) -> Result<String, (Status, Json<ErrorResponse>)> {
-    let token_hash = crate::auth::hash_token(&bearer_token.0);
-
-    // Look up the session to get the user_id
-    let session: Option<(i32,)> = sqlx::query_as(
-        "SELECT user_id FROM user_sessions WHERE token_hash = ? AND expires_at > NOW()",
-    )
-    .bind(&token_hash)
-    .fetch_optional(pool.inner())
-    .await
-    .map_err(|_| {
-        (
-            Status::InternalServerError,
-            Json(ErrorResponse {
-                error: "Database error".to_string(),
-            }),
-        )
-    })?;
-
-    let (user_id,) = session.ok_or((
-        Status::Unauthorized,
-        Json(ErrorResponse {
-            error: "Invalid or expired session token".to_string(),
-        }),
-    ))?;
-
-    let limit = limit.unwrap_or(20); // Default limit is 20 results per page
-    let page_num = page_num.map_or(1, |num| if num > 0 { num } else { 1 });
-    let query_offset = (page_num - 1) * limit;
-
-    let songlists: Vec<SonglistSchema> = sqlx::query_as("SELECT * from songlists")
-        .fetch_all(pool.inner())
-        .await
-        .map_err(|_| {
-            (
-                Status::InternalServerError,
-                Json(ErrorResponse {
-                    error: "Database error".to_string(),
-                }),
-            )
-        })?;
-
-    let songlists: Vec<Songlist> = songlists
-        .into_iter()
-        .map(|songlist| Songlist {
-            id: songlist.id,
-            sha1sum: songlist.sha1sum,
-            content: songlist.content.as_ref().clone(),
-        })
-        .collect();
-
-    let query = format!(
-        "SELECT *, users.username from games
-        LEFT JOIN users ON games.user_id = users.user_id
-        WHERE games.user_id = ? AND has_terminated = TRUE
-        ORDER BY start_time DESC
-        LIMIT ? OFFSET ?"
-    );
-
-    let games: Vec<GameSchema> = sqlx::query_as(&query)
-        .bind(user_id)
-        .bind(limit as i32)
-        .bind(query_offset as i32)
-        .fetch_all(pool.inner())
-        .await
-        .map_err(|_| {
-            (
-                Status::InternalServerError,
-                Json(ErrorResponse {
-                    error: "Database error".to_string(),
-                }),
-            )
-        })?;
-
-    let games: Vec<Game> = games
-        .into_iter()
-        .map(|game| {
-            let selected_songs =
-                serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap())
-                    .unwrap();
-            let full_songlist = songlists
-                .iter()
-                .find(|s| s.id == game.songlist_id)
-                .unwrap()
-                .content
-                .clone();
-
-            let selected_songs_desc = get_songs(full_songlist, selected_songs);
-
-            let format =
-                format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z")
-                    .unwrap();
-
-            Game {
-                uuid: game.uuid,
-                start_time: game.start_time.format(&format).unwrap(),
-                songlist_id: game.songlist_id,
-                selected_songs: selected_songs_desc,
-                has_terminated: game.has_terminated,
-                terminal_score: game.terminal_score,
-                player_name: game.player_name,
-                num_guesses: game.num_guesses,
-                username: game.username,
-            }
-        })
-        .collect();
-
-    Ok(serde_json::to_string(&games).unwrap())
-}
-
 /// API endpoint to get games for a user by username (public, no auth required).
 /// Results are paginated.
 #[get("/users/<username>/games?<page_num>&<limit>")]
@@ -364,6 +246,52 @@ pub async fn get_user_games_by_username(
         .collect();
 
     Ok(serde_json::to_string(&games).unwrap())
+}
+
+#[derive(sqlx::FromRow, Debug)]
+struct UserProfileSchema {
+    username: String,
+    created_at: PrimitiveDateTime,
+    games_played: i64,
+    guesses_made: i64,
+}
+
+#[derive(Debug, Serialize)]
+pub struct UserProfile {
+    pub username: String,
+    pub created_at: String,
+    pub games_played: i64,
+    pub guesses_made: i64,
+}
+
+#[get("/users/<username>/profile")]
+pub async fn get_user_profile_by_username(
+    pool: &rocket::State<Pool<MySql>>,
+    username: String,
+) -> Result<Json<UserProfile>, Status> {
+    let user_profile: Option<UserProfileSchema> = sqlx::query_as(
+        "SELECT users.username, users.created_at, COUNT(DISTINCT games.uuid) as games_played, COUNT(guesses.game_uuid) as guesses_made
+        FROM users
+        LEFT JOIN games ON games.user_id = users.user_id
+        LEFT JOIN guesses ON guesses.game_uuid = games.uuid
+        WHERE users.username = ?
+        GROUP BY users.username, users.created_at",
+    )
+    .bind(&username)
+    .fetch_optional(pool.inner())
+    .await
+    .map_err(|_| Status::InternalServerError)?;
+
+    let user_profile = user_profile.ok_or(Status::NotFound)?;
+
+    let format = format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
+
+    Ok(Json(UserProfile {
+        username: user_profile.username,
+        created_at: user_profile.created_at.format(&format).unwrap(),
+        games_played: user_profile.games_played,
+        guesses_made: user_profile.guesses_made,
+    }))
 }
 
 #[derive(sqlx::FromRow, Debug)]
