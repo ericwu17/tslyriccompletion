@@ -44,6 +44,9 @@ export function ProfilePage() {
       }
       setHasMore(newGames.length === 10);
     } catch (err) {
+      if (err.response?.status == 404) {
+        navigate("/user-not-found");
+      }
       const errorMsg =
         err.response?.data?.error || "Failed to load games";
       setGamesError(errorMsg);
@@ -76,7 +79,7 @@ export function ProfilePage() {
   if (gamesError) {
     return (
       <Container maxWidth="sm" sx={{ py: 4 }}>
-        <Alert severity="error">{gamesError}</Alert>
+        <Alert severity="error">{gamesError.description}</Alert>
       </Container>
     );
   }
