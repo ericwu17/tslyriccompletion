@@ -2,7 +2,7 @@ pub mod bearer_token;
 pub mod login;
 pub mod logout;
 pub mod password_reset;
-pub mod profile;
+pub mod personal_details;
 pub mod signup;
 pub mod verify_email;
 

@@ -21,7 +21,8 @@ import { SignupPage } from "./auth/SignupPage";
 import { LoginPage } from "./auth/LoginPage";
 import { EmailVerificationPage } from "./auth/EmailVerificationPage";
 import { PasswordResetPage } from "./auth/PasswordResetPage";
-import { ProfilePage } from "./auth/ProfilePage";
+import { PersonalDetails } from "./auth/PersonalDetails";
+import { ProfilePage } from "./user/ProfilePage";
 import { AuthProvider } from "./context/AuthContext";
 
 function AppContent() {
@@ -55,8 +56,8 @@ function AppContent() {
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/verify-email" element={<EmailVerificationPage />} />
           <Route path="/auth/reset-password" element={<PasswordResetPage />} />
-          <Route path="/auth/profile" element={<ProfilePage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/users/:username" element={<ProfilePage />} />
+          <Route path="/personal-details" element={<PersonalDetails />} />
 
           {
             /* Note: the route /tswift exists

@@ -20,7 +20,7 @@ use std::collections::HashMap;
 use auth::login::login;
 use auth::logout::logout;
 use auth::password_reset::{request_password_reset, reset_password};
-use auth::profile::get_profile;
+use auth::personal_details::get_personal_details;
 use auth::signup::signup;
 use auth::verify_email::{request_email_verification, verify_email};
 use feedback::{downvote_line, get_feedback, upvote_line};
@@ -29,7 +29,7 @@ use game::{
     GameState,
 };
 use history::line_history::get_line;
-use history::{get_game, get_games};
+use history::{get_game, get_games, get_user_games, get_user_games_by_username};
 use rss::{get_recent_feedback_rss, get_recent_votes_rss};
 use song::{get_all_songlists, get_song, get_song_list, get_song_list_with_id};
 use std::sync::{Arc, Mutex};
@@ -85,6 +85,8 @@ async fn main() -> Result<(), rocket::Error> {
         .mount("/", routes![get_games])
         .mount("/", routes![get_game])
         .mount("/", routes![get_line])
+        .mount("/", routes![get_user_games])
+        .mount("/", routes![get_user_games_by_username])
         .mount("/", routes![upvote_line])
         .mount("/", routes![downvote_line])
         .mount("/", routes![get_feedback])
@@ -97,7 +99,7 @@ async fn main() -> Result<(), rocket::Error> {
         .mount("/", routes![verify_email])
         .mount("/", routes![request_password_reset])
         .mount("/", routes![reset_password])
-        .mount("/", routes![get_profile])
+        .mount("/", routes![get_personal_details])
         .ignite()
         .await?;
 

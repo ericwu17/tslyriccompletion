@@ -5,22 +5,22 @@ export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
-  const [userProfile, setUserProfile] = useState(null);
+  const [userPersonalDetails, setUserPersonalDetails] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const setProfileAndTokenFromToken = (token) => {
+  const setDetailsAndTokenFromToken = (token) => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-    // Make a request to the profile page, to confirm that the server still
+    // Make a request to user's personal details, to confirm that the server still
     // knows that we're logged in, and validates our session token
-    axios.get("/auth/profile",).then((response) => {
+    axios.get("/auth/personal-details",).then((response) => {
       if (response.status != 200) {
         logoutOnFrontend();
       } else {
         setToken(token);
-        setUserProfile(response.data);
+        setUserPersonalDetails(response.data);
       }
     });
   };
@@ -29,12 +29,12 @@ export function AuthProvider({ children }) {
   // Load auth state from localStorage on mount
   useEffect(() => {
     const savedToken = localStorage.getItem("authToken");
-    setProfileAndTokenFromToken(savedToken);
+    setDetailsAndTokenFromToken(savedToken);
   }, []);
 
   const logoutOnFrontend = () => {
     // log out on front end
-    setUserProfile(null);
+    setUserPersonalDetails(null);
     setToken(null);
     localStorage.removeItem("authToken");
   };
@@ -56,13 +56,13 @@ export function AuthProvider({ children }) {
 
       const { token: newToken, username: returnedUsername } = response.data;
 
-      const newUserProfile = {
+      const newUserPersonalDetails = {
         username: returnedUsername,
         email,
       };
 
       setToken(newToken);
-      setUserProfile(newUserProfile);
+      setUserPersonalDetails(newUserPersonalDetails);
       localStorage.setItem("authToken", newToken);
 
       return { success: true };
@@ -86,12 +86,12 @@ export function AuthProvider({ children }) {
 
       const { token: newToken, username: returnedUsername } = response.data;
 
-      const newUserProfile = {
+      const newUserPersonalDetails = {
         username: returnedUsername,
       };
 
       setToken(newToken);
-      setUserProfile(newUserProfile);
+      setUserPersonalDetails(newUserPersonalDetails);
       localStorage.setItem("authToken", newToken);
 
       return { success: true };
@@ -194,12 +194,12 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const isLoggedIn = !!token && !!userProfile;
+  const isLoggedIn = !!token && !!userPersonalDetails;
 
   return (
     <AuthContext.Provider
       value={{
-        userProfile,
+        userPersonalDetails,
         token,
         isLoggedIn,
         isLoading,

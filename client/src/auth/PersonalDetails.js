@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth";
 import axios from "axios";
@@ -8,7 +8,6 @@ import {
   Box,
   Typography,
   Button,
-  CircularProgress,
   Alert,
   Card,
   CardContent,
@@ -18,44 +17,17 @@ import {
 import VerifiedIcon from "@mui/icons-material/Verified";
 import ErrorIcon from "@mui/icons-material/Error";
 
-export function ProfilePage() {
+export function PersonalDetails() {
   const navigate = useNavigate();
-  const { token, isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, userPersonalDetails} = useAuth();
+
+  const data = userPersonalDetails;
 
   const [changeEmailMessageIsOpen, setChangeEmailDialogIsOpen] = useState(false);
-
-  const [profile, setProfile] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isVerifyEmailLoading, setIsVerifyEmailLoading] = useState(false);
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/auth/login");
-      return;
-    }
-
-    const fetchProfile = async () => {
-      setIsLoading(true);
-      setError("");
-      try {
-        const response = await axios.get("/auth/profile");
-        setProfile(response.data);
-      } catch (err) {
-        const errorMsg = err.response?.data?.error || "Failed to load profile";
-        setError(errorMsg);
-        if (err.response?.status === 401) {
-          navigate("/auth/login");
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, [isLoggedIn, token, navigate]);
 
   const handleLogout = async () => {
     await logout();
@@ -79,19 +51,7 @@ export function ProfilePage() {
   if (!isLoggedIn) {
     return (
       <Container maxWidth="sm" sx={{ py: 4 }}>
-        <Alert severity="info">Please log in to view your profile</Alert>
-      </Container>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <Container maxWidth="sm" sx={{ py: 4 }}>
-        <Box sx={
-          { display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }
-        }>
-          <CircularProgress />
-        </Box>
+        <Alert severity="info">Please log in to view your personal details</Alert>
       </Container>
     );
   }
@@ -108,10 +68,10 @@ export function ProfilePage() {
     <Container maxWidth="sm" sx={{ py: 4 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom sx={{ textAlign: "center", mb: 4 }}>
-          My Profile
+          Personal Details
         </Typography>
 
-        {profile && (
+        {data && (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
             {/* Username Card */}
             <Card>
@@ -120,13 +80,13 @@ export function ProfilePage() {
                   Username
                 </Typography>
                 <Typography variant="h6">
-                  {profile.username}
+                  {data.username}
                 </Typography>
               </CardContent>
             </Card>
 
             {/* Email Card */}
-            {profile.email &&
+            {data.email &&
               <Card>
                 <CardContent>
                   <Box sx={
@@ -142,11 +102,11 @@ export function ProfilePage() {
                         Email Address
                       </Typography>
                       <Typography variant="h6">
-                        {profile.email}
+                        {data.email}
                       </Typography>
                     </Box>
                     <Box>
-                      {profile.email_verified ? (
+                      {data.email_verified ? (
                         <Chip
                           icon={<VerifiedIcon />}
                           label="Verified"
@@ -164,7 +124,7 @@ export function ProfilePage() {
                     </Box>
                   </Box>
 
-                  {!profile.email_verified && (
+                  {!data.email_verified && (
                     <Button
                       variant="contained"
                       color="warning"
@@ -205,38 +165,6 @@ export function ProfilePage() {
               </Box>
               }
             </Card>
-
-            {/* BEGIN TEMPORARY NOTICE */}
-            <Box>
-              <Card>
-                <CardContent>
-                  <Typography>
-                    This page is currently under construction...
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
-            <Box>
-              <Card>
-                <CardContent>
-                  <Typography>
-                    More information will be displayed on this page in the future,
-                    such as: your high scores, saved songlists, or other things
-                    that I haven't thought about yet.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
-            <Box>
-              <Card>
-                <CardContent>
-                  <Typography>
-                    You can send me an email at tslyriccompletion@gmail.com to suggest ideas.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
-            {/* END TEMPORARY NOTICE */}
 
             {/* Action Buttons */}
             <Box sx={{ display: "flex", gap: 2, mt: 3 }}>

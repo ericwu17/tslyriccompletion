@@ -16,7 +16,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
   const [currentName, setCurrentName] = React.useState("");
   const [hasSentFeedback, setHasSentFeedback] = React.useState(false);
 
-  const { isLoggedIn, userProfile } = useAuth();
+  const { isLoggedIn, userPersonalDetails } = useAuth();
 
   const { score, current_question, id, completed_question, terminated, choices } = gameState;
 
@@ -231,7 +231,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
           <Box>
             <Typography sx={{color:"#BA0021"}}>
               Good game! Better luck next time!
-              You are logged in as {userProfile.username} and this game has been saved.
+              You are logged in as {userPersonalDetails.username} and this game has been saved.
             </Typography>
             <Box>
               <Button onClick={beginAgain} sx={{width:"min-content"}}>Play Again</Button>

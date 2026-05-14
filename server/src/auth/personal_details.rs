@@ -8,18 +8,18 @@ use sqlx::{MySql, Pool};
 use super::ErrorResponse;
 
 #[derive(Serialize)]
-pub struct UserProfile {
+pub struct UserPersonalDetails {
     pub username: String,
     pub email: Option<String>,
     pub email_verified: bool,
 }
 
-/// Get the current user's profile
-#[get("/auth/profile")]
-pub async fn get_profile(
+/// Get the current user's personal details
+#[get("/auth/personal-details")]
+pub async fn get_personal_details(
     pool: &State<Pool<MySql>>,
     bearer_token: BearerToken,
-) -> Result<Json<UserProfile>, (Status, Json<ErrorResponse>)> {
+) -> Result<Json<UserPersonalDetails>, (Status, Json<ErrorResponse>)> {
     let token_hash = super::hash_token(&bearer_token.0);
 
     // Look up the session to get the user_id
@@ -45,7 +45,7 @@ pub async fn get_profile(
         }),
     ))?;
 
-    // Get the user's profile information
+    // Get the user's information
     let user: Option<(String, Option<String>, bool)> =
         sqlx::query_as("SELECT username, email, email_verified FROM users WHERE user_id = ?")
             .bind(user_id)
@@ -67,7 +67,7 @@ pub async fn get_profile(
         }),
     ))?;
 
-    Ok(Json(UserProfile {
+    Ok(Json(UserPersonalDetails {
         username,
         email,
         email_verified,

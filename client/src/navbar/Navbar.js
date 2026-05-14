@@ -60,7 +60,7 @@ export default function Navbar() {
   const [windowSize, setWindowSize] = React.useState(getWindowSize());
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { isLoggedIn, userProfile, logout } = useAuth();
+  const { isLoggedIn, userPersonalDetails, logout } = useAuth();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -88,8 +88,12 @@ export default function Navbar() {
     navigate("/");
   };
 
-  const goToProfile = () => {
-    navigate("/auth/profile");
+  const goToPersonalDetails = () => {
+    navigate("/personal-details");
+  };
+
+  const goToMyProfile = () => {
+    navigate(`/users/${userPersonalDetails?.username}`);
   };
 
   let toolbar;
@@ -141,7 +145,7 @@ export default function Navbar() {
             <IconButton
               color="inherit"
               onClick={handleUserMenuOpen}
-              title={`Logged in as ${userProfile?.username}`}
+              title={`Logged in as ${userPersonalDetails?.username}`}
             >
               <AccountCircleIcon />
             </IconButton>
@@ -151,10 +155,13 @@ export default function Navbar() {
               onClose={handleUserMenuClose}
             >
               <MenuItem disabled>
-                {userProfile?.username}
+                {userPersonalDetails?.username}
               </MenuItem>
-              <MenuItem onClick={goToProfile}>
+              <MenuItem onClick={goToMyProfile}>
                 My Profile
+              </MenuItem>
+              <MenuItem onClick={goToPersonalDetails}>
+                Personal Details
               </MenuItem>
               <MenuItem onClick={handleLogout}>
                 Logout
@@ -193,7 +200,7 @@ export default function Navbar() {
             size="large"
             color="inherit"
             onClick={handleUserMenuOpen}
-            title={`Logged in as ${userProfile?.username}`}
+            title={`Logged in as ${userPersonalDetails?.username}`}
             sx={{ mr: 1 }}
           >
             <AccountCircleIcon />
@@ -207,10 +214,13 @@ export default function Navbar() {
           {isLoggedIn && (
             <>
               <MenuItem disabled>
-                {userProfile?.username}
+                {userPersonalDetails?.username}
               </MenuItem>
-              <MenuItem onClick={goToProfile}>
+              <MenuItem onClick={goToMyProfile}>
                 My Profile
+              </MenuItem>
+              <MenuItem onClick={goToPersonalDetails}>
+                Personal Details
               </MenuItem>
               <MenuItem onClick={handleLogout}>
                 Logout
