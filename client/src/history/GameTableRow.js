@@ -49,7 +49,11 @@ export default function GameTableRow({game, index}) {
 export function PlayerNameDisplay({name, username}) {
   if (username) {
     return (
-      <span style={{color:"darkgreen", fontWeight: "bold"}}>{username}</span>
+      <a href={`/users/${username}`}>
+        <span style={{color:"black", fontWeight: "bold"}}>
+          {username}
+        </span>
+      </a>
     );
   }
   if (name) {
