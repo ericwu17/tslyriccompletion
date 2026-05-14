@@ -10,7 +10,6 @@ use sqlx::{
 use std::collections::HashMap;
 use rocket::http::Status;
 use rocket::serde::json::Json;
-use crate::auth::{bearer_token::BearerToken, ErrorResponse};
 
 pub mod line_history;
 
