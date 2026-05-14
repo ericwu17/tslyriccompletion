@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sudo echo "starting build process"
 cargo install --path .
 sudo systemctl restart tswiftrs
 
