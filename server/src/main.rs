@@ -37,6 +37,7 @@ use game::{
 };
 use history::line_history::get_line;
 use history::{get_game, get_games, get_user_games_by_username, get_user_profile_by_username};
+use leaderboard::get_monthly_leaderboard;
 use rss::{get_recent_feedback_rss, get_recent_votes_rss};
 use song::{get_all_songlists, get_song, get_song_list, get_song_list_with_id};
 use std::sync::{Arc, Mutex};
@@ -116,6 +117,7 @@ async fn main() -> Result<(), rocket::Error> {
         .mount("/", routes![request_password_reset])
         .mount("/", routes![reset_password])
         .mount("/", routes![get_personal_details])
+        .mount("/", routes![get_monthly_leaderboard])
         .ignite()
         .await?;
 

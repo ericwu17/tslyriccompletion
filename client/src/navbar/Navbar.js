@@ -47,6 +47,7 @@ const MOBILE_WIDTH = 770;
 
 export const HOME_URL = "/";
 export const PLAY_URL = "/play";
+export const VIEW_LEADERBOARD_URL = "/leaderboard";
 export const VIEW_SCORES_URL = "/history";
 export const VIEW_LYRICS_URL = "/song";
 export const VIEW_STATS_URL = "/stats";
@@ -124,9 +125,9 @@ export default function Navbar() {
         </Button>
         <Button
           color="inherit"
-          onClick={() => { window.location.href = VIEW_SCORES_URL; }}
+          onClick={() => { window.location.href = VIEW_LEADERBOARD_URL; }}
         >
-          Scores
+          Leaderboards
         </Button>
         <Button
           color="inherit"
@@ -299,9 +300,9 @@ function HamburgerMenu() {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={() => window.location.href = VIEW_SCORES_URL}>
+          <ListItemButton onClick={() => window.location.href = VIEW_LEADERBOARD_URL}>
             <ListItemText>
-              Scores
+              Leaderboards
             </ListItemText>
           </ListItemButton>
         </ListItem>

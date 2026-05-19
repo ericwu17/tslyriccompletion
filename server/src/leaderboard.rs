@@ -1,29 +1,15 @@
-use std::collections::HashSet;
-
+use chrono::{Datelike, Local};
+use rocket::serde::json::Json;
+use rocket::State;
+use serde::Serialize;
 use sqlx::{prelude::FromRow, MySql, Pool};
 
-const LEADERBOARD_CANDIDATE_QUERY: &str = r#"
-    SELECT g.user_id, g.uuid, g.terminal_score AS best_score
-    FROM games g
-    INNER JOIN (
-        SELECT user_id, MAX(terminal_score) AS max_score
-        FROM games
-        WHERE user_id IS NOT NULL
-        AND has_terminated = TRUE
-        AND terminal_score IS NOT NULL
-        AND start_time >= ?
-        AND start_time < ?
-        GROUP BY user_id
-    ) best ON g.user_id = best.user_id AND g.terminal_score = best.max_score
-    ORDER BY g.terminal_score DESC, g.user_id ASC, g.uuid ASC
-"#;
-
-#[allow(dead_code)]
-#[derive(FromRow, Debug)]
-struct MonthlyMedalCandidate {
-    user_id: i32,
-    uuid: String,
-    best_score: i32,
+#[derive(Serialize, Debug, FromRow)]
+pub struct LeaderboardEntry {
+    pub user_id: i32,
+    pub username: String,
+    pub best_score: i32,
+    pub num_games: i32,
 }
 
 #[derive(FromRow, Debug)]
@@ -79,26 +65,52 @@ pub async fn award_monthly_medals(
     Ok(())
 }
 
-/// Gets leaderboard candidates for the given time period, ordered by score desc then user_id asc, and returns the top candidate for each user_id.
-/// The returned Vec will contain at most 1 entry for each user.
-async fn get_leaderboard(
+/// Gets leaderboard entries for the given time period.
+pub async fn get_leaderboard(
     pool: &Pool<MySql>,
     start_time: &str,
     end_time: &str,
-) -> Result<Vec<MonthlyMedalCandidate>, sqlx::Error> {
-    let candidates: Vec<MonthlyMedalCandidate> = sqlx::query_as(LEADERBOARD_CANDIDATE_QUERY)
-        .bind(&start_time)
-        .bind(&end_time)
-        .fetch_all(pool)
-        .await?;
+) -> Result<Vec<LeaderboardEntry>, sqlx::Error> {
+    let entries: Vec<LeaderboardEntry> = sqlx::query_as(
+        "SELECT games.user_id, users.username as username, MAX(terminal_score) AS best_score, COUNT(*) AS num_games
+         FROM games
+         JOIN users ON games.user_id = users.user_id
+         WHERE games.user_id IS NOT NULL
+           AND games.has_terminated = TRUE
+           AND games.terminal_score IS NOT NULL
+           AND games.start_time >= ?
+           AND games.start_time < ?
+         GROUP BY games.user_id
+         ORDER BY best_score DESC, games.user_id ASC",
+    )
+    .bind(start_time)
+    .bind(end_time)
+    .fetch_all(pool)
+    .await?;
 
-    let mut seen_user_ids = HashSet::new();
-    let mut winners = Vec::new();
-    for candidate in candidates.into_iter() {
-        if seen_user_ids.insert(candidate.user_id) {
-            winners.push(candidate);
-        }
+    Ok(entries)
+}
+
+/// API endpoint to get the current month's leaderboard
+#[get("/leaderboard?<year>&<month>")]
+pub async fn get_monthly_leaderboard(
+    pool: &State<Pool<MySql>>,
+    year: Option<i32>,
+    month: Option<i32>,
+) -> Json<Vec<LeaderboardEntry>> {
+    let now = Local::now();
+    let year = year.unwrap_or(now.year());
+    let month = month.unwrap_or(now.month() as i32);
+
+    let start_time = format!("{year:04}-{month:02}-01 00:00:00");
+    let end_time = if month == 12 {
+        format!("{:04}-01-01 00:00:00", year + 1)
+    } else {
+        format!("{:04}-{:02}-01 00:00:00", year, month + 1)
+    };
+
+    match get_leaderboard(pool.inner(), &start_time, &end_time).await {
+        Ok(entries) => Json(entries),
+        Err(_) => Json(Vec::new()),
     }
-
-    Ok(winners)
 }

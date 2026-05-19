@@ -17,6 +17,7 @@ import Changelog from "./changelog/changelog";
 import Changes20240331 from "./changelog/changes20240331";
 import NotRomanticPage from "./not-romantic/not-romantic";
 import StatsPage from "./stats/stats";
+import LeaderboardPage from "./leaderboard/Leaderboard";
 import { SignupPage } from "./auth/SignupPage";
 import { LoginPage } from "./auth/LoginPage";
 import { EmailVerificationPage } from "./auth/EmailVerificationPage";
@@ -45,6 +46,7 @@ function AppContent() {
           <Route path="/song/:album" element={<SongPage />} />
           <Route path="/songs" element={<Navigate to="/song" />} />
           <Route path="/stats" element={<StatsPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/history/game" element={<GameDetails />} />
           <Route path="/history/guess" element={<GuessHistory />} />
