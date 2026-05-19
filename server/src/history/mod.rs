@@ -272,6 +272,7 @@ pub async fn get_user_profile_by_username(
         LEFT JOIN games ON games.user_id = users.user_id
         LEFT JOIN guesses ON guesses.game_uuid = games.uuid
         WHERE users.username = ?
+        AND (games.has_terminated=1)
         GROUP BY users.username, users.created_at",
     )
     .bind(&username)
