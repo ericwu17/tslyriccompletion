@@ -1,5 +1,7 @@
 //! Allows users to view guess details and score summaries of past games.
 
+use rocket::http::Status;
+use rocket::serde::json::Json;
 use rocket::time::format_description;
 use serde::Deserialize;
 use serde::Serialize;
@@ -8,8 +10,6 @@ use sqlx::{
     MySql, Pool,
 };
 use std::collections::HashMap;
-use rocket::http::Status;
-use rocket::serde::json::Json;
 
 pub mod line_history;
 
@@ -167,13 +167,11 @@ pub async fn get_user_games_by_username(
     limit: Option<usize>,
 ) -> Result<String, Status> {
     // Resolve username to user_id
-    let user_query: Option<(i32,)> = sqlx::query_as(
-        "SELECT user_id FROM users WHERE username = ?",
-    )
-    .bind(&username)
-    .fetch_optional(pool.inner())
-    .await
-    .map_err(|_| Status::InternalServerError)?;
+    let user_query: Option<(i32,)> = sqlx::query_as("SELECT user_id FROM users WHERE username = ?")
+        .bind(&username)
+        .fetch_optional(pool.inner())
+        .await
+        .map_err(|_| Status::InternalServerError)?;
 
     let (user_id,) = user_query.ok_or(Status::NotFound)?;
 
@@ -283,7 +281,8 @@ pub async fn get_user_profile_by_username(
 
     let user_profile = user_profile.ok_or(Status::NotFound)?;
 
-    let format = format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
+    let format =
+        format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
 
     Ok(Json(UserProfile {
         username: user_profile.username,

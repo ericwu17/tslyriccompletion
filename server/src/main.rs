@@ -4,6 +4,7 @@ pub mod feedback;
 pub mod game;
 pub mod guess_generating;
 pub mod history;
+pub mod leaderboard;
 pub mod lifelines;
 pub mod loader_v2;
 pub mod rss;
@@ -13,9 +14,15 @@ pub mod stats;
 use crate::rss::RecentVotesCache;
 use crate::song::Song;
 use crate::stats::{get_stats, StatsResponse};
+use chrono::{Datelike, Local};
 use dotenv::dotenv;
+use leaderboard::award_monthly_medals;
+use rocket::tokio;
 use sqlx::mysql::MySqlPoolOptions;
+use sqlx::MySql;
+use sqlx::Pool;
 use std::collections::HashMap;
+use std::time::Duration;
 
 use auth::login::login;
 use auth::logout::logout;
@@ -29,12 +36,7 @@ use game::{
     GameState,
 };
 use history::line_history::get_line;
-use history::{
-    get_game,
-    get_games,
-    get_user_games_by_username,
-    get_user_profile_by_username,
-};
+use history::{get_game, get_games, get_user_games_by_username, get_user_profile_by_username};
 use rss::{get_recent_feedback_rss, get_recent_votes_rss};
 use song::{get_all_songlists, get_song, get_song_list, get_song_list_with_id};
 use std::sync::{Arc, Mutex};
@@ -68,6 +70,15 @@ async fn main() -> Result<(), rocket::Error> {
         .await
         .expect("Failed to connect to database");
     println!("Connection established!");
+
+    let pool_for_scheduler = pool.clone();
+    tokio::spawn(async move {
+        schedule_monthly_medal_award(pool_for_scheduler).await;
+    });
+
+    award_monthly_medals(&pool, 2026, 5)
+        .await
+        .expect("Failed to award monthly medals");
 
     let rocket = rocket::build()
         .manage(game_state)
@@ -111,4 +122,28 @@ async fn main() -> Result<(), rocket::Error> {
     let _ = rocket.launch().await?;
 
     Ok(())
+}
+
+async fn schedule_monthly_medal_award(pool: Pool<MySql>) {
+    // Track the last seen month+year and poll every 10 minutes.
+    let mut last_month = Local::now().month();
+    let mut last_year = Local::now().year();
+
+    loop {
+        tokio::time::sleep(Duration::from_secs(10 * 60)).await; // 10 minutes
+
+        let now = Local::now();
+        if now.month() != last_month || now.year() != last_year {
+            // Month changed — award for the month that just finished.
+            let (year_to_award, month_to_award) = if now.month() == 1 {
+                (now.year() - 1, 12)
+            } else {
+                (now.year(), now.month() as i32 - 1)
+            };
+            let _ = award_monthly_medals(&pool, year_to_award, month_to_award).await;
+
+            last_month = now.month();
+            last_year = now.year();
+        }
+    }
 }
