@@ -1,3 +1,5 @@
+use crate::auth::bearer_token::BearerToken;
+use crate::auth::hash_token;
 use crate::guess_generating::{
     lowercase_ignore_punctuation_edit_dist, optimal_truncated_dist, pick_distractors,
     pick_random_guess, Question,
@@ -70,6 +72,11 @@ pub struct GameState {
     /// A vector of songs included in the game. The (str, str) pairs are
     /// (Album_name, Song_name) pairs.
     included_songs: Vec<(&'static str, &'static str)>,
+    /// The user_id if this game is being played by a logged-in user, None if anonymous
+    /// Note that many game endpoints do not verify that the game is owned by
+    /// the logged-in user, since we assume that the game's ID is private info
+    /// and kind of acts like a token.
+    user_id: Option<i32>,
 }
 
 /// A struct related to [`GameState`]
@@ -86,6 +93,7 @@ pub struct GameStatePublic {
     terminated: bool,
     included_songs: Vec<(&'static str, &'static str)>,
     completed_question: bool,
+    user_id: Option<i32>,
 }
 
 /// A struct representing a result of a player's guess.
@@ -124,7 +132,11 @@ impl GameState {
     /// This function will modify the argument `songs_to_include`, so that if it's the empty vector,
     /// it will end up containing all songs in songs. It will also filter out any
     /// invalid songs in `songs_to_include`.
-    pub fn new(songs: &[Song], songs_to_include: &mut Vec<(&str, &str)>) -> Self {
+    pub fn new(
+        songs: &[Song],
+        songs_to_include: &mut Vec<(&str, &str)>,
+        user_id: Option<i32>,
+    ) -> Self {
         let mut actual_songs_to_include: Vec<(&'static str, &'static str)> = songs_to_include
             .clone()
             .into_iter()
@@ -149,6 +161,7 @@ impl GameState {
             terminated: false,
             completed_question: false,
             included_songs: actual_songs_to_include,
+            user_id,
         }
     }
 
@@ -166,6 +179,7 @@ impl GameState {
             terminated: self.terminated,
             included_songs: self.included_songs.clone(),
             completed_question: self.completed_question,
+            user_id: self.user_id,
         }
     }
 
@@ -183,6 +197,7 @@ impl GameState {
             terminated: self.terminated,
             included_songs: self.included_songs.clone(),
             completed_question: self.completed_question,
+            user_id: self.user_id,
         }
     }
 
@@ -232,9 +247,26 @@ pub async fn init_game(
     songs: &State<Vec<Song>>,
     songs_to_include: Json<Vec<(&str, &str)>>,
     pool: &rocket::State<Pool<MySql>>,
+    bearer_token: Option<BearerToken>,
 ) -> String {
+    // Extract user_id from bearer token if present
+    let user_id: Option<i32> = if let Some(BearerToken(token)) = bearer_token {
+        let token_hash = hash_token(&token);
+        let session: Option<(i32,)> = sqlx::query_as(
+            "SELECT user_id FROM user_sessions WHERE token_hash = ? AND expires_at > NOW()",
+        )
+        .bind(&token_hash)
+        .fetch_optional(pool.inner())
+        .await
+        .unwrap_or(None);
+
+        session.map(|(id,)| id)
+    } else {
+        None
+    };
+
     let mut songs_to_include = songs_to_include.to_vec();
-    let new_game_state = GameState::new(songs, &mut songs_to_include);
+    let new_game_state = GameState::new(songs, &mut songs_to_include, user_id);
     let uuid = Uuid::new_v4().to_string();
 
     {
@@ -278,11 +310,12 @@ pub async fn init_game(
 
     if result.is_empty() {
         // insert a new record if the current songlist sha is not found
-        let _ = sqlx::query("INSERT INTO songlists (sha1sum, content) VALUES (?, ?)")
+        sqlx::query("INSERT INTO songlists (sha1sum, content) VALUES (?, ?)")
             .bind(full_songlist_hash.clone())
             .bind(full_songlist_json)
             .fetch_all(pool.inner())
-            .await;
+            .await
+            .unwrap();
     }
 
     let songlists: Vec<SonglistSchema> =
@@ -308,13 +341,15 @@ pub async fn init_game(
         )
         .id;
 
-    // save the game to database
-    let _ = sqlx::query("INSERT INTO games VALUES (?, NOW(), ?, ?, 0, NULL, NULL)")
+    // save the game to database, including user_id if user is logged in
+    sqlx::query("INSERT INTO games VALUES (?, NOW(), ?, ?, 0, NULL, NULL, ?, 0)")
         .bind(uuid.clone())
         .bind(songlist_id)
         .bind(songlist_desc_json)
+        .bind(user_id)
         .fetch_all(pool.inner())
-        .await;
+        .await
+        .unwrap();
 
     serde_json::to_string(&new_game_state.into_public(uuid.clone())).unwrap()
 }
@@ -400,7 +435,7 @@ pub async fn game_lifelines(
         .choose(&mut rand::thread_rng())
         .unwrap();
 
-    let _ = sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
+    sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
         .bind(id.clone())
         .bind(gs.guesses_made)
         .bind(gs.current_question.song.album)
@@ -419,7 +454,14 @@ pub async fn game_lifelines(
         ))
         .bind(sqlx::types::Json(gs.choices))
         .fetch_all(pool.inner())
-        .await;
+        .await
+        .unwrap();
+
+    sqlx::query("UPDATE games SET num_guesses = num_guesses + 1 WHERE uuid = ?;")
+        .bind(&id)
+        .fetch_all(pool.inner())
+        .await
+        .unwrap();
 
     serde_json::to_string(&res.into_public_with_answers(id.clone())).unwrap()
 }
@@ -490,8 +532,25 @@ pub fn next_question(
 /// API endpoint to claim a game
 /// When a game first ends after an incorrect response, the game is "unclaimed", and so the player name
 /// will be NULL in the database. If the player enters their name, this API endpoint will be called.
+/// Games that are already associated with a user (user_id is not NULL) cannot be claimed with a name.
 #[get("/game/claim?<id>&<name>")]
 pub async fn claim_game(id: String, name: String, pool: &rocket::State<Pool<MySql>>) -> String {
+    // Check if the game already has a user_id
+    let game_user_id: Option<(Option<i32>,)> =
+        sqlx::query_as("SELECT user_id FROM games WHERE uuid = ?")
+            .bind(&id)
+            .fetch_optional(pool.inner())
+            .await
+            .unwrap_or(None);
+
+    // If the game already has a user_id, don't allow claiming with a name
+    if let Some((Some(_user_id),)) = game_user_id {
+        return serde_json::to_string(&serde_json::json!({
+            "error": "Cannot claim a game that is already associated with a user"
+        }))
+        .unwrap();
+    }
+
     let _ = sqlx::query(
         "UPDATE games
 			SET
@@ -707,7 +766,7 @@ pub async fn take_guess(
     // If the code runs to this point, then the guess is either correct or incorrect (not AFM state).
     // We can now record the guess into the database before returning.
 
-    let _ = sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
+    sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
         .bind(id.clone())
         .bind(gs.guesses_made)
         .bind(gs.current_question.song.album)
@@ -726,7 +785,14 @@ pub async fn take_guess(
         ))
         .bind(sqlx::types::Json(gs.choices))
         .fetch_all(pool.inner())
-        .await;
+        .await
+        .unwrap();
+
+    sqlx::query("UPDATE games SET num_guesses = num_guesses + 1 WHERE uuid = ?;")
+        .bind(&id)
+        .fetch_all(pool.inner())
+        .await
+        .unwrap();
 
     if !is_correct {
         let _ = sqlx::query(

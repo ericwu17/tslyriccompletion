@@ -21,6 +21,7 @@ pub struct GuessSchema {
     options: Json<Vec<String>>,
     submit_time: PrimitiveDateTime,
     player_name: Option<String>,
+    username: Option<String>,
 }
 
 #[derive(sqlx::FromRow, Debug)]
@@ -45,6 +46,7 @@ pub struct Guess {
     options: Vec<String>,
     submit_time: String,
     player_name: Option<String>,
+    username: Option<String>,
 }
 
 impl Guess {
@@ -71,6 +73,7 @@ impl Guess {
                 .unwrap(),
             submit_time: guess_schema.submit_time.format(&format).unwrap(),
             player_name: guess_schema.player_name,
+            username: guess_schema.username,
         }
     }
 }
@@ -90,8 +93,9 @@ pub async fn get_line(
     prompt: &str,
 ) -> String {
     let guesses: Vec<GuessSchema> = sqlx::query_as(
-        "SELECT guesses.*, games.player_name from guesses
+        "SELECT guesses.*, games.player_name, users.username from guesses
         INNER JOIN games ON guesses.game_uuid=games.uuid
+        LEFT JOIN users ON games.user_id = users.user_id
         WHERE
         album LIKE ?
         AND song_name LIKE ?

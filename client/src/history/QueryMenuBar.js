@@ -71,6 +71,7 @@ export default function QueryMenuBar({setGames, setIsLoading}) {
     }).catch((error) => {
       // Ignore abort errors, handle other errors
       if (error.code !== "ECONNABORTED") {
+        // eslint-disable-next-line
         console.error("Error fetching games:", error);
       }
     });
@@ -89,17 +90,6 @@ export default function QueryMenuBar({setGames, setIsLoading}) {
     }
     setPageNum(newPage.toString());
   };
-
-  // These two useEffects handle calling refetchGames().
-  // We want to call it immediately if a user changes a selected parameter,
-  // but we want a small cooldown if the user is typing (since typing generates many updates)
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      refetchGames();
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [searchString]);
 
   React.useEffect(() => {
     refetchGames();
@@ -159,14 +149,20 @@ export default function QueryMenuBar({setGames, setIsLoading}) {
       </Box>
     </>
   );
+  const timerRef = React.useRef(null);
   const searchNameSection = (
     <TextField
       placeholder="Search player name..."
       value={searchString}
       onChange={e => {setSearchString(e.target.value);}}
       onKeyDown={e => {
+        clearTimeout(timerRef.current);
         if (e.key === "Enter") {
           refetchGames();
+        } else {
+          timerRef.current = setTimeout(() => {
+            refetchGames();
+          }, 500);
         }
       }}
       onSubmit={refetchGames}

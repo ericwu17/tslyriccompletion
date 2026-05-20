@@ -8,8 +8,11 @@ import IconButton from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
-  CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText
+  CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem
 } from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/useAuth";
 
 import Satisfaction from "../fonts/Satisfaction.ttf";
 import { createTheme, ThemeProvider, } from "@mui/material/styles";
@@ -44,19 +47,22 @@ const MOBILE_WIDTH = 770;
 
 export const HOME_URL = "/";
 export const PLAY_URL = "/play";
+export const VIEW_LEADERBOARD_URL = "/leaderboard";
 export const VIEW_SCORES_URL = "/history";
 export const VIEW_LYRICS_URL = "/song";
 export const VIEW_STATS_URL = "/stats";
 
 export function getWindowSize() {
-  const {innerWidth, innerHeight} = window;
-  return {innerWidth, innerHeight};
+  const { innerWidth, innerHeight } = window;
+  return { innerWidth, innerHeight };
 }
 
 export default function Navbar() {
   const [windowSize, setWindowSize] = React.useState(getWindowSize());
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = React.useState(false);
-
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const { isLoggedIn, userPersonalDetails, logout } = useAuth();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     function handleWindowResize() {
@@ -69,6 +75,28 @@ export default function Navbar() {
     };
   }, []);
 
+  const handleUserMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleUserMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    handleUserMenuClose();
+    navigate("/");
+  };
+
+  const goToPersonalDetails = () => {
+    navigate("/personal-details");
+  };
+
+  const goToMyProfile = () => {
+    navigate(`/users/${userPersonalDetails?.username}`);
+  };
+
   let toolbar;
   if (windowSize.innerWidth > MOBILE_WIDTH) {
     toolbar = (
@@ -79,7 +107,7 @@ export default function Navbar() {
           color="inherit"
           aria-label="menu"
           sx={{ mr: 2 }}
-          onClick={() => {window.location.href=HOME_URL;}}
+          onClick={() => { window.location.href = HOME_URL; }}
         >
           <HomeIcon />
         </IconButton>
@@ -91,28 +119,72 @@ export default function Navbar() {
         </ThemeProvider>
         <Button
           color="inherit"
-          onClick={() => {window.location.href=PLAY_URL;}}
+          onClick={() => { window.location.href = PLAY_URL; }}
         >
           Play Game
         </Button>
         <Button
           color="inherit"
-          onClick={() => {window.location.href=VIEW_SCORES_URL;}}
+          onClick={() => { window.location.href = VIEW_LEADERBOARD_URL; }}
         >
-          Scores
+          Leaderboards
         </Button>
         <Button
           color="inherit"
-          onClick={() => {window.location.href=VIEW_STATS_URL;}}
+          onClick={() => { window.location.href = VIEW_STATS_URL; }}
         >
           Stats
         </Button>
         <Button
           color="inherit"
-          onClick={() => {window.location.href=VIEW_LYRICS_URL;}}
+          onClick={() => { window.location.href = VIEW_LYRICS_URL; }}
         >
           Lyrics
         </Button>
+        {isLoggedIn ? (
+          <>
+            <IconButton
+              color="inherit"
+              onClick={handleUserMenuOpen}
+              title={`Logged in as ${userPersonalDetails?.username}`}
+            >
+              <AccountCircleIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleUserMenuClose}
+            >
+              <MenuItem disabled>
+                {userPersonalDetails?.username}
+              </MenuItem>
+              <MenuItem onClick={goToMyProfile}>
+                My Profile
+              </MenuItem>
+              <MenuItem onClick={goToPersonalDetails}>
+                Personal Details
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>
+                Logout
+              </MenuItem>
+            </Menu>
+          </>
+        ) : (
+          <>
+            <Button
+              color="inherit"
+              onClick={() => navigate("/auth/login")}
+            >
+              Login
+            </Button>
+            <Button
+              color="inherit"
+              onClick={() => navigate("/auth/signup")}
+            >
+              Sign Up
+            </Button>
+          </>
+        )}
       </Toolbar>
     );
   } else {
@@ -124,13 +196,46 @@ export default function Navbar() {
             TS Lyric Completion
           </Typography>
         </ThemeProvider>
+        {isLoggedIn && (
+          <IconButton
+            size="large"
+            color="inherit"
+            onClick={handleUserMenuOpen}
+            title={`Logged in as ${userPersonalDetails?.username}`}
+            sx={{ mr: 1 }}
+          >
+            <AccountCircleIcon />
+          </IconButton>
+        )}
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleUserMenuClose}
+        >
+          {isLoggedIn && (
+            <>
+              <MenuItem disabled>
+                {userPersonalDetails?.username}
+              </MenuItem>
+              <MenuItem onClick={goToMyProfile}>
+                My Profile
+              </MenuItem>
+              <MenuItem onClick={goToPersonalDetails}>
+                Personal Details
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>
+                Logout
+              </MenuItem>
+            </>
+          )}
+        </Menu>
         <IconButton
           size="large"
           edge="start"
           color="inherit"
           aria-label="menu"
           sx={{ mr: 2 }}
-          onClick={() => {setHamburgerMenuIsOpen(true);}}
+          onClick={() => { setHamburgerMenuIsOpen(true); }}
         >
           <MenuIcon />
         </IconButton>
@@ -163,19 +268,27 @@ export default function Navbar() {
 }
 
 function HamburgerMenu() {
+  const { isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
   return (
     <Box
-      sx={{ width: "auto", background: "#3874CB", color:"white"}}
+      sx={{ width: "auto", background: "#3874CB", color: "white" }}
       role="presentation"
     >
       <List>
         <ListItem disablePadding>
           <ListItemButton onClick={() => window.location.href = HOME_URL}>
-            <ListItemText sx={{flexGrow:0, marginRight:1}}>
+            <ListItemText sx={{ flexGrow: 0, marginRight: 1 }}>
               Home
             </ListItemText>
             <ListItemIcon>
-              <HomeIcon sx={{ color: "white" }}/>
+              <HomeIcon sx={{ color: "white" }} />
             </ListItemIcon>
           </ListItemButton>
         </ListItem>
@@ -187,9 +300,9 @@ function HamburgerMenu() {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={() => window.location.href = VIEW_SCORES_URL}>
+          <ListItemButton onClick={() => window.location.href = VIEW_LEADERBOARD_URL}>
             <ListItemText>
-              Scores
+              Leaderboards
             </ListItemText>
           </ListItemButton>
         </ListItem>
@@ -207,6 +320,32 @@ function HamburgerMenu() {
             </ListItemText>
           </ListItemButton>
         </ListItem>
+        {isLoggedIn ? (
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleLogout}>
+              <ListItemText>
+                Logout
+              </ListItemText>
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          <>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/auth/login")}>
+                <ListItemText>
+                  Login
+                </ListItemText>
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/auth/signup")}>
+                <ListItemText>
+                  Sign Up
+                </ListItemText>
+              </ListItemButton>
+            </ListItem>
+          </>
+        )}
       </List>
     </Box>
   );
