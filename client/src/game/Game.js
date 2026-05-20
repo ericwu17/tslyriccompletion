@@ -4,10 +4,12 @@ import Cookies from "js-cookie";
 import {
   Checkbox, Box, Grid, Button,
   Typography, Paper, Link, Alert, Snackbar,
-  Dialog, DialogTitle, DialogActions, DialogContent, TextField
+  Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText,
+  FormControlLabel, TextField
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import GameStateDisplay from "./GameStateDisplay";
+import { useAuth } from "../auth/useAuth";
 import { ALBUM_LOGOS, ALBUM_ORDER, generateSongHref, getAlbumChipWidth } from "../utils/Utils";
 
 
@@ -20,16 +22,17 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 export default function Game() {
+  const { isLoggedIn } = useAuth();
   const [hasStarted, setHasStarted] = React.useState(false);
   const [gameState, setGameState] = React.useState({});
   const [songList, setSongList] = React.useState({});
   const [orderedSongList, setOrderedSongList] = React.useState({});
+  const [guestWarningOpen, setGuestWarningOpen] = React.useState(false);
+  const [dontShowAgain, setDontShowAgain] = React.useState(false);
   const albumChipWidth = getAlbumChipWidth();
+  const GUEST_WARNING_COOKIE = "tsgc-hide-guest-play-warning";
 
   const beginGame = () => {
-    // if (!hasStarted) {
-    //   return;
-    // }
     const includedSongList = [];
     for (let album of Object.keys(songList)) {
       for (let name of Object.keys(songList[album])) {
@@ -46,6 +49,26 @@ export default function Game() {
       console.log("starting game with id: ", response.data.id);
       setHasStarted(true);
     });
+  };
+
+  const handleGuestWarningConfirm = () => {
+    if (dontShowAgain) {
+      Cookies.set(GUEST_WARNING_COOKIE, "true", {
+        sameSite: "Lax",
+        path: "/",
+      });
+    }
+    setGuestWarningOpen(false);
+    beginGame();
+  };
+
+  const handleBeginClick = () => {
+    const skipGuestWarning = Cookies.get(GUEST_WARNING_COOKIE);
+    if (!isLoggedIn && !skipGuestWarning) {
+      setGuestWarningOpen(true);
+      return;
+    }
+    beginGame();
   };
 
   React.useEffect(() => {
@@ -112,10 +135,38 @@ export default function Game() {
           When you're ready, click "Begin"!
         </Typography>
         <Box sx={{width: "max-content", border: "2px solid green"}}>
-          <Button onClick={beginGame} size="large">
+          <Button onClick={handleBeginClick} size="large">
             Begin
           </Button>
         </Box>
+        <Dialog
+          open={guestWarningOpen}
+          onClose={() => setGuestWarningOpen(false)}
+          aria-labelledby="guest-warning-dialog-title"
+        >
+          <DialogTitle id="guest-warning-dialog-title">Play without account?</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to play without <a href="/auth/login">logging in</a>? Logging in will save your games
+              and allow you to participate in the monthly leaderboards.
+            </DialogContentText>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={dontShowAgain}
+                  onChange={(event) => setDontShowAgain(event.target.checked)}
+                />
+              }
+              label="Don't show this again"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setGuestWarningOpen(false)}>Cancel</Button>
+            <Button onClick={handleGuestWarningConfirm} variant="contained">
+              Continue without signing in
+            </Button>
+          </DialogActions>
+        </Dialog>
         <SongSelection
           songList={songList}
           setSongList={setSongList}
