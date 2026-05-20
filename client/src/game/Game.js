@@ -54,6 +54,7 @@ export default function Game() {
   const handleGuestWarningConfirm = () => {
     if (dontShowAgain) {
       Cookies.set(GUEST_WARNING_COOKIE, "true", {
+        expires: 365,
         sameSite: "Lax",
         path: "/",
       });
