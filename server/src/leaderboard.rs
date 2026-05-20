@@ -10,6 +10,7 @@ pub struct LeaderboardEntry {
     pub username: String,
     pub best_score: i32,
     pub num_games: i32,
+    pub best_game_uuid: String,
 }
 
 #[derive(FromRow, Debug)]
@@ -72,16 +73,35 @@ pub async fn get_leaderboard(
     end_time: &str,
 ) -> Result<Vec<LeaderboardEntry>, sqlx::Error> {
     let entries: Vec<LeaderboardEntry> = sqlx::query_as(
-        "SELECT games.user_id, users.username as username, MAX(terminal_score) AS best_score, COUNT(*) AS num_games
-         FROM games
-         JOIN users ON games.user_id = users.user_id
-         WHERE games.user_id IS NOT NULL
-           AND games.has_terminated = TRUE
-           AND games.terminal_score IS NOT NULL
-           AND games.start_time >= ?
-           AND games.start_time < ?
-         GROUP BY games.user_id
-         ORDER BY best_score DESC, games.user_id ASC",
+        "SELECT
+           m.user_id,
+           u.username,
+           m.best_score,
+           m.num_games,
+           MIN(g.uuid) AS best_game_uuid
+         FROM (
+           SELECT user_id, MAX(terminal_score) AS best_score, COUNT(*) AS num_games
+           FROM games
+           WHERE user_id IS NOT NULL
+             AND has_terminated = TRUE
+             AND terminal_score IS NOT NULL
+             AND start_time >= ?
+             AND start_time < ?
+           GROUP BY user_id
+         ) m
+         JOIN games g
+           ON g.user_id = m.user_id
+           AND g.terminal_score = m.best_score
+         JOIN users u
+           ON u.user_id = m.user_id
+         GROUP BY
+           m.user_id,
+           u.username,
+           m.best_score,
+           m.num_games
+         ORDER BY
+           m.best_score DESC,
+           m.user_id ASC",
     )
     .bind(start_time)
     .bind(end_time)

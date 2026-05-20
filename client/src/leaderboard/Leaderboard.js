@@ -2,8 +2,9 @@ import React from "react";
 import {
   Box, Typography, Table,
   TableCell, TableRow, TableBody,
-  TableHead, CircularProgress, Link
+  TableHead, CircularProgress, Link, IconButton
 } from "@mui/material";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { PlayerNameDisplay } from "../history/GameTableRow";
 import axios from "axios";
 
@@ -72,9 +73,19 @@ export default function LeaderboardPage() {
           <PlayerNameDisplay username={entry.username}/>
         </TableCell>
         <TableCell align="center" sx={{ fontWeight: rowFontWeight }}>
-          <Typography>
-            {entry.best_score}
-          </Typography>
+          <Box display="flex" alignItems="center" justifyContent="center" gap={1}>
+            <Typography>
+              {entry.best_score}
+            </Typography>
+            <IconButton
+              href={`/history/game?id=${entry.best_game_uuid}`}
+              size="small"
+              sx={{ padding: 0 }}
+              title="View game"
+            >
+              <OpenInNewIcon fontSize="small" />
+            </IconButton>
+          </Box>
         </TableCell>
         <TableCell align="center" sx={{ fontWeight: rowFontWeight }}>
           <Typography>
