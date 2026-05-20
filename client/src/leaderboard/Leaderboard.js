@@ -55,11 +55,17 @@ export default function LeaderboardPage() {
   const LeaderboardRow = ({ index, entry }) => {
     const rowFontWeight = index === 0 ? "bold" : "normal";
 
+    let rank = index + 1;
+    const medals = ["🥇", "🥈", "🥉"];
+    if (index < medals.length) {
+      rank = medals[index];
+    }
+
     return (
       <TableRow>
         <TableCell align="center" sx={{ fontWeight: rowFontWeight }}>
           <Typography>
-            {index + 1}
+            {rank}
           </Typography>
         </TableCell>
         <TableCell align="center" sx={{ fontWeight: rowFontWeight }}>
