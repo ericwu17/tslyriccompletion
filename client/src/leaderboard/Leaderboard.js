@@ -4,6 +4,7 @@ import {
   TableCell, TableRow, TableBody,
   TableHead, CircularProgress, Link
 } from "@mui/material";
+import { PlayerNameDisplay } from "../history/GameTableRow";
 import axios from "axios";
 
 export default function LeaderboardPage() {
@@ -62,9 +63,7 @@ export default function LeaderboardPage() {
           </Typography>
         </TableCell>
         <TableCell align="center" sx={{ fontWeight: rowFontWeight }}>
-          <Typography>
-            {entry.username}
-          </Typography>
+          <PlayerNameDisplay username={entry.username}/>
         </TableCell>
         <TableCell align="center" sx={{ fontWeight: rowFontWeight }}>
           <Typography>
@@ -95,7 +94,7 @@ export default function LeaderboardPage() {
       </Box>
 
       <Typography sx={{ mb: 2 }}>
-        {numPlayers} {numPlayers === 1 ? "player" : "players"} on the leaderboard for this month
+        {numPlayers} {numPlayers === 1 ? "player" : "players"} on the leaderboard for this month.
       </Typography>
 
       {leaderboard.length > 0 ? (
