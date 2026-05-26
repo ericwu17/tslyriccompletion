@@ -247,10 +247,25 @@ pub async fn get_user_games_by_username(
 
 #[derive(sqlx::FromRow, Debug)]
 struct UserProfileSchema {
+    user_id: i32,
     username: String,
     created_at: PrimitiveDateTime,
     games_played: i64,
     guesses_made: i64,
+}
+
+#[derive(sqlx::FromRow, Debug)]
+struct MedalSchema {
+    awarded_year: i32,
+    awarded_month: i32,
+    r#type: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct Medal {
+    pub awarded_year: i32,
+    pub awarded_month: i32,
+    pub medal_type: String,
 }
 
 #[derive(Debug, Serialize)]
@@ -259,6 +274,7 @@ pub struct UserProfile {
     pub created_at: String,
     pub games_played: i64,
     pub guesses_made: i64,
+    pub medals: Vec<Medal>,
 }
 
 #[get("/users/<username>/profile")]
@@ -267,13 +283,12 @@ pub async fn get_user_profile_by_username(
     username: String,
 ) -> Result<Json<UserProfile>, Status> {
     let user_profile: Option<UserProfileSchema> = sqlx::query_as(
-        "SELECT users.username, users.created_at, COUNT(DISTINCT games.uuid) as games_played, COUNT(guesses.game_uuid) as guesses_made
+        "SELECT users.user_id, users.username, users.created_at, COUNT(DISTINCT games.uuid) as games_played, COUNT(guesses.game_uuid) as guesses_made
         FROM users
-        LEFT JOIN games ON games.user_id = users.user_id
+        LEFT JOIN games ON games.user_id = users.user_id AND games.has_terminated = 1
         LEFT JOIN guesses ON guesses.game_uuid = games.uuid
         WHERE users.username = ?
-        AND (games.has_terminated=1)
-        GROUP BY users.username, users.created_at",
+        GROUP BY users.user_id, users.username, users.created_at",
     )
     .bind(&username)
     .fetch_optional(pool.inner())
@@ -281,6 +296,24 @@ pub async fn get_user_profile_by_username(
     .map_err(|_| Status::InternalServerError)?;
 
     let user_profile = user_profile.ok_or(Status::NotFound)?;
+
+    // There should never be more than one medal in a given year/month.
+    let medals: Vec<MedalSchema> = sqlx::query_as(
+        "SELECT awarded_year, awarded_month, type FROM medals WHERE user_id = ? ORDER BY awarded_year DESC, awarded_month DESC",
+    )
+    .bind(user_profile.user_id)
+    .fetch_all(pool.inner())
+    .await
+    .map_err(|_| Status::InternalServerError)?;
+
+    let medals = medals
+        .into_iter()
+        .map(|medal| Medal {
+            awarded_year: medal.awarded_year,
+            awarded_month: medal.awarded_month,
+            medal_type: medal.r#type,
+        })
+        .collect();
 
     let format =
         format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
@@ -290,6 +323,7 @@ pub async fn get_user_profile_by_username(
         created_at: user_profile.created_at.format(&format).unwrap(),
         games_played: user_profile.games_played,
         guesses_made: user_profile.guesses_made,
+        medals,
     }))
 }
 

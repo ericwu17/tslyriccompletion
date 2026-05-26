@@ -34,6 +34,27 @@ export function ProfilePage() {
   const [userNotFound, setUserNotFound] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
+  const medalEmojiByType = {
+    GOLD: "🥇",
+    SILVER: "🥈",
+    BRONZE: "🥉",
+  };
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   const fetchGames = useCallback(async (pageNum = 1) => {
     setGamesLoading(true);
     setGamesError("");
@@ -155,6 +176,50 @@ export function ProfilePage() {
                   <strong>Account created:</strong>{" "}
                   {new Date(profile.created_at).toLocaleDateString()}
                 </Typography>
+              </Box>
+            ) : null}
+          </CardContent>
+        </Card>
+
+        <Card sx={{ mb: 3 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Medal Collection
+            </Typography>
+            {profileLoading ? (
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <CircularProgress size={20} />
+                <Typography>Loading medals...</Typography>
+              </Box>
+            ) : profile ? (
+              <Box>
+                {profile.medals && profile.medals.length > 0 ? (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                    {profile.medals.map((medal, index) => (
+                      <Box
+                        key={`${medal.awarded_year}-${medal.awarded_month}-${index}`}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          p: 1,
+                          borderRadius: 1,
+                          bgcolor: "background.paper",
+                          boxShadow: 1,
+                        }}
+                      >
+                        <Typography>{medalEmojiByType[medal.medal_type] || "🏅"}</Typography>
+                        <Typography>
+                          {monthNames[medal.awarded_month - 1]} {medal.awarded_year}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Box>
+                ) : (
+                  <Typography color="textSecondary">
+                    No medals earned yet.
+                  </Typography>
+                )}
               </Box>
             ) : null}
           </CardContent>
