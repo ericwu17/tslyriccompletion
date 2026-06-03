@@ -2,20 +2,32 @@ import React from "react";
 import {
   Box, Typography, Table,
   TableCell, TableRow, TableBody,
-  TableHead, CircularProgress, Link, IconButton
+  TableHead, CircularProgress, Link, IconButton,
+  FormControl, InputLabel, Select, MenuItem
 } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { PlayerNameDisplay } from "../history/GameTableRow";
 import axios from "axios";
 
+const START_YEAR = 2024;
+
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
 export default function LeaderboardPage() {
   const [leaderboardData, setLeaderboardData] = React.useState(null);
   const [pageState, setPageState] = React.useState(null);
 
-  const getLeaderboard = () => {
+  const now = new Date();
+  const [selectedYear, setSelectedYear] = React.useState(now.getFullYear());
+  const [selectedMonth, setSelectedMonth] = React.useState(now.getMonth() + 1);
+
+  const getLeaderboard = React.useCallback((year, month) => {
     setPageState("LOADING");
 
-    axios.get("/leaderboard")
+    axios.get("/leaderboard", { params: { year, month } })
       .then((response) => {
         setLeaderboardData(response.data);
         setPageState("LOADED");
@@ -25,9 +37,16 @@ export default function LeaderboardPage() {
         console.error("Error fetching leaderboard:", error);
         setPageState("ERROR");
       });
-  };
+  }, []);
 
-  React.useEffect(() => { getLeaderboard(); }, []);
+  React.useEffect(() => {
+    getLeaderboard(selectedYear, selectedMonth);
+  }, [selectedYear, selectedMonth, getLeaderboard]);
+
+  const years = [];
+  for (let y = START_YEAR; y <= now.getFullYear(); y++) {
+    years.push(y);
+  }
 
   if (pageState === "LOADING") {
     return <CircularProgress />;
@@ -48,9 +67,7 @@ export default function LeaderboardPage() {
   }
 
   const leaderboard = leaderboardData;
-  const now = new Date();
-  const monthName = now.toLocaleString("default", { month: "long" });
-  const year = now.getFullYear();
+  const monthName = MONTHS[selectedMonth - 1];
   const numPlayers = leaderboard.length;
 
   const LeaderboardRow = ({ index, entry }) => {
@@ -106,8 +123,35 @@ export default function LeaderboardPage() {
     >
       <Box my={1} mx={1}>
         <Typography variant="h3" sx={{ mb: 2 }}>
-          TSLC {monthName} {year} Leaderboard
+          TSLC {monthName} {selectedYear} Leaderboard
         </Typography>
+      </Box>
+
+      <Box display="flex" gap={2} sx={{ mb: 2 }}>
+        <FormControl size="small" sx={{ minWidth: 120 }}>
+          <InputLabel>Month</InputLabel>
+          <Select
+            value={selectedMonth}
+            label="Month"
+            onChange={(e) => setSelectedMonth(e.target.value)}
+          >
+            {MONTHS.map((name, index) => (
+              <MenuItem key={index} value={index + 1}>{name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl size="small" sx={{ minWidth: 100 }}>
+          <InputLabel>Year</InputLabel>
+          <Select
+            value={selectedYear}
+            label="Year"
+            onChange={(e) => setSelectedYear(e.target.value)}
+          >
+            {years.map((y) => (
+              <MenuItem key={y} value={y}>{y}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
 
       <Typography sx={{ mb: 2 }}>
@@ -147,7 +191,7 @@ export default function LeaderboardPage() {
           </TableBody>
         </Table>
       ) : (
-        <Typography>No players on the leaderboard yet for {monthName} {year}.</Typography>
+        <Typography>No players on the leaderboard yet for {monthName} {selectedYear}.</Typography>
       )}
 
       <Box mt={4} mb={2}>
