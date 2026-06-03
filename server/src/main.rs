@@ -77,10 +77,6 @@ async fn main() -> Result<(), rocket::Error> {
         schedule_monthly_medal_award(pool_for_scheduler).await;
     });
 
-    award_monthly_medals(&pool, 2026, 5)
-        .await
-        .expect("Failed to award monthly medals");
-
     let rocket = rocket::build()
         .manage(game_state)
         .manage(songs)
