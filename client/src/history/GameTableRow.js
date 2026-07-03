@@ -4,8 +4,6 @@ import { TableRow, TableCell, Link, Box } from "@mui/material";
 import { parseISO } from "date-fns";
 
 export default function GameTableRow({game, index}) {
-  const name = game.player_name;
-
   const score = game.terminal_score;
   const { num_guesses } = game;
 
@@ -24,20 +22,11 @@ export default function GameTableRow({game, index}) {
           {startTime.toLocaleString()}
         </Box>
       </TableCell>
-      {name &&
-        <TableCell>
-          <Box pl={1}>
-            {name}
-          </Box>
-        </TableCell>
-      }
-      {!name &&
-        <TableCell>
-          <Box pl={1}>
-            <span style={{color:"darkgray", fontWeight: "bold"}}>{"<Anonymous>"}</span>
-          </Box>
-        </TableCell>
-      }
+      <TableCell>
+        <Box pl={1}>
+          <PlayerNameDisplay name={game.player_name} username={game.username}/>
+        </Box>
+      </TableCell>
       <TableCell align="right">
         <Box pl={1}>
           {num_guesses}
@@ -54,5 +43,26 @@ export default function GameTableRow({game, index}) {
         </Box>
       </TableCell>
     </TableRow>
+  );
+}
+
+export function PlayerNameDisplay({name, username}) {
+  if (username) {
+    return (
+      <a href={`/users/${username}`}>
+        <span style={{color:"black", fontWeight: "bold"}}>
+          {username}
+        </span>
+      </a>
+    );
+  }
+  if (name) {
+    return (
+      <span>{name}</span>
+    );
+  }
+
+  return (
+    <span style={{color:"darkgray", fontWeight: "bold"}}>{"<Anonymous>"}</span>
   );
 }

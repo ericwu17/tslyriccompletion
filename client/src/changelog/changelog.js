@@ -11,6 +11,14 @@ import {
 const CHANGELOG_ENTRIES = [
   (
     <Typography key="2025-10-24">
+      2026-05-09: Introduced user accounts! You can now sign up for a user account.
+      More features
+      (such as saved songlists for starting games, a high scores page, and personal game history)
+      will be coming soon.
+    </Typography>
+  ),
+  (
+    <Typography key="2025-10-24">
       2025-10-24: Added a page for Taylor Swift songs that are not romantic: {" "}
       <Link href="/not-romantic">/not-romantic</Link>
     </Typography>

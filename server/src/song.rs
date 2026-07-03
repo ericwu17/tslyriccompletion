@@ -142,21 +142,18 @@ impl Song {
         for line in &lines {
             let line_text = line.text;
             let invalid_chars = vec![
-                'е',
-                '”',
-                '“',
-                '’',
-                '\u{2005}',
-                '\u{205f}',
-                '\u{200b}',
-                '—',  // this is a long dash
-                '–',  // this is a different long dash
-                '…'
+                'е', '”', '“', '’', '\u{2005}', '\u{205f}', '\u{200b}',
+                '—', // this is a long dash
+                '–', // this is a different long dash
+                '…',
             ];
 
             for invalid_char in invalid_chars {
                 if line_text.contains(invalid_char) {
-                    panic!("line contains invalid character `{}` from song {}", invalid_char, name);
+                    panic!(
+                        "line contains invalid character `{}` from song {}",
+                        invalid_char, name
+                    );
                 }
             }
         }
