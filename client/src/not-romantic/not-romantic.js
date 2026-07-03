@@ -65,6 +65,11 @@ const NOT_ROMANTIC_SONGS_DATA = [
   },
   {
     "album": "Speak Now",
+    "name": "Long Live",
+    "description": " is about her team.",
+  },
+  {
+    "album": "Speak Now",
     "name": "Castles Crumbling",
     "description": " is about the fear of losing one's reputation, or the pressure of fame.",
   },
