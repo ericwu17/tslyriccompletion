@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import {
   ALBUM_LOGOS, ALBUM_ORDER,
   generateLineHistoryHref,
-  generateSongHref, useAlbumChipWidth, isTouchDevice, normalizeQuotes
+  generateSongHref, useAlbumChipWidth, isTouchDevice, normalizeQuotes, decodeLegacyEscapes
 } from "../utils/Utils";
 import { LinePopoverContent } from "../history/GuessHistory";
 import { NotFoundImg } from "../not-found/NotFound";
@@ -22,7 +22,9 @@ export const Item = styled(Paper)(({ theme }) => ({
 
 
 export default function SongPage() {
-  let { album, name } = useParams();
+  const params = useParams();
+  const album = params.album && decodeLegacyEscapes(params.album);
+  const name = params.name && decodeLegacyEscapes(params.name);
   const albumChipWidth = useAlbumChipWidth();
 
   const [unfilteredSongList, setSongList] = React.useState({});
@@ -42,7 +44,8 @@ export default function SongPage() {
   }, []);
   React.useEffect(() => {
     setIsSongLoading(true);
-    axios.get(`/songs/${album}/${name}`).then((response) => {
+    const url = `/songs/${encodeURIComponent(album)}/${encodeURIComponent(name)}`;
+    axios.get(url).then((response) => {
       setSong(response.data);
       setIsSongLoading(false);
     });

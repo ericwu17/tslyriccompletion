@@ -23,7 +23,7 @@ export default function GameDetails() {
   const id = useSearchParamsState("id", "")[0];
 
   React.useEffect(() => {
-    axios.get(`/history/game?id=${id}`).then((response) => {
+    axios.get("/history/game", { params: { id } }).then((response) => {
       setData(response.data);
       if (response.status !== 200) {
         setFetchError(true);

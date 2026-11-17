@@ -13,6 +13,7 @@ import {
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
+import { generateUserProfileHref } from "../utils/Utils";
 
 import Satisfaction from "../fonts/Satisfaction.ttf";
 import { createTheme, ThemeProvider, } from "@mui/material/styles";
@@ -94,7 +95,7 @@ export default function Navbar() {
   };
 
   const goToMyProfile = () => {
-    navigate(`/users/${userPersonalDetails?.username}`);
+    navigate(generateUserProfileHref(userPersonalDetails?.username));
   };
 
   let toolbar;

@@ -8,6 +8,7 @@ import {
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { PlayerNameDisplay } from "../history/GameTableRow";
 import axios from "axios";
+import { generateGameHref } from "../utils/Utils";
 
 const START_YEAR = 2024;
 
@@ -95,7 +96,7 @@ export default function LeaderboardPage() {
               {entry.best_score}
             </Typography>
             <IconButton
-              href={`/history/game?id=${entry.best_game_uuid}`}
+              href={generateGameHref(entry.best_game_uuid)}
               size="small"
               sx={{ padding: 0 }}
               title="View game"

@@ -86,7 +86,7 @@ export default function Game() {
       console.log(`Loading game from cookies... (the id is: ${maybeGameId})`);
       axios.get("/songs").then((response) => {
         const songs = response.data;
-        axios.get(`/game/next?id=${maybeGameId}`).then((response) => {
+        axios.get("/game/next", { params: { id: maybeGameId } }).then((response) => {
           if (!response.data.id) {
             // return early because the game id in cookies is invalid.
             // eslint-disable-next-line no-console

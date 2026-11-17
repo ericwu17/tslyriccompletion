@@ -14,7 +14,7 @@ export default function SongListSection({selectedSongs, songlistId}) {
   const [snackBarIsOpen, setSnackBarIsOpen] = React.useState(false);
 
   React.useEffect(() => {
-    axios.get(`/songs?id=${songlistId}`).then((response) => {
+    axios.get("/songs", { params: { id: songlistId } }).then((response) => {
       setFullSongList(response.data);
     });
   }, []);

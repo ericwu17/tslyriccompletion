@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "@mui/material";
 import NotFound from "../not-found/NotFound";
+import { generateGameHref } from "../utils/Utils";
 
 export function ProfilePage() {
   const { username } = useParams();
@@ -60,7 +61,8 @@ export function ProfilePage() {
     setGamesError("");
     try {
       const response = await axios.get(
-        `/users/${username}/games?page_num=${pageNum}&limit=10`
+        `/users/${encodeURIComponent(username)}/games`,
+        { params: { page_num: pageNum, limit: 10 } }
       );
       const newGames = response.data;
       if (pageNum === 1) {
@@ -86,7 +88,7 @@ export function ProfilePage() {
     setProfileLoading(true);
     setProfileError("");
     try {
-      const response = await axios.get(`/users/${username}/profile`);
+      const response = await axios.get(`/users/${encodeURIComponent(username)}/profile`);
       setProfile(response.data);
     } catch (err) {
       if (err.response?.status == 404) {
@@ -267,7 +269,7 @@ export function ProfilePage() {
                             size="small"
                             variant="outlined"
                             onClick={() =>
-                              navigate(`/history/game?id=${game.uuid}`)
+                              navigate(generateGameHref(game.uuid))
                             }
                           >
                             View Details

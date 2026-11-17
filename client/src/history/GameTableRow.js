@@ -2,6 +2,7 @@ import React from "react";
 import { TableRow, TableCell, Link, Box } from "@mui/material";
 
 import { parseISO } from "date-fns";
+import { generateGameHref, generateUserProfileHref } from "../utils/Utils";
 
 export default function GameTableRow({game, index}) {
   const score = game.terminal_score;
@@ -39,7 +40,7 @@ export default function GameTableRow({game, index}) {
       </TableCell>
       <TableCell align="right">
         <Box pl={1}>
-          <Link href={`/history/game?id=${game.uuid}`}>Details</Link>
+          <Link href={generateGameHref(game.uuid)}>Details</Link>
         </Box>
       </TableCell>
     </TableRow>
@@ -49,7 +50,7 @@ export default function GameTableRow({game, index}) {
 export function PlayerNameDisplay({name, username}) {
   if (username) {
     return (
-      <a href={`/users/${username}`}>
+      <a href={generateUserProfileHref(username)}>
         <span style={{color:"black", fontWeight: "bold"}}>
           {username}
         </span>

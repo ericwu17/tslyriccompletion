@@ -3,7 +3,7 @@ import React from "react";
 import { Typography, Box, CircularProgress, Link, Divider } from "@mui/material";
 import {
   ALBUM_LOGOS, generateGameHref, generateSongHref,
-  unescapeQuestionMarks, useSearchParamsState, generateLineBackendAPIHistoryHref,
+  decodeLegacyEscapes, useSearchParamsState,
 } from "../utils/Utils";
 import { generateFlags } from "./GameDetails";
 import { FlaggedText } from "../game/ResultDisplay";
@@ -15,12 +15,12 @@ import { PlayerNameDisplay } from "./GameTableRow";
 export default function GuessHistory() {
   const [data, setData] = React.useState({});
   const [fetchError, setFetchError] = React.useState(false);
-  const album = unescapeQuestionMarks(useSearchParamsState("album", "")[0]);
-  const song = unescapeQuestionMarks(useSearchParamsState("song", "")[0]);
-  const prompt = unescapeQuestionMarks(useSearchParamsState("prompt", "")[0]);
+  const album = decodeLegacyEscapes(useSearchParamsState("album", "")[0]);
+  const song = decodeLegacyEscapes(useSearchParamsState("song", "")[0]);
+  const prompt = decodeLegacyEscapes(useSearchParamsState("prompt", "")[0]);
 
   React.useEffect(() => {
-    axios.get(generateLineBackendAPIHistoryHref(album, song, prompt)).then((response) => {
+    axios.get("/history/line", { params: { album, song, prompt } }).then((response) => {
       setData(response.data);
       if (response.status !== 200) {
         setFetchError(true);
@@ -76,7 +76,7 @@ export default function GuessHistory() {
           />
           <Typography variant="h6">
             <Link href={generateSongHref(album, song)}>
-              {unescapeQuestionMarks(album)} : {unescapeQuestionMarks(song)}
+              {album} : {song}
             </Link>
           </Typography>
         </Box>
@@ -93,7 +93,7 @@ export default function GuessHistory() {
         }
         <Typography variant="h4">
           <span style={{color:"#00ab66", fontFamily: "Monospace", fontWeight: "bold"}}>
-            {unescapeQuestionMarks(prompt)}
+            {prompt}
           </span>
         </Typography>
         <Typography>
@@ -195,7 +195,7 @@ export function LinePopoverContent({ album, song, prompt }) {
   const [fetchError, setFetchError] = React.useState(false);
 
   React.useEffect(() => {
-    axios.get(generateLineBackendAPIHistoryHref(album, song, prompt)).then((response) => {
+    axios.get("/history/line", { params: { album, song, prompt } }).then((response) => {
       setData(response.data);
       if (response.status !== 200) {
         setFetchError(true);

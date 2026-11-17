@@ -60,11 +60,16 @@ export default function QueryMenuBar({setGames, setIsLoading}) {
     // Create new abort controller for this request
     abortControllerRef.current = new AbortController();
 
-    axios.get(
-      // eslint-disable-next-line max-len
-      `/history/all?sort=${sortBy}&search=${searchString}&include_nameless=${includeNameless}&page_num=${pageNum}&limit=${limit}`,
-      { signal: abortControllerRef.current.signal }
-    ).then((response) => {
+    axios.get("/history/all", {
+      params: {
+        sort: sortBy,
+        search: searchString,
+        include_nameless: includeNameless,
+        page_num: pageNum,
+        limit,
+      },
+      signal: abortControllerRef.current.signal,
+    }).then((response) => {
       let games = response.data;
       setGames(games);
       setIsLoading(false);

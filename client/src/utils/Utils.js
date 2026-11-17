@@ -68,46 +68,43 @@ export function useSearchParamsState(
   return [searchParamsState, setSearchParamsState];
 }
 
-const escapeQuestionMarks = s => {
-  // This function replaces question marks in 's' with the string '%253F'.
-  // The purpose is so that when entered into a URL on the front end, it translates to
-  // '%3F', and then this gets interpreted as '?' when the front end communicates with the back end.
+// URL-building rules:
+//  - Requests to the back end should pass query values through axios's `params` option
+//    (and path segments through encodeURIComponent), never by pasting raw strings into the URL.
+//    Song names and lyrics contain "?" and "&" (e.g. "Question...?", "Forever & Always").
+//  - Links to front end pages are built with the helpers below, which encode each value once.
 
-  // This function is needed because of the song "Question...?"
-  // and also the song "Forever & always"
-  return s.replaceAll("?", "%253F").replaceAll("&", "%2526");
-};
-const escapeQuestionMarksSingleLevel = s => {
-  // Used for URLs sent straight to the back end (not via a front end route),
-  // so the characters only need to be escaped one level deep.
-  return s.replaceAll("?", "%3F").replaceAll("&", "%26");
+const toQueryString = params => {
+  return Object.entries(params)
+    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+    .join("&");
 };
 
 export const generateSongHref = (album, name) => {
-  return `/song/${escapeQuestionMarks(album)}/${escapeQuestionMarks(name)}`;
+  return `/song/${encodeURIComponent(album)}/${encodeURIComponent(name)}`;
 };
 
 export const generateGameHref = uuid => {
-  return `/history/game?id=${uuid}`;
+  return `/history/game?${toQueryString({ id: uuid })}`;
+};
+
+export const generateUserProfileHref = username => {
+  return `/users/${encodeURIComponent(username)}`;
 };
 
 export const generateLineHistoryHref = (album, song, prompt) => {
-  const album_esc = escapeQuestionMarks(album);
-  const song_esc = escapeQuestionMarks(song);
-  const prompt_esc = escapeQuestionMarks(prompt);
-
-  return `/history/guess?album=${album_esc}&song=${song_esc}&prompt=${prompt_esc}`;
+  return `/history/guess?${toQueryString({ album, song, prompt })}`;
 };
 
-export const generateLineBackendAPIHistoryHref = (album, song, prompt) => {
-  const album_esc = escapeQuestionMarksSingleLevel(album);
-  const song_esc = escapeQuestionMarksSingleLevel(song);
-  const prompt_esc = escapeQuestionMarksSingleLevel(prompt);
-
-  return `/history/line?album=${album_esc}&song=${song_esc}&prompt=${prompt_esc}`;
+export const generateFeedbackHref = (album, songName, line) => {
+  return `/feedback?${toQueryString({ album, song_name: songName, line })}`;
 };
 
-export const unescapeQuestionMarks = s => {
+// Links generated before Nov 2026 double-escaped "?" and "&" (as "%253F" and "%2526"), so after
+// the router decodes them once they still read "%3F" and "%26". Apply this to values read from
+// song and line-history URLs so those old links (bookmarks, shared links) keep working.
+// It is a no-op for current links, and no song name or lyric contains a literal "%".
+export const decodeLegacyEscapes = s => {
   return s.replaceAll("%3F", "?").replaceAll("%26", "&");
 };
 
