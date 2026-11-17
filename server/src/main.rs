@@ -1,5 +1,4 @@
 pub mod auth;
-pub mod diff;
 pub mod feedback;
 pub mod game;
 pub mod guess_generating;
