@@ -203,7 +203,7 @@ function GuessDetails({ guess, totalNumGuesses }) {
               </Typography>
             </Box>
             <Box
-              aria-owns={open ? "mouse-over-popover" : undefined}
+              aria-owns={popoverOpen ? "mouse-over-popover" : undefined}
               aria-haspopup="true"
               onMouseEnter={handlePopoverOpen}
               onMouseLeave={handlePopoverClose}

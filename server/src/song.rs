@@ -76,13 +76,8 @@ impl Line {
         let mut is_exclamatory = false;
         let mut is_bad_prompt = None;
 
-        let text = if raw_text.contains('$') {
-            // everything before the `$` is part of the line
-            let _num_segments = raw_text.split('$').count();
-            raw_text.split('$').take(1).next().unwrap()
-        } else {
-            raw_text
-        };
+        // Everything before the first `$` is the lyric text; everything after the last `$` is markers.
+        let text = raw_text.split('$').next().unwrap();
 
         if raw_text.contains('$') {
             let markers = raw_text.split('$').next_back().unwrap();
@@ -134,7 +129,7 @@ impl Song {
             lyrics_raw_processed.push_str(line.text);
             lyrics_raw_processed.push('\n');
 
-            lines_unique.insert(raw_line);
+            lines_unique.insert(line.text);
             lines.push(line);
         }
 
@@ -170,28 +165,6 @@ impl Song {
         let n = lines.len();
         lines[n - 1].is_bad_prompt = Some("Has no next line");
 
-        // NOTE: the logic here calculates whether there are multiple successors
-        // let mut continuation_map: HashMap<String, Vec<String>> = HashMap::new();
-        // for index in 0..lines.len() - 1 {
-        //     let line = &lines[index];
-        //     if let Some(continuations) = continuation_map.get(&line.text) {
-        //         if !continuations.contains(&lines[index + 1].text) {
-        //             let mut v = continuations.clone();
-        //             v.push(lines[index + 1].text.clone());
-        //             continuation_map.insert(line.text.clone(), v);
-        //         }
-        //     } else {
-        //         continuation_map.insert(line.text.clone(), vec![lines[index + 1].text.clone()]);
-        //     }
-        // }
-        // for index in 0..lines.len() - 1 {
-        //     if let Some(continuations) = continuation_map.get(&lines[index].text) {
-        //         if continuations.len() > 1 {
-        //             lines[index].has_multiple_successors = true;
-        //         }
-        //     }
-        // }
-
         Song {
             album,
             name,
@@ -208,13 +181,7 @@ impl Song {
 pub fn get_song_list(songs: &State<Vec<Song>>) -> String {
     let mut s: HashMap<&'static str, Vec<&'static str>> = HashMap::new();
     for song in songs.iter() {
-        if let Some(v) = s.get(song.album) {
-            let mut v = v.clone();
-            v.push(song.name);
-            s.insert(song.album, v);
-        } else {
-            s.insert(song.album, vec![song.name]);
-        }
+        s.entry(song.album).or_default().push(song.name);
     }
 
     serde_json::to_string(&s).unwrap()
@@ -235,26 +202,13 @@ pub async fn get_song_list_with_id(id: i32, pool: &rocket::State<Pool<MySql>>) -
         return "{}".to_string();
     }
 
-    let songlists: Vec<Songlist> = result
-        .into_iter()
-        .map(|songlist| Songlist {
-            id: songlist.id,
-            sha1sum: songlist.sha1sum,
-            content: songlist.content.as_ref().clone(),
-        })
-        .collect();
+    let songlists: Vec<Songlist> = result.into_iter().map(Songlist::from).collect();
 
     let songs = &songlists.first().unwrap().content;
 
     let mut s: HashMap<String, Vec<String>> = HashMap::new();
     for (album, name) in songs.iter() {
-        if let Some(v) = s.get(album) {
-            let mut v = v.clone();
-            v.push(name.clone());
-            s.insert(album.clone(), v);
-        } else {
-            s.insert(album.clone(), vec![name.clone()]);
-        }
+        s.entry(album.clone()).or_default().push(name.clone());
     }
 
     serde_json::to_string(&s).unwrap()
@@ -267,14 +221,7 @@ pub async fn get_all_songlists(pool: &rocket::State<Pool<MySql>>) -> String {
         .fetch_all(pool.inner())
         .await
         .unwrap();
-    let all_songlists: Vec<Songlist> = all_songlists
-        .into_iter()
-        .map(|songlist| Songlist {
-            id: songlist.id,
-            sha1sum: songlist.sha1sum,
-            content: songlist.content.as_ref().clone(),
-        })
-        .collect();
+    let all_songlists: Vec<Songlist> = all_songlists.into_iter().map(Songlist::from).collect();
 
     let mut result: HashMap<i32, &Vec<(String, String)>> = HashMap::new();
 

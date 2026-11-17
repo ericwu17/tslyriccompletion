@@ -2,7 +2,7 @@
 //! when the server starts.
 //!
 //! The original v1 of this loader used to load songs from a `taylor` submodule in the repository.
-//! The v2 loader loads songs from the `lyrics_data` directory in the directory. This allows
+//! The v2 loader loads songs from the `lyrics_data` directory in the repository. This allows
 //! me to have more control over the format of the songs, and which songs are considered part of the
 //! game can be changed by directly adding/removing files.
 

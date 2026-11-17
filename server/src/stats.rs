@@ -86,7 +86,7 @@ pub async fn get_stats(
         *cache = Some(response.clone());
     }
 
-    return serde_json::to_string(&response).unwrap();
+    serde_json::to_string(&response).unwrap()
 }
 
 async fn get_stats_from_recent_period(

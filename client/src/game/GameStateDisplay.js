@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { Box, Button, ButtonBase, Divider, Link, TextField, Typography } from "@mui/material";
 import ResultDisplay from "./ResultDisplay";
-import { ALBUM_LOGOS, generateSongHref, normalizeQuotes } from "../utils/Utils";
+import { ALBUM_LOGOS, GAME_ID_COOKIE, generateSongHref, normalizeQuotes } from "../utils/Utils";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { useAuth } from "../auth/useAuth";
@@ -25,7 +25,7 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
       // once the game ends, we want to remove the cookie so that
       // if users close the tab, they won't be loaded into the game
       // next time
-      Cookies.remove("tsgg-game-id");
+      Cookies.remove(GAME_ID_COOKIE);
     }
   }, [terminated]);
 
@@ -47,9 +47,6 @@ export default function GameStateDisplay({gameState, setGameState, setHasStarted
   const isMultipleChoice = choices.length > 0;
 
   const prompt = current_question.shown_line;
-
-
-
 
   const onKeyDown = e => {
     if (e.key === "Enter" && !completed_question && currentGuess !== "") {

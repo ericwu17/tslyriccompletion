@@ -1,14 +1,14 @@
 use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::State;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use sqlx::{MySql, Pool};
 
 use crate::auth::{get_email_token_expiry, send_email};
 
 use super::{
     generate_token, get_session_expiry, hash_password, hash_token, is_valid_username_format,
-    ErrorResponse, UserAgent,
+    AuthResponse, ErrorResponse, UserAgent,
 };
 
 #[derive(Deserialize)]
@@ -18,21 +18,13 @@ pub struct SignupRequest {
     pub password: String,
 }
 
-#[derive(Serialize)]
-pub struct SignupResponse {
-    pub token: String,
-    pub user_id: i32,
-    pub username: String,
-    pub expires_at: String,
-}
-
 #[post("/auth/signup", format = "json", data = "<req>")]
 pub async fn signup(
     pool: &State<Pool<MySql>>,
     user_agent: UserAgent,
     req: Json<SignupRequest>,
-) -> Result<Json<SignupResponse>, (Status, Json<ErrorResponse>)> {
-    // TODO: emails are optional
+) -> Result<Json<AuthResponse>, (Status, Json<ErrorResponse>)> {
+    // Email is optional: an empty string means the user chose not to provide one.
     let maybe_email = if req.email.is_empty() {
         None
     } else {
@@ -208,7 +200,7 @@ pub async fn signup(
 
         let subject = "Verify Your Email";
         let body = format!(
-        "Thanks for signing up for a Taylor Swift Lyric Completion Account! Your username is: {}\n\nClick the link below to verify your email:\n\n{}\n\n. This link expires in 24 hours.",
+        "Thanks for signing up for a Taylor Swift Lyric Completion Account! Your username is: {}\n\nClick the link below to verify your email:\n\n{}\n\nThis link expires in 24 hours.",
         req.username,
         verification_link,
     );
@@ -240,7 +232,7 @@ pub async fn signup(
     .await
     .unwrap();
 
-    Ok(Json(SignupResponse {
+    Ok(Json(AuthResponse {
         token,
         user_id,
         username: req.username.clone(),

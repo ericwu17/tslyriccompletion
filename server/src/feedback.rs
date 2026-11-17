@@ -14,29 +14,7 @@ pub async fn upvote_line(
     pool: &rocket::State<Pool<MySql>>,
     vote_cache: &rocket::State<Arc<Mutex<RecentVotesCache>>>,
 ) -> String {
-    let _ = sqlx::query("INSERT IGNORE INTO votes (album, song_name, lyric, num_upvotes, num_downvotes) VALUES (?, ?, ?, 0, 0);")
-        .bind(album)
-        .bind(song_name)
-        .bind(line)
-        .fetch_all(pool.inner())
-        .await;
-    let _ = sqlx::query("UPDATE votes SET num_upvotes = num_upvotes + 1 WHERE album LIKE ? AND song_name LIKE ? AND lyric LIKE ?;")
-        .bind(album)
-        .bind(song_name)
-        .bind(line)
-        .fetch_all(pool.inner())
-        .await;
-    {
-        let mut guard = vote_cache.lock().unwrap();
-        guard.add(VoteEvent {
-            time: Utc::now(),
-            album: album.to_string(),
-            song_name: song_name.to_string(),
-            lyric: line.to_string(),
-            is_upvote: true,
-        });
-    }
-
+    record_vote(album, song_name, line, true, pool, vote_cache).await;
     "".to_owned()
 }
 
@@ -49,31 +27,45 @@ pub async fn downvote_line(
     pool: &rocket::State<Pool<MySql>>,
     vote_cache: &rocket::State<Arc<Mutex<RecentVotesCache>>>,
 ) -> String {
+    record_vote(album, song_name, line, false, pool, vote_cache).await;
+    "".to_owned()
+}
+
+/// Records a vote in the database and in the recent-votes cache (used by the votes RSS feed).
+async fn record_vote(
+    album: &str,
+    song_name: &str,
+    line: &str,
+    is_upvote: bool,
+    pool: &Pool<MySql>,
+    vote_cache: &Mutex<RecentVotesCache>,
+) {
     let _ = sqlx::query("INSERT IGNORE INTO votes (album, song_name, lyric, num_upvotes, num_downvotes) VALUES (?, ?, ?, 0, 0);")
         .bind(album)
         .bind(song_name)
         .bind(line)
-        .fetch_all(pool.inner())
+        .fetch_all(pool)
         .await;
-    let _ = sqlx::query("UPDATE votes SET num_downvotes = num_downvotes + 1 WHERE album LIKE ? AND song_name LIKE ? AND lyric LIKE ?;")
+
+    let update_query = if is_upvote {
+        "UPDATE votes SET num_upvotes = num_upvotes + 1 WHERE album LIKE ? AND song_name LIKE ? AND lyric LIKE ?;"
+    } else {
+        "UPDATE votes SET num_downvotes = num_downvotes + 1 WHERE album LIKE ? AND song_name LIKE ? AND lyric LIKE ?;"
+    };
+    let _ = sqlx::query(update_query)
         .bind(album)
         .bind(song_name)
         .bind(line)
-        .fetch_all(pool.inner())
+        .fetch_all(pool)
         .await;
 
-    {
-        let mut guard = vote_cache.lock().unwrap();
-        guard.add(VoteEvent {
-            time: Utc::now(),
-            album: album.to_string(),
-            song_name: song_name.to_string(),
-            lyric: line.to_string(),
-            is_upvote: false,
-        });
-    }
-
-    "".to_owned()
+    vote_cache.lock().unwrap().add(VoteEvent {
+        time: Utc::now(),
+        album: album.to_string(),
+        song_name: song_name.to_string(),
+        lyric: line.to_string(),
+        is_upvote,
+    });
 }
 
 #[derive(Deserialize, Debug)]

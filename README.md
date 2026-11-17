@@ -23,14 +23,14 @@ CREATE DATABASE mydb
 and then:
 
 ```bash
-mysql -u root -p mydb < ./mydb_dump.sql
+mysql -u root -p mydb < ./server/mydb--2024-02-26--01-58-00.sql
 ```
 
-where `mydb_dump.sql` is the sql dump file which can be found in the server directory.
+where `mydb--2024-02-26--01-58-00.sql` is the sql dump file in the server directory.
 
 You will also need to set up .env files in both the client and server directory. The .env file
 in the server directory will contain information about database credentials (see the README
-file in the sever directory). The .env file in the client directory will contain something like:
+file in the server directory). The .env file in the client directory will contain something like:
 
 ```text
 REACT_APP_AXIOS_BASE_URL=http://localhost:3000

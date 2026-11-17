@@ -37,13 +37,7 @@ pub async fn award_monthly_medals(
         return Ok(());
     }
 
-    let start_time = format!("{year:04}-{month:02}-01 00:00:00");
-    let end_time = if month == 12 {
-        format!("{:04}-01-01 00:00:00", year + 1)
-    } else {
-        format!("{:04}-{:02}-01 00:00:00", year, month + 1)
-    };
-
+    let (start_time, end_time) = month_bounds(year, month);
     let winners = get_leaderboard(pool, &start_time, &end_time).await?;
 
     let mut tx = pool.begin().await?;
@@ -64,6 +58,18 @@ pub async fn award_monthly_medals(
     tx.commit().await?;
 
     Ok(())
+}
+
+/// Returns `(start, end)` datetime strings for the given month, where `start` is inclusive and
+/// `end` (the first moment of the next month) is exclusive. `month` is 1-indexed.
+fn month_bounds(year: i32, month: i32) -> (String, String) {
+    let start_time = format!("{year:04}-{month:02}-01 00:00:00");
+    let end_time = if month == 12 {
+        format!("{:04}-01-01 00:00:00", year + 1)
+    } else {
+        format!("{:04}-{:02}-01 00:00:00", year, month + 1)
+    };
+    (start_time, end_time)
 }
 
 /// Gets leaderboard entries for the given time period.
@@ -111,7 +117,7 @@ pub async fn get_leaderboard(
     Ok(entries)
 }
 
-/// API endpoint to get the current month's leaderboard
+/// API endpoint to get the leaderboard for a given month (defaults to the current month)
 #[get("/leaderboard?<year>&<month>")]
 pub async fn get_monthly_leaderboard(
     pool: &State<Pool<MySql>>,
@@ -122,12 +128,7 @@ pub async fn get_monthly_leaderboard(
     let year = year.unwrap_or(now.year());
     let month = month.unwrap_or(now.month() as i32);
 
-    let start_time = format!("{year:04}-{month:02}-01 00:00:00");
-    let end_time = if month == 12 {
-        format!("{:04}-01-01 00:00:00", year + 1)
-    } else {
-        format!("{:04}-{:02}-01 00:00:00", year, month + 1)
-    };
+    let (start_time, end_time) = month_bounds(year, month);
 
     match get_leaderboard(pool.inner(), &start_time, &end_time).await {
         Ok(entries) => Json(entries),

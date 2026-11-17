@@ -23,7 +23,8 @@ pub const CHARS_TO_IGNORE: &[char] = &['(', ')', ',', '.', '-', ':', ';', '"', '
 
 /// If a guess's dist is greater than `MAX_ACCEPTABLE_DIST` from the answer, then the game ends.
 const MAX_ACCEPTABLE_DIST: usize = 13;
-/// A bonus is awarded the guess matches the answer perfectly.
+/// Points awarded when the guess matches the answer perfectly (a bonus over the usual
+/// `MAX_ACCEPTABLE_DIST - dist + 1` points).
 const POINTS_FOR_PERFECT_MATCH: i32 = 26;
 
 /// An enum representing a shown hint.
@@ -169,17 +170,8 @@ impl GameState {
     /// since the GameState does not have a UUID, it must be provided.
     pub fn into_public(&self, id: String) -> GameStatePublic {
         GameStatePublic {
-            score: self.score,
-            guesses_made: self.guesses_made,
             current_question: self.current_question.hide_answer_and_song(),
-            lifeline_inv: self.lifeline_inv.clone(),
-            hints_shown: self.hints_shown.clone(),
-            choices: self.choices.clone(),
-            id,
-            terminated: self.terminated,
-            included_songs: self.included_songs.clone(),
-            completed_question: self.completed_question,
-            user_id: self.user_id,
+            ..self.into_public_with_answers(id)
         }
     }
 
@@ -203,32 +195,9 @@ impl GameState {
 
     /// returns whether a lifeline `lifeline` has been used in the current question
     pub fn has_used_lifeline(&self, lifeline: Lifeline) -> bool {
-        match lifeline {
-            Lifeline::ShowPrevLines => {
-                for hint in &self.hints_shown {
-                    if let Hint::ShowPrevLines { .. } = hint {
-                        return true;
-                    }
-                }
-                false
-            }
-            Lifeline::ShowTitleAlbum => {
-                for hint in &self.hints_shown {
-                    if let Hint::ShowTitle(_) = hint {
-                        return true;
-                    }
-                }
-                false
-            }
-            Lifeline::Skip => {
-                for hint in &self.hints_shown {
-                    if *hint == Hint::Skip {
-                        return true;
-                    }
-                }
-                false
-            }
-        }
+        self.hints_shown
+            .iter()
+            .any(|hint| hint.underlying_lifeline() == lifeline)
     }
 
     fn set_single_answer(&mut self, ans: &'static str) {
@@ -276,18 +245,12 @@ pub async fn init_game(
 
     let full_songlist: Vec<(&'static str, &'static str)> =
         songs.iter().map(|song| (song.album, song.name)).collect();
+    // Maps each album name to a list of booleans: the k-th boolean says whether
+    // the k-th song of that album is included in this game.
     let mut songlist_desc: HashMap<&'static str, Vec<bool>> = HashMap::new();
-    // The for loop below builds out the songlist_desc object, which is a Hashmap mapping album names to a list of boolean values.
-    // The list of boolean values represents which songs are included/excluded in the game.
     for song in &full_songlist {
         let is_included = songs_to_include.contains(song);
-        if let Some(v) = songlist_desc.get(song.0) {
-            let mut v = v.clone();
-            v.push(is_included);
-            songlist_desc.insert(song.0, v);
-        } else {
-            songlist_desc.insert(song.0, vec![is_included]);
-        }
+        songlist_desc.entry(song.0).or_default().push(is_included);
     }
 
     let mut hasher = Sha1::new();
@@ -306,8 +269,6 @@ pub async fn init_game(
             .await
             .unwrap();
 
-    println!("result has length {}", result.len());
-
     if result.is_empty() {
         // insert a new record if the current songlist sha is not found
         sqlx::query("INSERT INTO songlists (sha1sum, content) VALUES (?, ?)")
@@ -325,14 +286,7 @@ pub async fn init_game(
             .await
             .unwrap();
 
-    let songlists: Vec<Songlist> = songlists
-        .into_iter()
-        .map(|songlist| Songlist {
-            id: songlist.id,
-            sha1sum: songlist.sha1sum,
-            content: songlist.content.as_ref().clone(),
-        })
-        .collect();
+    let songlists: Vec<Songlist> = songlists.into_iter().map(Songlist::from).collect();
 
     let songlist_id = songlists
         .first()
@@ -435,33 +389,7 @@ pub async fn game_lifelines(
         .choose(&mut rand::thread_rng())
         .unwrap();
 
-    sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
-        .bind(id.clone())
-        .bind(gs.guesses_made)
-        .bind(gs.current_question.song.album)
-        .bind(gs.current_question.song.name)
-        .bind(gs.current_question.shown_line)
-        .bind(answer)
-        .bind("skipped")
-        .bind("")
-        .bind(0)
-        .bind(Option::<String>::None)
-        .bind(sqlx::types::Json(
-            gs.hints_shown
-                .iter()
-                .map(|hint| hint.underlying_lifeline().as_string())
-                .collect::<Vec<String>>(),
-        ))
-        .bind(sqlx::types::Json(gs.choices))
-        .fetch_all(pool.inner())
-        .await
-        .unwrap();
-
-    sqlx::query("UPDATE games SET num_guesses = num_guesses + 1 WHERE uuid = ?;")
-        .bind(&id)
-        .fetch_all(pool.inner())
-        .await
-        .unwrap();
+    record_guess(pool, &id, &gs, answer, "skipped", "", 0, None).await;
 
     serde_json::to_string(&res.into_public_with_answers(id.clone())).unwrap()
 }
@@ -766,33 +694,17 @@ pub async fn take_guess(
     // If the code runs to this point, then the guess is either correct or incorrect (not AFM state).
     // We can now record the guess into the database before returning.
 
-    sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
-        .bind(id.clone())
-        .bind(gs.guesses_made)
-        .bind(gs.current_question.song.album)
-        .bind(gs.current_question.song.name)
-        .bind(gs.current_question.shown_line)
-        .bind(closest_answer)
-        .bind(if is_correct { "correct" } else { "incorrect" })
-        .bind(guess)
-        .bind(num_points_earned)
-        .bind(lifeline_earned)
-        .bind(sqlx::types::Json(
-            gs.hints_shown
-                .iter()
-                .map(|hint| hint.underlying_lifeline().as_string())
-                .collect::<Vec<String>>(),
-        ))
-        .bind(sqlx::types::Json(gs.choices))
-        .fetch_all(pool.inner())
-        .await
-        .unwrap();
-
-    sqlx::query("UPDATE games SET num_guesses = num_guesses + 1 WHERE uuid = ?;")
-        .bind(&id)
-        .fetch_all(pool.inner())
-        .await
-        .unwrap();
+    record_guess(
+        pool,
+        &id,
+        &gs,
+        closest_answer,
+        if is_correct { "correct" } else { "incorrect" },
+        guess,
+        num_points_earned,
+        lifeline_earned,
+    )
+    .await;
 
     if !is_correct {
         let _ = sqlx::query(
@@ -823,15 +735,48 @@ fn is_afm(ans: &str, guess: &str) -> bool {
     lowercase_ignore_punctuation_edit_dist(&ans, guess) <= (n / 5)
 }
 
-/// whether `guess` is on the right track to `answer`. If a guess is on the right track,
-/// then the player will be prompted to guess again without penalty.
+/// Saves a finished question (answered or skipped) to the `guesses` table, and bumps the
+/// game's `num_guesses` counter.
 ///
-/// Note that as implemented, the guess "owuefh" is on the right track to any guess, since
-/// the after truncation of answer, the distance of truncated answer and guess will not exceed
-/// `MAX_ACCEPTABLE_DIST`.
-pub fn is_on_right_track(guess: &str, answer: &str) -> bool {
-    let (_, dist) = optimal_truncated_dist(answer, guess);
-    dist <= MAX_ACCEPTABLE_DIST
+/// `result` is one of `"correct"`, `"incorrect"`, or `"skipped"`.
+#[allow(clippy::too_many_arguments)]
+async fn record_guess(
+    pool: &Pool<MySql>,
+    game_id: &str,
+    gs: &GameState,
+    answer: &str,
+    result: &str,
+    user_guess: &str,
+    points_earned: i32,
+    lifeline_earned: Option<String>,
+) {
+    sqlx::query("INSERT INTO guesses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())")
+        .bind(game_id)
+        .bind(gs.guesses_made)
+        .bind(gs.current_question.song.album)
+        .bind(gs.current_question.song.name)
+        .bind(gs.current_question.shown_line)
+        .bind(answer)
+        .bind(result)
+        .bind(user_guess)
+        .bind(points_earned)
+        .bind(lifeline_earned)
+        .bind(sqlx::types::Json(
+            gs.hints_shown
+                .iter()
+                .map(|hint| hint.underlying_lifeline().as_string())
+                .collect::<Vec<String>>(),
+        ))
+        .bind(sqlx::types::Json(&gs.choices))
+        .fetch_all(pool)
+        .await
+        .unwrap();
+
+    sqlx::query("UPDATE games SET num_guesses = num_guesses + 1 WHERE uuid = ?;")
+        .bind(game_id)
+        .fetch_all(pool)
+        .await
+        .unwrap();
 }
 
 fn get_previous_lines(question: &Question) -> (String, bool) {

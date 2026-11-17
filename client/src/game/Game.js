@@ -3,22 +3,16 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import {
   Checkbox, Box, Grid, Button,
-  Typography, Paper, Link, Alert, Snackbar,
+  Typography, Link, Alert, Snackbar,
   Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText,
   FormControlLabel, TextField
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import GameStateDisplay from "./GameStateDisplay";
 import { useAuth } from "../auth/useAuth";
-import { ALBUM_LOGOS, ALBUM_ORDER, generateSongHref, getAlbumChipWidth } from "../utils/Utils";
-
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#E0FFFF",
-  ...theme.typography.body2,
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
+import { Item } from "../song/SongPage";
+import {
+  ALBUM_LOGOS, ALBUM_ORDER, GAME_ID_COOKIE, generateSongHref, useAlbumChipWidth
+} from "../utils/Utils";
 
 
 export default function Game() {
@@ -29,7 +23,7 @@ export default function Game() {
   const [orderedSongList, setOrderedSongList] = React.useState({});
   const [guestWarningOpen, setGuestWarningOpen] = React.useState(false);
   const [dontShowAgain, setDontShowAgain] = React.useState(false);
-  const albumChipWidth = getAlbumChipWidth();
+  const albumChipWidth = useAlbumChipWidth();
   const GUEST_WARNING_COOKIE = "tsgc-hide-guest-play-warning";
 
   const beginGame = () => {
@@ -44,7 +38,7 @@ export default function Game() {
 
     axios.post("/game/start", includedSongList).then((response) => {
       setGameState(response.data);
-      Cookies.set("tsgg-game-id", response.data.id);
+      Cookies.set(GAME_ID_COOKIE, response.data.id);
       // eslint-disable-next-line no-console
       console.log("starting game with id: ", response.data.id);
       setHasStarted(true);
@@ -86,7 +80,7 @@ export default function Game() {
       setSongList(songs);
     });
 
-    let maybeGameId = Cookies.get("tsgg-game-id");
+    let maybeGameId = Cookies.get(GAME_ID_COOKIE);
     if (maybeGameId) {
       // eslint-disable-next-line no-console
       console.log(`Loading game from cookies... (the id is: ${maybeGameId})`);
@@ -208,12 +202,7 @@ function SongSelection({songList, setSongList, orderedSongList, albumChipWidth})
   };
 
   const toggleAlbum = album => {
-    let res;
-    if (hasAllSelected(album)) {
-      res = false;
-    } else {
-      res = true;
-    }
+    const res = !hasAllSelected(album);
     let newAlbum = {};
     for (let song of Object.keys(songList[album])) {
       newAlbum[song] = res;
@@ -224,7 +213,7 @@ function SongSelection({songList, setSongList, orderedSongList, albumChipWidth})
 
 
   const toggleAll = () => {
-    const res = isAllSongsSelected ? false : true;
+    const res = !isAllSongsSelected;
 
     const newSongList = {};
     for (let album of ALBUM_ORDER) {
@@ -353,10 +342,6 @@ function getSelectedSongString(songList, orderedSongList) {
   const resultString = result.join("\n");
   return resultString;
 }
-
-
-
-
 
 function ImportSongStringDialog({open, onClose, setSongList, songList}) {
   const [currInputStr, setCurrInputStr] = React.useState("");

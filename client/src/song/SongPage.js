@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import {
   ALBUM_LOGOS, ALBUM_ORDER,
   generateLineHistoryHref,
-  generateSongHref, getAlbumChipWidth, isTouchDevice, normalizeQuotes
+  generateSongHref, useAlbumChipWidth, isTouchDevice, normalizeQuotes
 } from "../utils/Utils";
 import { LinePopoverContent } from "../history/GuessHistory";
 import { NotFoundImg } from "../not-found/NotFound";
@@ -23,7 +23,7 @@ export const Item = styled(Paper)(({ theme }) => ({
 
 export default function SongPage() {
   let { album, name } = useParams();
-  const albumChipWidth = getAlbumChipWidth();
+  const albumChipWidth = useAlbumChipWidth();
 
   const [unfilteredSongList, setSongList] = React.useState({});
   const [song, setSong] = React.useState({});
@@ -225,7 +225,7 @@ function GuessableLine({album, song, line, numGuesses}) {
 
   return (
     <Box
-      aria-owns={open ? "mouse-over-popover" : undefined}
+      aria-owns={popoverOpen ? "mouse-over-popover" : undefined}
       aria-haspopup="true"
       onMouseEnter={handlePopoverOpen}
       onMouseLeave={handlePopoverClose}

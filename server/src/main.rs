@@ -58,8 +58,8 @@ async fn main() -> Result<(), rocket::Error> {
     let db_pw = std::env::var("DATABASE_PASSWORD").expect("DATABASE_PASSWORD must be set.");
 
     let songs: Vec<Song> = loader_v2::load_songs_from_files();
-    let my_hashmap: HashMap<String, GameState> = HashMap::new();
-    let game_state = Arc::new(Mutex::new(my_hashmap));
+    // In-progress games, keyed by game UUID.
+    let game_state: Arc<Mutex<HashMap<String, GameState>>> = Default::default();
     let votes_cache = Arc::new(Mutex::new(RecentVotesCache::new()));
     let stats_cache: Arc<Mutex<Option<StatsResponse>>> = Default::default();
 
@@ -83,37 +83,47 @@ async fn main() -> Result<(), rocket::Error> {
         .manage(pool)
         .manage(votes_cache)
         .manage(stats_cache)
-        .mount("/", routes![index])
-        .mount("/", routes![get_stats])
-        .mount("/", routes![get_song_list])
-        .mount("/", routes![get_song_list_with_id])
-        .mount("/", routes![get_all_songlists])
-        .mount("/", routes![get_song])
-        .mount("/", routes![init_game])
-        .mount("/", routes![game_lifelines])
-        .mount("/", routes![reduce_multiple_choice])
-        .mount("/", routes![next_question])
-        .mount("/", routes![claim_game])
-        .mount("/", routes![take_guess])
-        .mount("/", routes![get_games])
-        .mount("/", routes![get_game])
-        .mount("/", routes![get_line])
-        .mount("/", routes![get_user_games_by_username])
-        .mount("/", routes![get_user_profile_by_username])
-        .mount("/", routes![upvote_line])
-        .mount("/", routes![downvote_line])
-        .mount("/", routes![get_feedback])
-        .mount("/", routes![get_recent_feedback_rss])
-        .mount("/", routes![get_recent_votes_rss])
-        .mount("/", routes![signup])
-        .mount("/", routes![login])
-        .mount("/", routes![logout])
-        .mount("/", routes![request_email_verification])
-        .mount("/", routes![verify_email])
-        .mount("/", routes![request_password_reset])
-        .mount("/", routes![reset_password])
-        .mount("/", routes![get_personal_details])
-        .mount("/", routes![get_monthly_leaderboard])
+        .mount(
+            "/",
+            routes![
+                index,
+                get_stats,
+                // songs
+                get_song_list,
+                get_song_list_with_id,
+                get_all_songlists,
+                get_song,
+                // game
+                init_game,
+                game_lifelines,
+                reduce_multiple_choice,
+                next_question,
+                claim_game,
+                take_guess,
+                // history & users
+                get_games,
+                get_game,
+                get_line,
+                get_user_games_by_username,
+                get_user_profile_by_username,
+                get_monthly_leaderboard,
+                // feedback
+                upvote_line,
+                downvote_line,
+                get_feedback,
+                get_recent_feedback_rss,
+                get_recent_votes_rss,
+                // auth
+                signup,
+                login,
+                logout,
+                request_email_verification,
+                verify_email,
+                request_password_reset,
+                reset_password,
+                get_personal_details,
+            ],
+        )
         .ignite()
         .await?;
 

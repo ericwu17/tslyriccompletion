@@ -9,9 +9,9 @@ use serde::Serialize;
 const NUM_DISTRACTORS: i32 = 16;
 
 /// A struct representing a question asked to the player.
-/// The field `answer` is a list of possible answers, and
-/// The field `song` is the song that the question
-/// comes from, so these fields should be hidden from the user until the question is answered.
+/// The field `answers` is a list of possible answers (a line can have several different
+/// successors in a song), and the field `song` is the song that the question comes from.
+/// Both fields should be hidden from the user until the question is answered.
 #[derive(Debug, Clone, Serialize)]
 pub struct Question {
     pub shown_line: &'static str,
@@ -93,10 +93,7 @@ fn is_acceptable_guess(guess: &'static str, lines: &[Line]) -> bool {
 /// Generates distractor answer choices for a multiple choice question, while ensuring that
 /// the distractors are not too close to the correct answer
 ///
-pub fn pick_distractors(
-    correct_answers: Vec<&'static str>,
-    songs: &Vec<Song>,
-) -> Vec<&'static str> {
+pub fn pick_distractors(correct_answers: Vec<&'static str>, songs: &[Song]) -> Vec<&'static str> {
     let mut distractors = Vec::new();
     for _ in 0..NUM_DISTRACTORS {
         let random_song = songs.choose(&mut rand::thread_rng()).unwrap();

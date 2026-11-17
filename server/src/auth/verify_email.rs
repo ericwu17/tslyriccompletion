@@ -140,7 +140,7 @@ pub async fn request_email_verification(
 
     let subject = "Verify Your Email";
     let body = format!(
-        "Click the link below to verify your email:\n\n{}\n\n This link expires in 24 hours.",
+        "Click the link below to verify your email:\n\n{}\n\nThis link expires in 24 hours.",
         verification_link,
     );
 

@@ -4,7 +4,7 @@ import {
   Checkbox, Button, Snackbar, Alert
 } from "@mui/material";
 import axios from "axios";
-import { ALBUM_ORDER, ALBUM_LOGOS, getAlbumChipWidth, generateSongHref } from "../utils/Utils";
+import { ALBUM_ORDER, ALBUM_LOGOS, useAlbumChipWidth, generateSongHref } from "../utils/Utils";
 import { Item } from "../song/SongPage";
 
 
@@ -19,7 +19,7 @@ export default function SongListSection({selectedSongs, songlistId}) {
     });
   }, []);
 
-  const albumChipWidth = getAlbumChipWidth();
+  const albumChipWidth = useAlbumChipWidth();
 
 
   if (JSON.stringify(fullSongList) === "{}") {

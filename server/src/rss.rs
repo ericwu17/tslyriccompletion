@@ -1,6 +1,6 @@
+use crate::history::format_db_datetime;
 use atom_syndication::{Content, Entry, Feed};
 use chrono::prelude::*;
-use rocket::time::format_description;
 use sqlx::{types::time::PrimitiveDateTime, MySql, Pool};
 use std::{
     collections::VecDeque,
@@ -8,7 +8,8 @@ use std::{
 };
 
 #[derive(sqlx::FromRow, Debug)]
-pub struct GameSchema {
+/// A row of the `feedback` table.
+pub struct FeedbackSchema {
     pub time: PrimitiveDateTime,
     pub album: String,
     pub song_name: String,
@@ -22,7 +23,7 @@ pub struct GameSchema {
 /// This endpoint is for my personal use, to see what people have been saying.
 #[get("/feedback/get_recent_feedback_rss")]
 pub async fn get_recent_feedback_rss(pool: &rocket::State<Pool<MySql>>) -> String {
-    let recent_feedbacks: Vec<GameSchema> =
+    let recent_feedbacks: Vec<FeedbackSchema> =
         sqlx::query_as("SELECT * FROM feedback ORDER BY time DESC LIMIT 20;")
             .fetch_all(pool.inner())
             .await
@@ -37,9 +38,7 @@ pub async fn get_recent_feedback_rss(pool: &rocket::State<Pool<MySql>>) -> Strin
         let mut entry = Entry::default();
         entry.set_title("New Feedback");
 
-        let time_format =
-            format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
-        let feedback_time_str = f.time.format(&time_format).unwrap();
+        let feedback_time_str = format_db_datetime(&f.time);
         let feedback_time_chrono: DateTime<Utc> = DateTime::parse_from_rfc3339(&feedback_time_str)
             .unwrap()
             .into();
@@ -92,7 +91,7 @@ impl Default for RecentVotesCache {
     }
 }
 
-/// API endpoint to get a RSS feed of the most up and down votes
+/// API endpoint to get a RSS feed of the most recent up and down votes
 /// Returns the (up to) 20 most recent vote events
 /// Note that this endpoint reads from the RecentVotesCache, which will be cleared whenever
 /// the server restarts.

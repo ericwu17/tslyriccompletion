@@ -155,7 +155,8 @@ export default function LeaderboardPage() {
       </Box>
 
       <Typography sx={{ mb: 2 }}>
-        {numPlayers} {numPlayers === 1 ? "player" : "players"} on the leaderboard for this month.
+        {numPlayers} {numPlayers === 1 ? "player" : "players"} on the leaderboard
+        for {monthName} {selectedYear}.
       </Typography>
 
       {leaderboard.length > 0 ? (

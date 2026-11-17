@@ -69,8 +69,8 @@ export default function QueryMenuBar({setGames, setIsLoading}) {
       setGames(games);
       setIsLoading(false);
     }).catch((error) => {
-      // Ignore abort errors, handle other errors
-      if (error.code !== "ECONNABORTED") {
+      // Ignore requests we aborted ourselves (because a newer query superseded them)
+      if (!axios.isCancel(error)) {
         // eslint-disable-next-line
         console.error("Error fetching games:", error);
       }

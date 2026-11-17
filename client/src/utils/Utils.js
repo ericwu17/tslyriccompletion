@@ -24,6 +24,9 @@ export const ALBUM_LOGOS = {
   "The Life of a Showgirl": "https://i.scdn.co/image/ab67616d0000b273d7812467811a7da6e6a44902",
 };
 
+// Name of the cookie that remembers the in-progress game, so a refresh resumes it.
+export const GAME_ID_COOKIE = "tsgg-game-id";
+
 export const normalizeQuotes = string => {
   const result = string
     .replaceAll("“", "\"")
@@ -75,7 +78,8 @@ const escapeQuestionMarks = s => {
   return s.replaceAll("?", "%253F").replaceAll("&", "%2526");
 };
 const escapeQuestionMarksSingleLevel = s => {
-  // sometimes we want to escape these characters quotes only one level deep
+  // Used for URLs sent straight to the back end (not via a front end route),
+  // so the characters only need to be escaped one level deep.
   return s.replaceAll("?", "%3F").replaceAll("&", "%26");
 };
 
@@ -112,7 +116,7 @@ export const unescapeQuestionMarks = s => {
 // Then it returns an appropriate value to use in the xs prop of Grid item
 // (remember that a grid is 12 units in each row, therefore a xs of 4 means
 // each row will have 3 chips)
-export const getAlbumChipWidth = () => {
+export const useAlbumChipWidth = () => {
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.up("md"));
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));

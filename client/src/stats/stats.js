@@ -13,10 +13,7 @@ export default function StatsPage() {
   const getStats = () => {
     setPageState("LOADING");
 
-    axios.get(
-      // eslint-disable-next-line max-len
-      "/stats"
-    ).then((response) => {
+    axios.get("/stats").then((response) => {
       let stats = response.data;
       setStats(stats);
       setPageState("LOADED");

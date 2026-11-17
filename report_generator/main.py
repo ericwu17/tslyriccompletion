@@ -20,10 +20,11 @@ db_pw = ""
 
 with open("./.env") as f:
     for line in f.readlines():
+        line = line.strip()
         if line.startswith("DATABASE_USER="):
-            db_user = line.strip().strip("DATABASE_USER=")
+            db_user = line[len("DATABASE_USER="):]
         if line.startswith("DATABASE_PASSWORD="):
-            db_pw = line.strip().strip("DATABASE_PASSWORD=")
+            db_pw = line[len("DATABASE_PASSWORD="):]
 
 
 cnx = mysql.connector.connect(user=db_user, password=db_pw, database='mydb')

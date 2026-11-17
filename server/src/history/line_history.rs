@@ -1,4 +1,4 @@
-use rocket::time::format_description;
+use super::format_db_datetime;
 use serde::Serialize;
 use sqlx::{
     types::{time::PrimitiveDateTime, Json},
@@ -51,9 +51,6 @@ pub struct Guess {
 
 impl Guess {
     pub fn from_schema(guess_schema: GuessSchema) -> Self {
-        let format =
-            format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
-
         Guess {
             game_uuid: guess_schema.game_uuid,
             order_num: guess_schema.order_num,
@@ -65,13 +62,9 @@ impl Guess {
             user_guess: guess_schema.user_guess,
             points_earned: guess_schema.points_earned,
             lifeline_earned: guess_schema.lifeline_earned,
-            lifelines_used: serde_json::from_str(
-                &serde_json::to_string(&guess_schema.lifelines_used).unwrap(),
-            )
-            .unwrap(),
-            options: serde_json::from_str(&serde_json::to_string(&guess_schema.options).unwrap())
-                .unwrap(),
-            submit_time: guess_schema.submit_time.format(&format).unwrap(),
+            lifelines_used: guess_schema.lifelines_used.0,
+            options: guess_schema.options.0,
+            submit_time: format_db_datetime(&guess_schema.submit_time),
             player_name: guess_schema.player_name,
             username: guess_schema.username,
         }

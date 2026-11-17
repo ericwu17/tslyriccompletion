@@ -59,6 +59,47 @@ pub struct Songlist {
     pub content: Vec<(String, String)>,
 }
 
+impl From<SonglistSchema> for Songlist {
+    fn from(schema: SonglistSchema) -> Self {
+        Songlist {
+            id: schema.id,
+            sha1sum: schema.sha1sum,
+            content: schema.content.0,
+        }
+    }
+}
+
+/// Formats a database timestamp the way the client expects, e.g. `2024-03-31 12:34:56Z`.
+pub fn format_db_datetime(time: &PrimitiveDateTime) -> String {
+    let format =
+        format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
+    time.format(&format).unwrap()
+}
+
+impl Game {
+    /// Builds a [`Game`] from a database row. `songlists` must contain the game's songlist.
+    fn from_schema(game: GameSchema, songlists: &[Songlist]) -> Self {
+        let full_songlist = songlists
+            .iter()
+            .find(|s| s.id == game.songlist_id)
+            .unwrap()
+            .content
+            .clone();
+
+        Game {
+            uuid: game.uuid,
+            start_time: format_db_datetime(&game.start_time),
+            songlist_id: game.songlist_id,
+            selected_songs: get_songs(full_songlist, game.selected_songs.0),
+            has_terminated: game.has_terminated,
+            terminal_score: game.terminal_score,
+            player_name: game.player_name,
+            num_guesses: game.num_guesses,
+            username: game.username,
+        }
+    }
+}
+
 /// API endpoint to get all past games, with various filtering options.
 /// Results are paginated.
 #[get("/history/all?<sort>&<search>&<limit>&<include_nameless>&<page_num>")]
@@ -83,14 +124,7 @@ pub async fn get_games(
         .await
         .unwrap();
 
-    let songlists: Vec<Songlist> = songlists
-        .into_iter()
-        .map(|songlist| Songlist {
-            id: songlist.id,
-            sha1sum: songlist.sha1sum,
-            content: songlist.content.as_ref().clone(),
-        })
-        .collect();
+    let songlists: Vec<Songlist> = songlists.into_iter().map(Songlist::from).collect();
 
     let order_by_clause = match sort.as_str() {
         "score" => "ORDER BY terminal_score DESC",
@@ -123,35 +157,7 @@ pub async fn get_games(
 
     let games: Vec<Game> = games
         .into_iter()
-        .map(|game| {
-            let selected_songs =
-                serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap())
-                    .unwrap();
-            let full_songlist = songlists
-                .iter()
-                .find(|s| s.id == game.songlist_id)
-                .unwrap()
-                .content
-                .clone();
-
-            let selected_songs_desc = get_songs(full_songlist, selected_songs);
-
-            let format =
-                format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z")
-                    .unwrap();
-
-            Game {
-                uuid: game.uuid,
-                start_time: game.start_time.format(&format).unwrap(),
-                songlist_id: game.songlist_id,
-                selected_songs: selected_songs_desc,
-                has_terminated: game.has_terminated,
-                terminal_score: game.terminal_score,
-                player_name: game.player_name,
-                num_guesses: game.num_guesses,
-                username: game.username,
-            }
-        })
+        .map(|game| Game::from_schema(game, &songlists))
         .collect();
 
     serde_json::to_string(&games).unwrap()
@@ -184,24 +190,15 @@ pub async fn get_user_games_by_username(
         .await
         .map_err(|_| Status::InternalServerError)?;
 
-    let songlists: Vec<Songlist> = songlists
-        .into_iter()
-        .map(|songlist| Songlist {
-            id: songlist.id,
-            sha1sum: songlist.sha1sum,
-            content: songlist.content.as_ref().clone(),
-        })
-        .collect();
+    let songlists: Vec<Songlist> = songlists.into_iter().map(Songlist::from).collect();
 
-    let query = format!(
-        "SELECT *, users.username from games
+    let query = "SELECT *, users.username from games
         LEFT JOIN users ON games.user_id = users.user_id
         WHERE games.user_id = ? AND has_terminated = TRUE
         ORDER BY start_time DESC
-        LIMIT ? OFFSET ?"
-    );
+        LIMIT ? OFFSET ?";
 
-    let games: Vec<GameSchema> = sqlx::query_as(&query)
+    let games: Vec<GameSchema> = sqlx::query_as(query)
         .bind(user_id)
         .bind(limit as i32)
         .bind(query_offset as i32)
@@ -211,35 +208,7 @@ pub async fn get_user_games_by_username(
 
     let games: Vec<Game> = games
         .into_iter()
-        .map(|game| {
-            let selected_songs =
-                serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap())
-                    .unwrap();
-            let full_songlist = songlists
-                .iter()
-                .find(|s| s.id == game.songlist_id)
-                .unwrap()
-                .content
-                .clone();
-
-            let selected_songs_desc = get_songs(full_songlist, selected_songs);
-
-            let format =
-                format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z")
-                    .unwrap();
-
-            Game {
-                uuid: game.uuid,
-                start_time: game.start_time.format(&format).unwrap(),
-                songlist_id: game.songlist_id,
-                selected_songs: selected_songs_desc,
-                has_terminated: game.has_terminated,
-                terminal_score: game.terminal_score,
-                player_name: game.player_name,
-                num_guesses: game.num_guesses,
-                username: game.username,
-            }
-        })
+        .map(|game| Game::from_schema(game, &songlists))
         .collect();
 
     Ok(serde_json::to_string(&games).unwrap())
@@ -315,12 +284,9 @@ pub async fn get_user_profile_by_username(
         })
         .collect();
 
-    let format =
-        format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
-
     Ok(Json(UserProfile {
         username: user_profile.username,
-        created_at: user_profile.created_at.format(&format).unwrap(),
+        created_at: format_db_datetime(&user_profile.created_at),
         games_played: user_profile.games_played,
         guesses_made: user_profile.guesses_made,
         medals,
@@ -364,9 +330,6 @@ pub struct Guess {
 
 impl Guess {
     pub fn from_schema(guess_schema: GuessSchema) -> Self {
-        let format =
-            format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
-
         Guess {
             game_uuid: guess_schema.game_uuid,
             order_num: guess_schema.order_num,
@@ -378,13 +341,9 @@ impl Guess {
             user_guess: guess_schema.user_guess,
             points_earned: guess_schema.points_earned,
             lifeline_earned: guess_schema.lifeline_earned,
-            lifelines_used: serde_json::from_str(
-                &serde_json::to_string(&guess_schema.lifelines_used).unwrap(),
-            )
-            .unwrap(),
-            options: serde_json::from_str(&serde_json::to_string(&guess_schema.options).unwrap())
-                .unwrap(),
-            submit_time: guess_schema.submit_time.format(&format).unwrap(),
+            lifelines_used: guess_schema.lifelines_used.0,
+            options: guess_schema.options.0,
+            submit_time: format_db_datetime(&guess_schema.submit_time),
         }
     }
 }
@@ -436,14 +395,7 @@ pub async fn get_game(pool: &rocket::State<Pool<MySql>>, id: String) -> String {
         .await
         .unwrap();
 
-    let songlists: Vec<Songlist> = songlists
-        .into_iter()
-        .map(|songlist| Songlist {
-            id: songlist.id,
-            sha1sum: songlist.sha1sum,
-            content: songlist.content.as_ref().clone(),
-        })
-        .collect();
+    let songlists: Vec<Songlist> = songlists.into_iter().map(Songlist::from).collect();
 
     let game: GameSchema = sqlx::query_as(
         "SELECT *, (select count(*) from guesses where game_uuid like uuid) as num_guesses, users.username from games
@@ -452,18 +404,6 @@ pub async fn get_game(pool: &rocket::State<Pool<MySql>>, id: String) -> String {
         .bind(id.clone())
         .fetch_one(pool.inner())
         .await.unwrap();
-    let format =
-        format_description::parse("[year]-[month]-[day] [hour]:[minute]:[second]Z").unwrap();
-
-    let selected_songs =
-        serde_json::from_str(&serde_json::to_string(&game.selected_songs).unwrap()).unwrap();
-    let full_songlist = songlists
-        .iter()
-        .find(|s| s.id == game.songlist_id)
-        .unwrap()
-        .content
-        .clone();
-    let selected_songs_desc = get_songs(full_songlist, selected_songs);
 
     let guesses: Vec<GuessSchema> = sqlx::query_as(
         "SELECT * from guesses
@@ -477,15 +417,8 @@ pub async fn get_game(pool: &rocket::State<Pool<MySql>>, id: String) -> String {
     let guesses: Vec<Guess> = guesses.into_iter().map(Guess::from_schema).collect();
 
     let game = Game {
-        uuid: game.uuid,
-        start_time: game.start_time.format(&format).unwrap(),
-        songlist_id: game.songlist_id,
-        selected_songs: selected_songs_desc,
-        has_terminated: game.has_terminated,
-        terminal_score: game.terminal_score,
-        player_name: game.player_name,
-        username: game.username,
         num_guesses: guesses.len() as i32,
+        ..Game::from_schema(game, &songlists)
     };
 
     serde_json::to_string(&GameWithGuesses { game, guesses }).unwrap()

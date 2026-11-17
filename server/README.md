@@ -7,7 +7,17 @@ A .env file is required in this directory. The .env file contains contents of th
 ```text
 DATABASE_USER=root
 DATABASE_PASSWORD=secret_here
+
+# Used to send account emails (verification, password reset) through Gmail SMTP
+EMAIL_FROM=address@gmail.com
+EMAIL_PASS=app_password_here
+
+# Base URL used in links inside those emails (defaults to http://localhost:3000)
+FRONTEND_URL=https://tslyriccompletion.com
 ```
+
+Only the database variables are required for the server to start. Without the email variables,
+signup (with an email address), email verification, and password reset requests will fail.
 
 The sql server is backed up periodically (weekly) by using the mysqldump command.
 A cron job is used to execute this command. Here is the cron file:

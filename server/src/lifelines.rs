@@ -1,9 +1,8 @@
 use rand::prelude::*;
 use serde::Serialize;
-use std::fmt;
 
 /// An enum representing one of three possible lifelines.
-#[derive(Serialize, Clone)]
+#[derive(Serialize, Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Lifeline {
     ShowTitleAlbum,
     ShowPrevLines,
@@ -46,82 +45,33 @@ impl LifelineInventory {
             skip: 1,
         }
     }
-    pub fn consume_lifeline(&mut self, lifeline: Lifeline) -> bool {
+
+    fn count_mut(&mut self, lifeline: Lifeline) -> &mut i32 {
         match lifeline {
-            Lifeline::ShowTitleAlbum => {
-                if self.show_title_album > 0 {
-                    self.show_title_album -= 1;
-                    return true;
-                }
-                false
-            }
-            Lifeline::ShowPrevLines => {
-                if self.show_prev_lines > 0 {
-                    self.show_prev_lines -= 1;
-                    return true;
-                }
-                false
-            }
-            Lifeline::Skip => {
-                if self.skip > 0 {
-                    self.skip -= 1;
-                    return true;
-                }
-                false
-            }
+            Lifeline::ShowTitleAlbum => &mut self.show_title_album,
+            Lifeline::ShowPrevLines => &mut self.show_prev_lines,
+            Lifeline::Skip => &mut self.skip,
         }
     }
-    pub fn add_lifeline(&mut self, lifeline: &Lifeline) {
-        match lifeline {
-            Lifeline::ShowTitleAlbum => {
-                self.show_title_album += 1;
-            }
-            Lifeline::ShowPrevLines => {
-                self.show_prev_lines += 1;
-            }
-            Lifeline::Skip => {
-                self.skip += 1;
-            }
+
+    /// Uses up one of `lifeline`. Returns false (and does nothing) if none are left.
+    pub fn consume_lifeline(&mut self, lifeline: Lifeline) -> bool {
+        let count = self.count_mut(lifeline);
+        if *count > 0 {
+            *count -= 1;
+            true
+        } else {
+            false
         }
+    }
+
+    pub fn add_lifeline(&mut self, lifeline: &Lifeline) {
+        *self.count_mut(*lifeline) += 1;
     }
 }
 
 impl Default for LifelineInventory {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-impl fmt::Display for LifelineInventory {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Write strictly the first element into the supplied output
-        // stream: `f`. Returns `fmt::Result` which indicates whether the
-        // operation succeeded or failed. Note that `write!` uses syntax which
-        // is very similar to `println!`.
-        write!(f, "You currently have:\n\tShow Title Lifelines (?t): {}\n\tShow Previous Lines Lifelines (?p): {}\n\tSkip Question Lifelines (?s): {}", 
-			self.show_title_album,
-			self.show_prev_lines,
-			self.skip,
-		)
-    }
-}
-
-impl fmt::Display for Lifeline {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Write strictly the first element into the supplied output
-        // stream: `f`. Returns `fmt::Result` which indicates whether the
-        // operation succeeded or failed. Note that `write!` uses syntax which
-        // is very similar to `println!`.
-        match self {
-            Lifeline::ShowPrevLines => {
-                write!(f, "Show Previous Lines Lifeline")
-            }
-            Lifeline::ShowTitleAlbum => {
-                write!(f, "Show Title Lifeline")
-            }
-            Lifeline::Skip => {
-                write!(f, "Skip Question Lifeline")
-            }
-        }
     }
 }

@@ -42,8 +42,8 @@ export function SignupPage() {
       return false;
     }
 
-    if (username.length < 3) {
-      setValidationError("Username must be at least 3 characters");
+    if (username.length < 6) {
+      setValidationError("Username must be at least 6 characters");
       return false;
     }
 
@@ -55,10 +55,6 @@ export function SignupPage() {
     const usernameRegex = /^[a-zA-Z0-9_-]+$/;
     if (!usernameRegex.test(username)) {
       setValidationError("Username can only contain letters, numbers, underscores, and hyphens");
-      return false;
-    }
-    if (!(username.length >= 6)) {
-      setValidationError("Username must be at least 6 characters");
       return false;
     }
 
@@ -197,7 +193,7 @@ export function SignupPage() {
         <Box sx={{ mt: 3, textAlign: "center" }}>
           <Typography variant="body2">
             Already have an account?{" "}
-            <MuiLink component={Link} to="/login">
+            <MuiLink component={Link} to="/auth/login">
               Log in here
             </MuiLink>
           </Typography>
